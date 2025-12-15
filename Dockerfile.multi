@@ -108,6 +108,10 @@ ENV HUSKY=0
 ENV CI=true
 # Install only production deps
 RUN npm ci --omit=dev
+# Certain build artifacts need mongodb runtime deps (may not be prod deps)
+RUN npm install mongodb --omit=dev
+# Fix case-sensitive imports: @Aipyq/* -> @aipyq/*
+RUN ln -s /app/node_modules/@aipyq /app/node_modules/@Aipyq || true
 COPY api ./api
 COPY config ./config
 COPY --from=data-provider-build /app/packages/data-provider/dist ./packages/data-provider/dist
