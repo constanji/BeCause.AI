@@ -16,6 +16,20 @@ const plugins = [
   typescript({
     tsconfig: './tsconfig.json',
     useTsconfigDeclarationDir: true,
+    /**
+     * Skip type checking to reduce memory usage when processing large dependencies
+     * Types are validated at compile time, this only affects rollup bundling
+     */
+    check: false,
+    /**
+     * Exclude node_modules from processing to reduce memory footprint
+     * Prevents loading type declarations from dependencies like @aipyq/agents
+     */
+    exclude: ['node_modules/**'],
+    /**
+     * Use cache for faster incremental builds
+     */
+    cacheRoot: './node_modules/.cache/rpt2_cache',
   }),
   terser(),
 ];

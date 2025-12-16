@@ -11,7 +11,7 @@ import { ConnectionsRepository } from '~/mcp/ConnectionsRepository';
  * Only meant to be extended by MCPManager.
  * Much of the logic was move here from the old MCPManager to make it more manageable.
  * User connections will soon be ephemeral and not cached anymore:
- * https://github.com/constanji/Aipyq/discussions/8790
+ * https://github.com/constanji/Aipyqchat/discussions/8790
  */
 export abstract class UserConnectionManager {
   // Connections shared by all users.

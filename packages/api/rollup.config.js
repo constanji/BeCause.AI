@@ -40,6 +40,12 @@ const plugins = [
      * Always include source content in sourcemaps for better debugging
      */
     inlineSources: true,
+    /**
+     * Note: @rollup/plugin-typescript uses TypeScript's transpileModule API by default,
+     * which only performs syntax transformation and doesn't load type declarations.
+     * This helps reduce memory usage when processing large dependencies like @aipyq/agents.
+     * Type checking should be done separately via tsc --noEmit if needed.
+     */
   }),
   json(),
 ];

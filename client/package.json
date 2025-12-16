@@ -7,8 +7,8 @@
     "typecheck": "tsc --noEmit",
     "data-provider": "cd .. && npm run build:data-provider",
     "build:file": "cross-env NODE_ENV=production vite build --debug > vite-output.log 2>&1",
-    "build": "cross-env NODE_ENV=production vite build && node ./scripts/post-build.cjs",
-    "build:ci": "cross-env NODE_ENV=development vite build --mode ci",
+    "build": "cross-env NODE_ENV=production NODE_OPTIONS='--max-old-space-size=6144' vite build && node ./scripts/post-build.cjs",
+    "build:ci": "cross-env NODE_ENV=development NODE_OPTIONS='--max-old-space-size=6144' vite build --mode ci",
     "dev": "cross-env NODE_ENV=development vite",
     "preview-prod": "cross-env NODE_ENV=development vite preview",
     "test": "cross-env NODE_ENV=development jest --watch",
@@ -19,13 +19,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/constanji/Aipyq.git"
+    "url": "git+https://github.com/constanji/Aipyqchat.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/constanji/Aipyq/issues"
+    "url": "https://github.com/constanji/Aipyqchat/issues"
   },
   "homepage": "https://www.aipyq.com",
   "dependencies": {

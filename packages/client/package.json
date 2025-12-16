@@ -17,7 +17,7 @@
   ],
   "scripts": {
     "clean": "rimraf dist",
-    "build": "npm run clean && rollup -c --bundleConfigAsCjs",
+    "build": "npm run clean && cross-env NODE_OPTIONS='--max-old-space-size=4096' rollup -c --bundleConfigAsCjs",
     "build:watch": "rollup -c -w --bundleConfigAsCjs",
     "dev": "rollup -c -w --bundleConfigAsCjs"
   },
@@ -69,6 +69,7 @@
     "tailwind-merge": "^1.9.1"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "@rollup/plugin-alias": "^5.1.0",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-node-resolve": "^15.0.0",

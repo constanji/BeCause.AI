@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/constanji/Aipyq.git"
+    "url": "git+https://github.com/constanji/Aipyqchat.git"
   },
   "keywords": [],
   "author": "",
@@ -30,7 +30,7 @@
     "~/*": "./*"
   },
   "bugs": {
-    "url": "https://github.com/constanji/Aipyq/issues"
+    "url": "https://github.com/constanji/Aipyqchat/issues"
   },
   "homepage": "https://www.aipyq.com",
   "dependencies": {

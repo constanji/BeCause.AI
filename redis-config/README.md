@@ -405,4 +405,4 @@ For Redis-specific issues:
 - [Redis Cluster Tutorial](https://redis.io/docs/manual/scaling/)
 
 For Aipyq integration:
-- [Aipyq Documentation](https://github.com/constanji/Aipyq)
+- [Aipyq Documentation](https://github.com/constanji/Aipyqchat)

@@ -33,6 +33,11 @@ export default {
       declaration: true,
       declarationDir: 'dist/types',
       rootDir: 'src',
+      /**
+       * Note: @rollup/plugin-typescript uses transpileModule by default.
+       * Ensure tsconfig.json has skipLibCheck: true to skip type checking
+       * of declaration files from dependencies like @aipyq/agents.
+       */
     }),
   ],
   // Do not bundle these external dependencies

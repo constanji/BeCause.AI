@@ -6,7 +6,18 @@
     "inlineSources": true,
     "removeComments": false,
     "preserveConstEnums": true,
-    "declarationMap": true
+    "declarationMap": true,
+    /**
+     * Skip type checking of declaration files to reduce memory usage
+     * This is especially important when processing large dependencies like @aipyq/agents
+     */
+    "skipLibCheck": true
   },
-  "exclude": ["node_modules", "dist", "types", "src/**/*.test.ts", "src/**/*.spec.ts"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "types",
+    "src/**/*.test.ts",
+    "src/**/*.spec.ts"
+  ]
 }

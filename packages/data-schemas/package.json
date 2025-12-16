@@ -18,7 +18,7 @@
   ],
   "scripts": {
     "clean": "rimraf dist",
-    "build": "npm run clean && rollup -c --silent --bundleConfigAsCjs",
+    "build": "npm run clean && cross-env NODE_OPTIONS='--max-old-space-size=4096' rollup -c --silent --bundleConfigAsCjs",
     "build:watch": "rollup -c -w",
     "test": "jest --coverage --watch",
     "test:ci": "jest --coverage --ci",
@@ -28,15 +28,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/constanji/Aipyq.git"
+    "url": "git+https://github.com/constanji/Aipyqchat.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/constanji/Aipyq/issues"
+    "url": "https://github.com/constanji/Aipyqchat/issues"
   },
   "homepage": "https://www.aipyq.com",
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "@rollup/plugin-alias": "^5.1.0",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-json": "^6.1.0",
