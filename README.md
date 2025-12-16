@@ -78,7 +78,7 @@
   - 内置内容审核与 Token 消耗管理工具
 
 ---
-
+> **提示**：如果在构建或启动过程中遇到错误，请参考 `docs/构建说明.md` 获取详细排查步骤。
 ## 🚀 快速开始
 
 ### 前置要求
@@ -108,42 +108,42 @@
     npm run build:packages
     ```
     
-2.5 **构建Agent包**
+3. **构建Agent包**
     ```bash
     cd agents-Aipyq
     npm install           # 首次建议跑一下
     npm run build:dev     # 生成 dist/esm 和 dist/cjs
     ```
 
-3. **构建前端**
+4. **构建前端**
    ```bash
    cd client
    npm run build
    cd ..
    ```
 
-4. **配置环境变量**
+5. **配置环境变量**
    ```bash
    cp .env.example .env
    cp Aipyq.yaml.example Aipyq.yaml
    # 按需编辑 .env，配置数据库、密钥等
    ```
 
-5. **启动后端（终端 1）**
+6. **启动后端（终端 1）**
    ```bash
    npm run backend:dev
    ```
 
-6. **启动前端（终端 2）**
+7. **启动前端（终端 2）**
    ```bash
    npm run frontend:dev
    ```
 
-7. **默认访问地址**
+8. **默认访问地址**
    - 开发前端：`http://localhost:3090`
    - 后端 API：`http://localhost:3080`
 
-> **提示**：更详细的部署说明（包括生产模式、构建优化与常见问题），请查看 `docs/部署.md`。
+
 
 ### 方式二：Docker 开发模式（测试版）
 
