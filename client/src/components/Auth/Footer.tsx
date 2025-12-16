@@ -12,7 +12,7 @@ function Footer({ startupConfig }: { startupConfig: TStartupConfig | null | unde
 
   const privacyPolicyRender = privacyPolicy?.externalUrl && (
     <a
-      className="text-sm text-green-500"
+      className="text-xs text-green-500"
       href={privacyPolicy.externalUrl}
       target={privacyPolicy.openNewTab ? '_blank' : undefined}
       rel="noreferrer"
@@ -23,7 +23,7 @@ function Footer({ startupConfig }: { startupConfig: TStartupConfig | null | unde
 
   const termsOfServiceRender = termsOfService?.externalUrl && (
     <a
-      className="text-sm text-green-500"
+      className="text-xs text-green-500"
       href={termsOfService.externalUrl}
       target={termsOfService.openNewTab ? '_blank' : undefined}
       rel="noreferrer"
@@ -49,7 +49,7 @@ function Footer({ startupConfig }: { startupConfig: TStartupConfig | null | unde
       lines.forEach((line, lineIndex) => {
         if (line) {
           parts.push(
-            <span key={`text-${keyIndex++}`} className="text-sm text-gray-600 dark:text-gray-400">
+            <span key={`text-${keyIndex++}`} className="text-xs text-gray-600 dark:text-gray-400">
               {line}
             </span>
           );
@@ -77,7 +77,7 @@ function Footer({ startupConfig }: { startupConfig: TStartupConfig | null | unde
           href={linkUrl}
           target="_blank"
           rel="noreferrer"
-          className="text-sm text-green-500"
+          className="text-xs text-green-500"
         >
           {linkText}
         </a>
@@ -99,7 +99,7 @@ function Footer({ startupConfig }: { startupConfig: TStartupConfig | null | unde
         <>
           {lines.map((line, index) => (
             <React.Fragment key={`line-${index}`}>
-              <span className="text-sm text-gray-600 dark:text-gray-400">{line}</span>
+              <span className="text-xs text-gray-600 dark:text-gray-400">{line}</span>
               {index < lines.length - 1 && <br />}
             </React.Fragment>
           ))}
@@ -115,7 +115,7 @@ function Footer({ startupConfig }: { startupConfig: TStartupConfig | null | unde
     const mainContentParts = (
       typeof startupConfig?.customFooter === 'string'
         ? startupConfig.customFooter
-        : 'AI 每日朋友圈  \n[浙ICP备2021031999号-3](https://beian.miit.gov.cn/)  Copyright © 2025-2026 Powered By [aipyq.com](aipyq.com). All Rights Reserved'
+        : 'AI 每日朋友圈  \n[浙ICP备2021031999号-3](https://beian.miit.gov.cn/)  Copyright © 2025-2026 Powered By [aipyq.com](https://www.aipyq.com). '
     ).split('|');
 
     const parts = mainContentParts.map((part) => part.trim()).filter(Boolean);
@@ -125,9 +125,16 @@ function Footer({ startupConfig }: { startupConfig: TStartupConfig | null | unde
     }
 
     return (
-      <div className="text-sm text-gray-600 dark:text-gray-400 text-center">
+      <div className="text-xs text-gray-600 dark:text-gray-400 text-center">
         {parts.map((part, index) => (
           <React.Fragment key={`custom-footer-part-${index}`}>
+            {index === 0 && (
+              <img
+                src="/assets/logo.svg"
+                alt="Logo"
+                className="inline-block h-3 w-3 mr-1 align-text-bottom -mt-0.5"
+              />
+            )}
             {parseMarkdownLinks(part)}
             {index < parts.length - 1 && (
               <span className="mx-1 text-gray-400 dark:text-gray-500" aria-hidden="true">
