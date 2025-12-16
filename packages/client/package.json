@@ -17,7 +17,7 @@
   ],
   "scripts": {
     "clean": "rimraf dist",
-    "build": "npm run clean && cross-env NODE_OPTIONS='--max-old-space-size=4096' rollup -c --bundleConfigAsCjs",
+    "build": "npm run clean && rollup -c --bundleConfigAsCjs",
     "build:watch": "rollup -c -w --bundleConfigAsCjs",
     "dev": "rollup -c -w --bundleConfigAsCjs"
   },

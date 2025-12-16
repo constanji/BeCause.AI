@@ -19,7 +19,7 @@
   },
   "scripts": {
     "clean": "rimraf dist",
-    "build": "npm run clean && cross-env NODE_OPTIONS='--max-old-space-size=4096' rollup -c --silent --bundleConfigAsCjs",
+    "build": "npm run clean && rollup -c --silent --bundleConfigAsCjs",
     "build:watch": "rollup -c -w",
     "rollup:api": "npx rollup -c server-rollup.config.js --bundleConfigAsCjs",
     "test": "jest --coverage --watch",
