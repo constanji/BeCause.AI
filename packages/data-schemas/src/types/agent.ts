@@ -1,5 +1,5 @@
 import { Document, Types } from 'mongoose';
-import type { GraphEdge } from '@aipyq/data-provider';
+import type { GraphEdge } from '@because/data-provider';
 
 export interface ISupportContact {
   name?: string;

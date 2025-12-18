@@ -8,7 +8,7 @@ import {
   TooltipAnchor,
   OGDialogTemplate,
   useToastContext,
-} from '@aipyq/client';
+} from '@because/client';
 import type { FC } from 'react';
 import { useDeleteConversationTagMutation } from '~/data-provider';
 import { NotificationSeverity } from '~/common';

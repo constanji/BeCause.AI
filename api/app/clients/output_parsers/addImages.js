@@ -1,5 +1,5 @@
-const { getBasePath } = require('@aipyq/api');
-const { logger } = require('@aipyq/data-schemas');
+const { getBasePath } = require('@because/api');
+const { logger } = require('@because/data-schemas');
 
 /**
  * The `addImages` function corrects any erroneous image URLs in the `responseMessage.text`

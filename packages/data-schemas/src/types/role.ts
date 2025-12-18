@@ -1,5 +1,5 @@
-import { PermissionTypes, Permissions } from '@aipyq/data-provider';
-import type { DeepPartial } from '@aipyq/data-provider';
+import { PermissionTypes, Permissions } from '@because/data-provider';
+import type { DeepPartial } from '@because/data-provider';
 import type { Document } from 'mongoose';
 import { CursorPaginationParams } from '~/common';
 

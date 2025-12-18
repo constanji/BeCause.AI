@@ -1,8 +1,8 @@
 const cookies = require('cookie');
 const jwt = require('jsonwebtoken');
 const openIdClient = require('openid-client');
-const { logger } = require('@aipyq/data-schemas');
-const { isEnabled, findOpenIDUser } = require('@aipyq/api');
+const { logger } = require('@because/data-schemas');
+const { isEnabled, findOpenIDUser } = require('@because/api');
 const {
   requestPasswordReset,
   setOpenIDAuthTokens,

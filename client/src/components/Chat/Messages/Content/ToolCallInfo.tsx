@@ -1,9 +1,9 @@
 import React from 'react';
 import { useLocalize } from '~/hooks';
-import { Tools } from '@aipyq/data-provider';
+import { Tools } from '@because/data-provider';
 import { UIResourceRenderer } from '@mcp-ui/client';
 import UIResourceCarousel from './UIResourceCarousel';
-import type { TAttachment, UIResource } from '@aipyq/data-provider';
+import type { TAttachment, UIResource } from '@because/data-provider';
 
 function OptimizedCodeBlock({ text, maxHeight = 320 }: { text: string; maxHeight?: number }) {
   return (

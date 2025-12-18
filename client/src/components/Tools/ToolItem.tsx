@@ -1,5 +1,5 @@
 import { XCircle, PlusCircleIcon, Wrench } from 'lucide-react';
-import type { TPlugin, AgentToolType } from '@aipyq/data-provider';
+import type { TPlugin, AgentToolType } from '@because/data-provider';
 import { useLocalize } from '~/hooks';
 
 type ToolItemProps = {

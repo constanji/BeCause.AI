@@ -1,7 +1,7 @@
 import React, { useState, useMemo, memo } from 'react';
 import { useRecoilState } from 'recoil';
-import type { TConversation, TMessage, TFeedback } from '@aipyq/data-provider';
-import { EditIcon, Clipboard, CheckMark, ContinueIcon, RegenerateIcon } from '@aipyq/client';
+import type { TConversation, TMessage, TFeedback } from '@because/data-provider';
+import { EditIcon, Clipboard, CheckMark, ContinueIcon, RegenerateIcon } from '@because/client';
 import { useGenerationsByLatest, useLocalize } from '~/hooks';
 import { Fork } from '~/components/Conversations';
 import MessageAudio from './MessageAudio';

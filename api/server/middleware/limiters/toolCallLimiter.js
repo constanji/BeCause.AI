@@ -1,6 +1,6 @@
 const rateLimit = require('express-rate-limit');
-const { limiterCache } = require('@aipyq/api');
-const { ViolationTypes } = require('@aipyq/data-provider');
+const { limiterCache } = require('@because/api');
+const { ViolationTypes } = require('@because/data-provider');
 const logViolation = require('~/cache/logViolation');
 
 const { TOOL_CALL_VIOLATION_SCORE: score } = process.env;

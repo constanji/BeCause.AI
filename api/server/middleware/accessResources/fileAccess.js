@@ -1,5 +1,5 @@
-const { logger } = require('@aipyq/data-schemas');
-const { PermissionBits, hasPermissions, ResourceType } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { PermissionBits, hasPermissions, ResourceType } = require('@because/data-provider');
 const { getEffectivePermissions } = require('~/server/services/PermissionService');
 const { getAgents } = require('~/models/Agent');
 const { getFiles } = require('~/models/File');

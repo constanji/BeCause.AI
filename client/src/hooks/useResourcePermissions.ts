@@ -1,8 +1,8 @@
 import {
   hasPermissions,
   useGetEffectivePermissionsQuery,
-} from '@aipyq/data-provider/react-query';
-import type { ResourceType } from '@aipyq/data-provider';
+} from '@because/data-provider/react-query';
+import type { ResourceType } from '@because/data-provider';
 
 /**
  * fetches resource permissions once and returns a function to check any permission

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRecoilState } from 'recoil';
-import { Switch, Label, InfoHoverCard, ESide } from '@aipyq/client';
+import { Switch, Label, InfoHoverCard, ESide } from '@because/client';
 import { useLocalize } from '~/hooks';
 import store from '~/store';
 

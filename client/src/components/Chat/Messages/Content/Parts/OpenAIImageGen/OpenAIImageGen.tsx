@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { PixelCard } from '@aipyq/client';
-import type { TAttachment, TFile, TAttachmentMetadata } from '@aipyq/data-provider';
+import { PixelCard } from '@because/client';
+import type { TAttachment, TFile, TAttachmentMetadata } from '@because/data-provider';
 import Image from '~/components/Chat/Messages/Content/Image';
 import ProgressText from './ProgressText';
 import { scaleImage } from '~/utils';

@@ -1,5 +1,5 @@
 const express = require('express');
-const { isEnabled } = require('@aipyq/api');
+const { isEnabled } = require('@because/api');
 const staticCache = require('../utils/staticCache');
 const paths = require('~/config/paths');
 

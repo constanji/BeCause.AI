@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import type { TStartupConfig, TSubmission } from '@aipyq/data-provider';
+import type { TStartupConfig, TSubmission } from '@because/data-provider';
 import { useUpdateEphemeralAgent, useApplyNewAgentTemplate } from '~/store/agents';
 import { getModelSpec, applyModelSpecEphemeralAgent } from '~/utils';
 

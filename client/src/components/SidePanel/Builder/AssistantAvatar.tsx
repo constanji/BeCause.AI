@@ -1,25 +1,25 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import * as Popover from '@radix-ui/react-popover';
-import { useToastContext } from '@aipyq/client';
+import { useToastContext } from '@because/client';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   fileConfig as defaultFileConfig,
   QueryKeys,
   defaultOrderQuery,
   mergeFileConfig,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type {
   Metadata,
   Assistant,
   AssistantsEndpoint,
   AssistantCreateParams,
   AssistantListResponse,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useUploadAssistantAvatarMutation, useGetFileConfig } from '~/data-provider';
 import { AssistantAvatar, NoImage, AvatarMenu } from './Images';
 import { useAssistantsMapContext } from '~/Providers';
-// import { Spinner } from '@aipyq/client';
+// import { Spinner } from '@because/client';
 import { useLocalize } from '~/hooks';
 import { formatBytes } from '~/utils';
 

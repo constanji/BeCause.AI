@@ -8,7 +8,7 @@ jest.mock('~/cache/getLogStores', () => ({
   }),
 }));
 
-const { EModelEndpoint, ErrorTypes, validateAzureGroups } = require('@aipyq/data-provider');
+const { EModelEndpoint, ErrorTypes, validateAzureGroups } = require('@because/data-provider');
 const { getUserKey, getUserKeyValues } = require('~/server/services/UserService');
 const initializeClient = require('./initialize');
 const { OpenAIClient } = require('~/app');
@@ -30,15 +30,15 @@ const mockAppConfig = {
       modelNames: ['gpt-4-vision-preview', 'gpt-3.5-turbo', 'gpt-4'],
       modelGroupMap: {
         'gpt-4-vision-preview': {
-          group: 'Aipyq-westus',
+          group: 'Because-westus',
           deploymentName: 'gpt-4-vision-preview',
           version: '2024-02-15-preview',
         },
       },
       groupMap: {
-        'Aipyq-westus': {
+        'Because-westus': {
           apiKey: 'WESTUS_API_KEY',
-          instanceName: 'Aipyq-westus',
+          instanceName: 'Because-westus',
           version: '2023-12-01-preview',
           models: {
             'gpt-4-vision-preview': {
@@ -61,9 +61,9 @@ describe('initializeClient', () => {
 
   const validAzureConfigs = [
     {
-      group: 'Aipyq-westus',
+      group: 'Because-westus',
       apiKey: 'WESTUS_API_KEY',
-      instanceName: 'Aipyq-westus',
+      instanceName: 'Because-westus',
       version: '2023-12-01-preview',
       models: {
         'gpt-4-vision-preview': {
@@ -85,9 +85,9 @@ describe('initializeClient', () => {
       },
     },
     {
-      group: 'Aipyq-eastus',
+      group: 'Because-eastus',
       apiKey: 'EASTUS_API_KEY',
-      instanceName: 'Aipyq-eastus',
+      instanceName: 'Because-eastus',
       deploymentName: 'gpt-4-turbo',
       version: '2024-02-15-preview',
       models: {

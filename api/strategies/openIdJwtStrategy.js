@@ -1,10 +1,10 @@
 const cookies = require('cookie');
 const jwksRsa = require('jwks-rsa');
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 const { HttpsProxyAgent } = require('https-proxy-agent');
-const { SystemRoles } = require('@aipyq/data-provider');
+const { SystemRoles } = require('@because/data-provider');
 const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
-const { isEnabled, findOpenIDUser } = require('@aipyq/api');
+const { isEnabled, findOpenIDUser } = require('@because/api');
 const { updateUser, findUser } = require('~/models');
 
 /**
@@ -44,7 +44,7 @@ const openIdJwtLogin = (openIdConfig) => {
       passReqToCallback: true,
     },
     /**
-     * @param {import('@aipyq/api').ServerRequest} req
+     * @param {import('@because/api').ServerRequest} req
      * @param {import('openid-client').IDToken} payload
      * @param {import('passport-jwt').VerifyCallback} done
      */

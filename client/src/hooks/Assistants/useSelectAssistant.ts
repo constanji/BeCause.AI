@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import { isAssistantsEndpoint } from '@aipyq/data-provider';
-import type { AssistantsEndpoint, TConversation, TPreset } from '@aipyq/data-provider';
+import { isAssistantsEndpoint } from '@because/data-provider';
+import type { AssistantsEndpoint, TConversation, TPreset } from '@because/data-provider';
 import useDefaultConvo from '~/hooks/Conversations/useDefaultConvo';
 import { useChatContext } from '~/Providers/ChatContext';
 import useAssistantListMap from './useAssistantListMap';

@@ -1,5 +1,5 @@
 import debounce from 'lodash/debounce';
-import { LocalStorageKeys } from '@aipyq/data-provider';
+import { LocalStorageKeys } from '@because/data-provider';
 
 export const clearDraft = debounce((id?: string | null) => {
   localStorage.removeItem(`${LocalStorageKeys.TEXT_DRAFT}${id ?? ''}`);

@@ -1,6 +1,6 @@
-const { logger } = require('@aipyq/data-schemas');
-const { encrypt, decrypt } = require('@aipyq/api');
-const { ErrorTypes } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { encrypt, decrypt } = require('@because/api');
+const { ErrorTypes } = require('@because/data-provider');
 const { updateUser } = require('~/models');
 const { Key } = require('~/db/models');
 

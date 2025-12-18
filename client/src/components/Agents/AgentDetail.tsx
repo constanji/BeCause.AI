@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { Link } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
-import { OGDialog, OGDialogContent, Button, useToastContext } from '@aipyq/client';
+import { OGDialog, OGDialogContent, Button, useToastContext } from '@because/client';
 import {
   QueryKeys,
   Constants,
@@ -9,8 +9,8 @@ import {
   PermissionBits,
   LocalStorageKeys,
   AgentListResponse,
-} from '@aipyq/data-provider';
-import type t from '@aipyq/data-provider';
+} from '@because/data-provider';
+import type t from '@because/data-provider';
 import { renderAgentAvatar, clearMessagesCache } from '~/utils';
 import { useLocalize, useDefaultConvo } from '~/hooks';
 import { useChatContext } from '~/Providers';

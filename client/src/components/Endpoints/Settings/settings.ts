@@ -1,4 +1,4 @@
-import { EModelEndpoint } from '@aipyq/data-provider';
+import { EModelEndpoint } from '@because/data-provider';
 import type { FC } from 'react';
 import type { TModelSelectProps } from '~/common';
 import { GoogleSettings, PluginSettings } from './MultiView';

@@ -1,5 +1,5 @@
-import { Providers } from '@aipyq/agents';
-import { mbToBytes, isOpenAILikeProvider } from '@aipyq/data-provider';
+import { Providers } from '@because/agents';
+import { mbToBytes, isOpenAILikeProvider } from '@because/data-provider';
 
 export interface PDFValidationResult {
   isValid: boolean;

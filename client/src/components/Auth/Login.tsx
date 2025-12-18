@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { ErrorTypes, registerPage } from '@aipyq/data-provider';
-import { OpenIDIcon, useToastContext } from '@aipyq/client';
+import { ErrorTypes, registerPage } from '@because/data-provider';
+import { OpenIDIcon, useToastContext } from '@because/client';
 import { useOutletContext, useSearchParams } from 'react-router-dom';
 import type { TLoginLayoutContext } from '~/common';
 import { ErrorMessage } from '~/components/Auth/ErrorMessage';

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Blocks, MCPIcon, AttachmentIcon } from '@aipyq/client';
+import { Blocks, MCPIcon, AttachmentIcon } from '@because/client';
 import { Database, Bookmark, Settings2, ArrowRightToLine, MessageSquareQuote } from 'lucide-react';
 import {
   Permissions,
@@ -8,8 +8,8 @@ import {
   isParamEndpoint,
   isAgentsEndpoint,
   isAssistantsEndpoint,
-} from '@aipyq/data-provider';
-import type { TInterfaceConfig, TEndpointsConfig } from '@aipyq/data-provider';
+} from '@because/data-provider';
+import type { TInterfaceConfig, TEndpointsConfig } from '@because/data-provider';
 import type { NavLink } from '~/common';
 import AgentPanelSwitch from '~/components/SidePanel/Agents/AgentPanelSwitch';
 import BookmarkPanel from '~/components/SidePanel/Bookmarks/BookmarkPanel';

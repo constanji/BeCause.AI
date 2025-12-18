@@ -11,7 +11,7 @@ import {
   parseCompactConvo,
   replaceSpecialVars,
   isAssistantsEndpoint,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import { useSetRecoilState, useResetRecoilState, useRecoilValue } from 'recoil';
 import type {
   TMessage,
@@ -20,7 +20,7 @@ import type {
   TEndpointOption,
   TEndpointsConfig,
   EndpointSchemaKey,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type { SetterOrUpdater } from 'recoil';
 import type { TAskFunction, ExtendedFile } from '~/common';
 import useSetFilesToDelete from '~/hooks/Files/useSetFilesToDelete';

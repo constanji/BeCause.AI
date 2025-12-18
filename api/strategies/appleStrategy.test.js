@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
-const { isEnabled } = require('@aipyq/api');
-const { logger } = require('@aipyq/data-schemas');
+const { isEnabled } = require('@because/api');
+const { logger } = require('@because/data-schemas');
 const { Strategy: AppleStrategy } = require('passport-apple');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const { createSocialUser, handleExistingUser } = require('./process');
@@ -10,8 +10,8 @@ const { findUser } = require('~/models');
 const { User } = require('~/db/models');
 
 jest.mock('jsonwebtoken');
-jest.mock('@aipyq/data-schemas', () => {
-  const actualModule = jest.requireActual('@aipyq/data-schemas');
+jest.mock('@because/data-schemas', () => {
+  const actualModule = jest.requireActual('@because/data-schemas');
   return {
     ...actualModule,
     logger: {
@@ -26,8 +26,8 @@ jest.mock('./process', () => ({
   createSocialUser: jest.fn(),
   handleExistingUser: jest.fn(),
 }));
-jest.mock('@aipyq/api', () => ({
-  ...jest.requireActual('@aipyq/api'),
+jest.mock('@because/api', () => ({
+  ...jest.requireActual('@because/api'),
   isEnabled: jest.fn(),
 }));
 jest.mock('~/models', () => ({

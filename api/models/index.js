@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { createMethods } = require('@aipyq/data-schemas');
+const { createMethods } = require('@because/data-schemas');
 const methods = createMethods(mongoose);
 const { comparePassword } = require('./userMethods');
 const {

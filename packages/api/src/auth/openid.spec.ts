@@ -1,10 +1,10 @@
-import { ErrorTypes } from '@aipyq/data-provider';
-import { logger } from '@aipyq/data-schemas';
-import type { IUser, UserMethods } from '@aipyq/data-schemas';
+import { ErrorTypes } from '@because/data-provider';
+import { logger } from '@because/data-schemas';
+import type { IUser, UserMethods } from '@because/data-schemas';
 import { findOpenIDUser } from './openid';
 
-jest.mock('@aipyq/data-schemas', () => ({
-  ...jest.requireActual('@aipyq/data-schemas'),
+jest.mock('@because/data-schemas', () => ({
+  ...jest.requireActual('@because/data-schemas'),
   logger: {
     warn: jest.fn(),
     info: jest.fn(),

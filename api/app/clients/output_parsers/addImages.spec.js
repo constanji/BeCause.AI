@@ -152,25 +152,25 @@ describe('addImages', () => {
     });
 
     it('should prepend base path to image URLs when DOMAIN_CLIENT is set', () => {
-      process.env.DOMAIN_CLIENT = 'http://localhost:3080/Aipyq';
+      process.env.DOMAIN_CLIENT = 'http://localhost:3080/Because';
       intermediateSteps.push({ observation: '![desc](/images/test.png)' });
       addImages(intermediateSteps, responseMessage);
-      expect(responseMessage.text).toBe('\n![desc](/Aipyq/images/test.png)');
+      expect(responseMessage.text).toBe('\n![desc](/Because/images/test.png)');
     });
 
     it('should not prepend base path when image URL already has base path', () => {
-      process.env.DOMAIN_CLIENT = 'http://localhost:3080/Aipyq';
-      intermediateSteps.push({ observation: '![desc](/Aipyq/images/test.png)' });
+      process.env.DOMAIN_CLIENT = 'http://localhost:3080/Because';
+      intermediateSteps.push({ observation: '![desc](/Because/images/test.png)' });
       addImages(intermediateSteps, responseMessage);
-      expect(responseMessage.text).toBe('\n![desc](/Aipyq/images/test.png)');
+      expect(responseMessage.text).toBe('\n![desc](/Because/images/test.png)');
     });
 
     it('should correct erroneous URLs with base path', () => {
-      process.env.DOMAIN_CLIENT = 'http://localhost:3080/Aipyq';
+      process.env.DOMAIN_CLIENT = 'http://localhost:3080/Because';
       responseMessage.text = '![desc](sandbox:/images/test.png)';
       intermediateSteps.push({ observation: '![desc](/images/test.png)' });
       addImages(intermediateSteps, responseMessage);
-      expect(responseMessage.text).toBe('![desc](/Aipyq/images/test.png)');
+      expect(responseMessage.text).toBe('![desc](/Because/images/test.png)');
     });
 
     it('should handle empty base path (root deployment)', () => {
@@ -188,31 +188,31 @@ describe('addImages', () => {
     });
 
     it('should handle observation without image path match', () => {
-      process.env.DOMAIN_CLIENT = 'http://localhost:3080/Aipyq';
+      process.env.DOMAIN_CLIENT = 'http://localhost:3080/Because';
       intermediateSteps.push({ observation: '![desc](not-an-image-path)' });
       addImages(intermediateSteps, responseMessage);
       expect(responseMessage.text).toBe('\n![desc](not-an-image-path)');
     });
 
     it('should handle nested subdirectories in base path', () => {
-      process.env.DOMAIN_CLIENT = 'http://localhost:3080/apps/Aipyq';
+      process.env.DOMAIN_CLIENT = 'http://localhost:3080/apps/Because';
       intermediateSteps.push({ observation: '![desc](/images/test.png)' });
       addImages(intermediateSteps, responseMessage);
-      expect(responseMessage.text).toBe('\n![desc](/apps/Aipyq/images/test.png)');
+      expect(responseMessage.text).toBe('\n![desc](/apps/Because/images/test.png)');
     });
 
     it('should handle multiple observations with mixed base path scenarios', () => {
-      process.env.DOMAIN_CLIENT = 'http://localhost:3080/Aipyq';
+      process.env.DOMAIN_CLIENT = 'http://localhost:3080/Because';
       intermediateSteps.push({ observation: '![desc1](/images/test1.png)' });
-      intermediateSteps.push({ observation: '![desc2](/Aipyq/images/test2.png)' });
+      intermediateSteps.push({ observation: '![desc2](/Because/images/test2.png)' });
       addImages(intermediateSteps, responseMessage);
       expect(responseMessage.text).toBe(
-        '\n![desc1](/Aipyq/images/test1.png)\n![desc2](/Aipyq/images/test2.png)',
+        '\n![desc1](/Because/images/test1.png)\n![desc2](/Because/images/test2.png)',
       );
     });
 
     it('should handle complex markdown with base path', () => {
-      process.env.DOMAIN_CLIENT = 'http://localhost:3080/Aipyq';
+      process.env.DOMAIN_CLIENT = 'http://localhost:3080/Because';
       const complexMarkdown = `
         # Document Title
         ![image1](/images/image1.png)
@@ -221,18 +221,18 @@ describe('addImages', () => {
       `;
       intermediateSteps.push({ observation: complexMarkdown });
       addImages(intermediateSteps, responseMessage);
-      expect(responseMessage.text).toBe('\n![image1](/Aipyq/images/image1.png)');
+      expect(responseMessage.text).toBe('\n![image1](/Because/images/image1.png)');
     });
 
     it('should handle URLs that are already absolute', () => {
-      process.env.DOMAIN_CLIENT = 'http://localhost:3080/Aipyq';
+      process.env.DOMAIN_CLIENT = 'http://localhost:3080/Because';
       intermediateSteps.push({ observation: '![desc](https://example.com/image.png)' });
       addImages(intermediateSteps, responseMessage);
       expect(responseMessage.text).toBe('\n![desc](https://example.com/image.png)');
     });
 
     it('should handle data URLs', () => {
-      process.env.DOMAIN_CLIENT = 'http://localhost:3080/Aipyq';
+      process.env.DOMAIN_CLIENT = 'http://localhost:3080/Because';
       intermediateSteps.push({
         observation:
           '![desc](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==)',

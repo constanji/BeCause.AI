@@ -1,13 +1,13 @@
 const client = require('openid-client');
-const { isEnabled } = require('@aipyq/api');
-const { logger } = require('@aipyq/data-schemas');
-const { CacheKeys } = require('@aipyq/data-provider');
+const { isEnabled } = require('@because/api');
+const { logger } = require('@because/data-schemas');
+const { CacheKeys } = require('@because/data-provider');
 const { Client } = require('@microsoft/microsoft-graph-client');
 const { getOpenIdConfig } = require('~/strategies/openidStrategy');
 const getLogStores = require('~/cache/getLogStores');
 
 /**
- * @import { TPrincipalSearchResult, TGraphPerson, TGraphUser, TGraphGroup, TGraphPeopleResponse, TGraphUsersResponse, TGraphGroupsResponse } from '@aipyq/data-provider'
+ * @import { TPrincipalSearchResult, TGraphPerson, TGraphUser, TGraphGroup, TGraphPeopleResponse, TGraphUsersResponse, TGraphGroupsResponse } from '@because/data-provider'
  */
 
 /**

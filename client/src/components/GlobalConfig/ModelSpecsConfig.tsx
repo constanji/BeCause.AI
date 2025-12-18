@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
-import { Button, useToastContext } from '@aipyq/client';
+import { Button, useToastContext } from '@because/client';
 import { useForm, useFieldArray, Controller, useWatch } from 'react-hook-form';
 import { useDrag, useDrop } from 'react-dnd';
-import type { TStartupConfig, TModelSpec } from '@aipyq/data-provider';
-import { useGetModelsQuery } from '@aipyq/data-provider/react-query';
+import type { TStartupConfig, TModelSpec } from '@because/data-provider';
+import { useGetModelsQuery } from '@because/data-provider/react-query';
 import { useGetEndpointsQuery } from '~/data-provider';
 import { useLocalize } from '~/hooks';
 import { cn, defaultTextProps } from '~/utils';

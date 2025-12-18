@@ -1,7 +1,7 @@
 import { memo, Suspense, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
-import { DelayedRender } from '@aipyq/client';
-import type { TMessage } from '@aipyq/data-provider';
+import { DelayedRender } from '@because/client';
+import type { TMessage } from '@because/data-provider';
 import type { TMessageContentProps, TDisplayProps } from '~/common';
 import Error from '~/components/Messages/Content/Error';
 import { useMessageContext } from '~/Providers';

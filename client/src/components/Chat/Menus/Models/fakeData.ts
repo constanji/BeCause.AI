@@ -1,5 +1,5 @@
-import { EModelEndpoint, AuthType } from '@aipyq/data-provider';
-import type { TModelSpec } from '@aipyq/data-provider';
+import { EModelEndpoint, AuthType } from '@because/data-provider';
+import type { TModelSpec } from '@because/data-provider';
 
 export const data: TModelSpec[] = [
   {

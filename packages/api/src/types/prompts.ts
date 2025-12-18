@@ -1,4 +1,4 @@
-import type { IPromptGroup as IPromptGroup } from '@aipyq/data-schemas';
+import type { IPromptGroup as IPromptGroup } from '@because/data-schemas';
 import type { Types } from 'mongoose';
 
 export interface PromptGroupsListResponse {

@@ -1,7 +1,7 @@
 import { useRecoilState } from 'recoil';
 import { useEffect, useCallback } from 'react';
-import { isAssistantsEndpoint } from '@aipyq/data-provider';
-import type { TMessage } from '@aipyq/data-provider';
+import { isAssistantsEndpoint } from '@because/data-provider';
+import type { TMessage } from '@because/data-provider';
 import type { TMessageProps } from '~/common';
 import MessageContent from '~/components/Messages/MessageContent';
 import MessageParts from './MessageParts';

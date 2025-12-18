@@ -2,9 +2,9 @@ import { useState, useId } from 'react';
 import { PlusCircle } from 'lucide-react';
 import * as Menu from '@ariakit/react/menu';
 import { useFormContext } from 'react-hook-form';
-import { DropdownPopup } from '@aipyq/client';
-import { specialVariables } from '@aipyq/data-provider';
-import type { TSpecialVarLabel } from '@aipyq/data-provider';
+import { DropdownPopup } from '@because/client';
+import { specialVariables } from '@because/data-provider';
+import type { TSpecialVarLabel } from '@because/data-provider';
 import { useLocalize } from '~/hooks';
 
 interface VariableOption {

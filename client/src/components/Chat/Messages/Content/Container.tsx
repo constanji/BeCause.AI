@@ -1,4 +1,4 @@
-import { TMessage } from '@aipyq/data-provider';
+import { TMessage } from '@because/data-provider';
 import Files from './Files';
 
 const Container = ({ children, message }: { children: React.ReactNode; message?: TMessage }) => (

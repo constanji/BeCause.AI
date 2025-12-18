@@ -1,5 +1,5 @@
-const { isEnabled } = require('@aipyq/api');
-const { ViolationTypes } = require('@aipyq/data-provider');
+const { isEnabled } = require('@because/api');
+const { ViolationTypes } = require('@because/data-provider');
 const getLogStores = require('./getLogStores');
 const banViolation = require('./banViolation');
 

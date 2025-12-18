@@ -1,11 +1,11 @@
-const { logger } = require('@aipyq/data-schemas');
-const { ErrorTypes } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { ErrorTypes } = require('@because/data-provider');
 const { createSocialUser, handleExistingUser } = require('./process');
 const socialLogin = require('./socialLogin');
 const { findUser } = require('~/models');
 
-jest.mock('@aipyq/data-schemas', () => {
-  const actualModule = jest.requireActual('@aipyq/data-schemas');
+jest.mock('@because/data-schemas', () => {
+  const actualModule = jest.requireActual('@because/data-schemas');
   return {
     ...actualModule,
     logger: {
@@ -21,8 +21,8 @@ jest.mock('./process', () => ({
   handleExistingUser: jest.fn(),
 }));
 
-jest.mock('@aipyq/api', () => ({
-  ...jest.requireActual('@aipyq/api'),
+jest.mock('@because/api', () => ({
+  ...jest.requireActual('@because/api'),
   isEnabled: jest.fn().mockReturnValue(true),
   isEmailDomainAllowed: jest.fn().mockReturnValue(true),
 }));

@@ -5,9 +5,9 @@ import {
   ToolCallTypes,
   imageGenTools,
   isImageVisionTool,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import { memo } from 'react';
-import type { TMessageContentParts, TAttachment } from '@aipyq/data-provider';
+import type { TMessageContentParts, TAttachment } from '@because/data-provider';
 import { OpenAIImageGen, EmptyText, Reasoning, ExecuteCode, AgentUpdate, Text } from './Parts';
 import { ErrorMessage } from './MessageContent';
 import RetrievalCall from './RetrievalCall';

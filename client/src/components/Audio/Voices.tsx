@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRecoilState } from 'recoil';
-import { Dropdown } from '@aipyq/client';
+import { Dropdown } from '@because/client';
 import type { Option } from '~/common';
 import { useLocalize, useTTSBrowser, useTTSExternal } from '~/hooks';
 import { logger } from '~/utils';

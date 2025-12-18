@@ -1,6 +1,6 @@
-import { Providers } from '@aipyq/agents';
-import { isOpenAILikeProvider, isDocumentSupportedProvider } from '@aipyq/data-provider';
-import type { IMongoFile } from '@aipyq/data-schemas';
+import { Providers } from '@because/agents';
+import { isOpenAILikeProvider, isDocumentSupportedProvider } from '@because/data-provider';
+import type { IMongoFile } from '@because/data-schemas';
 import type {
   AnthropicDocumentBlock,
   StrategyFunctions,

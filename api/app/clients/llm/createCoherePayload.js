@@ -1,4 +1,4 @@
-const { CohereConstants } = require('@aipyq/data-provider');
+const { CohereConstants } = require('@because/data-provider');
 const { titleInstruction } = require('../prompts/titlePrompts');
 
 // Mapping OpenAI roles to Cohere roles

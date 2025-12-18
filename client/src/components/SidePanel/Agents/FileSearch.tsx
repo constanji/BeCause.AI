@@ -2,14 +2,14 @@ import { useState, useRef } from 'react';
 import { Folder } from 'lucide-react';
 import * as Ariakit from '@ariakit/react';
 import { useFormContext } from 'react-hook-form';
-import { SharePointIcon, AttachmentIcon, DropdownPopup } from '@aipyq/client';
+import { SharePointIcon, AttachmentIcon, DropdownPopup } from '@because/client';
 import {
   EModelEndpoint,
   EToolResources,
   mergeFileConfig,
   AgentCapabilities,
   getEndpointFileConfig,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type { ExtendedFile, AgentForm } from '~/common';
 import useSharePointFileHandling from '~/hooks/Files/useSharePointFileHandling';
 import { useGetFileConfig, useGetStartupConfig } from '~/data-provider';

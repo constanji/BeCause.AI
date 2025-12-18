@@ -1,4 +1,4 @@
-import { TooltipAnchor } from '@aipyq/client';
+import { TooltipAnchor } from '@because/client';
 import { useLocalize } from '~/hooks';
 import { cn } from '~/utils';
 

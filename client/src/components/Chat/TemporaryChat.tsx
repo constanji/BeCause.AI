@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { TooltipAnchor } from '@aipyq/client';
+import { TooltipAnchor } from '@because/client';
 import { MessageCircleDashed } from 'lucide-react';
 import { useRecoilState, useRecoilCallback } from 'recoil';
 import { useChatContext } from '~/Providers';

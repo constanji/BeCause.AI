@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import { useWatch } from 'react-hook-form';
 import type { Control } from 'react-hook-form';
-import { SendIcon, TooltipAnchor } from '@aipyq/client';
+import { SendIcon, TooltipAnchor } from '@because/client';
 import { useLocalize } from '~/hooks';
 import { cn } from '~/utils';
 

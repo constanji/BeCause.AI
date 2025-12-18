@@ -1,5 +1,5 @@
 import React from 'react';
-import { Label } from '@aipyq/client';
+import { Label } from '@because/client';
 import CategoryIcon from '~/components/Prompts/Groups/CategoryIcon';
 import { useLocalize } from '~/hooks';
 

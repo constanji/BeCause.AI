@@ -1,6 +1,6 @@
-const { sleep } = require('@aipyq/agents');
-const { sendEvent } = require('@aipyq/api');
-const { logger } = require('@aipyq/data-schemas');
+const { sleep } = require('@because/agents');
+const { sendEvent } = require('@because/api');
+const { logger } = require('@because/data-schemas');
 const {
   Constants,
   StepTypes,
@@ -8,7 +8,7 @@ const {
   ToolCallTypes,
   MessageContentTypes,
   AssistantStreamEvents,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const { retrieveAndProcessFile } = require('~/server/services/Files/process');
 const { processRequiredActions } = require('~/server/services/ToolService');
 const { processMessages } = require('~/server/services/Threads');

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import { Capabilities } from '@aipyq/data-provider';
+import { Capabilities } from '@because/data-provider';
 import { useFormContext, useWatch } from 'react-hook-form';
-import type { TConfig, AssistantsEndpoint } from '@aipyq/data-provider';
+import type { TConfig, AssistantsEndpoint } from '@because/data-provider';
 import type { AssistantForm } from '~/common';
 import ImageVision from './ImageVision';
 import { useLocalize } from '~/hooks';

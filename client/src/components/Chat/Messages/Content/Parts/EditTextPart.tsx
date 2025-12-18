@@ -1,11 +1,11 @@
 import { useRef, useEffect, useCallback, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import { TextareaAutosize } from '@aipyq/client';
-import { ContentTypes } from '@aipyq/data-provider';
+import { TextareaAutosize } from '@because/client';
+import { ContentTypes } from '@because/data-provider';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { Lightbulb, MessageSquare } from 'lucide-react';
-import { useUpdateMessageContentMutation } from '@aipyq/data-provider/react-query';
-import type { Agents } from '@aipyq/data-provider';
+import { useUpdateMessageContentMutation } from '@because/data-provider/react-query';
+import type { Agents } from '@because/data-provider';
 import type { TEditProps } from '~/common';
 import { useMessagesOperations, useMessagesConversation, useAddedChatContext } from '~/Providers';
 import Container from '~/components/Chat/Messages/Content/Container';

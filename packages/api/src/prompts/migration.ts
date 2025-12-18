@@ -1,7 +1,7 @@
-import { logger } from '@aipyq/data-schemas';
-import { AccessRoleIds, ResourceType, PrincipalType, Constants } from '@aipyq/data-provider';
+import { logger } from '@because/data-schemas';
+import { AccessRoleIds, ResourceType, PrincipalType, Constants } from '@because/data-provider';
 import { ensureRequiredCollectionsExist } from '../db/utils';
-import type { AccessRoleMethods, IPromptGroupDocument } from '@aipyq/data-schemas';
+import type { AccessRoleMethods, IPromptGroupDocument } from '@because/data-schemas';
 import type { Model, Mongoose } from 'mongoose';
 
 const { GLOBAL_PROJECT_NAME } = Constants;

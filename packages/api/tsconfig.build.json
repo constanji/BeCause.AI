@@ -9,7 +9,7 @@
     "declarationMap": true,
     /**
      * Skip type checking of declaration files to reduce memory usage
-     * This is especially important when processing large dependencies like @aipyq/agents
+     * This is especially important when processing large dependencies like @because/agents
      */
     "skipLibCheck": true
   },

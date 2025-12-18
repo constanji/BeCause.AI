@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
-import { PrincipalType } from '@aipyq/data-provider';
-import type { TPrincipal } from '@aipyq/data-provider';
+import { PrincipalType } from '@because/data-provider';
+import type { TPrincipal } from '@because/data-provider';
 import PrincipalAvatar from '~/components/Sharing/PrincipalAvatar';
 import { useLocalize } from '~/hooks';
 import { cn } from '~/utils';

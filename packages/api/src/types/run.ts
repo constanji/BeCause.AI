@@ -1,5 +1,5 @@
-import type { Providers, ClientOptions } from '@aipyq/agents';
-import type { AgentModelParameters } from '@aipyq/data-provider';
+import type { Providers, ClientOptions } from '@because/agents';
+import type { AgentModelParameters } from '@because/data-provider';
 import type { OpenAIConfiguration } from './openai';
 
 export type RunLLMConfig = {

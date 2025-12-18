@@ -1,7 +1,7 @@
 import React from 'react';
 // import { motion } from 'framer-motion';
 // import { LockIcon, UnlockIcon } from 'lucide-react';
-import { Label, Button } from '@aipyq/client';
+import { Label, Button } from '@because/client';
 import { useLocalize } from '~/hooks';
 
 interface DisableTwoFactorToggleProps {

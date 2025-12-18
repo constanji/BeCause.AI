@@ -1,5 +1,5 @@
 import React from 'react';
-import { HoverCardPortal, HoverCardContent } from '@aipyq/client';
+import { HoverCardPortal, HoverCardContent } from '@because/client';
 import { TranslationKeys, useLocalize } from '~/hooks';
 import { ESide } from '~/common';
 

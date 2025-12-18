@@ -9,7 +9,7 @@ const {
   AccessRoleIds,
   PrincipalType,
   PermissionBits,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 
 // Mock modules before importing
 jest.mock('~/server/services/Config', () => ({

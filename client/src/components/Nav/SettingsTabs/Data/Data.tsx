@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { useOnClickOutside } from '@aipyq/client';
-import { SystemRoles } from '@aipyq/data-provider';
+import { useOnClickOutside } from '@because/client';
+import { SystemRoles } from '@because/data-provider';
 import ImportConversations from './ImportConversations';
 // import { RevokeKeys } from './RevokeKeys'; // 已隐藏撤销凭据功能
 import { DeleteCache } from './DeleteCache';

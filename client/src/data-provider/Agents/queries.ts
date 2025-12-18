@@ -1,11 +1,11 @@
 import { useQuery, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
-import { QueryKeys, dataService, EModelEndpoint, PermissionBits } from '@aipyq/data-provider';
+import { QueryKeys, dataService, EModelEndpoint, PermissionBits } from '@because/data-provider';
 import type {
   QueryObserverResult,
   UseQueryOptions,
   UseInfiniteQueryOptions,
 } from '@tanstack/react-query';
-import type t from '@aipyq/data-provider';
+import type t from '@because/data-provider';
 import { isEphemeralAgent } from '~/common';
 
 /**

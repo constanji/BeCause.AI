@@ -6,7 +6,7 @@ import {
   InputNumber,
   SelectDropDown,
   HoverCardTrigger,
-} from '@aipyq/client';
+} from '@because/client';
 import type { TModelSelectProps } from '~/common';
 import { cn, optionText, defaultTextProps, removeFocusRings } from '~/utils';
 import OptionHover from './OptionHover';

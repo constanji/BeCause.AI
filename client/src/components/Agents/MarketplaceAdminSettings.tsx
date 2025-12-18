@@ -2,7 +2,7 @@ import { useMemo, useEffect, useState } from 'react';
 import * as Ariakit from '@ariakit/react';
 import { ShieldEllipsis } from 'lucide-react';
 import { useForm, Controller } from 'react-hook-form';
-import { Permissions, SystemRoles, roleDefaults, PermissionTypes } from '@aipyq/data-provider';
+import { Permissions, SystemRoles, roleDefaults, PermissionTypes } from '@because/data-provider';
 import {
   Button,
   Switch,
@@ -12,7 +12,7 @@ import {
   OGDialogContent,
   OGDialogTrigger,
   useToastContext,
-} from '@aipyq/client';
+} from '@because/client';
 import type { Control, UseFormSetValue, UseFormGetValues } from 'react-hook-form';
 import { useUpdateMarketplacePermissionsMutation } from '~/data-provider';
 import { useLocalize, useAuthContext } from '~/hooks';

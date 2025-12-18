@@ -1,4 +1,4 @@
-const { Constants } = require('@aipyq/data-provider');
+const { Constants } = require('@because/data-provider');
 const { initializeFakeClient } = require('./FakeClient');
 
 jest.mock('~/db/connect');
@@ -40,8 +40,8 @@ jest.mock('~/models', () => ({
 
 const { getConvo, saveConvo } = require('~/models');
 
-jest.mock('@aipyq/agents', () => {
-  const { Providers } = jest.requireActual('@aipyq/agents');
+jest.mock('@because/agents', () => {
+  const { Providers } = jest.requireActual('@because/agents');
   return {
     Providers,
     ChatOpenAI: jest.fn().mockImplementation(() => {

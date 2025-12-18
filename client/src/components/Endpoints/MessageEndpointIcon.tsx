@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Feather } from 'lucide-react';
-import { EModelEndpoint, isAssistantsEndpoint, alternateName } from '@aipyq/data-provider';
+import { EModelEndpoint, isAssistantsEndpoint, alternateName } from '@because/data-provider';
 import {
   Plugin,
   GPTIcon,
@@ -12,7 +12,7 @@ import {
   AnthropicIcon,
   AzureMinimalIcon,
   CustomMinimalIcon,
-} from '@aipyq/client';
+} from '@because/client';
 import UnknownIcon from '~/hooks/Endpoint/UnknownIcon';
 import { IconProps } from '~/common';
 import { cn } from '~/utils';

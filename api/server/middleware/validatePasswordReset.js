@@ -1,5 +1,5 @@
-const { isEnabled } = require('@aipyq/api');
-const { logger } = require('@aipyq/data-schemas');
+const { isEnabled } = require('@because/api');
+const { logger } = require('@because/data-schemas');
 
 function validatePasswordReset(req, res, next) {
   if (isEnabled(process.env.ALLOW_PASSWORD_RESET)) {

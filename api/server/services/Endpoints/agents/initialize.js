@@ -1,16 +1,16 @@
-const { logger } = require('@aipyq/data-schemas');
-const { createContentAggregator } = require('@aipyq/agents');
+const { logger } = require('@because/data-schemas');
+const { createContentAggregator } = require('@because/agents');
 const {
   validateAgentModel,
   getCustomEndpointConfig,
   createSequentialChainEdges,
-} = require('@aipyq/api');
+} = require('@because/api');
 const {
   Constants,
   EModelEndpoint,
   isAgentsEndpoint,
   getResponseSender,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const {
   createToolEndCallback,
   getDefaultHandlers,

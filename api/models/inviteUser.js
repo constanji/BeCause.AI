@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const { getRandomValues } = require('@aipyq/api');
-const { logger, hashToken } = require('@aipyq/data-schemas');
+const { getRandomValues } = require('@because/api');
+const { logger, hashToken } = require('@because/data-schemas');
 const { createToken, findToken } = require('~/models');
 
 /**

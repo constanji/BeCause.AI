@@ -1,5 +1,5 @@
-import { logger } from '@aipyq/data-schemas';
-import type { IPluginAuth, PluginAuthMethods } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
+import type { IPluginAuth, PluginAuthMethods } from '@because/data-schemas';
 import { decrypt } from '../crypto/encryption';
 
 export interface GetPluginAuthMapParams {

@@ -1,5 +1,5 @@
-import { OGDialogContent, OGDialog } from '@aipyq/client';
-import type { TPromptGroup } from '@aipyq/data-provider';
+import { OGDialogContent, OGDialog } from '@because/client';
+import type { TPromptGroup } from '@because/data-provider';
 import PromptDetails from './PromptDetails';
 
 const PreviewPrompt = ({

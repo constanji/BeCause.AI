@@ -1,5 +1,5 @@
-import { SafeSearchTypes, SearchProviders, ScraperProviders } from '@aipyq/data-provider';
-import type { TCustomConfig } from '@aipyq/data-provider';
+import { SafeSearchTypes, SearchProviders, ScraperProviders } from '@because/data-provider';
+import type { TCustomConfig } from '@because/data-provider';
 import { loadWebSearchConfig } from './web';
 
 describe('loadWebSearchConfig', () => {

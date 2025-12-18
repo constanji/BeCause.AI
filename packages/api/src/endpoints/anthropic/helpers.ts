@@ -1,6 +1,6 @@
-import { logger } from '@aipyq/data-schemas';
-import { AnthropicClientOptions } from '@aipyq/agents';
-import { EModelEndpoint, anthropicSettings } from '@aipyq/data-provider';
+import { logger } from '@because/data-schemas';
+import { AnthropicClientOptions } from '@because/agents';
+import { EModelEndpoint, anthropicSettings } from '@because/data-provider';
 import { matchModelName } from '~/utils/tokens';
 
 /**

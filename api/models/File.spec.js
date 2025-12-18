@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 const { v4: uuidv4 } = require('uuid');
-const { createModels } = require('@aipyq/data-schemas');
+const { createModels } = require('@because/data-schemas');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const {
   SystemRoles,
   ResourceType,
   AccessRoleIds,
   PrincipalType,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const { grantPermission } = require('~/server/services/PermissionService');
 const { getFiles, createFile } = require('./File');
 const { seedDefaultRoles } = require('~/models');

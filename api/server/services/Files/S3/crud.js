@@ -1,8 +1,8 @@
 const fs = require('fs');
 const fetch = require('node-fetch');
-const { initializeS3 } = require('@aipyq/api');
-const { logger } = require('@aipyq/data-schemas');
-const { FileSources } = require('@aipyq/data-provider');
+const { initializeS3 } = require('@because/api');
+const { logger } = require('@because/data-schemas');
+const { FileSources } = require('@because/data-provider');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 const {
   PutObjectCommand,

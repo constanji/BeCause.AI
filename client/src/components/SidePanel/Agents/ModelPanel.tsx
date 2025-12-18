@@ -1,6 +1,6 @@
 import React, { useMemo, useEffect } from 'react';
 import keyBy from 'lodash/keyBy';
-import { ControlCombobox } from '@aipyq/client';
+import { ControlCombobox } from '@because/client';
 import { ChevronLeft, RotateCcw } from 'lucide-react';
 import { useFormContext, useWatch, Controller } from 'react-hook-form';
 import { componentMapping } from '~/components/SidePanel/Parameters/components';
@@ -11,8 +11,8 @@ import {
   LocalStorageKeys,
   SettingDefinition,
   agentParamSettings,
-} from '@aipyq/data-provider';
-import type * as t from '@aipyq/data-provider';
+} from '@because/data-provider';
+import type * as t from '@because/data-provider';
 import type { AgentForm, AgentModelPanelProps, StringOption } from '~/common';
 import { useGetEndpointsQuery } from '~/data-provider';
 import { useLocalize } from '~/hooks';

@@ -2,12 +2,12 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const multer = require('multer');
-const { sanitizeFilename } = require('@aipyq/api');
+const { sanitizeFilename } = require('@because/api');
 const {
   mergeFileConfig,
   getEndpointFileConfig,
   fileConfig: defaultFileConfig,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const { getAppConfig } = require('~/server/services/Config');
 
 const storage = multer.diskStorage({
@@ -39,7 +39,7 @@ const importFileFilter = (req, file, cb) => {
 
 /**
  *
- * @param {import('@aipyq/data-provider').FileConfig | undefined} customFileConfig
+ * @param {import('@because/data-provider').FileConfig | undefined} customFileConfig
  */
 const createFileFilter = (customFileConfig) => {
   /**

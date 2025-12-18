@@ -3,7 +3,7 @@ import {
   EModelEndpoint,
   ReasoningEffort,
   ReasoningSummary,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import { getOpenAIConfig } from './config';
 
 describe('getOpenAIConfig - Backward Compatibility', () => {
@@ -66,7 +66,7 @@ describe('getOpenAIConfig - Backward Compatibility', () => {
         },
         reverseProxyUrl: 'https://gateway.ai.cloudflare.com/v1/account-id/gateway-id/openrouter',
         headers: {
-          'x-aipyq-thread-id': '{{AIPYQ_BODY_CONVERSATIONID}}',
+          'x-because-thread-id': '{{BECAUSE_BODY_CONVERSATIONID}}',
           'x-test-key': '{{TESTING_USER_VAR}}',
         },
         proxy: '',
@@ -85,9 +85,9 @@ describe('getOpenAIConfig - Backward Compatibility', () => {
         configOptions: {
           baseURL: 'https://gateway.ai.cloudflare.com/v1/account-id/gateway-id/openrouter',
           defaultHeaders: {
-            'HTTP-Referer': 'https://www.aipyq.com',
-            'X-Title': 'Aipyq',
-            'x-aipyq-thread-id': '{{AIPYQ_BODY_CONVERSATIONID}}',
+            'HTTP-Referer': 'https://because.ai',
+            'X-Title': 'Because',
+            'x-because-thread-id': '{{BECAUSE_BODY_CONVERSATIONID}}',
             'x-test-key': '{{TESTING_USER_VAR}}',
           },
         },
@@ -396,7 +396,7 @@ describe('getOpenAIConfig - Backward Compatibility', () => {
           'https://gateway.ai.cloudflare.com/v1/${CF_ACCOUNT_ID}/${CF_GATEWAY_ID}/workers-ai/v1',
         proxy: '',
         headers: {
-          'x-aipyq-thread-id': '{{AIPYQ_BODY_CONVERSATIONID}}',
+          'x-because-thread-id': '{{BECAUSE_BODY_CONVERSATIONID}}',
           'x-test-key': '{{TESTING_USER_VAR}}',
         },
         addParams: {
@@ -420,7 +420,7 @@ describe('getOpenAIConfig - Backward Compatibility', () => {
           baseURL:
             'https://gateway.ai.cloudflare.com/v1/${CF_ACCOUNT_ID}/${CF_GATEWAY_ID}/workers-ai/v1',
           defaultHeaders: {
-            'x-aipyq-thread-id': '{{AIPYQ_BODY_CONVERSATIONID}}',
+            'x-because-thread-id': '{{BECAUSE_BODY_CONVERSATIONID}}',
             'x-test-key': '{{TESTING_USER_VAR}}',
           },
         },

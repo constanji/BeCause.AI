@@ -1,7 +1,7 @@
 import React, { useState, useRef, useMemo } from 'react';
-import { Skeleton } from '@aipyq/client';
+import { Skeleton } from '@because/client';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { apiBaseUrl } from '@aipyq/data-provider';
+import { apiBaseUrl } from '@because/data-provider';
 import { cn, scaleImage } from '~/utils';
 import DialogImage from './DialogImage';
 

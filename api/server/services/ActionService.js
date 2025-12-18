@@ -1,15 +1,15 @@
 const jwt = require('jsonwebtoken');
 const { nanoid } = require('nanoid');
 const { tool } = require('@langchain/core/tools');
-const { logger } = require('@aipyq/data-schemas');
-const { GraphEvents, sleep } = require('@aipyq/agents');
+const { logger } = require('@because/data-schemas');
+const { GraphEvents, sleep } = require('@because/agents');
 const {
   sendEvent,
   encryptV2,
   decryptV2,
   logAxiosError,
   refreshAccessToken,
-} = require('@aipyq/api');
+} = require('@because/api');
 const {
   Time,
   CacheKeys,
@@ -19,7 +19,7 @@ const {
   actionDelimiter,
   isImageVisionTool,
   actionDomainSeparator,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const { findToken, updateToken, createToken } = require('~/models');
 const { getActions, deleteActions } = require('~/models/Action');
 const { deleteAssistant } = require('~/models/Assistant');
@@ -148,7 +148,7 @@ async function createActionTool({
   /** @type {(toolInput: Object | string, config: GraphRunnableConfig) => Promise<unknown>} */
   const _call = async (toolInput, config) => {
     try {
-      /** @type {import('@aipyq/data-provider').ActionMetadataRuntime} */
+      /** @type {import('@because/data-provider').ActionMetadataRuntime} */
       const metadata = action.metadata;
       const executor = requestBuilder.createExecutor();
       const preparedExecutor = executor.setParams(toolInput ?? {});

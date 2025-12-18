@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { EModelEndpoint, AgentCapabilities } from '@aipyq/data-provider';
-import type { TAgentsEndpoint, TEndpointsConfig } from '@aipyq/data-provider';
+import { EModelEndpoint, AgentCapabilities } from '@because/data-provider';
+import type { TAgentsEndpoint, TEndpointsConfig } from '@because/data-provider';
 import { useGetEndpointsQuery } from '~/data-provider';
 
 interface UseGetAgentsConfigOptions {

@@ -1,8 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { QueryKeys } from '@aipyq/data-provider';
-import type { ConversationListResponse } from '@aipyq/data-provider';
+import { QueryKeys } from '@because/data-provider';
+import type { ConversationListResponse } from '@because/data-provider';
 import type { InfiniteData } from '@tanstack/react-query';
-import type t from '@aipyq/data-provider';
+import type t from '@because/data-provider';
 
 const useUpdateTagsInConvo = () => {
   const queryClient = useQueryClient();

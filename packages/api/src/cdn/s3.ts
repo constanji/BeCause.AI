@@ -1,5 +1,5 @@
 import { S3Client } from '@aws-sdk/client-s3';
-import { logger } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
 
 let s3: S3Client | null = null;
 

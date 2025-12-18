@@ -1,5 +1,5 @@
 import { CopyPlus } from 'lucide-react';
-import { useToastContext, Button } from '@aipyq/client';
+import { useToastContext, Button } from '@because/client';
 import { useDuplicateAgentMutation } from '~/data-provider';
 import { isEphemeralAgent } from '~/common';
 import { useLocalize } from '~/hooks';

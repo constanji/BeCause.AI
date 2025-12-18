@@ -8,7 +8,7 @@ import React, {
   useReducer,
   useCallback,
 } from 'react';
-import { Badge } from '@aipyq/client';
+import { Badge } from '@because/client';
 import { useRecoilValue, useRecoilCallback } from 'recoil';
 import type { LucideIcon } from 'lucide-react';
 import CodeInterpreter from './CodeInterpreter';

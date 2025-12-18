@@ -1,8 +1,8 @@
 import { useMemo, useState, useEffect, useRef, useLayoutEffect } from 'react';
-import { Button } from '@aipyq/client';
+import { Button } from '@because/client';
 import { TriangleAlert } from 'lucide-react';
-import { actionDelimiter, actionDomainSeparator, Constants } from '@aipyq/data-provider';
-import type { TAttachment } from '@aipyq/data-provider';
+import { actionDelimiter, actionDomainSeparator, Constants } from '@because/data-provider';
+import type { TAttachment } from '@because/data-provider';
 import { useLocalize, useProgress } from '~/hooks';
 import { AttachmentGroup } from './Parts';
 import ToolCallInfo from './ToolCallInfo';

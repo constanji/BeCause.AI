@@ -1,5 +1,5 @@
 const { Readable } = require('stream');
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 
 class TextStream extends Readable {
   constructor(text, options = {}) {

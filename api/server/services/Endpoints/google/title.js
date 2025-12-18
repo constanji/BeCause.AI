@@ -1,5 +1,5 @@
-const { isEnabled } = require('@aipyq/api');
-const { EModelEndpoint, CacheKeys, Constants, googleSettings } = require('@aipyq/data-provider');
+const { isEnabled } = require('@because/api');
+const { EModelEndpoint, CacheKeys, Constants, googleSettings } = require('@because/data-provider');
 const getLogStores = require('~/cache/getLogStores');
 const initializeClient = require('./initialize');
 const { saveConvo } = require('~/models');

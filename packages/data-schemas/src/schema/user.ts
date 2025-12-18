@@ -1,5 +1,5 @@
 import { Schema } from 'mongoose';
-import { SystemRoles } from '@aipyq/data-provider';
+import { SystemRoles } from '@because/data-provider';
 import { IUser } from '~/types';
 
 // Session sub-schema

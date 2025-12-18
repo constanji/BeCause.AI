@@ -1,6 +1,6 @@
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 const { HttpsProxyAgent } = require('https-proxy-agent');
-const { sleep, SplitStreamHandler, CustomOpenAIClient: OpenAI } = require('@aipyq/agents');
+const { sleep, SplitStreamHandler, CustomOpenAIClient: OpenAI } = require('@because/agents');
 const {
   isEnabled,
   Tokenizer,
@@ -11,7 +11,7 @@ const {
   genAzureChatCompletion,
   getModelMaxOutputTokens,
   createStreamEventHandlers,
-} = require('@aipyq/api');
+} = require('@because/api');
 const {
   Constants,
   ImageDetail,
@@ -24,7 +24,7 @@ const {
   getResponseSender,
   validateVisionModel,
   mapModelToAzureConfig,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const { encodeAndFormat } = require('~/server/services/Files/images/encode');
 const { formatMessage, createContextHandlers } = require('./prompts');
 const { spendTokens } = require('~/models/spendTokens');
@@ -787,8 +787,8 @@ class OpenAIClient extends BaseClient {
 
       if (this.useOpenRouter) {
         opts.defaultHeaders = {
-          'HTTP-Referer': 'https://www.aipyq.com',
-          'X-Title': 'Aipyq',
+          'HTTP-Referer': 'https://because.ai',
+          'X-Title': 'Because',
         };
       }
 

@@ -1,11 +1,11 @@
-import { TokenMethods } from '@aipyq/data-schemas';
+import { TokenMethods } from '@because/data-schemas';
 import { FlowStateManager, MCPConnection, MCPOAuthTokens, MCPOptions } from '../..';
 import { MCPManager } from '../MCPManager';
 import { mcpServersRegistry } from '../../mcp/registry/MCPServersRegistry';
 import { OAuthReconnectionManager } from './OAuthReconnectionManager';
 import { OAuthReconnectionTracker } from './OAuthReconnectionTracker';
 
-jest.mock('@aipyq/data-schemas', () => ({
+jest.mock('@because/data-schemas', () => ({
   logger: {
     info: jest.fn(),
     warn: jest.fn(),

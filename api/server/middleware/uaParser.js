@@ -1,6 +1,6 @@
 const uap = require('ua-parser-js');
-const { ViolationTypes } = require('@aipyq/data-provider');
-const { handleError } = require('@aipyq/api');
+const { ViolationTypes } = require('@because/data-provider');
+const { handleError } = require('@because/api');
 const { logViolation } = require('../../cache');
 
 /**

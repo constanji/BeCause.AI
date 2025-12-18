@@ -2,14 +2,14 @@ import { useEffect } from 'react';
 import { Search, X } from 'lucide-react';
 import { Dialog, DialogPanel, DialogTitle, Description } from '@headlessui/react';
 import { useFormContext } from 'react-hook-form';
-import { isAgentsEndpoint } from '@aipyq/data-provider';
-import { useUpdateUserPluginsMutation } from '@aipyq/data-provider/react-query';
+import { isAgentsEndpoint } from '@because/data-provider';
+import { useUpdateUserPluginsMutation } from '@because/data-provider/react-query';
 import type {
   AssistantsEndpoint,
   EModelEndpoint,
   TPluginAction,
   TError,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type { TPluginStoreDialogProps } from '~/common/types';
 import { PluginPagination, PluginAuthForm } from '~/components/Plugins/Store';
 import { useLocalize, usePluginDialogHelpers } from '~/hooks';

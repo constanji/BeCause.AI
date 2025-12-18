@@ -1,5 +1,5 @@
-const { logger } = require('@aipyq/data-schemas');
-const { EModelEndpoint } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { EModelEndpoint } = require('@because/data-provider');
 const {
   getAnthropicModels,
   getBedrockModels,

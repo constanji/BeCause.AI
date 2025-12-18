@@ -1,7 +1,7 @@
 const cookies = require('cookie');
 const jwt = require('jsonwebtoken');
-const { logger } = require('@aipyq/data-schemas');
-const { isEnabled, getBasePath } = require('@aipyq/api');
+const { logger } = require('@because/data-schemas');
+const { isEnabled, getBasePath } = require('@because/api');
 
 const OBJECT_ID_LENGTH = 24;
 const OBJECT_ID_PATTERN = /^[0-9a-f]{24}$/i;
@@ -22,7 +22,7 @@ function isValidObjectId(id) {
 }
 
 /**
- * Validates a Aipyq refresh token
+ * Validates a Because refresh token
  * @param {string} refreshToken - The refresh token to validate
  * @returns {{valid: boolean, userId?: string, error?: string}} - Validation result
  */
@@ -56,7 +56,7 @@ function createValidateImageRequest(secureImageLinks) {
   }
   /**
    * Middleware to validate image request.
-   * Supports both Aipyq refresh tokens and OpenID JWT tokens.
+   * Supports both Because refresh tokens and OpenID JWT tokens.
    * Must be set by `secureImageLinks` via custom config file.
    */
   return async function validateImageRequest(req, res, next) {

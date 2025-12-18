@@ -1,5 +1,5 @@
 import { useRecoilState } from 'recoil';
-import { Dropdown } from '@aipyq/client';
+import { Dropdown } from '@because/client';
 import { useLocalize } from '~/hooks';
 import store from '~/store';
 

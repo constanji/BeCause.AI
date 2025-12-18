@@ -1,7 +1,7 @@
 import React from 'react';
 import FileList from './FileList';
-import { Button, Input } from '@aipyq/client';
-import { TFile } from '@aipyq/data-provider/dist/types';
+import { Button, Input } from '@because/client';
+import { TFile } from '@because/data-provider/dist/types';
 import UploadFileButton from './UploadFileButton';
 import { ListFilter } from 'lucide-react';
 import { useLocalize } from '~/hooks';

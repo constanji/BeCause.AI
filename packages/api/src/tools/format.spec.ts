@@ -1,5 +1,5 @@
-import { AuthType, EToolResources } from '@aipyq/data-provider';
-import type { TPlugin } from '@aipyq/data-provider';
+import { AuthType, EToolResources } from '@because/data-provider';
+import type { TPlugin } from '@because/data-provider';
 import { filterUniquePlugins, checkPluginAuth, getToolkitKey } from './format';
 
 describe('format.ts helper functions', () => {

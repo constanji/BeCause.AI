@@ -2,11 +2,11 @@ import {
   Constants,
   defaultAssistantsVersion,
   ConversationListResponse,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { dataService, MutationKeys, QueryKeys, defaultOrderQuery } from '@aipyq/data-provider';
+import { dataService, MutationKeys, QueryKeys, defaultOrderQuery } from '@because/data-provider';
 import type { InfiniteData, UseMutationResult } from '@tanstack/react-query';
-import type * as t from '@aipyq/data-provider';
+import type * as t from '@because/data-provider';
 import {
   logger,
   /* Conversations */

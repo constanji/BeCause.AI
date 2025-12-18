@@ -6,7 +6,7 @@ import AgentGrid from '../AgentGrid';
 import AgentCard from '../AgentCard';
 import SearchBar from '../SearchBar';
 import ErrorDisplay from '../ErrorDisplay';
-import * as t from '@aipyq/data-provider';
+import * as t from '@because/data-provider';
 
 // Mock matchMedia
 Object.defineProperty(window, 'matchMedia', {

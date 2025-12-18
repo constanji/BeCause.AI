@@ -15,7 +15,7 @@ import type {
   VisibilityState,
   ColumnFiltersState,
 } from '@tanstack/react-table';
-import { FileContext } from '@aipyq/data-provider';
+import { FileContext } from '@because/data-provider';
 import {
   Button,
   Input,
@@ -32,8 +32,8 @@ import {
   TrashIcon,
   Spinner,
   useMediaQuery,
-} from '@aipyq/client';
-import type { TFile } from '@aipyq/data-provider';
+} from '@because/client';
+import type { TFile } from '@because/data-provider';
 import type { AugmentedColumnDef } from '~/common';
 import { useDeleteFilesFromTable } from '~/hooks/Files';
 import { useLocalize } from '~/hooks';

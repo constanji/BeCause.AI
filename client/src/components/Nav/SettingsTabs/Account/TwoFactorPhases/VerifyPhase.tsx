@@ -6,7 +6,7 @@ import {
   InputOTPGroup,
   InputOTPSeparator,
   InputOTPSlot,
-} from '@aipyq/client';
+} from '@because/client';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
 import { useLocalize } from '~/hooks';
 

@@ -8,8 +8,8 @@ import {
   getEndpointField,
   isAssistantsEndpoint,
   getEndpointFileConfig,
-} from '@aipyq/data-provider';
-import type { TConversation } from '@aipyq/data-provider';
+} from '@because/data-provider';
+import type { TConversation } from '@because/data-provider';
 import { useGetFileConfig, useGetEndpointsQuery } from '~/data-provider';
 import AttachFileMenu from './AttachFileMenu';
 import AttachFile from './AttachFile';

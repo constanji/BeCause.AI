@@ -1,8 +1,8 @@
 import { useEffect, useCallback } from 'react';
-import { useToastContext } from '@aipyq/client';
+import { useToastContext } from '@because/client';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { mergeFileConfig, fileConfig as defaultFileConfig } from '@aipyq/data-provider';
-import type { AgentAvatar } from '@aipyq/data-provider';
+import { mergeFileConfig, fileConfig as defaultFileConfig } from '@because/data-provider';
+import type { AgentAvatar } from '@because/data-provider';
 import type { AgentForm } from '~/common';
 import { AgentAvatarRender, NoImage, AvatarMenu } from './Images';
 import { useGetFileConfig } from '~/data-provider';

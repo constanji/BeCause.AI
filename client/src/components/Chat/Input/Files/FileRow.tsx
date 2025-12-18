@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useToastContext } from '@aipyq/client';
-import { EToolResources } from '@aipyq/data-provider';
+import { useToastContext } from '@because/client';
+import { EToolResources } from '@because/data-provider';
 import type { ExtendedFile } from '~/common';
 import { useDeleteFilesMutation } from '~/data-provider';
 import { useFileDeletion } from '~/hooks/Files';

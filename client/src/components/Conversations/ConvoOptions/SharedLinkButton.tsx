@@ -8,8 +8,8 @@ import {
   Label,
   OGDialogTemplate,
   useToastContext,
-} from '@aipyq/client';
-import type { TSharedLinkGetResponse } from '@aipyq/data-provider';
+} from '@because/client';
+import type { TSharedLinkGetResponse } from '@because/data-provider';
 import {
   useCreateSharedLinkMutation,
   useUpdateSharedLinkMutation,

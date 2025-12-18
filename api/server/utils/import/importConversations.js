@@ -1,5 +1,5 @@
 const fs = require('fs').promises;
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 const { getImporter } = require('./importers');
 
 /**

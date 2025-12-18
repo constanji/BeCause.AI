@@ -1,6 +1,6 @@
 const path = require('path');
 const mongoose = require('mongoose');
-const { User, Balance } = require('@aipyq/data-schemas').createModels(mongoose);
+const { User, Balance } = require('@because/data-schemas').createModels(mongoose);
 require('module-alias')({ base: path.resolve(__dirname, '..', 'api') });
 const { silentExit } = require('./helpers');
 const connect = require('./connect');

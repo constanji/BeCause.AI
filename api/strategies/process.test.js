@@ -1,4 +1,4 @@
-const { FileSources } = require('@aipyq/data-provider');
+const { FileSources } = require('@because/data-provider');
 const { handleExistingUser } = require('./process');
 
 jest.mock('~/server/services/Files/strategies', () => ({
@@ -19,7 +19,7 @@ jest.mock('~/server/services/Config', () => ({
   getAppConfig: jest.fn().mockResolvedValue({}),
 }));
 
-jest.mock('@aipyq/api', () => ({
+jest.mock('@because/api', () => ({
   getBalanceConfig: jest.fn(() => ({
     enabled: false,
   })),

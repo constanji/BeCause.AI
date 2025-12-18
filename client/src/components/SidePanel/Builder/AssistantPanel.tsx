@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import { useGetModelsQuery } from '@aipyq/data-provider/react-query';
-import { Spinner, useToastContext, SelectDropDown } from '@aipyq/client';
+import { useGetModelsQuery } from '@because/data-provider/react-query';
+import { Spinner, useToastContext, SelectDropDown } from '@because/client';
 import { useForm, FormProvider, Controller, useWatch } from 'react-hook-form';
 import {
   Tools,
@@ -8,8 +8,8 @@ import {
   actionDelimiter,
   ImageVisionTool,
   defaultAssistantFormValues,
-} from '@aipyq/data-provider';
-import type { FunctionTool, TConfig } from '@aipyq/data-provider';
+} from '@because/data-provider';
+import type { FunctionTool, TConfig } from '@because/data-provider';
 import type { AssistantForm, AssistantPanelProps } from '~/common';
 import {
   useCreateAssistantMutation,

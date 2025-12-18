@@ -1,6 +1,6 @@
-import { logger } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
 import type { OAuthTokens, OAuthClientInformation } from '@modelcontextprotocol/sdk/shared/auth.js';
-import type { TokenMethods, IToken } from '@aipyq/data-schemas';
+import type { TokenMethods, IToken } from '@because/data-schemas';
 import type { MCPOAuthTokens, ExtendedOAuthTokens, OAuthMetadata } from './types';
 import { encryptV2, decryptV2 } from '~/crypto';
 import { isSystemUserId } from '~/mcp/enum';

@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { Spinner } from '@aipyq/client';
+import { Spinner } from '@because/client';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useVerifyEmailMutation, useResendVerificationEmail } from '~/data-provider';
 import { useLocalize } from '~/hooks';

@@ -1,7 +1,7 @@
 const path = require('path');
 require('module-alias')({ base: path.resolve(__dirname, '..', 'api') });
 const mongoose = require('mongoose');
-const { User } = require('@aipyq/data-schemas').createModels(mongoose);
+const { User } = require('@because/data-schemas').createModels(mongoose);
 const connect = require('./connect');
 
 const listUsers = async () => {

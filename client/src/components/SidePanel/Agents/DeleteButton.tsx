@@ -7,8 +7,8 @@ import {
   useToastContext,
   OGDialogTrigger,
   OGDialogTemplate,
-} from '@aipyq/client';
-import type { Agent, AgentCreateParams } from '@aipyq/data-provider';
+} from '@because/client';
+import type { Agent, AgentCreateParams } from '@because/data-provider';
 import type { UseMutationResult } from '@tanstack/react-query';
 import { logger, getDefaultAgentFormValues } from '~/utils';
 import { useLocalize, useSetIndexOptions } from '~/hooks';

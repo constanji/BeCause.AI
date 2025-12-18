@@ -1,5 +1,5 @@
-import { useToastContext } from '@aipyq/client';
-import { EToolResources } from '@aipyq/data-provider';
+import { useToastContext } from '@because/client';
+import { EToolResources } from '@because/data-provider';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   QueryKeys,
@@ -7,8 +7,8 @@ import {
   MutationKeys,
   defaultOrderQuery,
   isAssistantsEndpoint,
-} from '@aipyq/data-provider';
-import type * as t from '@aipyq/data-provider';
+} from '@because/data-provider';
+import type * as t from '@because/data-provider';
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useLocalize } from '~/hooks';
 

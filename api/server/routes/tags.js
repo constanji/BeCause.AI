@@ -1,7 +1,7 @@
 const express = require('express');
-const { logger } = require('@aipyq/data-schemas');
-const { generateCheckAccess } = require('@aipyq/api');
-const { PermissionTypes, Permissions } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { generateCheckAccess } = require('@because/api');
+const { PermissionTypes, Permissions } = require('@because/data-provider');
 const {
   updateTagsForConversation,
   updateConversationTag,

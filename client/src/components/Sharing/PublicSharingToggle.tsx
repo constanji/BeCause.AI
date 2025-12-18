@@ -1,8 +1,8 @@
 import React from 'react';
 import { Globe, Shield } from 'lucide-react';
-import { ResourceType } from '@aipyq/data-provider';
-import { Switch, InfoHoverCard, ESide, Label } from '@aipyq/client';
-import type { AccessRoleIds } from '@aipyq/data-provider';
+import { ResourceType } from '@because/data-provider';
+import { Switch, InfoHoverCard, ESide, Label } from '@because/client';
+import type { AccessRoleIds } from '@because/data-provider';
 import AccessRolesPicker from './AccessRolesPicker';
 import { useLocalize } from '~/hooks';
 import { cn } from '~/utils';

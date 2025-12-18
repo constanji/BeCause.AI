@@ -1,5 +1,5 @@
-import { ContentTypes } from '@aipyq/data-provider';
-import type { TMessageContentParts } from '@aipyq/data-provider';
+import { ContentTypes } from '@because/data-provider';
+import type { TMessageContentParts } from '@because/data-provider';
 
 /**
  * Filters out malformed tool call content parts that don't have the required tool_call property.

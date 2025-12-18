@@ -1,6 +1,6 @@
 import { useMemo, useState, useCallback } from 'react';
-import type { DynamicSettingProps } from '@aipyq/data-provider';
-import { Label, HoverCard, HoverCardTrigger, ControlCombobox } from '@aipyq/client';
+import type { DynamicSettingProps } from '@because/data-provider';
+import { Label, HoverCard, HoverCardTrigger, ControlCombobox } from '@because/client';
 import { TranslationKeys, useLocalize, useParameterEffects } from '~/hooks';
 import { useChatContext } from '~/Providers';
 import OptionHover from './OptionHover';

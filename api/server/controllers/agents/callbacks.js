@@ -1,7 +1,7 @@
 const { nanoid } = require('nanoid');
-const { sendEvent } = require('@aipyq/api');
-const { logger } = require('@aipyq/data-schemas');
-const { Tools, StepTypes, FileContext, ErrorTypes } = require('@aipyq/data-provider');
+const { sendEvent } = require('@because/api');
+const { logger } = require('@because/data-schemas');
+const { Tools, StepTypes, FileContext, ErrorTypes } = require('@because/data-provider');
 const {
   EnvVar,
   Providers,
@@ -10,7 +10,7 @@ const {
   ToolEndHandler,
   handleToolCalls,
   ChatModelStreamHandler,
-} = require('@aipyq/agents');
+} = require('@because/agents');
 const { processFileCitations } = require('~/server/services/Files/Citations');
 const { processCodeOutput } = require('~/server/services/Files/Code/process');
 const { loadAuthValues } = require('~/server/services/Tools/credentials');

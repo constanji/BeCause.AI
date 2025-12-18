@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { UIResourceRenderer } from '@mcp-ui/client';
-import type { UIResource } from '@aipyq/data-provider';
+import type { UIResource } from '@because/data-provider';
 
 interface UIResourceCarouselProps {
   uiResources: UIResource[];

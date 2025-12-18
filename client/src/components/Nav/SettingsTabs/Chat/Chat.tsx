@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { SystemRoles } from '@aipyq/data-provider';
+import { SystemRoles } from '@because/data-provider';
 import { showThinkingAtom } from '~/store/showThinking';
 import FontSizeSelector from './FontSizeSelector';
 import { ForkSettings } from './ForkSettings';

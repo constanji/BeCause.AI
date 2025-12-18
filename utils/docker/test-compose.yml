@@ -3,7 +3,7 @@ services:
   # api:
   #     - HOST=0.0.0.0
   #     - NODE_ENV=production
-  #     - MONGO_URI=mongodb://mongodb:27017/Aipyq
+  #     - MONGO_URI=mongodb://mongodb:27017/Because
   #     - MEILI_HOST=http://meilisearch:7700
   #     - RAG_PORT=${RAG_PORT:-8000}
   #     - RAG_API_URL=http://rag_api:${RAG_PORT:-8000}
@@ -12,7 +12,7 @@ services:
       context: .
       dockerfile: Dockerfile.multi
       target: prod-stage
-    container_name: Aipyq-NGINX
+    container_name: Because-NGINX
     ports:
       - 80:80
       - 443:443
@@ -50,7 +50,7 @@ services:
     volumes:
       - pgdata2:/var/lib/postgresql/data
   rag_api:
-    image: ghcr.io/constanji/Aipyq-rag-api-dev-lite:latest
+    image: ghcr.io/constanji/Because-rag-api-dev-lite:latest
     environment:
       - DB_HOST=vectordb
       - RAG_PORT=${RAG_PORT:-8000}

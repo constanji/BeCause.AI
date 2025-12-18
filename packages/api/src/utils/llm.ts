@@ -1,10 +1,10 @@
-import { aipyq } from '@aipyq/data-provider';
-import type { DynamicSettingProps } from '@aipyq/data-provider';
+import { because } from '@because/data-provider';
+import type { DynamicSettingProps } from '@because/data-provider';
 
-type AipyqKeys = keyof typeof aipyq;
+type BecauseKeys = keyof typeof because;
 
-type AipyqParams = {
-  modelOptions: Omit<NonNullable<DynamicSettingProps['conversation']>, AipyqKeys>;
+type BecauseParams = {
+  modelOptions: Omit<NonNullable<DynamicSettingProps['conversation']>, BecauseKeys>;
   resendFiles: boolean;
   promptPrefix?: string | null;
   maxContextTokens?: number;
@@ -13,16 +13,16 @@ type AipyqParams = {
 };
 
 /**
- * Separates Aipyq-specific parameters from model options
+ * Separates Because-specific parameters from model options
  * @param options - The combined options object
  */
-export function extractAipyqParams(
+export function extractBecauseParams(
   options?: DynamicSettingProps['conversation'],
-): AipyqParams {
+): BecauseParams {
   if (!options) {
     return {
-      modelOptions: {} as Omit<NonNullable<DynamicSettingProps['conversation']>, AipyqKeys>,
-      resendFiles: aipyq.resendFiles.default as boolean,
+      modelOptions: {} as Omit<NonNullable<DynamicSettingProps['conversation']>, BecauseKeys>,
+      resendFiles: because.resendFiles.default as boolean,
     };
   }
 
@@ -30,7 +30,7 @@ export function extractAipyqParams(
 
   const resendFiles =
     (delete modelOptions.resendFiles, options.resendFiles) ??
-    (aipyq.resendFiles.default as boolean);
+    (because.resendFiles.default as boolean);
   const promptPrefix = (delete modelOptions.promptPrefix, options.promptPrefix);
   const maxContextTokens = (delete modelOptions.maxContextTokens, options.maxContextTokens);
   const fileTokenLimit = (delete modelOptions.fileTokenLimit, options.fileTokenLimit);
@@ -39,7 +39,7 @@ export function extractAipyqParams(
   return {
     modelOptions: modelOptions as Omit<
       NonNullable<DynamicSettingProps['conversation']>,
-      AipyqKeys
+      BecauseKeys
     >,
     maxContextTokens,
     fileTokenLimit,

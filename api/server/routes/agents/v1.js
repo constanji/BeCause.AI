@@ -1,6 +1,6 @@
 const express = require('express');
-const { generateCheckAccess } = require('@aipyq/api');
-const { PermissionTypes, Permissions, PermissionBits } = require('@aipyq/data-provider');
+const { generateCheckAccess } = require('@because/api');
+const { PermissionTypes, Permissions, PermissionBits } = require('@because/data-provider');
 const { requireJwtAuth, configMiddleware, canAccessAgentResource } = require('~/server/middleware');
 const v1 = require('~/server/controllers/agents/v1');
 const { getRoleByName } = require('~/models/Role');

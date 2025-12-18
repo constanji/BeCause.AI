@@ -2,7 +2,7 @@
 import { useMemo, useState, useRef, useEffect } from 'react';
 import { Plus } from 'lucide-react';
 import { matchSorter } from 'match-sorter';
-import { SystemRoles, PermissionTypes, Permissions } from '@aipyq/data-provider';
+import { SystemRoles, PermissionTypes, Permissions } from '@because/data-provider';
 import {
   Table,
   Input,
@@ -22,8 +22,8 @@ import {
   useToastContext,
   OGDialogTrigger,
   OGDialogTemplate,
-} from '@aipyq/client';
-import type { TUserMemory } from '@aipyq/data-provider';
+} from '@because/client';
+import type { TUserMemory } from '@because/data-provider';
 import {
   useUpdateMemoryPreferencesMutation,
   useDeleteMemoryMutation,

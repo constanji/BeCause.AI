@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useMemo, useCallback, createContext, useRef } from 'react';
-import { Button, useToastContext, Switch } from '@aipyq/client';
+import { Button, useToastContext, Switch } from '@because/client';
 import { useQueryClient } from '@tanstack/react-query';
-import { QueryKeys, EModelEndpoint, Permissions, PermissionTypes, isAgentsEndpoint, isAssistantsEndpoint } from '@aipyq/data-provider';
-import { useGetModelsQuery } from '@aipyq/data-provider/react-query';
+import { QueryKeys, EModelEndpoint, Permissions, PermissionTypes, isAgentsEndpoint, isAssistantsEndpoint } from '@because/data-provider';
+import { useGetModelsQuery } from '@because/data-provider/react-query';
 import { useGetStartupConfig, useGetEndpointsQuery } from '~/data-provider';
 import { useLocalize, useAuthContext, useHasAccess } from '~/hooks';
 import { mapEndpoints } from '~/utils';
-import type { TInterfaceConfig, TConversation } from '@aipyq/data-provider';
+import type { TInterfaceConfig, TConversation } from '@because/data-provider';
 import { ModelSelectorProvider, useModelSelectorContext } from '~/components/Chat/Menus/Endpoints/ModelSelectorContext';
 import { ModelSelectorChatContext } from '~/components/Chat/Menus/Endpoints/ModelSelectorChatContext';
 import {

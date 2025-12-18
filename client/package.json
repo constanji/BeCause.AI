@@ -1,5 +1,5 @@
 {
-  "name": "@aipyq/frontend",
+  "name": "@because/frontend",
   "version": "v0.8.1-rc2",
   "description": "",
   "type": "module",
@@ -19,15 +19,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/constanji/Aipyqchat.git"
+    "url": "git+https://github.com/constanji/Because.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/constanji/Aipyqchat/issues"
+    "url": "https://github.com/constanji/Because/issues"
   },
-  "homepage": "https://www.aipyq.com",
+  "homepage": "https://github.com/constanji/Because",
   "dependencies": {
     "@ant-design/icons": "^5.5.1",
     "@ant-design/x": "^1.0.0",
@@ -37,7 +37,7 @@
     "@dicebear/collection": "^9.2.2",
     "@dicebear/core": "^9.2.2",
     "@headlessui/react": "^2.1.2",
-    "@aipyq/client": "*",
+    "@because/client": "*",
     "@marsidev/react-turnstile": "^1.1.0",
     "@mcp-ui/client": "^5.7.0",
     "@radix-ui/react-accordion": "^1.1.2",
@@ -78,7 +78,7 @@
     "input-otp": "^1.4.2",
     "jotai": "^2.12.5",
     "js-cookie": "^3.0.5",
-    "@aipyq/data-provider": "*",
+    "@because/data-provider": "*",
     "lodash": "^4.17.21",
     "lucide-react": "^0.394.0",
     "match-sorter": "^8.1.0",

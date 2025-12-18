@@ -1,4 +1,4 @@
-import { RegenerateIcon } from '@aipyq/client';
+import { RegenerateIcon } from '@because/client';
 import type { TGenButtonProps } from '~/common';
 import { useLocalize } from '~/hooks';
 import Button from './Button';

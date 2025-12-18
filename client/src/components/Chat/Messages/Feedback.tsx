@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import * as Ariakit from '@ariakit/react';
-import { TFeedback, TFeedbackTag, getTagsForRating } from '@aipyq/data-provider';
+import { TFeedback, TFeedbackTag, getTagsForRating } from '@because/data-provider';
 import {
   Button,
   OGDialog,
@@ -8,7 +8,7 @@ import {
   OGDialogTitle,
   ThumbUpIcon,
   ThumbDownIcon,
-} from '@aipyq/client';
+} from '@because/client';
 import {
   AlertCircle,
   PenTool,

@@ -1,5 +1,5 @@
-const { logger } = require('@aipyq/data-schemas');
-const { ToolCallTypes } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { ToolCallTypes } = require('@because/data-provider');
 const validateAuthor = require('~/server/middleware/assistants/validateAuthor');
 const { validateAndUpdateTool } = require('~/server/services/ActionService');
 const { getCachedTools } = require('~/server/services/Config');

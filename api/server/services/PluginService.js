@@ -1,5 +1,5 @@
-const { logger } = require('@aipyq/data-schemas');
-const { encrypt, decrypt } = require('@aipyq/api');
+const { logger } = require('@because/data-schemas');
+const { encrypt, decrypt } = require('@because/api');
 const { findOnePluginAuth, updatePluginAuth, deletePluginAuth } = require('~/models');
 
 /**

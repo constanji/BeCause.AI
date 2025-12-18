@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useMemo } from 'react';
-import type { TMessage } from '@aipyq/data-provider';
+import type { TMessage } from '@because/data-provider';
 import { useChatContext } from './ChatContext';
 import { getLatestText } from '~/utils';
 

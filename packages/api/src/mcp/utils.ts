@@ -1,4 +1,4 @@
-import { Constants } from '@aipyq/data-provider';
+import { Constants } from '@because/data-provider';
 
 export const mcpToolPattern = new RegExp(`^.+${Constants.mcp_delimiter}.+$`);
 /**

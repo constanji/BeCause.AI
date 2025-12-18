@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import { Spinner } from '@aipyq/client';
+import { Spinner } from '@because/client';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Constants, EModelEndpoint, QueryKeys } from '@aipyq/data-provider';
-import { useGetModelsQuery } from '@aipyq/data-provider/react-query';
+import { Constants, EModelEndpoint, QueryKeys } from '@because/data-provider';
+import { useGetModelsQuery } from '@because/data-provider/react-query';
 import { useQueryClient } from '@tanstack/react-query';
-import type { TPreset } from '@aipyq/data-provider';
+import type { TPreset } from '@because/data-provider';
 import { useGetConvoIdQuery, useGetStartupConfig, useGetEndpointsQuery } from '~/data-provider';
 import { useNewConvo, useAppStartup, useAssistantListMap, useIdChangeEffect } from '~/hooks';
 import { getDefaultModelSpec, getModelSpecPreset, logger } from '~/utils';

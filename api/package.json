@@ -1,5 +1,5 @@
 {
-  "name": "@aipyq/backend",
+  "name": "@because/backend",
   "version": "v0.8.1-rc2",
   "description": "",
   "scripts": {
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/constanji/Aipyqchat.git"
+    "url": "git+https://github.com/constanji/Because.git"
   },
   "keywords": [],
   "author": "",
@@ -30,9 +30,9 @@
     "~/*": "./*"
   },
   "bugs": {
-    "url": "https://github.com/constanji/Aipyqchat/issues"
+    "url": "https://github.com/constanji/Because/issues"
   },
-  "homepage": "https://www.aipyq.com",
+  "homepage": "https://github.com/constanji/Because",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.52.0",
     "@aws-sdk/client-s3": "^3.758.0",
@@ -47,9 +47,9 @@
     "@langchain/google-genai": "^0.2.13",
     "@langchain/google-vertexai": "^0.2.13",
     "@langchain/textsplitters": "^0.1.0",
-    "@aipyq/agents": "^3.0.44",
-    "@aipyq/api": "*",
-    "@aipyq/data-schemas": "*",
+    "@because/agents": "^3.0.44",
+    "@because/api": "*",
+    "@because/data-schemas": "*",
     "@microsoft/microsoft-graph-client": "^3.0.7",
     "@modelcontextprotocol/sdk": "^1.21.0",
     "@node-saml/passport-saml": "^5.1.0",
@@ -82,7 +82,7 @@
     "keyv": "^5.3.2",
     "keyv-file": "^5.1.2",
     "klona": "^2.0.6",
-    "@aipyq/data-provider": "*",
+    "@because/data-provider": "*",
     "lodash": "^4.17.21",
     "meilisearch": "^0.38.0",
     "memorystore": "^1.6.7",

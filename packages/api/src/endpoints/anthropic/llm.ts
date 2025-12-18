@@ -1,6 +1,6 @@
 import { Dispatcher, ProxyAgent } from 'undici';
-import { AnthropicClientOptions } from '@aipyq/agents';
-import { anthropicSettings, removeNullishValues } from '@aipyq/data-provider';
+import { AnthropicClientOptions } from '@because/agents';
+import { anthropicSettings, removeNullishValues } from '@because/data-provider';
 import type { AnthropicLLMConfigResult, AnthropicConfigOptions } from '~/types/anthropic';
 import { checkPromptCacheSupport, getClaudeHeaders, configureReasoning } from './helpers';
 

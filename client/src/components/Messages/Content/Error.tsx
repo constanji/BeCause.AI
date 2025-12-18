@@ -1,5 +1,5 @@
 // file deepcode ignore HardcodedNonCryptoSecret: No hardcoded secrets
-import { ViolationTypes, ErrorTypes, alternateName } from '@aipyq/data-provider';
+import { ViolationTypes, ErrorTypes, alternateName } from '@because/data-provider';
 import type { LocalizeFunction } from '~/common';
 import { formatJSON, extractJson, isJson } from '~/utils/json';
 import { useLocalize } from '~/hooks';

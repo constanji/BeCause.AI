@@ -1,5 +1,5 @@
 import { extractOpenIDTokenInfo, isOpenIDTokenValid, processOpenIDPlaceholders } from './oidc';
-import type { TUser } from '@aipyq/data-provider';
+import type { TUser } from '@because/data-provider';
 
 describe('OpenID Token Utilities', () => {
   describe('extractOpenIDTokenInfo', () => {
@@ -186,73 +186,73 @@ describe('OpenID Token Utilities', () => {
   });
 
   describe('processOpenIDPlaceholders', () => {
-    it('should replace AIPYQ_OPENID_TOKEN with access token', () => {
+    it('should replace BECAUSE_OPENID_TOKEN with access token', () => {
       const tokenInfo = {
         accessToken: 'access-token-value',
         idToken: 'id-token-value',
         userId: 'oidc-sub-456',
       };
 
-      const input = 'Authorization: Bearer {{AIPYQ_OPENID_TOKEN}}';
+      const input = 'Authorization: Bearer {{BECAUSE_OPENID_TOKEN}}';
       const result = processOpenIDPlaceholders(input, tokenInfo);
 
       expect(result).toBe('Authorization: Bearer access-token-value');
     });
 
-    it('should replace AIPYQ_OPENID_ACCESS_TOKEN with access token', () => {
+    it('should replace BECAUSE_OPENID_ACCESS_TOKEN with access token', () => {
       const tokenInfo = {
         accessToken: 'access-token-value',
         userId: 'oidc-sub-456',
       };
 
-      const input = 'Token: {{AIPYQ_OPENID_ACCESS_TOKEN}}';
+      const input = 'Token: {{BECAUSE_OPENID_ACCESS_TOKEN}}';
       const result = processOpenIDPlaceholders(input, tokenInfo);
 
       expect(result).toBe('Token: access-token-value');
     });
 
-    it('should replace AIPYQ_OPENID_ID_TOKEN with id token', () => {
+    it('should replace BECAUSE_OPENID_ID_TOKEN with id token', () => {
       const tokenInfo = {
         idToken: 'id-token-value',
         userId: 'oidc-sub-456',
       };
 
-      const input = 'ID Token: {{AIPYQ_OPENID_ID_TOKEN}}';
+      const input = 'ID Token: {{BECAUSE_OPENID_ID_TOKEN}}';
       const result = processOpenIDPlaceholders(input, tokenInfo);
 
       expect(result).toBe('ID Token: id-token-value');
     });
 
-    it('should replace AIPYQ_OPENID_USER_ID with user id', () => {
+    it('should replace BECAUSE_OPENID_USER_ID with user id', () => {
       const tokenInfo = {
         userId: 'oidc-sub-456',
       };
 
-      const input = 'User: {{AIPYQ_OPENID_USER_ID}}';
+      const input = 'User: {{BECAUSE_OPENID_USER_ID}}';
       const result = processOpenIDPlaceholders(input, tokenInfo);
 
       expect(result).toBe('User: oidc-sub-456');
     });
 
-    it('should replace AIPYQ_OPENID_USER_EMAIL with user email', () => {
+    it('should replace BECAUSE_OPENID_USER_EMAIL with user email', () => {
       const tokenInfo = {
         userEmail: 'test@example.com',
         userId: 'oidc-sub-456',
       };
 
-      const input = 'Email: {{AIPYQ_OPENID_USER_EMAIL}}';
+      const input = 'Email: {{BECAUSE_OPENID_USER_EMAIL}}';
       const result = processOpenIDPlaceholders(input, tokenInfo);
 
       expect(result).toBe('Email: test@example.com');
     });
 
-    it('should replace AIPYQ_OPENID_USER_NAME with user name', () => {
+    it('should replace BECAUSE_OPENID_USER_NAME with user name', () => {
       const tokenInfo = {
         userName: 'Test User',
         userId: 'oidc-sub-456',
       };
 
-      const input = 'Name: {{AIPYQ_OPENID_USER_NAME}}';
+      const input = 'Name: {{BECAUSE_OPENID_USER_NAME}}';
       const result = processOpenIDPlaceholders(input, tokenInfo);
 
       expect(result).toBe('Name: Test User');
@@ -267,7 +267,7 @@ describe('OpenID Token Utilities', () => {
       };
 
       const input =
-        'Authorization: Bearer {{AIPYQ_OPENID_TOKEN}}, ID: {{AIPYQ_OPENID_ID_TOKEN}}, User: {{AIPYQ_OPENID_USER_ID}}';
+        'Authorization: Bearer {{BECAUSE_OPENID_TOKEN}}, ID: {{BECAUSE_OPENID_ID_TOKEN}}, User: {{BECAUSE_OPENID_USER_ID}}';
       const result = processOpenIDPlaceholders(input, tokenInfo);
 
       expect(result).toBe(
@@ -283,7 +283,7 @@ describe('OpenID Token Utilities', () => {
       };
 
       const input =
-        'Access: {{AIPYQ_OPENID_TOKEN}}, ID: {{AIPYQ_OPENID_ID_TOKEN}}, User: {{AIPYQ_OPENID_USER_ID}}';
+        'Access: {{BECAUSE_OPENID_TOKEN}}, ID: {{BECAUSE_OPENID_ID_TOKEN}}, User: {{BECAUSE_OPENID_USER_ID}}';
       const result = processOpenIDPlaceholders(input, tokenInfo);
 
       expect(result).toBe('Access: , ID: , User: oidc-sub-456');
@@ -300,13 +300,13 @@ describe('OpenID Token Utilities', () => {
       };
 
       const input = `
-        Authorization: Bearer {{AIPYQ_OPENID_TOKEN}}
-        ID Token: {{AIPYQ_OPENID_ID_TOKEN}}
-        Access Token (alt): {{AIPYQ_OPENID_ACCESS_TOKEN}}
-        User ID: {{AIPYQ_OPENID_USER_ID}}
-        User Email: {{AIPYQ_OPENID_USER_EMAIL}}
-        User Name: {{AIPYQ_OPENID_USER_NAME}}
-        Expires: {{AIPYQ_OPENID_EXPIRES_AT}}
+        Authorization: Bearer {{BECAUSE_OPENID_TOKEN}}
+        ID Token: {{BECAUSE_OPENID_ID_TOKEN}}
+        Access Token (alt): {{BECAUSE_OPENID_ACCESS_TOKEN}}
+        User ID: {{BECAUSE_OPENID_USER_ID}}
+        User Email: {{BECAUSE_OPENID_USER_EMAIL}}
+        User Name: {{BECAUSE_OPENID_USER_NAME}}
+        Expires: {{BECAUSE_OPENID_EXPIRES_AT}}
       `;
 
       const result = processOpenIDPlaceholders(input, tokenInfo);
@@ -339,10 +339,10 @@ describe('OpenID Token Utilities', () => {
       };
 
       // Wrong case should NOT be replaced
-      const input = 'Token: {{aipyq_openid_token}}';
+      const input = 'Token: {{because_openid_token}}';
       const result = processOpenIDPlaceholders(input, tokenInfo);
 
-      expect(result).toBe('Token: {{aipyq_openid_token}}');
+      expect(result).toBe('Token: {{because_openid_token}}');
     });
 
     it('should handle multiple occurrences of the same placeholder', () => {
@@ -352,7 +352,7 @@ describe('OpenID Token Utilities', () => {
       };
 
       const input =
-        'Primary: {{AIPYQ_OPENID_TOKEN}}, Secondary: {{AIPYQ_OPENID_TOKEN}}, Backup: {{AIPYQ_OPENID_TOKEN}}';
+        'Primary: {{BECAUSE_OPENID_TOKEN}}, Secondary: {{BECAUSE_OPENID_TOKEN}}, Backup: {{BECAUSE_OPENID_TOKEN}}';
       const result = processOpenIDPlaceholders(input, tokenInfo);
 
       expect(result).toBe(
@@ -370,17 +370,17 @@ describe('OpenID Token Utilities', () => {
       };
 
       const input =
-        'Access: {{AIPYQ_OPENID_TOKEN}}, ID: {{AIPYQ_OPENID_ID_TOKEN}}, User: {{AIPYQ_OPENID_USER_ID}}';
+        'Access: {{BECAUSE_OPENID_TOKEN}}, ID: {{BECAUSE_OPENID_ID_TOKEN}}, User: {{BECAUSE_OPENID_USER_ID}}';
       const result = processOpenIDPlaceholders(input, tokenInfo);
 
       expect(result).toBe('Access: , ID: , User: oidc-sub-456');
     });
 
     it('should return original value when tokenInfo is null', () => {
-      const input = 'Authorization: Bearer {{AIPYQ_OPENID_TOKEN}}';
+      const input = 'Authorization: Bearer {{BECAUSE_OPENID_TOKEN}}';
       const result = processOpenIDPlaceholders(input, null);
 
-      expect(result).toBe('Authorization: Bearer {{AIPYQ_OPENID_TOKEN}}');
+      expect(result).toBe('Authorization: Bearer {{BECAUSE_OPENID_TOKEN}}');
     });
 
     it('should return original value when value is not a string', () => {
@@ -421,7 +421,7 @@ describe('OpenID Token Utilities', () => {
 
       // Step 3: Process placeholders
       const input =
-        'Authorization: Bearer {{AIPYQ_OPENID_TOKEN}}, User: {{AIPYQ_OPENID_USER_ID}}';
+        'Authorization: Bearer {{BECAUSE_OPENID_TOKEN}}, User: {{BECAUSE_OPENID_USER_ID}}';
       const result = processOpenIDPlaceholders(input, tokenInfo!);
       expect(result).toContain('Authorization: Bearer access-token-value');
       expect(result).toContain('User:');
@@ -446,7 +446,7 @@ describe('OpenID Token Utilities', () => {
 
       // Even if expired, processOpenIDPlaceholders should still work
       // (validation is checked separately by the caller)
-      const input = 'Authorization: Bearer {{AIPYQ_OPENID_TOKEN}}';
+      const input = 'Authorization: Bearer {{BECAUSE_OPENID_TOKEN}}';
       const result = processOpenIDPlaceholders(input, tokenInfo!);
       expect(result).toBe('Authorization: Bearer access-token-value');
     });

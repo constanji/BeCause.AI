@@ -1,6 +1,6 @@
 import React from 'react';
-import { ECallState } from '@aipyq/data-provider';
-import { CircleIcon, CircleDotsIcon } from '@aipyq/client';
+import { ECallState } from '@because/data-provider';
+import { CircleIcon, CircleDotsIcon } from '@because/client';
 
 const CircleRender = ({ rmsLevel, isCameraOn, state }) => {
   const getIconComponent = (state) => {

@@ -1,11 +1,11 @@
 import { renderHook, act } from '@testing-library/react';
 import copy from 'copy-to-clipboard';
-import { ContentTypes } from '@aipyq/data-provider';
+import { ContentTypes } from '@because/data-provider';
 import type {
   SearchResultData,
   ProcessedOrganic,
   TMessageContentParts,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import useCopyToClipboard from '~/hooks/Messages/useCopyToClipboard';
 
 // Mock the copy-to-clipboard module

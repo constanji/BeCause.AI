@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
-import { useCombobox } from '@aipyq/client';
+import { useCombobox } from '@because/client';
 import { AutoSizer, List } from 'react-virtualized';
-import { EModelEndpoint } from '@aipyq/data-provider';
-import type { TConversation } from '@aipyq/data-provider';
+import { EModelEndpoint } from '@because/data-provider';
+import type { TConversation } from '@because/data-provider';
 import type { MentionOption, ConvoGenerator } from '~/common';
 import type { SetterOrUpdater } from 'recoil';
 import useSelectMention from '~/hooks/Input/useSelectMention';

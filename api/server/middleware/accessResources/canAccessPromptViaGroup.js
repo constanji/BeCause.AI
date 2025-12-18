@@ -1,4 +1,4 @@
-const { ResourceType } = require('@aipyq/data-provider');
+const { ResourceType } = require('@because/data-provider');
 const { canAccessResource } = require('./canAccessResource');
 const { getPrompt } = require('~/models/Prompt');
 

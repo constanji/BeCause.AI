@@ -487,9 +487,9 @@ describe('validateAzureGroups with modelGroupMap and groupMap', () => {
   it('should throw an error if environment variables are set but not configured', () => {
     const validConfigs: TAzureGroups = [
       {
-        group: 'Aipyq-westus',
+        group: 'Because-westus',
         apiKey: '${WESTUS_API_KEY}',
-        instanceName: 'Aipyq-westus',
+        instanceName: 'Because-westus',
         version: '2023-12-01-preview',
         models: {
           'gpt-4-vision-preview': {
@@ -511,9 +511,9 @@ describe('validateAzureGroups with modelGroupMap and groupMap', () => {
         },
       },
       {
-        group: 'Aipyq-eastus',
+        group: 'Because-eastus',
         apiKey: '${EASTUS_API_KEY}',
-        instanceName: 'Aipyq-eastus',
+        instanceName: 'Because-eastus',
         deploymentName: 'gpt-4-turbo',
         version: '2024-02-15-preview',
         models: {
@@ -536,9 +536,9 @@ describe('validateAzureGroups with modelGroupMap and groupMap', () => {
 
     const validConfigs: TAzureGroups = [
       {
-        group: 'Aipyq-westus',
+        group: 'Because-westus',
         apiKey: '${WESTUS_API_KEY}',
-        instanceName: 'Aipyq-westus',
+        instanceName: 'Because-westus',
         version: '2023-12-01-preview',
         models: {
           'gpt-4-vision-preview': {
@@ -560,9 +560,9 @@ describe('validateAzureGroups with modelGroupMap and groupMap', () => {
         },
       },
       {
-        group: 'Aipyq-eastus',
+        group: 'Because-eastus',
         apiKey: '${EASTUS_API_KEY}',
-        instanceName: 'Aipyq-eastus',
+        instanceName: 'Because-eastus',
         deploymentName: 'gpt-4-turbo',
         version: '2024-02-15-preview',
         models: {
@@ -612,12 +612,12 @@ describe('validateAzureGroups with modelGroupMap and groupMap', () => {
       expect(modelGroupMap[modelName]).toBeDefined();
     });
 
-    // Check groupMap for 'Aipyq-westus'
-    expect(groupMap).toHaveProperty('Aipyq-westus');
-    expect(groupMap['Aipyq-westus']).toEqual(
+    // Check groupMap for 'Because-westus'
+    expect(groupMap).toHaveProperty('Because-westus');
+    expect(groupMap['Because-westus']).toEqual(
       expect.objectContaining({
         apiKey: '${WESTUS_API_KEY}',
-        instanceName: 'Aipyq-westus',
+        instanceName: 'Because-westus',
         version: '2023-12-01-preview',
         models: expect.objectContaining({
           'gpt-4-vision-preview': expect.any(Object),
@@ -629,12 +629,12 @@ describe('validateAzureGroups with modelGroupMap and groupMap', () => {
       }),
     );
 
-    // Check groupMap for 'Aipyq-eastus'
-    expect(groupMap).toHaveProperty('Aipyq-eastus');
-    expect(groupMap['Aipyq-eastus']).toEqual(
+    // Check groupMap for 'Because-eastus'
+    expect(groupMap).toHaveProperty('Because-eastus');
+    expect(groupMap['Because-eastus']).toEqual(
       expect.objectContaining({
         apiKey: '${EASTUS_API_KEY}',
-        instanceName: 'Aipyq-eastus',
+        instanceName: 'Because-eastus',
         deploymentName: 'gpt-4-turbo',
         version: '2024-02-15-preview',
         models: expect.objectContaining({
@@ -678,7 +678,7 @@ describe('validateAzureGroups with modelGroupMap and groupMap', () => {
     });
     expect(azureOptions1).toEqual({
       azureOpenAIApiKey: 'westus-key',
-      azureOpenAIApiInstanceName: 'Aipyq-westus',
+      azureOpenAIApiInstanceName: 'Because-westus',
       azureOpenAIApiDeploymentName: 'gpt-4-vision-preview',
       azureOpenAIApiVersion: '2024-02-15-preview',
     });
@@ -694,7 +694,7 @@ describe('validateAzureGroups with modelGroupMap and groupMap', () => {
     });
     expect(azureOptions2).toEqual({
       azureOpenAIApiKey: 'eastus-key',
-      azureOpenAIApiInstanceName: 'Aipyq-eastus',
+      azureOpenAIApiInstanceName: 'Because-eastus',
       azureOpenAIApiDeploymentName: 'gpt-4-turbo',
       azureOpenAIApiVersion: '2024-02-15-preview',
     });
@@ -710,7 +710,7 @@ describe('validateAzureGroups with modelGroupMap and groupMap', () => {
     });
     expect(azureOptions3).toEqual({
       azureOpenAIApiKey: 'westus-key',
-      azureOpenAIApiInstanceName: 'Aipyq-westus',
+      azureOpenAIApiInstanceName: 'Because-westus',
       azureOpenAIApiDeploymentName: 'gpt-4',
       azureOpenAIApiVersion: '2023-12-01-preview',
     });
@@ -722,7 +722,7 @@ describe('validateAzureGroups with modelGroupMap and groupMap', () => {
     });
     expect(azureOptions4).toEqual({
       azureOpenAIApiKey: 'westus-key',
-      azureOpenAIApiInstanceName: 'Aipyq-westus',
+      azureOpenAIApiInstanceName: 'Because-westus',
       azureOpenAIApiDeploymentName: 'gpt-35-turbo',
       azureOpenAIApiVersion: '2023-12-01-preview',
     });
@@ -734,7 +734,7 @@ describe('validateAzureGroups with modelGroupMap and groupMap', () => {
     });
     expect(azureOptions5).toEqual({
       azureOpenAIApiKey: 'westus-key',
-      azureOpenAIApiInstanceName: 'Aipyq-westus',
+      azureOpenAIApiInstanceName: 'Because-westus',
       azureOpenAIApiDeploymentName: 'gpt-35-turbo-1106',
       azureOpenAIApiVersion: '2023-12-01-preview',
     });
@@ -746,7 +746,7 @@ describe('validateAzureGroups with modelGroupMap and groupMap', () => {
     });
     expect(azureOptions6).toEqual({
       azureOpenAIApiKey: 'westus-key',
-      azureOpenAIApiInstanceName: 'Aipyq-westus',
+      azureOpenAIApiInstanceName: 'Because-westus',
       azureOpenAIApiDeploymentName: 'gpt-4-1106-preview',
       azureOpenAIApiVersion: '2023-12-01-preview',
     });

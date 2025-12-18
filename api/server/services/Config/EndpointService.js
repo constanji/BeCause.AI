@@ -1,5 +1,5 @@
-const { isUserProvided } = require('@aipyq/api');
-const { EModelEndpoint } = require('@aipyq/data-provider');
+const { isUserProvided } = require('@because/api');
+const { EModelEndpoint } = require('@because/data-provider');
 const { generateConfig } = require('~/server/utils/handleText');
 
 const {

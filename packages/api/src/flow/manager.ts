@@ -1,5 +1,5 @@
 import { Keyv } from 'keyv';
-import { logger } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
 import type { StoredDataNoRaw } from 'keyv';
 import type { FlowState, FlowMetadata, FlowManagerOptions } from './types';
 

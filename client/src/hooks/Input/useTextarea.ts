@@ -1,8 +1,8 @@
 import debounce from 'lodash/debounce';
 import { useEffect, useRef, useCallback } from 'react';
 import { useRecoilValue, useRecoilState } from 'recoil';
-import type { TEndpointOption } from '@aipyq/data-provider';
-import { Constants } from '@aipyq/data-provider';
+import type { TEndpointOption } from '@because/data-provider';
+import { Constants } from '@because/data-provider';
 import type { KeyboardEvent } from 'react';
 import {
   forceResize,

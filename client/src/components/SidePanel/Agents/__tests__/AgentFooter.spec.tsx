@@ -1,9 +1,9 @@
 import React from 'react';
-import { SystemRoles } from '@aipyq/data-provider';
+import { SystemRoles } from '@because/data-provider';
 import { render, screen } from '@testing-library/react';
 import type { UseMutationResult } from '@tanstack/react-query';
 import '@testing-library/jest-dom/extend-expect';
-import type { Agent, AgentCreateParams, TUser, ResourceType } from '@aipyq/data-provider';
+import type { Agent, AgentCreateParams, TUser, ResourceType } from '@because/data-provider';
 import AgentFooter from '../AgentFooter';
 import { Panel } from '~/common';
 
@@ -157,7 +157,7 @@ jest.mock('../DuplicateAgent', () => ({
   ),
 }));
 
-jest.mock('@aipyq/client', () => ({
+jest.mock('@because/client', () => ({
   Spinner: () => <div data-testid="spinner" />,
 }));
 

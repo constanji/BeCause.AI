@@ -1,5 +1,5 @@
 import dedent from 'dedent';
-import { shadcnComponents } from '@aipyq/data-provider';
+import { shadcnComponents } from '@because/data-provider';
 import type {
   SandpackProviderProps,
   SandpackPredefinedTemplate,

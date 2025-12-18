@@ -35,24 +35,24 @@ RUN \
     npm config set fetch-retries 5 ; \
     npm config set fetch-retry-mintimeout 15000
 
-# Copy and build agents-Aipyq before installing dependencies
-COPY --chown=node:node agents-Aipyq/package.json ./agents-Aipyq/package.json
-COPY --chown=node:node agents-Aipyq/tsconfig*.json ./agents-Aipyq/
-COPY --chown=node:node agents-Aipyq/rollup.config.js ./agents-Aipyq/
-COPY --chown=node:node agents-Aipyq/husky-setup.js ./agents-Aipyq/husky-setup.js
-COPY --chown=node:node agents-Aipyq/src ./agents-Aipyq/src
+# Copy and build agents-because before installing dependencies
+COPY --chown=node:node agents-because/package.json ./agents-because/package.json
+COPY --chown=node:node agents-because/tsconfig*.json ./agents-because/
+COPY --chown=node:node agents-because/rollup.config.js ./agents-because/
+COPY --chown=node:node agents-because/husky-setup.js ./agents-because/husky-setup.js
+COPY --chown=node:node agents-because/src ./agents-because/src
 
 ENV HUSKY=0
 ENV CI=true
 
-# 若已在源码中包含 agents-Aipyq/dist，可直接复制到镜像中以跳过构建
-COPY --chown=node:node agents-Aipyq/dist ./agents-Aipyq/dist
+# 若已在源码中包含 agents-because/dist，可直接复制到镜像中以跳过构建
+COPY --chown=node:node agents-because/dist ./agents-because/dist
 
 RUN \
-    cd agents-Aipyq && \
+    cd agents-because && \
     # 如果 dist 不存在或为空，则安装依赖并构建
     if [ ! -d "dist" ] || [ -z "$(ls -A dist 2>/dev/null)" ]; then \
-      echo "Building agents-Aipyq (dist not found)..."; \
+      echo "Building agents-because (dist not found)..."; \
       npm install --no-audit --omit=dev && \
       DISABLE_SOURCEMAP=true NODE_OPTIONS="--max-old-space-size=8192" npm run build; \
     else \
@@ -60,7 +60,7 @@ RUN \
       npm install --no-audit --omit=dev; \
     fi
 
-# Now install all dependencies including the local agents-Aipyq package
+# Now install all dependencies including the local agents-because package
 RUN npm ci --no-audit
 
 COPY --chown=node:node . .
@@ -87,8 +87,8 @@ RUN \
     # 某些构建产物需要 mongodb 运行时依赖（可能未列为 prod dep），显式安装
     npm install mongodb --omit=dev && \
     npm cache clean --force && \
-    # 兼容大小写导入：@Aipyq/* -> @aipyq/*
-    ln -s /app/node_modules/@aipyq /app/node_modules/@Aipyq || true
+    # 兼容大小写导入：@Because/* -> @because/*
+    ln -s /app/node_modules/@because /app/node_modules/@Because || true
 
 # Node API setup
 EXPOSE 3080

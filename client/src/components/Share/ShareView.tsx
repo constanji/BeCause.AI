@@ -2,9 +2,9 @@ import { memo, useState, useCallback, useContext } from 'react';
 import Cookies from 'js-cookie';
 import { useRecoilState } from 'recoil';
 import { useParams } from 'react-router-dom';
-import { buildTree } from '@aipyq/data-provider';
+import { buildTree } from '@because/data-provider';
 import { CalendarDays, Settings } from 'lucide-react';
-import { useGetSharedMessages } from '@aipyq/data-provider/react-query';
+import { useGetSharedMessages } from '@because/data-provider/react-query';
 import {
   Spinner,
   Button,
@@ -15,7 +15,7 @@ import {
   OGDialogHeader,
   OGDialogContent,
   OGDialogTrigger,
-} from '@aipyq/client';
+} from '@because/client';
 import { ThemeSelector, LangSelector } from '~/components/Nav/SettingsTabs/General/General';
 import { ShareArtifactsContainer } from './ShareArtifacts';
 import { useLocalize, useDocumentTitle } from '~/hooks';

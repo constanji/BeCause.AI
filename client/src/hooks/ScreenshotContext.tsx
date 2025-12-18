@@ -1,6 +1,6 @@
 import { createContext, useRef, useContext, RefObject } from 'react';
 import { toCanvas } from 'html-to-image';
-import { ThemeContext, isDark } from '@aipyq/client';
+import { ThemeContext, isDark } from '@because/client';
 
 type ScreenshotContextType = {
   ref?: RefObject<HTMLDivElement>;

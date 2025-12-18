@@ -1,13 +1,13 @@
 const { nanoid } = require('nanoid');
-const { checkAccess } = require('@aipyq/api');
-const { logger } = require('@aipyq/data-schemas');
+const { checkAccess } = require('@because/api');
+const { logger } = require('@because/data-schemas');
 const {
   Tools,
   Permissions,
   FileSources,
   EModelEndpoint,
   PermissionTypes,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const { getRoleByName } = require('~/models/Role');
 const { Files } = require('~/models');
 

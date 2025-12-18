@@ -1,4 +1,4 @@
-const { removeNullishValues } = require('@aipyq/data-provider');
+const { removeNullishValues } = require('@because/data-provider');
 const generateArtifactsPrompt = require('~/app/clients/prompts/artifacts');
 
 const buildOptions = (endpoint, parsedBody) => {

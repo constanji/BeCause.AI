@@ -1,5 +1,5 @@
-import { RateLimitPrefix } from '@aipyq/data-provider';
-import type { TCustomConfig } from '@aipyq/data-provider';
+import { RateLimitPrefix } from '@because/data-provider';
+import type { TCustomConfig } from '@because/data-provider';
 
 /**
  *

@@ -1,6 +1,6 @@
 const OpenAI = require('openai');
 const { ProxyAgent } = require('undici');
-const { ErrorTypes, EModelEndpoint } = require('@aipyq/data-provider');
+const { ErrorTypes, EModelEndpoint } = require('@because/data-provider');
 const {
   getUserKeyValues,
   getUserKeyExpiry,

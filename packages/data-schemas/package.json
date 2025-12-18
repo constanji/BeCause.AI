@@ -1,7 +1,7 @@
 {
-  "name": "@aipyq/data-schemas",
+  "name": "@because/data-schemas",
   "version": "0.0.30",
-  "description": "Mongoose schemas and models for Aipyq",
+  "description": "Mongoose schemas and models for Because",
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.es.js",
@@ -28,14 +28,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/constanji/Aipyqchat.git"
+    "url": "git+https://github.com/constanji/Because.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/constanji/Aipyqchat/issues"
+    "url": "https://github.com/constanji/Because/issues"
   },
-  "homepage": "https://www.aipyq.com",
+  "homepage": "https://github.com/constanji/Because",
   "devDependencies": {
     "cross-env": "^7.0.3",
     "@rollup/plugin-alias": "^5.1.0",
@@ -62,7 +62,7 @@
   "peerDependencies": {
     "jsonwebtoken": "^9.0.2",
     "klona": "^2.0.6",
-    "@aipyq/data-provider": "*",
+    "@because/data-provider": "*",
     "lodash": "^4.17.21",
     "meilisearch": "^0.38.0",
     "mongoose": "^8.12.1",
@@ -78,6 +78,6 @@
     "mongoose",
     "schema",
     "typescript",
-    "aipyq"
+    "because"
   ]
 }

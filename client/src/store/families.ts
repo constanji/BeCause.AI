@@ -10,8 +10,8 @@ import {
   useSetRecoilState,
   useRecoilCallback,
 } from 'recoil';
-import { LocalStorageKeys, Constants } from '@aipyq/data-provider';
-import type { TMessage, TPreset, TConversation, TSubmission } from '@aipyq/data-provider';
+import { LocalStorageKeys, Constants } from '@because/data-provider';
+import type { TMessage, TPreset, TConversation, TSubmission } from '@because/data-provider';
 import type { TOptionSettings, ExtendedFile } from '~/common';
 import { useSetConvoContext } from '~/Providers/SetConvoContext';
 import { storeEndpointSettings, logger, createChatSearchParams } from '~/utils';

@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Input } from '@aipyq/client';
+import { Input } from '@because/client';
 import { Cross1Icon } from '@radix-ui/react-icons';
-import type { TPrompt } from '@aipyq/data-provider';
+import type { TPrompt } from '@because/data-provider';
 import { useUpdatePromptLabels } from '~/data-provider';
 
 const PromptForm = ({ selectedPrompt }: { selectedPrompt?: TPrompt }) => {

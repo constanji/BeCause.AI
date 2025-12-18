@@ -6,8 +6,8 @@ import {
   OGDialogTitle,
   OGDialogHeader,
   OGDialogContent,
-} from '@aipyq/client';
-import type { MCPServerStatus } from '@aipyq/data-provider';
+} from '@because/client';
+import type { MCPServerStatus } from '@because/data-provider';
 import type { ConfigFieldDetail } from '~/common';
 import ServerInitializationSection from './ServerInitializationSection';
 import CustomUserVarsSection from './CustomUserVarsSection';

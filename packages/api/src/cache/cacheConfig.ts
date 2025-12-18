@@ -1,6 +1,6 @@
 import { readFileSync, existsSync } from 'fs';
-import { logger } from '@aipyq/data-schemas';
-import { CacheKeys } from '@aipyq/data-provider';
+import { logger } from '@because/data-schemas';
+import { CacheKeys } from '@because/data-provider';
 import { math, isEnabled } from '~/utils';
 
 // To ensure that different deployments do not interfere with each other's cache, we use a prefix for the Redis keys.

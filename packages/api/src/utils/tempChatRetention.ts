@@ -1,5 +1,5 @@
-import { logger } from '@aipyq/data-schemas';
-import type { AppConfig } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
+import type { AppConfig } from '@because/data-schemas';
 
 /**
  * Default retention period for temporary chats in hours

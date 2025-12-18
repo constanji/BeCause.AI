@@ -1,4 +1,4 @@
-const { handleError } = require('@aipyq/api');
+const { handleError } = require('@because/api');
 
 function validateEndpoint(req, res, next) {
   const { endpoint: _endpoint, endpointType } = req.body;

@@ -1,8 +1,8 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const { getAccessToken } = require('@aipyq/api');
-const { logger } = require('@aipyq/data-schemas');
-const { CacheKeys } = require('@aipyq/data-provider');
+const { getAccessToken } = require('@because/api');
+const { logger } = require('@because/data-schemas');
+const { CacheKeys } = require('@because/data-provider');
 const { findToken, updateToken, createToken } = require('~/models');
 const { getFlowStateManager } = require('~/config');
 const { getLogStores } = require('~/cache');

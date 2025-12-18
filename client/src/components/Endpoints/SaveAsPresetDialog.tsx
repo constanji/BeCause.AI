@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useCreatePresetMutation } from '@aipyq/data-provider/react-query';
-import { OGDialogTemplate, OGDialog, Input, Label, useToastContext } from '@aipyq/client';
+import { useCreatePresetMutation } from '@because/data-provider/react-query';
+import { OGDialogTemplate, OGDialog, Input, Label, useToastContext } from '@because/client';
 import type { TEditPresetProps } from '~/common';
 import { cn, removeFocusOutlines, cleanupPreset, defaultTextProps } from '~/utils';
 import { NotificationSeverity } from '~/common';

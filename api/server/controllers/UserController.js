@@ -1,12 +1,12 @@
-const { logger, webSearchKeys } = require('@aipyq/data-schemas');
-const { Tools, CacheKeys, Constants, FileSources } = require('@aipyq/data-provider');
+const { logger, webSearchKeys } = require('@because/data-schemas');
+const { Tools, CacheKeys, Constants, FileSources } = require('@because/data-provider');
 const {
   MCPOAuthHandler,
   MCPTokenStorage,
   mcpServersRegistry,
   normalizeHttpError,
   extractWebSearchEnvVars,
-} = require('@aipyq/api');
+} = require('@because/api');
 const {
   deleteAllUserSessions,
   deleteAllSharedLinks,

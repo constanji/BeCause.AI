@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BookmarkPlusIcon } from 'lucide-react';
-import { OGDialogTrigger } from '@aipyq/client';
+import { OGDialogTrigger } from '@because/client';
 import type { FC } from 'react';
 import { BookmarkEditDialog, BookmarkItems, BookmarkItem } from '~/components/Bookmarks';
 import { useLocalize } from '~/hooks';

@@ -7,7 +7,7 @@ import {
   OGDialogTrigger,
   Spinner,
   useOnClickOutside,
-} from '@aipyq/client';
+} from '@because/client';
 import { useLocalize } from '~/hooks';
 
 export const DeleteCache = ({ disabled = false }: { disabled?: boolean }) => {

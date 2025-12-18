@@ -28,11 +28,11 @@ COPY --chown=node:node packages/data-provider/package.json ./packages/data-provi
 COPY --chown=node:node packages/data-schemas/package.json ./packages/data-schemas/package.json
 COPY --chown=node:node packages/api/package.json ./packages/api/package.json
 
-# Copy agents-Aipyq package files
-COPY --chown=node:node agents-Aipyq/package.json ./agents-Aipyq/package.json
-COPY --chown=node:node agents-Aipyq/tsconfig*.json ./agents-Aipyq/
-COPY --chown=node:node agents-Aipyq/rollup.config.js ./agents-Aipyq/
-COPY --chown=node:node agents-Aipyq/husky-setup.js ./agents-Aipyq/
+# Copy agents-because package files
+COPY --chown=node:node agents-because/package.json ./agents-because/package.json
+COPY --chown=node:node agents-because/tsconfig*.json ./agents-because/
+COPY --chown=node:node agents-because/rollup.config.js ./agents-because/
+COPY --chown=node:node agents-because/husky-setup.js ./agents-because/
 
 ENV HUSKY=0
 
@@ -41,19 +41,19 @@ RUN \
     npm config set fetch-retry-maxtimeout 600000 ; \
     npm config set fetch-retries 5 ; \
     npm config set fetch-retry-mintimeout 15000 ; \
-    cd agents-Aipyq && npm install --no-audit && cd .. ; \
+    cd agents-because && npm install --no-audit && cd .. ; \
     npm ci
 
-# Copy agents-Aipyq source files (源代码会通过 volume 挂载，这里只复制必要的配置)
+# Copy agents-because source files (源代码会通过 volume 挂载，这里只复制必要的配置)
 # 注意：运行时这些文件会被 volume 挂载覆盖
-COPY --chown=node:node agents-Aipyq/src ./agents-Aipyq/src
-RUN mkdir -p ./agents-Aipyq/dist
+COPY --chown=node:node agents-because/src ./agents-because/src
+RUN mkdir -p ./agents-because/dist
 
-# 尝试构建 agents-Aipyq
-RUN cd agents-Aipyq && npm run build || echo "Note: agents-Aipyq build optional in dev mode, source will be mounted via volume"
+# 尝试构建 agents-because
+RUN cd agents-because && npm run build || echo "Note: agents-because build optional in dev mode, source will be mounted via volume"
 
 # Copy dist if it exists (will be overridden by volume mount)
-COPY --chown=node:node agents-Aipyq/dist ./agents-Aipyq/dist
+COPY --chown=node:node agents-because/dist ./agents-because/dist
 
 # Note: 源代码将通过 volumes 挂载，所以这里只是设置工作目录和安装依赖
 # 在实际运行时，挂载的源代码会覆盖这些文件

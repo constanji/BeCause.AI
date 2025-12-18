@@ -1,7 +1,7 @@
 import { useRecoilState } from 'recoil';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { QueryKeys, isAgentsEndpoint } from '@aipyq/data-provider';
+import { QueryKeys, isAgentsEndpoint } from '@because/data-provider';
 import {
   Input,
   Label,
@@ -9,8 +9,8 @@ import {
   OGDialogTitle,
   SelectDropDown,
   OGDialogContent,
-} from '@aipyq/client';
-import type { TModelsConfig, TEndpointsConfig } from '@aipyq/data-provider';
+} from '@because/client';
+import type { TModelsConfig, TEndpointsConfig } from '@because/data-provider';
 import {
   cn,
   defaultTextProps,

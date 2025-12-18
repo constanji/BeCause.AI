@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import { getEndpointField, Constants } from '@aipyq/data-provider';
-import type * as t from '@aipyq/data-provider';
+import { getEndpointField, Constants } from '@because/data-provider';
+import type * as t from '@because/data-provider';
 import { getIconKey, getEntity, getIconEndpoint } from '~/utils';
 import ConvoIconURL from '~/components/Endpoints/ConvoIconURL';
 import { icons } from '~/hooks/Endpoint/Icons';

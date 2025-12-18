@@ -1,4 +1,4 @@
-import type { IMongoFile } from '@aipyq/data-schemas';
+import type { IMongoFile } from '@because/data-schemas';
 import type { ServerRequest } from './http';
 import type { Readable } from 'stream';
 export interface STTService {

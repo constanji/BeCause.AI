@@ -1,7 +1,7 @@
 const { Tool } = require('@langchain/core/tools');
 const { z } = require('zod');
 const axios = require('axios');
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 
 /**
  * Database Schema Tool - 获取数据库表结构信息

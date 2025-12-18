@@ -1,6 +1,6 @@
-import { EToolResources } from '@aipyq/data-provider';
+import { EToolResources } from '@because/data-provider';
 import { convertOcrToContextInPlace, mergeAgentOcrConversion } from './legacy';
-import type { AgentToolResources, TFile } from '@aipyq/data-provider';
+import type { AgentToolResources, TFile } from '@because/data-provider';
 
 describe('OCR to Context Conversion for updateAgentHandler', () => {
   describe('convertOcrToContextInPlace', () => {

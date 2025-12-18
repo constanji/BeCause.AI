@@ -5,7 +5,7 @@ import * as React from 'react';
 import { describe, it, expect, beforeEach, jest } from '@jest/globals';
 import { render, waitFor, fireEvent } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import type { Agent } from '@aipyq/data-provider';
+import type { Agent } from '@because/data-provider';
 
 // Mock toast context - define this after all mocks
 let mockShowToast: jest.Mock;
@@ -30,8 +30,8 @@ jest.mock('~/store/toast', () => ({
 jest.mock('~/store', () => {});
 
 // Mock the data service to control network responses
-jest.mock('@aipyq/data-provider', () => {
-  const actualModule = jest.requireActual('@aipyq/data-provider') as any;
+jest.mock('@because/data-provider', () => {
+  const actualModule = jest.requireActual('@because/data-provider') as any;
   return {
     ...actualModule,
     dataService: {
@@ -63,7 +63,7 @@ jest.mock('@aipyq/data-provider', () => {
   };
 });
 
-jest.mock('@aipyq/client', () => ({
+jest.mock('@because/client', () => ({
   Button: ({ children, onClick, ...props }: any) => (
     <button onClick={onClick} {...props}>
       {children}
@@ -77,7 +77,7 @@ jest.mock('@aipyq/client', () => ({
 }));
 
 // Mock other dependencies
-jest.mock('@aipyq/data-provider/react-query', () => ({
+jest.mock('@because/data-provider/react-query', () => ({
   useGetModelsQuery: () => ({ data: {} }),
   useGetEffectivePermissionsQuery: () => ({
     data: { permissionBits: 0xffffffff }, // All permissions
@@ -205,7 +205,7 @@ jest.mock('react-hook-form', () => {
 });
 
 // Import after mocks
-import { dataService } from '@aipyq/data-provider';
+import { dataService } from '@because/data-provider';
 import { useGetAgentByIdQuery } from '~/data-provider';
 import AgentPanel from './AgentPanel';
 

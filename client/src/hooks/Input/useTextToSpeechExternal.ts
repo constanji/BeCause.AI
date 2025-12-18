@@ -1,6 +1,6 @@
 import { useState, useMemo, useRef, useCallback, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
-import { useToastContext } from '@aipyq/client';
+import { useToastContext } from '@because/client';
 import { useTextToSpeechMutation, useVoicesQuery } from '~/data-provider';
 import { useLocalize } from '~/hooks';
 import store from '~/store';

@@ -1,6 +1,6 @@
 const express = require('express');
-const { Tokenizer, generateCheckAccess } = require('@aipyq/api');
-const { PermissionTypes, Permissions } = require('@aipyq/data-provider');
+const { Tokenizer, generateCheckAccess } = require('@because/api');
+const { PermissionTypes, Permissions } = require('@because/data-provider');
 const {
   getAllUserMemories,
   toggleUserMemories,

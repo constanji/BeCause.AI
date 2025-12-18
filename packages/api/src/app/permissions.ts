@@ -1,12 +1,12 @@
-import { logger } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
 import {
   SystemRoles,
   Permissions,
   roleDefaults,
   PermissionTypes,
   getConfigDefaults,
-} from '@aipyq/data-provider';
-import type { IRole, AppConfig } from '@aipyq/data-schemas';
+} from '@because/data-provider';
+import type { IRole, AppConfig } from '@because/data-schemas';
 import { isMemoryEnabled } from '~/memory/config';
 
 /**
@@ -92,7 +92,7 @@ export async function updateInterfacePermissions({
   const defaults = getConfigDefaults().interface;
 
   // Permission precedence order:
-  // 1. Explicit user configuration (from Aipyq.yaml)
+  // 1. Explicit user configuration (from Because.yaml)
   // 2. Role-specific defaults (from roleDefaults)
   // 3. Interface schema defaults (from interfaceSchema.default())
   for (const roleName of [SystemRoles.USER, SystemRoles.ADMIN]) {

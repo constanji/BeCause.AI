@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AccessRoleIds, ResourceType } from '@aipyq/data-provider';
+import { AccessRoleIds, ResourceType } from '@because/data-provider';
 import { Share2Icon, Users, Link, CopyCheck, UserX, UserCheck } from 'lucide-react';
 import {
   Label,
@@ -12,8 +12,8 @@ import {
   OGDialogContent,
   OGDialogTrigger,
   useToastContext,
-} from '@aipyq/client';
-import type { TPrincipal } from '@aipyq/data-provider';
+} from '@because/client';
+import type { TPrincipal } from '@because/data-provider';
 import {
   usePeoplePickerPermissions,
   useResourcePermissionState,

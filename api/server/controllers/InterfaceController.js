@@ -1,8 +1,8 @@
 const fs = require('fs').promises;
 const path = require('path');
 const yaml = require('js-yaml');
-const { logger } = require('@aipyq/data-schemas');
-const { interfaceSchema } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { interfaceSchema } = require('@because/data-provider');
 const getConfigPath = require('~/server/utils/getConfigPath');
 
 async function updateInterfaceConfig(req, res) {
@@ -31,7 +31,7 @@ async function updateInterfaceConfig(req, res) {
     // Check if config file exists and is a local file (not a URL)
     if (/^https?:\/\//.test(configPath)) {
       return res.status(400).json({
-        error: 'Cannot update remote config file. Please use a local Aipyq.yaml file.',
+        error: 'Cannot update remote config file. Please use a local Because.yaml file.',
       });
     }
 
@@ -170,7 +170,7 @@ async function updateInterfaceConfig(req, res) {
 
     // 清除缓存，强制重新加载配置
     const { getLogStores } = require('~/cache');
-    const { CacheKeys } = require('@aipyq/data-provider');
+    const { CacheKeys } = require('@because/data-provider');
     const cache = getLogStores(CacheKeys.CONFIG_STORE);
     
     // 清除所有相关缓存

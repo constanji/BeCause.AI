@@ -1,11 +1,11 @@
 import { memo, useMemo } from 'react';
-import { ContentTypes } from '@aipyq/data-provider';
+import { ContentTypes } from '@because/data-provider';
 import type {
   TMessageContentParts,
   SearchResultData,
   TAttachment,
   Agents,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import { MessageContext, SearchContext } from '~/Providers';
 import MemoryArtifacts from './MemoryArtifacts';
 import Sources from '~/components/Web/Sources';

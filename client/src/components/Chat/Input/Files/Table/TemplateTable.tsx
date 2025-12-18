@@ -1,4 +1,4 @@
-import { DotsIcon, TrashIcon } from '@aipyq/client';
+import { DotsIcon, TrashIcon } from '@because/client';
 
 export default function Template() {
   return (

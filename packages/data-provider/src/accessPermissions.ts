@@ -30,7 +30,7 @@ export enum PrincipalModel {
 }
 
 /**
- * Source of the principal (local Aipyq or external Entra ID)
+ * Source of the principal (local Because or external Entra ID)
  */
 export type TPrincipalSource = 'local' | 'entra';
 

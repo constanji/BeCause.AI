@@ -1,6 +1,6 @@
-import { FileSources, FileContext } from '@aipyq/data-provider';
-import type { TFile } from '@aipyq/data-provider';
-import { OGDialog, OGDialogContent, OGDialogHeader, OGDialogTitle } from '@aipyq/client';
+import { FileSources, FileContext } from '@because/data-provider';
+import type { TFile } from '@because/data-provider';
+import { OGDialog, OGDialogContent, OGDialogHeader, OGDialogTitle } from '@because/client';
 import { useGetFiles } from '~/data-provider';
 import { DataTable, columns } from './Table';
 import { useLocalize } from '~/hooks';

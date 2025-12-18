@@ -8,11 +8,11 @@ import {
   type OpenIDTokenInfo,
 } from '../packages/api/src/utils/oidc';
 import { processMCPEnv, resolveHeaders } from '../packages/api/src/utils/env';
-import type { TUser } from '@aipyq/data-provider';
-import type { IUser } from '@aipyq/data-schemas';
+import type { TUser } from '@because/data-provider';
+import type { IUser } from '@because/data-schemas';
 
 // Mock logger to avoid console output during tests
-jest.mock('@aipyq/data-schemas', () => ({
+jest.mock('@because/data-schemas', () => ({
   logger: {
     error: jest.fn(),
     warn: jest.fn(),
@@ -163,19 +163,19 @@ describe('OpenID Connect Federated Provider Token Integration', () => {
     };
 
     it('should replace OpenID Connect token placeholders', () => {
-      const template = 'Bearer {{AIPYQ_OPENID_TOKEN}}';
+      const template = 'Bearer {{BECAUSE_OPENID_TOKEN}}';
       const result = processOpenIDPlaceholders(template, tokenInfo);
       expect(result).toBe('Bearer cognito-access-token-123');
     });
 
     it('should replace specific OpenID Connect placeholders', () => {
       const template = `
-        Access: {{AIPYQ_OPENID_ACCESS_TOKEN}}
-        ID: {{AIPYQ_OPENID_ID_TOKEN}}
-        User: {{AIPYQ_OPENID_USER_ID}}
-        Email: {{AIPYQ_OPENID_USER_EMAIL}}
-        Name: {{AIPYQ_OPENID_USER_NAME}}
-        Expires: {{AIPYQ_OPENID_EXPIRES_AT}}
+        Access: {{BECAUSE_OPENID_ACCESS_TOKEN}}
+        ID: {{BECAUSE_OPENID_ID_TOKEN}}
+        User: {{BECAUSE_OPENID_USER_ID}}
+        Email: {{BECAUSE_OPENID_USER_EMAIL}}
+        Name: {{BECAUSE_OPENID_USER_NAME}}
+        Expires: {{BECAUSE_OPENID_EXPIRES_AT}}
       `;
 
       const result = processOpenIDPlaceholders(template, tokenInfo);
@@ -194,14 +194,14 @@ describe('OpenID Connect Federated Provider Token Integration', () => {
         userId: 'user-123',
       };
 
-      const template = 'Token: {{AIPYQ_OPENID_TOKEN}}, Email: {{AIPYQ_OPENID_USER_EMAIL}}';
+      const template = 'Token: {{BECAUSE_OPENID_TOKEN}}, Email: {{BECAUSE_OPENID_USER_EMAIL}}';
       const result = processOpenIDPlaceholders(template, partialTokenInfo);
 
       expect(result).toBe('Token: partial-cognito-token, Email: ');
     });
 
     it('should return original value for null token info', () => {
-      const template = 'Bearer {{AIPYQ_OPENID_TOKEN}}';
+      const template = 'Bearer {{BECAUSE_OPENID_TOKEN}}';
       const result = processOpenIDPlaceholders(template, null);
       expect(result).toBe(template);
     });
@@ -272,9 +272,9 @@ describe('OpenID Connect Federated Provider Token Integration', () => {
   describe('Integration with resolveHeaders', () => {
     it('should resolve OpenID Connect placeholders in headers for Cognito', () => {
       const headers = {
-        'Authorization': '{{AIPYQ_OPENID_TOKEN}}',
-        'X-User-ID': '{{AIPYQ_OPENID_USER_ID}}',
-        'X-User-Email': '{{AIPYQ_OPENID_USER_EMAIL}}',
+        'Authorization': '{{BECAUSE_OPENID_TOKEN}}',
+        'X-User-ID': '{{BECAUSE_OPENID_USER_ID}}',
+        'X-User-Email': '{{BECAUSE_OPENID_USER_EMAIL}}',
       };
 
       const resolvedHeaders = resolveHeaders({
@@ -289,7 +289,7 @@ describe('OpenID Connect Federated Provider Token Integration', () => {
 
     it('should work with Bearer token format for Cognito', () => {
       const headers = {
-        'Authorization': 'Bearer {{AIPYQ_OPENID_TOKEN}}',
+        'Authorization': 'Bearer {{BECAUSE_OPENID_TOKEN}}',
       };
 
       const resolvedHeaders = resolveHeaders({
@@ -302,8 +302,8 @@ describe('OpenID Connect Federated Provider Token Integration', () => {
 
     it('should work with specific access token placeholder', () => {
       const headers = {
-        'Authorization': 'Bearer {{AIPYQ_OPENID_ACCESS_TOKEN}}',
-        'X-Cognito-ID-Token': '{{AIPYQ_OPENID_ID_TOKEN}}',
+        'Authorization': 'Bearer {{BECAUSE_OPENID_ACCESS_TOKEN}}',
+        'X-Cognito-ID-Token': '{{BECAUSE_OPENID_ID_TOKEN}}',
       };
 
       const resolvedHeaders = resolveHeaders({
@@ -322,9 +322,9 @@ describe('OpenID Connect Federated Provider Token Integration', () => {
         command: 'node',
         args: ['server.js'],
         env: {
-          'COGNITO_ACCESS_TOKEN': '{{AIPYQ_OPENID_TOKEN}}',
-          'USER_ID': '{{AIPYQ_OPENID_USER_ID}}',
-          'USER_EMAIL': '{{AIPYQ_OPENID_USER_EMAIL}}',
+          'COGNITO_ACCESS_TOKEN': '{{BECAUSE_OPENID_TOKEN}}',
+          'USER_ID': '{{BECAUSE_OPENID_USER_ID}}',
+          'USER_EMAIL': '{{BECAUSE_OPENID_USER_EMAIL}}',
         },
       };
 
@@ -343,9 +343,9 @@ describe('OpenID Connect Federated Provider Token Integration', () => {
         type: 'sse' as const,
         url: 'https://api.example.com/mcp',
         headers: {
-          'Authorization': 'Bearer {{AIPYQ_OPENID_ACCESS_TOKEN}}',
-          'X-Cognito-User-Info': '{{AIPYQ_OPENID_USER_EMAIL}}',
-          'X-Cognito-ID-Token': '{{AIPYQ_OPENID_ID_TOKEN}}',
+          'Authorization': 'Bearer {{BECAUSE_OPENID_ACCESS_TOKEN}}',
+          'X-Cognito-User-Info': '{{BECAUSE_OPENID_USER_EMAIL}}',
+          'X-Cognito-ID-Token': '{{BECAUSE_OPENID_ID_TOKEN}}',
         },
       };
 
@@ -364,9 +364,9 @@ describe('OpenID Connect Federated Provider Token Integration', () => {
         command: 'node',
         args: ['aws-mcp-server.js'],
         env: {
-          'AWS_COGNITO_TOKEN': '{{AIPYQ_OPENID_ACCESS_TOKEN}}',
-          'AWS_COGNITO_ID_TOKEN': '{{AIPYQ_OPENID_ID_TOKEN}}',
-          'COGNITO_USER_SUB': '{{AIPYQ_OPENID_USER_ID}}',
+          'AWS_COGNITO_TOKEN': '{{BECAUSE_OPENID_ACCESS_TOKEN}}',
+          'AWS_COGNITO_ID_TOKEN': '{{BECAUSE_OPENID_ID_TOKEN}}',
+          'COGNITO_USER_SUB': '{{BECAUSE_OPENID_USER_ID}}',
         },
       };
 
@@ -384,7 +384,7 @@ describe('OpenID Connect Federated Provider Token Integration', () => {
   describe('Security and Edge Cases', () => {
     it('should not process OpenID Connect placeholders for expired tokens', () => {
       const headers = {
-        'Authorization': 'Bearer {{AIPYQ_OPENID_TOKEN}}',
+        'Authorization': 'Bearer {{BECAUSE_OPENID_TOKEN}}',
       };
 
       const resolvedHeaders = resolveHeaders({
@@ -393,7 +393,7 @@ describe('OpenID Connect Federated Provider Token Integration', () => {
       });
 
       // Should not replace placeholder if token is expired
-      expect(resolvedHeaders['Authorization']).toBe('Bearer {{AIPYQ_OPENID_TOKEN}}');
+      expect(resolvedHeaders['Authorization']).toBe('Bearer {{BECAUSE_OPENID_TOKEN}}');
     });
 
     it('should handle malformed federated token data gracefully', () => {
@@ -405,7 +405,7 @@ describe('OpenID Connect Federated Provider Token Integration', () => {
       };
 
       const headers = {
-        'Authorization': 'Bearer {{AIPYQ_OPENID_TOKEN}}',
+        'Authorization': 'Bearer {{BECAUSE_OPENID_TOKEN}}',
       };
 
       const resolvedHeaders = resolveHeaders({
@@ -414,11 +414,11 @@ describe('OpenID Connect Federated Provider Token Integration', () => {
       });
 
       // Should not replace placeholder if token extraction fails
-      expect(resolvedHeaders['Authorization']).toBe('Bearer {{AIPYQ_OPENID_TOKEN}}');
+      expect(resolvedHeaders['Authorization']).toBe('Bearer {{BECAUSE_OPENID_TOKEN}}');
     });
 
     it('should handle multiple placeholder instances in same string', () => {
-      const template = '{{AIPYQ_OPENID_TOKEN}}-{{AIPYQ_OPENID_TOKEN}}-{{AIPYQ_OPENID_USER_ID}}';
+      const template = '{{BECAUSE_OPENID_TOKEN}}-{{BECAUSE_OPENID_TOKEN}}-{{BECAUSE_OPENID_USER_ID}}';
 
       const tokenInfo: OpenIDTokenInfo = {
         accessToken: 'cognito-token123',
@@ -439,7 +439,7 @@ describe('OpenID Connect Federated Provider Token Integration', () => {
       };
 
       const headers = {
-        'Authorization': 'Bearer {{AIPYQ_OPENID_TOKEN}}',
+        'Authorization': 'Bearer {{BECAUSE_OPENID_TOKEN}}',
       };
 
       const resolvedHeaders = resolveHeaders({
@@ -448,7 +448,7 @@ describe('OpenID Connect Federated Provider Token Integration', () => {
       });
 
       // Should not replace placeholder if no tokens available
-      expect(resolvedHeaders['Authorization']).toBe('Bearer {{AIPYQ_OPENID_TOKEN}}');
+      expect(resolvedHeaders['Authorization']).toBe('Bearer {{BECAUSE_OPENID_TOKEN}}');
     });
 
     it('should prioritize federatedTokens over openidTokens', () => {

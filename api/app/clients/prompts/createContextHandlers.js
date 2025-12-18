@@ -1,6 +1,6 @@
 const axios = require('axios');
-const { logger } = require('@aipyq/data-schemas');
-const { isEnabled, generateShortLivedToken } = require('@aipyq/api');
+const { logger } = require('@because/data-schemas');
+const { isEnabled, generateShortLivedToken } = require('@because/api');
 
 const footer = `Use the context as your learned knowledge to better answer the user.
 

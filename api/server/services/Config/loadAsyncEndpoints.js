@@ -1,7 +1,7 @@
 const path = require('path');
-const { logger } = require('@aipyq/data-schemas');
-const { EModelEndpoint } = require('@aipyq/data-provider');
-const { loadServiceKey, isUserProvided } = require('@aipyq/api');
+const { logger } = require('@because/data-schemas');
+const { EModelEndpoint } = require('@because/data-provider');
+const { loadServiceKey, isUserProvided } = require('@because/api');
 const { config } = require('./EndpointService');
 
 const { openAIApiKey, azureOpenAIApiKey, useAzurePlugins, userProvidedOpenAI, googleKey } = config;

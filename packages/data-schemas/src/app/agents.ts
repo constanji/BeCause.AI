@@ -1,8 +1,8 @@
-import { EModelEndpoint, agentsEndpointSchema } from '@aipyq/data-provider';
-import type { TCustomConfig, TAgentsEndpoint } from '@aipyq/data-provider';
+import { EModelEndpoint, agentsEndpointSchema } from '@because/data-provider';
+import type { TCustomConfig, TAgentsEndpoint } from '@because/data-provider';
 
 /**
- * Sets up the Agents configuration from the config (`Aipyq.yaml`) file.
+ * Sets up the Agents configuration from the config (`Because.yaml`) file.
  * If no agents config is defined, uses the provided defaults or parses empty object.
  *
  * @param config - The loaded custom configuration.

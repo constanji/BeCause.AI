@@ -1,4 +1,4 @@
-import { PermissionBits } from '@aipyq/data-provider';
+import { PermissionBits } from '@because/data-provider';
 
 /**
  * Common role combinations

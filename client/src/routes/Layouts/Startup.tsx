@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import type { TStartupConfig } from '@aipyq/data-provider';
+import type { TStartupConfig } from '@because/data-provider';
 import { useGetStartupConfig } from '~/data-provider';
 import AuthLayout from '~/components/Auth/AuthLayout';
 import { TranslationKeys, useLocalize } from '~/hooks';
@@ -38,7 +38,7 @@ export default function StartupLayout({ isAuthenticated }: { isAuthenticated?: b
   }, [isAuthenticated, navigate, data]);
 
   useEffect(() => {
-    document.title = startupConfig?.appTitle || 'Aipyq';
+    document.title = startupConfig?.appTitle || 'Because';
   }, [startupConfig?.appTitle]);
 
   useEffect(() => {

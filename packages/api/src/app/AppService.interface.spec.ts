@@ -1,5 +1,5 @@
-jest.mock('@aipyq/data-schemas', () => ({
-  ...jest.requireActual('@aipyq/data-schemas'),
+jest.mock('@because/data-schemas', () => ({
+  ...jest.requireActual('@because/data-schemas'),
   logger: {
     info: jest.fn(),
     warn: jest.fn(),
@@ -7,7 +7,7 @@ jest.mock('@aipyq/data-schemas', () => ({
   },
 }));
 
-import { AppService } from '@aipyq/data-schemas';
+import { AppService } from '@because/data-schemas';
 
 describe('AppService interface configuration', () => {
   beforeEach(() => {

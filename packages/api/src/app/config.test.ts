@@ -1,8 +1,8 @@
 import { getTransactionsConfig, getBalanceConfig } from './config';
-import { logger } from '@aipyq/data-schemas';
-import { FileSources } from '@aipyq/data-provider';
-import type { TCustomConfig } from '@aipyq/data-provider';
-import type { AppConfig } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
+import { FileSources } from '@because/data-provider';
+import type { TCustomConfig } from '@because/data-provider';
+import type { AppConfig } from '@because/data-schemas';
 
 // Helper function to create a minimal AppConfig for testing
 const createTestAppConfig = (overrides: Partial<AppConfig> = {}): AppConfig => {
@@ -32,7 +32,7 @@ const createTestAppConfig = (overrides: Partial<AppConfig> = {}): AppConfig => {
   };
 };
 
-jest.mock('@aipyq/data-schemas', () => ({
+jest.mock('@because/data-schemas', () => ({
   logger: {
     warn: jest.fn(),
   },

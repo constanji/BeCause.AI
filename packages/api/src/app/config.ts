@@ -1,11 +1,11 @@
-import { logger } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
 import {
   EModelEndpoint,
   removeNullishValues,
   normalizeEndpointName,
-} from '@aipyq/data-provider';
-import type { TCustomConfig, TEndpoint, TTransactionsConfig } from '@aipyq/data-provider';
-import type { AppConfig } from '@aipyq/data-schemas';
+} from '@because/data-provider';
+import type { TCustomConfig, TEndpoint, TTransactionsConfig } from '@because/data-provider';
+import type { AppConfig } from '@because/data-schemas';
 import { isEnabled } from '~/utils';
 
 /**

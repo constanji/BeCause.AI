@@ -1,6 +1,6 @@
-const { isEnabled } = require('@aipyq/api');
-const { logger } = require('@aipyq/data-schemas');
-const { SystemRoles } = require('@aipyq/data-provider');
+const { isEnabled } = require('@because/api');
+const { logger } = require('@because/data-schemas');
+const { SystemRoles } = require('@because/data-provider');
 
 /**
  * Checks if the user can delete their account

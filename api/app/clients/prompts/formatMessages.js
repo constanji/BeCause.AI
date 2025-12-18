@@ -1,7 +1,7 @@
 const { ToolMessage } = require('@langchain/core/messages');
-const { EModelEndpoint, ContentTypes } = require('@aipyq/data-provider');
+const { EModelEndpoint, ContentTypes } = require('@because/data-provider');
 const { HumanMessage, AIMessage, SystemMessage } = require('@langchain/core/messages');
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 
 /**
  * Formats a message to OpenAI Vision API payload format.

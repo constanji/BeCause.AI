@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useGetModelsQuery } from '@aipyq/data-provider/react-query';
+import { useGetModelsQuery } from '@because/data-provider/react-query';
 import { useRecoilState, useRecoilValue, useSetRecoilState, useRecoilCallback } from 'recoil';
 import {
   Constants,
@@ -10,14 +10,14 @@ import {
   getEndpointField,
   LocalStorageKeys,
   isAssistantsEndpoint,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type {
   TPreset,
   TSubmission,
   TModelsConfig,
   TConversation,
   TEndpointsConfig,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type { AssistantListItem } from '~/common';
 import {
   updateLastSelectedModel,

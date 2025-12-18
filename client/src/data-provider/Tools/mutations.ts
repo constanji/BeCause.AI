@@ -1,7 +1,7 @@
-import { dataService, QueryKeys, Tools } from '@aipyq/data-provider';
+import { dataService, QueryKeys, Tools } from '@because/data-provider';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { UseMutationResult } from '@tanstack/react-query';
-import type * as t from '@aipyq/data-provider';
+import type * as t from '@because/data-provider';
 
 export const useToolCallMutation = <T extends t.ToolId>(
   toolId: T,

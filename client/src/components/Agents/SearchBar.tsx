@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Search, X } from 'lucide-react';
-import { Input } from '@aipyq/client';
+import { Input } from '@because/client';
 import { useDebounce, useLocalize } from '~/hooks';
 
 /**

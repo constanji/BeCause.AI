@@ -1,7 +1,7 @@
-import { OptionTypes } from '@aipyq/data-provider';
-import type { DynamicSettingProps } from '@aipyq/data-provider';
+import { OptionTypes } from '@because/data-provider';
+import type { DynamicSettingProps } from '@because/data-provider';
 import { useLocalize, useDebouncedInput, useParameterEffects, TranslationKeys } from '~/hooks';
-import { Label, TextareaAutosize, HoverCard, HoverCardTrigger } from '@aipyq/client';
+import { Label, TextareaAutosize, HoverCard, HoverCardTrigger } from '@because/client';
 import { useChatContext } from '~/Providers';
 import OptionHover from './OptionHover';
 import { ESide } from '~/common';

@@ -1,6 +1,6 @@
-const { logger } = require('@aipyq/data-schemas');
-const { countTokens, isEnabled, sendEvent } = require('@aipyq/api');
-const { isAssistantsEndpoint, ErrorTypes, Constants } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { countTokens, isEnabled, sendEvent } = require('@because/api');
+const { isAssistantsEndpoint, ErrorTypes, Constants } = require('@because/data-provider');
 const { truncateText, smartTruncateText } = require('~/app/clients/prompts');
 const clearPendingReq = require('~/cache/clearPendingReq');
 const { sendError } = require('~/server/middleware/error');

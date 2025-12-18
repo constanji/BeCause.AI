@@ -1,7 +1,7 @@
 const { klona } = require('klona');
-const { sleep } = require('@aipyq/agents');
-const { sendEvent } = require('@aipyq/api');
-const { logger } = require('@aipyq/data-schemas');
+const { sleep } = require('@because/agents');
+const { sendEvent } = require('@because/api');
+const { logger } = require('@because/data-schemas');
 const {
   StepTypes,
   RunStatus,
@@ -11,7 +11,7 @@ const {
   imageGenTools,
   EModelEndpoint,
   defaultOrderQuery,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const { retrieveAndProcessFile } = require('~/server/services/Files/process');
 const { processRequiredActions } = require('~/server/services/ToolService');
 const { RunManager, waitForRun } = require('~/server/services/Runs');

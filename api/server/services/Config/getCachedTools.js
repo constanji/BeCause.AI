@@ -1,4 +1,4 @@
-const { CacheKeys } = require('@aipyq/data-provider');
+const { CacheKeys } = require('@because/data-provider');
 const getLogStores = require('~/cache/getLogStores');
 
 /**

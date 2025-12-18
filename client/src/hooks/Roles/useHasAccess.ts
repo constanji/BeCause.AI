@@ -1,6 +1,6 @@
 import { useMemo, useCallback, useContext } from 'react';
-import type { TUser, Permissions } from '@aipyq/data-provider';
-import { SystemRoles, PermissionTypes, roleDefaults } from '@aipyq/data-provider';
+import type { TUser, Permissions } from '@because/data-provider';
+import { SystemRoles, PermissionTypes, roleDefaults } from '@because/data-provider';
 import { AuthContext } from '~/hooks/AuthContext';
 
 const useHasAccess = ({
@@ -30,7 +30,7 @@ const useHasAccess = ({
       }
 
       if (isAuthenticated && user?.role != null) {
-        // 管理员对于记忆相关权限，总是返回 true（参考 Aipyq 的设计）
+        // 管理员对于记忆相关权限，总是返回 true（参考 Because 的设计）
         if (user.role === SystemRoles.ADMIN && permissionType === PermissionTypes.MEMORIES) {
           return true;
         }

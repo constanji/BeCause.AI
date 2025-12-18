@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Clipboard, CheckMark } from '@aipyq/client';
-import type { TMessage, TAttachment, SearchResultData } from '@aipyq/data-provider';
+import { Clipboard, CheckMark } from '@because/client';
+import type { TMessage, TAttachment, SearchResultData } from '@because/data-provider';
 import { useLocalize, useCopyToClipboard } from '~/hooks';
 
 type THoverButtons = {

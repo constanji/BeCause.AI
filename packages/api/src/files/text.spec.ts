@@ -1,7 +1,7 @@
-import { FileSources } from '@aipyq/data-provider';
+import { FileSources } from '@because/data-provider';
 import { Readable } from 'stream';
 
-jest.mock('@aipyq/data-schemas', () => ({
+jest.mock('@because/data-schemas', () => ({
   logger: {
     debug: jest.fn(),
     warn: jest.fn(),

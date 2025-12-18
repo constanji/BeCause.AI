@@ -1,12 +1,12 @@
 import filenamify from 'filenamify';
 import exportFromJSON from 'export-from-json';
-import { useToastContext } from '@aipyq/client';
-import { QueryKeys } from '@aipyq/data-provider';
+import { useToastContext } from '@because/client';
+import { QueryKeys } from '@because/data-provider';
 import { useCallback, useEffect, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
-import { useCreatePresetMutation, useGetModelsQuery } from '@aipyq/data-provider/react-query';
-import type { TPreset, TEndpointsConfig } from '@aipyq/data-provider';
+import { useCreatePresetMutation, useGetModelsQuery } from '@because/data-provider/react-query';
+import type { TPreset, TEndpointsConfig } from '@because/data-provider';
 import {
   useUpdatePresetMutation,
   useDeletePresetMutation,

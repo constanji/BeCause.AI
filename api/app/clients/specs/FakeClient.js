@@ -1,4 +1,4 @@
-const { getModelMaxTokens } = require('@aipyq/api');
+const { getModelMaxTokens } = require('@because/api');
 const BaseClient = require('../BaseClient');
 
 class FakeClient extends BaseClient {

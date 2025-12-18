@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { TUser } from '@aipyq/data-provider';
+import type { TUser } from '@because/data-provider';
 
 const useAvatar = (user: TUser | undefined) => {
   return useMemo(() => {

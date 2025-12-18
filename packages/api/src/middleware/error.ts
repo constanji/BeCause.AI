@@ -1,5 +1,5 @@
-import { logger } from '@aipyq/data-schemas';
-import { ErrorTypes } from '@aipyq/data-provider';
+import { logger } from '@because/data-schemas';
+import { ErrorTypes } from '@because/data-provider';
 import type { NextFunction, Request, Response } from 'express';
 import type { MongoServerError, ValidationError, CustomError } from '~/types';
 

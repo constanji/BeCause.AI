@@ -1,13 +1,13 @@
 import { primeResources } from './resources';
-import { logger } from '@aipyq/data-schemas';
-import { EModelEndpoint, EToolResources, AgentCapabilities } from '@aipyq/data-provider';
-import type { TAgentsEndpoint, TFile } from '@aipyq/data-provider';
-import type { IUser, AppConfig } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
+import { EModelEndpoint, EToolResources, AgentCapabilities } from '@because/data-provider';
+import type { TAgentsEndpoint, TFile } from '@because/data-provider';
+import type { IUser, AppConfig } from '@because/data-schemas';
 import type { Request as ServerRequest } from 'express';
 import type { TGetFiles } from './resources';
 
 // Mock logger
-jest.mock('@aipyq/data-schemas', () => ({
+jest.mock('@because/data-schemas', () => ({
   logger: {
     error: jest.fn(),
   },

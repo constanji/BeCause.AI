@@ -1,4 +1,4 @@
-import { PermissionTypes, Permissions } from '@aipyq/data-provider';
+import { PermissionTypes, Permissions } from '@because/data-provider';
 import useHasAccess from './Roles/useHasAccess';
 
 export default function usePersonalizationAccess() {

@@ -1,7 +1,7 @@
 import { Wrench } from 'lucide-react';
-import { useMultiSearch } from '@aipyq/client';
+import { useMultiSearch } from '@because/client';
 import { Root, Trigger, Content, Portal } from '@radix-ui/react-popover';
-import type { TPlugin } from '@aipyq/data-provider';
+import type { TPlugin } from '@because/data-provider';
 import MenuItem from '~/components/Chat/Menus/UI/MenuItem';
 import { cn } from '~/utils/';
 

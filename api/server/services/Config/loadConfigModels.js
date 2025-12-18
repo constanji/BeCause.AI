@@ -1,9 +1,9 @@
-const { isUserProvided } = require('@aipyq/api');
+const { isUserProvided } = require('@because/api');
 const {
   EModelEndpoint,
   extractEnvVariable,
   normalizeEndpointName,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const { fetchModels } = require('~/server/services/ModelService');
 const { getAppConfig } = require('./app');
 

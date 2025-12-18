@@ -1,11 +1,11 @@
-const { loadCustomEndpointsConfig } = require('@aipyq/api');
+const { loadCustomEndpointsConfig } = require('@because/api');
 const {
   CacheKeys,
   EModelEndpoint,
   isAgentsEndpoint,
   orderEndpointsConfig,
   defaultAgentCapabilities,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const loadDefaultEndpointsConfig = require('./loadDefaultEConfig');
 const getLogStores = require('~/cache/getLogStores');
 const { getAppConfig } = require('./app');
@@ -105,7 +105,7 @@ async function getEndpointsConfig(req) {
 
 /**
  * @param {ServerRequest} req
- * @param {import('@aipyq/data-provider').AgentCapabilities} capability
+ * @param {import('@because/data-provider').AgentCapabilities} capability
  * @returns {Promise<boolean>}
  */
 const checkCapability = async (req, capability) => {

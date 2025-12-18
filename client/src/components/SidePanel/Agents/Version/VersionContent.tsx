@@ -1,4 +1,4 @@
-import { Spinner } from '@aipyq/client';
+import { Spinner } from '@because/client';
 import type { VersionContext } from './types';
 import VersionItem from './VersionItem';
 import { useLocalize } from '~/hooks';

@@ -1,4 +1,4 @@
-import { AccessRoleIds, ResourceType } from '@aipyq/data-provider';
+import { AccessRoleIds, ResourceType } from '@because/data-provider';
 
 export interface ResourceConfig {
   resourceType: ResourceType;

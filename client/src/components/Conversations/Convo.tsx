@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import { useParams } from 'react-router-dom';
-import { Constants } from '@aipyq/data-provider';
-import { useToastContext, useMediaQuery } from '@aipyq/client';
-import type { TConversation } from '@aipyq/data-provider';
+import { Constants } from '@because/data-provider';
+import { useToastContext, useMediaQuery } from '@because/client';
+import type { TConversation } from '@because/data-provider';
 import { useUpdateConversationMutation } from '~/data-provider';
 import EndpointIcon from '~/components/Endpoints/EndpointIcon';
 import { useNavigateToConvo, useLocalize } from '~/hooks';

@@ -1,7 +1,7 @@
 const axios = require('axios');
-const { logger } = require('@aipyq/data-schemas');
-const { genAzureEndpoint } = require('@aipyq/api');
-const { extractEnvVariable, TTSProviders } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { genAzureEndpoint } = require('@because/api');
+const { extractEnvVariable, TTSProviders } = require('@because/data-provider');
 const { getRandomVoiceId, createChunkProcessor, splitTextIntoChunks } = require('./streamAudio');
 const { getAppConfig } = require('~/server/services/Config');
 
@@ -43,7 +43,7 @@ class TTSService {
     const ttsSchema = appConfig?.speech?.tts;
     if (!ttsSchema) {
       throw new Error(
-        'No TTS schema is set. Did you configure TTS in the custom config (Aipyq.yaml)?',
+        'No TTS schema is set. Did you configure TTS in the custom config (Because.yaml)?',
       );
     }
     const providers = Object.entries(ttsSchema).filter(

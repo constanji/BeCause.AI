@@ -1,6 +1,6 @@
-# Aipyq 数据模式包
+# Because 数据模式包
 
-本包使用 Mongoose ODM 为 Aipyq 提供数据库模式、模型、类型和方法。
+本包使用 Mongoose ODM 为 Because 提供数据库模式、模型、类型和方法。
 
 ## 📁 包结构
 

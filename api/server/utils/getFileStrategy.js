@@ -1,4 +1,4 @@
-const { FileSources, FileContext } = require('@aipyq/data-provider');
+const { FileSources, FileContext } = require('@because/data-provider');
 
 /**
  * Determines the appropriate file storage strategy based on file type and configuration.

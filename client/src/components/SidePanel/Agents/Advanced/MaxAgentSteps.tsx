@@ -6,7 +6,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
   CircleHelpIcon,
-} from '@aipyq/client';
+} from '@because/client';
 import type { AgentForm } from '~/common';
 import { useLocalize } from '~/hooks';
 import { ESide } from '~/common';

@@ -1,8 +1,8 @@
 const passport = require('passport');
 const session = require('express-session');
-const { isEnabled } = require('@aipyq/api');
-const { logger } = require('@aipyq/data-schemas');
-const { CacheKeys } = require('@aipyq/data-provider');
+const { isEnabled } = require('@because/api');
+const { logger } = require('@because/data-schemas');
+const { CacheKeys } = require('@because/data-provider');
 const {
   openIdJwtLogin,
   facebookLogin,

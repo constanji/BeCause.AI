@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, TrashIcon } from '@aipyq/client';
+import { Button, TrashIcon } from '@because/client';
 
 type DeleteIconButtonProps = {
   onClick: () => void;

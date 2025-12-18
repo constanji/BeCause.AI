@@ -1,5 +1,5 @@
-import { logger } from '@aipyq/data-schemas';
-import type { Logger } from '@aipyq/agents';
+import { logger } from '@because/data-schemas';
+import type { Logger } from '@because/agents';
 import { getBasePath } from './path';
 
 describe('getBasePath', () => {
@@ -24,33 +24,33 @@ describe('getBasePath', () => {
   });
 
   it('should return base path for subdirectory deployment', () => {
-    process.env.DOMAIN_CLIENT = 'http://localhost:3080/aipyq';
-    expect(getBasePath()).toBe('/aipyq');
+    process.env.DOMAIN_CLIENT = 'http://localhost:3080/because';
+    expect(getBasePath()).toBe('/because');
   });
 
   it('should return base path without trailing slash', () => {
-    process.env.DOMAIN_CLIENT = 'http://localhost:3080/aipyq/';
-    expect(getBasePath()).toBe('/aipyq');
+    process.env.DOMAIN_CLIENT = 'http://localhost:3080/because/';
+    expect(getBasePath()).toBe('/because');
   });
 
   it('should handle nested subdirectories', () => {
-    process.env.DOMAIN_CLIENT = 'http://localhost:3080/apps/aipyq';
-    expect(getBasePath()).toBe('/apps/aipyq');
+    process.env.DOMAIN_CLIENT = 'http://localhost:3080/apps/because';
+    expect(getBasePath()).toBe('/apps/because');
   });
 
   it('should handle HTTPS URLs', () => {
-    process.env.DOMAIN_CLIENT = 'https://example.com/aipyq';
-    expect(getBasePath()).toBe('/aipyq');
+    process.env.DOMAIN_CLIENT = 'https://example.com/because';
+    expect(getBasePath()).toBe('/because');
   });
 
   it('should handle URLs with query parameters', () => {
-    process.env.DOMAIN_CLIENT = 'http://localhost:3080/aipyq?param=value';
-    expect(getBasePath()).toBe('/aipyq');
+    process.env.DOMAIN_CLIENT = 'http://localhost:3080/because?param=value';
+    expect(getBasePath()).toBe('/because');
   });
 
   it('should handle URLs with fragments', () => {
-    process.env.DOMAIN_CLIENT = 'http://localhost:3080/aipyq#section';
-    expect(getBasePath()).toBe('/aipyq');
+    process.env.DOMAIN_CLIENT = 'http://localhost:3080/because#section';
+    expect(getBasePath()).toBe('/because');
   });
 
   it('should return empty string for invalid URL', () => {
@@ -86,12 +86,12 @@ describe('getBasePath', () => {
   });
 
   it('should handle URLs with ports', () => {
-    process.env.DOMAIN_CLIENT = 'http://localhost:8080/aipyq';
-    expect(getBasePath()).toBe('/aipyq');
+    process.env.DOMAIN_CLIENT = 'http://localhost:8080/because';
+    expect(getBasePath()).toBe('/because');
   });
 
   it('should handle URLs with subdomains', () => {
-    process.env.DOMAIN_CLIENT = 'https://app.example.com/aipyq';
-    expect(getBasePath()).toBe('/aipyq');
+    process.env.DOMAIN_CLIENT = 'https://app.example.com/because';
+    expect(getBasePath()).toBe('/because');
   });
 });

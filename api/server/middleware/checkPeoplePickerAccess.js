@@ -1,5 +1,5 @@
-const { logger } = require('@aipyq/data-schemas');
-const { PrincipalType, PermissionTypes, Permissions } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { PrincipalType, PermissionTypes, Permissions } = require('@because/data-provider');
 const { getRoleByName } = require('~/models/Role');
 
 /**

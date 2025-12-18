@@ -90,17 +90,17 @@ async function validateDockerRunning() {
     }down`;
     console.orange(downCommand);
     execSync(downCommand, { stdio: 'inherit' });
-    console.purple('正在清理所有 Aipyq Docker 镜像...');
+    console.purple('正在清理所有 Because Docker 镜像...');
 
-    const imageName = singleCompose ? 'Aipyq_single' : 'Aipyq';
+    const imageName = singleCompose ? 'Because_single' : 'Because';
     try {
       execSync(`${sudo}docker rmi ${imageName}:latest`, { stdio: 'inherit' });
     } catch (e) {
-      console.purple('无法移除 Docker 镜像 Aipyq:latest。它可能不存在。');
+      console.purple('无法移除 Docker 镜像 Because:latest。它可能不存在。');
     }
     console.purple('正在移除所有未使用的悬空 Docker 镜像...');
     execSync(`${sudo}docker image prune -f`, { stdio: 'inherit' });
-    console.purple('正在构建新的 Aipyq 镜像...');
+    console.purple('正在构建新的 Because 镜像...');
     const buildCommand = `${sudo}docker compose ${
       singleCompose ? '-f ./docs/dev/single-compose.yml ' : ''
     }build --no-cache`;
@@ -110,20 +110,20 @@ async function validateDockerRunning() {
     // Delete all node_modules
     directories.forEach(deleteNodeModules);
 
-    // Build agents-Aipyq if dist doesn't exist (needed for local package installation)
-    const agentsDistPath = path.resolve(rootDir, 'agents-Aipyq', 'dist');
+    // Build agents-because if dist doesn't exist (needed for local package installation)
+    const agentsDistPath = path.resolve(rootDir, 'agents-because', 'dist');
     if (!fs.existsSync(agentsDistPath)) {
-      console.purple('正在构建 agents-Aipyq...');
-      const agentsDir = path.resolve(rootDir, 'agents-Aipyq');
+      console.purple('正在构建 agents-because...');
+      const agentsDir = path.resolve(rootDir, 'agents-because');
       if (fs.existsSync(path.resolve(agentsDir, 'package.json'))) {
         try {
           execSync('npm install', { cwd: agentsDir, stdio: 'inherit' });
           execSync('npm run build', { cwd: agentsDir, stdio: 'inherit' });
         } catch (error) {
-          console.orange('警告: 构建 agents-Aipyq 失败，继续执行...');
+          console.orange('警告: 构建 agents-because 失败，继续执行...');
         }
       } else {
-        console.orange('警告: 未找到 agents-Aipyq 目录，跳过构建');
+        console.orange('警告: 未找到 agents-because 目录，跳过构建');
       }
     }
 
@@ -131,7 +131,7 @@ async function validateDockerRunning() {
     console.purple('正在清理 npm 缓存...');
     execSync('npm cache clean --force', { stdio: 'inherit' });
 
-    // Install dependencies (will use local agents-Aipyq from package.json)
+    // Install dependencies (will use local agents-because from package.json)
     console.purple('正在安装依赖...');
     execSync('npm ci', { stdio: 'inherit' });
 
@@ -146,7 +146,7 @@ async function validateDockerRunning() {
       singleCompose ? '-f ./docs/dev/single-compose.yml ' : ''
     }up`;
   }
-  console.green('您的 Aipyq 应用现已更新！使用以下命令启动应用:');
+  console.green('您的 Because 应用现已更新！使用以下命令启动应用:');
   console.purple(startCommand);
   console.orange(
     "注意: 建议清除浏览器的 cookies 和 localStorage，以确保完全干净的安装。",

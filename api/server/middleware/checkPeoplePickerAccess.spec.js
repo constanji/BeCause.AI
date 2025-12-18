@@ -1,11 +1,11 @@
-const { logger } = require('@aipyq/data-schemas');
-const { PrincipalType, PermissionTypes, Permissions } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { PrincipalType, PermissionTypes, Permissions } = require('@because/data-provider');
 const { checkPeoplePickerAccess } = require('./checkPeoplePickerAccess');
 const { getRoleByName } = require('~/models/Role');
 
 jest.mock('~/models/Role');
-jest.mock('@aipyq/data-schemas', () => ({
-  ...jest.requireActual('@aipyq/data-schemas'),
+jest.mock('@because/data-schemas', () => ({
+  ...jest.requireActual('@because/data-schemas'),
   logger: {
     error: jest.fn(),
   },

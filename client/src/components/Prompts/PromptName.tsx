@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Button, Label, Input, EditIcon, SaveIcon } from '@aipyq/client';
+import { Button, Label, Input, EditIcon, SaveIcon } from '@because/client';
 
 type Props = {
   name?: string;

@@ -1,9 +1,9 @@
 import React, { useMemo, useEffect, useCallback, useRef } from 'react';
 import { AutoSizer, List as VirtualList, WindowScroller } from 'react-virtualized';
 import { throttle } from 'lodash';
-import { Spinner } from '@aipyq/client';
-import { PermissionBits } from '@aipyq/data-provider';
-import type t from '@aipyq/data-provider';
+import { Spinner } from '@because/client';
+import { PermissionBits } from '@because/data-provider';
+import type t from '@because/data-provider';
 import { useMarketplaceAgentsInfiniteQuery } from '~/data-provider/Agents';
 import { useAgentCategories, useLocalize } from '~/hooks';
 import { useHasData } from './SmartLoader';

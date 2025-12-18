@@ -1,5 +1,5 @@
-import { memorySchema } from '@Aipyq/data-provider';
-import type { TCustomConfig, TMemoryConfig } from '@Aipyq/data-provider';
+import { memorySchema } from '@Because/data-provider';
+import type { TCustomConfig, TMemoryConfig } from '@Because/data-provider';
 
 const hasValidAgent = (agent: TMemoryConfig['agent']) =>
   !!agent &&

@@ -1,7 +1,7 @@
 import { useSetRecoilState } from 'recoil';
 import type { QueryClient } from '@tanstack/react-query';
-import { QueryKeys, Tools } from '@aipyq/data-provider';
-import type { TAttachment, EventSubmission, MemoriesResponse } from '@aipyq/data-provider';
+import { QueryKeys, Tools } from '@because/data-provider';
+import type { TAttachment, EventSubmission, MemoriesResponse } from '@because/data-provider';
 import { handleMemoryArtifact } from '~/utils/memory';
 import store from '~/store';
 

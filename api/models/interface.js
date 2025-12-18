@@ -1,5 +1,5 @@
-const { logger } = require('@aipyq/data-schemas');
-const { updateInterfacePermissions: updateInterfacePerms } = require('@aipyq/api');
+const { logger } = require('@because/data-schemas');
+const { updateInterfacePermissions: updateInterfacePerms } = require('@because/api');
 const { getRoleByName, updateAccessPermissions } = require('./Role');
 
 /**

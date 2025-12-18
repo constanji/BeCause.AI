@@ -1,6 +1,6 @@
 import React from 'react';
 import { PlusIcon } from 'lucide-react';
-import { Button } from '@aipyq/client';
+import { Button } from '@because/client';
 
 type UploadFileProps = {
   onClick: () => void;

@@ -3,13 +3,13 @@ import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { Bot, GripVertical } from 'lucide-react';
 import { useDrag, useDrop } from 'react-dnd';
-import { EModelEndpoint, Constants, SystemRoles, QueryKeys } from '@aipyq/data-provider';
+import { EModelEndpoint, Constants, SystemRoles, QueryKeys } from '@because/data-provider';
 import { useListAgentsQuery } from '~/data-provider';
 import { useLocalize, useAgentDefaultPermissionLevel, useNewConvo, useAuthContext } from '~/hooks';
 import { clearMessagesCache } from '~/utils';
 import { cn } from '~/utils';
 import { getAgentAvatarUrl } from '~/utils/agents';
-import type { Agent } from '@aipyq/data-provider';
+import type { Agent } from '@because/data-provider';
 import store from '~/store';
 
 interface AgentsListProps {

@@ -1,7 +1,7 @@
-import { logger, webSearchKeys } from '@aipyq/data-schemas';
-import { Constants, extractVariableName } from '@aipyq/data-provider';
-import type { TCustomConfig } from '@aipyq/data-provider';
-import type { AppConfig } from '@aipyq/data-schemas';
+import { logger, webSearchKeys } from '@because/data-schemas';
+import { Constants, extractVariableName } from '@because/data-provider';
+import type { TCustomConfig } from '@because/data-provider';
+import type { AppConfig } from '@because/data-schemas';
 import { isEnabled, checkEmailConfig } from '~/utils';
 import { handleRateLimits } from './limits';
 
@@ -16,12 +16,12 @@ const deprecatedVariables = [
   {
     key: 'CHECK_BALANCE',
     description:
-      'Please use the `balance` field in the `Aipyq.yaml` config file instead.\nMore info: https://www.aipyq.com/docs/configuration/aipyq_yaml/object_structure/balance#overview',
+      'Please use the `balance` field in the `Because.yaml` config file instead.\nMore info: https://because.ai/docs/configuration/because_yaml/object_structure/balance#overview',
   },
   {
     key: 'START_BALANCE',
     description:
-      'Please use the `balance` field in the `Aipyq.yaml` config file instead.\nMore info: https://www.aipyq.com/docs/configuration/aipyq_yaml/object_structure/balance#overview',
+      'Please use the `balance` field in the `Because.yaml` config file instead.\nMore info: https://because.ai/docs/configuration/because_yaml/object_structure/balance#overview',
   },
   {
     key: 'GOOGLE_API_KEY',
@@ -85,7 +85,7 @@ function checkPasswordReset() {
       
       Please configure email service for secure password reset functionality.
       
-      https://www.aipyq.com/docs/configuration/authentication/email
+      https://because.ai/docs/configuration/authentication/email
 
       ❗❗❗`,
     );
@@ -116,7 +116,7 @@ export function checkVariables() {
     logger.info(`\u200B
 
     For your convenience, use this tool to generate your own secret values:
-    https://www.aipyq.com/toolkit/creds_generator
+    https://because.ai/toolkit/creds_generator
 
     \u200B`);
   }
@@ -254,8 +254,8 @@ export function checkConfig(config: Partial<TCustomConfig>) {
 Latest version: ${Constants.CONFIG_VERSION}
 
       Check out the Config changelogs for the latest options and features added.
-
-      https://www.aipyq.com/changelog\n\n`,
+      
+      https://because.ai/changelog\n\n`,
     );
   }
 }
@@ -294,12 +294,12 @@ export function checkWebSearchConfig(webSearchConfig?: Partial<TCustomConfig['we
           
           Current value: "${value.substring(0, 10)}..."
           
-          This is incorrect! You should use environment variable references in your Aipyq.yaml file, such as:
+          This is incorrect! You should use environment variable references in your Because.yaml file, such as:
           ${key}: "\${YOUR_ENV_VAR_NAME}"
           
           Then set the actual API key in your .env file or environment variables.
           
-          More info: https://www.aipyq.com/docs/configuration/aipyq_yaml/web_search`,
+          More info: https://because.ai/docs/configuration/because_yaml/web_search`,
         );
       }
     }

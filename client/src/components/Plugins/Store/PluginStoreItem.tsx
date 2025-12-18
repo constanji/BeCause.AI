@@ -1,4 +1,4 @@
-import { TPlugin } from '@aipyq/data-provider';
+import { TPlugin } from '@because/data-provider';
 import { XCircle, DownloadCloud } from 'lucide-react';
 import { useLocalize } from '~/hooks';
 

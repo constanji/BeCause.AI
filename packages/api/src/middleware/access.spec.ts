@@ -4,12 +4,12 @@ import {
   PermissionTypes,
   EModelEndpoint,
   EndpointURLs,
-} from '@aipyq/data-provider';
-import type { IRole, IUser } from '@aipyq/data-schemas';
+} from '@because/data-provider';
+import type { IRole, IUser } from '@because/data-schemas';
 import { checkAccess, generateCheckAccess, skipAgentCheck } from './access';
 
 // Mock logger
-jest.mock('@aipyq/data-schemas', () => ({
+jest.mock('@because/data-schemas', () => ({
   logger: {
     warn: jest.fn(),
     error: jest.fn(),

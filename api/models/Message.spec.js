@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { v4: uuidv4 } = require('uuid');
-const { messageSchema } = require('@aipyq/data-schemas');
+const { messageSchema } = require('@because/data-schemas');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 
 const {
@@ -16,7 +16,7 @@ const {
 jest.mock('~/server/services/Config/app');
 
 /**
- * @type {import('mongoose').Model<import('@aipyq/data-schemas').IMessage>}
+ * @type {import('mongoose').Model<import('@because/data-schemas').IMessage>}
  */
 let Message;
 

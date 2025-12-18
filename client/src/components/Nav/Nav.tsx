@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, useMemo, memo, lazy, Suspense, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
-import { useMediaQuery } from '@aipyq/client';
-import type { ConversationListResponse } from '@aipyq/data-provider';
+import { useMediaQuery } from '@because/client';
+import type { ConversationListResponse } from '@because/data-provider';
 import type { InfiniteQueryObserverResult } from '@tanstack/react-query';
 import {
   useLocalize,

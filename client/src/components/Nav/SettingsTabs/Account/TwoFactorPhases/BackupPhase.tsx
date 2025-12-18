@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Download } from 'lucide-react';
-import { Button, Label } from '@aipyq/client';
+import { Button, Label } from '@because/client';
 import { useLocalize } from '~/hooks';
 
 const fadeAnimation = {

@@ -1,6 +1,6 @@
-const { isEnabled } = require('@aipyq/api');
-const { logger } = require('@aipyq/data-schemas');
-const { CacheKeys } = require('@aipyq/data-provider');
+const { isEnabled } = require('@because/api');
+const { logger } = require('@because/data-schemas');
+const { CacheKeys } = require('@because/data-provider');
 const getLogStores = require('~/cache/getLogStores');
 const { saveConvo } = require('~/models');
 

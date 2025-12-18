@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, useToastContext } from '@aipyq/client';
+import { Button, useToastContext } from '@because/client';
 import { useAuthContext } from '~/hooks';
 import { cn } from '~/utils';
 import * as Ariakit from '@ariakit/react';

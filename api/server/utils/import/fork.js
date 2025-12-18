@@ -1,6 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
-const { logger } = require('@aipyq/data-schemas');
-const { EModelEndpoint, Constants, ForkOptions } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { EModelEndpoint, Constants, ForkOptions } = require('@because/data-provider');
 const { createImportBatchBuilder } = require('./importBatchBuilder');
 const BaseClient = require('~/app/clients/BaseClient');
 const { getConvo } = require('~/models/Conversation');

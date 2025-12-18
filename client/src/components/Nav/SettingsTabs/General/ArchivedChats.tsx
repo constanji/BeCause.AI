@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { OGDialogTemplate, OGDialog, OGDialogTrigger, Button } from '@aipyq/client';
+import { OGDialogTemplate, OGDialog, OGDialogTrigger, Button } from '@because/client';
 import ArchivedChatsTable from './ArchivedChatsTable';
 import { useLocalize } from '~/hooks';
 

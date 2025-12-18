@@ -1,14 +1,14 @@
 import { useRecoilValue } from 'recoil';
 import { useCallback, useRef, useEffect } from 'react';
-import { useGetModelsQuery } from '@aipyq/data-provider/react-query';
-import { getEndpointField, LocalStorageKeys, isAssistantsEndpoint } from '@aipyq/data-provider';
+import { useGetModelsQuery } from '@because/data-provider/react-query';
+import { getEndpointField, LocalStorageKeys, isAssistantsEndpoint } from '@because/data-provider';
 import type {
   TEndpointsConfig,
   EModelEndpoint,
   TModelsConfig,
   TConversation,
   TPreset,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type { AssistantListItem } from '~/common';
 import type { SetterOrUpdater } from 'recoil';
 import useAssistantListMap from '~/hooks/Assistants/useAssistantListMap';

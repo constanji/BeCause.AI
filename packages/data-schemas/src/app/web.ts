@@ -1,5 +1,5 @@
-import { SafeSearchTypes } from '@aipyq/data-provider';
-import type { TCustomConfig } from '@aipyq/data-provider';
+import { SafeSearchTypes } from '@because/data-provider';
+import type { TCustomConfig } from '@because/data-provider';
 import type { TWebSearchKeys, TWebSearchCategories } from '~/types/web';
 
 export const webSearchAuth = {

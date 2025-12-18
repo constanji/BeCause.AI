@@ -1,7 +1,7 @@
 const path = require('path');
 const mongoose = require('mongoose');
-const { isEnabled, getBalanceConfig } = require('@aipyq/api');
-const { User } = require('@aipyq/data-schemas').createModels(mongoose);
+const { isEnabled, getBalanceConfig } = require('@because/api');
+const { User } = require('@because/data-schemas').createModels(mongoose);
 require('module-alias')({ base: path.resolve(__dirname, '..', 'api') });
 const { createTransaction } = require('~/models/Transaction');
 const { getAppConfig } = require('~/server/services/Config');

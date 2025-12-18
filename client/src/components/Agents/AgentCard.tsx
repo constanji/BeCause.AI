@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import { Label } from '@aipyq/client';
-import type t from '@aipyq/data-provider';
+import { Label } from '@because/client';
+import type t from '@because/data-provider';
 import { useLocalize, TranslationKeys, useAgentCategories } from '~/hooks';
 import { cn, renderAgentAvatar, getContactDisplayName } from '~/utils';
 

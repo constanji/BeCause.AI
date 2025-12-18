@@ -7,8 +7,8 @@ import {
   getEndpointField,
   isAgentsEndpoint,
   isAssistantsEndpoint,
-} from '@aipyq/data-provider';
-import type * as t from '@aipyq/data-provider';
+} from '@because/data-provider';
+import type * as t from '@because/data-provider';
 import type { LocalizeFunction, IconsRecord } from '~/common';
 
 export const getEntityName = ({

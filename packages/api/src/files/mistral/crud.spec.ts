@@ -34,7 +34,7 @@ jest.mock('axios', () => {
   };
 });
 
-jest.mock('@aipyq/data-schemas', () => ({
+jest.mock('@because/data-schemas', () => ({
   logger: {
     error: jest.fn(),
   },
@@ -59,7 +59,7 @@ import type {
   ServerRequest,
   OCRResult,
 } from '~/types';
-import { logger as mockLogger } from '@aipyq/data-schemas';
+import { logger as mockLogger } from '@because/data-schemas';
 import { readFileAsBuffer } from '~/utils/files';
 import {
   uploadDocumentToMistral,

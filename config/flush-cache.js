@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * Aipyq Cache Flush Utility
+ * Because Cache Flush Utility
  *
- * This script flushes the cache store used by Aipyq, whether it's
+ * This script flushes the cache store used by Because, whether it's
  * Redis (if configured) or file-based cache.
  *
  * Usage:
@@ -52,10 +52,10 @@ const getRedisCA = () => {
 
 async function showHelp() {
   console.log(`
-Aipyq 缓存清理工具
+Because 缓存清理工具
 
 描述:
-  清理 Aipyq 使用的缓存存储。自动检测
+  清理 Because 使用的缓存存储。自动检测
   是否使用 Redis 或基于文件的缓存，并相应地进行清理。
 
 用法:
@@ -280,7 +280,7 @@ async function flushFileCache(dryRun = false, verbose = false) {
 async function restartRecommendation() {
   console.log('\n💡 建议:');
   console.log('   为了完全清理缓存，特别是内存缓存，');
-  console.log('   请考虑重启 Aipyq 后端:');
+  console.log('   请考虑重启 Because 后端:');
   console.log('');
   console.log('     npm run backend:stop');
   console.log('     npm run backend:dev');
@@ -298,7 +298,7 @@ async function main() {
     return;
   }
 
-  console.log('🧹 Aipyq 缓存清理工具');
+  console.log('🧹 Because 缓存清理工具');
   console.log('================================');
 
   if (dryRun) {

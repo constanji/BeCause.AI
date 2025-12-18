@@ -1,4 +1,4 @@
-import { getEndpointField } from '@aipyq/data-provider';
+import { getEndpointField } from '@because/data-provider';
 import { useChatContext } from '~/Providers/ChatContext';
 import { useGetEndpointsQuery } from '~/data-provider';
 import useUserKey from './useUserKey';

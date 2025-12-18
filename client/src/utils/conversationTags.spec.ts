@@ -1,4 +1,4 @@
-import type { TConversationTagsResponse } from '@aipyq/data-provider';
+import type { TConversationTagsResponse } from '@because/data-provider';
 import { updateConversationTag } from './conversationTags';
 
 describe('ConversationTag Utilities', () => {

@@ -3,8 +3,8 @@ const axios = require('axios');
 const FormData = require('form-data');
 const nodemailer = require('nodemailer');
 const handlebars = require('handlebars');
-const { logger } = require('@aipyq/data-schemas');
-const { logAxiosError, isEnabled, readFileAsString } = require('@aipyq/api');
+const { logger } = require('@because/data-schemas');
+const { logAxiosError, isEnabled, readFileAsString } = require('@because/api');
 
 /**
  * Sends an email using Mailgun API.

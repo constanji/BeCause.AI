@@ -1,10 +1,10 @@
 import { memo, useCallback, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { useForm } from 'react-hook-form';
-import { Spinner } from '@aipyq/client';
+import { Spinner } from '@because/client';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Constants, buildTree } from '@aipyq/data-provider';
-import type { TMessage } from '@aipyq/data-provider';
+import { Constants, buildTree } from '@because/data-provider';
+import type { TMessage } from '@because/data-provider';
 import type { ChatFormValues } from '~/common';
 import { ChatContext, AddedChatContext, useFileMapContext, ChatFormProvider } from '~/Providers';
 import { useChatHelpers, useAddedResponse, useSSE } from '~/hooks';

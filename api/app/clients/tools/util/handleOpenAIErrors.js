@@ -1,5 +1,5 @@
 const OpenAI = require('openai');
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 
 /**
  * Handles errors that may occur when making requests to OpenAI's API.

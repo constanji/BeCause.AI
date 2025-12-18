@@ -1,7 +1,7 @@
 import { PlusCircle } from 'lucide-react';
-import { TooltipAnchor } from '@aipyq/client';
-import { isAssistantsEndpoint } from '@aipyq/data-provider';
-import type { TConversation } from '@aipyq/data-provider';
+import { TooltipAnchor } from '@because/client';
+import { isAssistantsEndpoint } from '@because/data-provider';
+import type { TConversation } from '@because/data-provider';
 import { useChatContext, useAddedChatContext } from '~/Providers';
 import { mainTextareaId } from '~/common';
 import { useLocalize } from '~/hooks';

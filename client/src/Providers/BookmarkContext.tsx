@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import type { TConversationTag } from '@aipyq/data-provider';
+import type { TConversationTag } from '@because/data-provider';
 
 type TBookmarkContext = { bookmarks: TConversationTag[] };
 

@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
-import { SettingsTabValues } from '@aipyq/data-provider';
+import { SettingsTabValues } from '@because/data-provider';
 import { MessageSquare, Command, DollarSign } from 'lucide-react';
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react';
 import {
@@ -10,7 +10,7 @@ import {
   SpeechIcon,
   useMediaQuery,
   PersonalizationIcon,
-} from '@aipyq/client';
+} from '@because/client';
 import type { TDialogProps } from '~/common';
 import {
   General,
@@ -25,7 +25,7 @@ import {
 import usePersonalizationAccess from '~/hooks/usePersonalizationAccess';
 import { useLocalize, TranslationKeys, useAuthContext } from '~/hooks';
 import { useGetStartupConfig } from '~/data-provider';
-import { SystemRoles } from '@aipyq/data-provider';
+import { SystemRoles } from '@because/data-provider';
 import { cn } from '~/utils';
 
 export default function Settings({ open, onOpenChange }: TDialogProps) {

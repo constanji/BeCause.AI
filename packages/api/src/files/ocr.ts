@@ -1,5 +1,5 @@
-import { OCRStrategy } from '@aipyq/data-provider';
-import type { TCustomConfig } from '@aipyq/data-provider';
+import { OCRStrategy } from '@because/data-provider';
+import type { TCustomConfig } from '@because/data-provider';
 
 export function loadOCRConfig(config?: TCustomConfig['ocr']): TCustomConfig['ocr'] | undefined {
   if (!config) return;

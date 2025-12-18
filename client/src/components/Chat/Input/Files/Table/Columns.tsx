@@ -1,15 +1,15 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { ArrowUpDown, Database } from 'lucide-react';
-import { FileSources, FileContext } from '@aipyq/data-provider';
+import { FileSources, FileContext } from '@because/data-provider';
 import {
   Button,
   Checkbox,
   OpenAIMinimalIcon,
   AzureMinimalIcon,
   useMediaQuery,
-} from '@aipyq/client';
+} from '@because/client';
 import type { ColumnDef } from '@tanstack/react-table';
-import type { TFile } from '@aipyq/data-provider';
+import type { TFile } from '@because/data-provider';
 import ImagePreview from '~/components/Chat/Input/Files/ImagePreview';
 import FilePreview from '~/components/Chat/Input/Files/FilePreview';
 import { TranslationKeys, useLocalize } from '~/hooks';

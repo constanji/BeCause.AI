@@ -1,5 +1,5 @@
 import { XCircle, PlusCircleIcon, Wrench } from 'lucide-react';
-import type { AgentToolType } from '@aipyq/data-provider';
+import type { AgentToolType } from '@because/data-provider';
 import { useLocalize } from '~/hooks';
 
 type MCPToolItemProps = {

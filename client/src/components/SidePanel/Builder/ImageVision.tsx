@@ -1,5 +1,5 @@
-import { Checkbox } from '@aipyq/client';
-import { Capabilities } from '@aipyq/data-provider';
+import { Checkbox } from '@because/client';
+import { Capabilities } from '@because/data-provider';
 import { useFormContext, Controller } from 'react-hook-form';
 import type { AssistantForm } from '~/common';
 import { useLocalize } from '~/hooks';

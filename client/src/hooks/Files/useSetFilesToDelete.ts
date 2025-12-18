@@ -1,4 +1,4 @@
-import { LocalStorageKeys } from '@aipyq/data-provider';
+import { LocalStorageKeys } from '@because/data-provider';
 
 export default function useSetFilesToDelete() {
   const setFilesToDelete = (files: Record<string, unknown>) =>

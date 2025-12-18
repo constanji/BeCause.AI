@@ -1,5 +1,5 @@
 const express = require('express');
-const { createSetBalanceConfig } = require('@aipyq/api');
+const { createSetBalanceConfig } = require('@because/api');
 const {
   resetPasswordRequestController,
   resetPasswordController,

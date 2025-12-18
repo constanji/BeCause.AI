@@ -1,5 +1,5 @@
-import { EModelEndpoint } from '@aipyq/data-provider';
-import type { TCustomConfig, TAgentsEndpoint } from '@aipyq/data-provider';
+import { EModelEndpoint } from '@because/data-provider';
+import type { TCustomConfig, TAgentsEndpoint } from '@because/data-provider';
 import type { AppConfig } from '~/types';
 import { azureAssistantsDefaults, assistantsConfigSetup } from './assistants';
 import { agentsConfigSetup } from './agents';

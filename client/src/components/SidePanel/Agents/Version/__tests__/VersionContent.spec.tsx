@@ -32,7 +32,7 @@ jest.mock('~/hooks', () => ({
   }),
 }));
 
-jest.mock('@aipyq/client', () => ({
+jest.mock('@because/client', () => ({
   Spinner: () => <div data-testid="spinner" />,
 }));
 

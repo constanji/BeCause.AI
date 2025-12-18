@@ -1,4 +1,4 @@
-import { Tools } from '@aipyq/data-provider';
+import { Tools } from '@because/data-provider';
 import { useVerifyAgentToolAuth } from '~/data-provider';
 import { useLocalize } from '~/hooks';
 import Action from './Action';

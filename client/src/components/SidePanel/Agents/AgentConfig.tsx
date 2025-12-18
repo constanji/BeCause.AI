@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { useToastContext } from '@aipyq/client';
+import { useToastContext } from '@because/client';
 import { Controller, useWatch, useFormContext } from 'react-hook-form';
-import { EModelEndpoint, getEndpointField } from '@aipyq/data-provider';
+import { EModelEndpoint, getEndpointField } from '@because/data-provider';
 import type { AgentForm, IconComponentTypes } from '~/common';
 import {
   removeFocusOutlines,

@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { TSubmission } from '@aipyq/data-provider';
+import { TSubmission } from '@because/data-provider';
 
 // current submission
 // submit any new value to this state will cause new message to be send.

@@ -1,6 +1,6 @@
 const client = require('openid-client');
-const { logger } = require('@aipyq/data-schemas');
-const { CacheKeys } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { CacheKeys } = require('@because/data-provider');
 const { getOpenIdConfig } = require('~/strategies/openidStrategy');
 const getLogStores = require('~/cache/getLogStores');
 

@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { logger } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
 import { fetch as undiciFetch, Agent } from 'undici';
 import {
   StdioClientTransport,
@@ -126,7 +126,7 @@ export class MCPConnection extends EventEmitter {
     }
     this.client = new Client(
       {
-        name: '@aipyq/api-client',
+        name: '@because/api-client',
         version: '1.2.3',
       },
       {

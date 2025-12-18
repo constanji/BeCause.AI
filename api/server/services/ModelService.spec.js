@@ -1,6 +1,6 @@
 const axios = require('axios');
-const { logAxiosError, resolveHeaders } = require('@aipyq/api');
-const { EModelEndpoint, defaultModels } = require('@aipyq/data-provider');
+const { logAxiosError, resolveHeaders } = require('@because/api');
+const { EModelEndpoint, defaultModels } = require('@because/data-provider');
 
 const {
   fetchModels,
@@ -11,8 +11,8 @@ const {
   getAnthropicModels,
 } = require('./ModelService');
 
-jest.mock('@aipyq/api', () => {
-  const originalUtils = jest.requireActual('@aipyq/api');
+jest.mock('@because/api', () => {
+  const originalUtils = jest.requireActual('@because/api');
   return {
     ...originalUtils,
     processModelData: jest.fn((...args) => {
@@ -30,8 +30,8 @@ jest.mock('~/cache/getLogStores', () =>
     set: jest.fn().mockResolvedValue(true),
   })),
 );
-jest.mock('@aipyq/data-schemas', () => ({
-  ...jest.requireActual('@aipyq/data-schemas'),
+jest.mock('@because/data-schemas', () => ({
+  ...jest.requireActual('@because/data-schemas'),
   logger: {
     error: jest.fn(),
   },
@@ -174,7 +174,7 @@ describe('fetchModels with createTokenConfig true', () => {
 
   beforeEach(() => {
     // Clears the mock's history before each test
-    const _utils = require('@aipyq/api');
+    const _utils = require('@because/api');
     axios.get.mockResolvedValue({ data });
   });
 
@@ -186,7 +186,7 @@ describe('fetchModels with createTokenConfig true', () => {
       createTokenConfig: true,
     });
 
-    const { processModelData } = require('@aipyq/api');
+    const { processModelData } = require('@because/api');
     expect(processModelData).toHaveBeenCalled();
     expect(processModelData).toHaveBeenCalledWith(data);
   });
@@ -254,8 +254,8 @@ describe('getOpenAIModels with mocked config', () => {
         userProvidedOpenAI: true,
       },
     }));
-    jest.mock('@aipyq/data-provider', () => {
-      const original = jest.requireActual('@aipyq/data-provider');
+    jest.mock('@because/data-provider', () => {
+      const original = jest.requireActual('@because/data-provider');
       return {
         ...original,
         defaultModels: {

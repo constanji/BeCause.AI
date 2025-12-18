@@ -1,7 +1,7 @@
 const { getCachedTools, getAppConfig } = require('~/server/services/Config');
 const { getLogStores } = require('~/cache');
 
-jest.mock('@aipyq/data-schemas', () => ({
+jest.mock('@because/data-schemas', () => ({
   logger: {
     debug: jest.fn(),
     error: jest.fn(),

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, TrashIcon } from '@aipyq/client';
-import type { TFile } from '@aipyq/data-provider';
+import { Button, TrashIcon } from '@because/client';
+import type { TFile } from '@because/data-provider';
 
 type FileListItemProps = {
   file: TFile;

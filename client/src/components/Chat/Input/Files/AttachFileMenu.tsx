@@ -13,15 +13,15 @@ import {
   EModelEndpoint,
   defaultAgentCapabilities,
   isDocumentSupportedProvider,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import {
   FileUpload,
   TooltipAnchor,
   DropdownPopup,
   AttachmentIcon,
   SharePointIcon,
-} from '@aipyq/client';
-import type { EndpointFileConfig } from '@aipyq/data-provider';
+} from '@because/client';
+import type { EndpointFileConfig } from '@because/data-provider';
 import {
   useAgentToolPermissions,
   useAgentCapabilities,

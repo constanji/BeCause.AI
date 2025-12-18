@@ -1,13 +1,13 @@
 const initializeClient = require('./initialize');
 
-jest.mock('@aipyq/api', () => ({
-  ...jest.requireActual('@aipyq/api'),
+jest.mock('@because/api', () => ({
+  ...jest.requireActual('@because/api'),
   resolveHeaders: jest.fn(),
   getOpenAIConfig: jest.fn(),
   getCustomEndpointConfig: jest.fn().mockReturnValue({
     apiKey: 'test-key',
     baseURL: 'https://test.com',
-    headers: { 'x-user': '{{AIPYQ_USER_ID}}', 'x-email': '{{AIPYQ_USER_EMAIL}}' },
+    headers: { 'x-user': '{{BECAUSE_USER_ID}}', 'x-email': '{{BECAUSE_USER_EMAIL}}' },
     models: { default: ['test-model'] },
   }),
 }));
@@ -52,11 +52,11 @@ describe('custom/initializeClient', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    const { getCustomEndpointConfig, resolveHeaders, getOpenAIConfig } = require('@aipyq/api');
+    const { getCustomEndpointConfig, resolveHeaders, getOpenAIConfig } = require('@because/api');
     getCustomEndpointConfig.mockReturnValue({
       apiKey: 'test-key',
       baseURL: 'https://test.com',
-      headers: { 'x-user': '{{AIPYQ_USER_ID}}', 'x-email': '{{AIPYQ_USER_EMAIL}}' },
+      headers: { 'x-user': '{{BECAUSE_USER_ID}}', 'x-email': '{{BECAUSE_USER_EMAIL}}' },
       models: { default: ['test-model'] },
     });
     resolveHeaders.mockReturnValue({ 'x-user': 'user-123', 'x-email': 'test@example.com' });
@@ -87,7 +87,7 @@ describe('custom/initializeClient', () => {
   });
 
   it('throws if endpoint config is missing', async () => {
-    const { getCustomEndpointConfig } = require('@aipyq/api');
+    const { getCustomEndpointConfig } = require('@because/api');
     getCustomEndpointConfig.mockReturnValueOnce(null);
     await expect(
       initializeClient({ req: mockRequest, res: mockResponse, optionsOnly: true }),

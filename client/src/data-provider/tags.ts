@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import type { UseQueryOptions, QueryObserverResult } from '@tanstack/react-query';
-import type { TConversationTagsResponse } from '@aipyq/data-provider';
-import { QueryKeys, dataService } from '@aipyq/data-provider';
+import type { TConversationTagsResponse } from '@because/data-provider';
+import { QueryKeys, dataService } from '@because/data-provider';
 
 export const useGetConversationTags = (
   config?: UseQueryOptions<TConversationTagsResponse>,

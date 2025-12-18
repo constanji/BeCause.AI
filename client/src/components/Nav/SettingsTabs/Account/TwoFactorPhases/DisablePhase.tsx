@@ -8,7 +8,7 @@ import {
   InputOTPSlot,
   InputOTPSeparator,
   Spinner,
-} from '@aipyq/client';
+} from '@because/client';
 import { useLocalize } from '~/hooks';
 
 const fadeAnimation = {

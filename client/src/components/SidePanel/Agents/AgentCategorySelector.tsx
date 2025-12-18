@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ControlCombobox } from '@aipyq/client';
+import { ControlCombobox } from '@because/client';
 import {
   useWatch,
   FieldPath,

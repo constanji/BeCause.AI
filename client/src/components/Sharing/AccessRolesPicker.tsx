@@ -1,10 +1,10 @@
 import React from 'react';
 import * as Ariakit from '@ariakit/react';
 import { ChevronDown } from 'lucide-react';
-import { DropdownPopup, Skeleton } from '@aipyq/client';
-import { AccessRoleIds, ResourceType } from '@aipyq/data-provider';
-import { useGetAccessRolesQuery } from '@aipyq/data-provider/react-query';
-import type { AccessRole } from '@aipyq/data-provider';
+import { DropdownPopup, Skeleton } from '@because/client';
+import { AccessRoleIds, ResourceType } from '@because/data-provider';
+import { useGetAccessRolesQuery } from '@because/data-provider/react-query';
+import type { AccessRole } from '@because/data-provider';
 import type * as t from '~/common';
 import { cn, getRoleLocalizationKeys } from '~/utils';
 import { useLocalize } from '~/hooks';

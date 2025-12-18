@@ -1,11 +1,11 @@
-const { Providers } = require('@aipyq/agents');
+const { Providers } = require('@because/agents');
 const {
   primeResources,
   getModelMaxTokens,
-  extractAipyqParams,
+  extractBecauseParams,
   filterFilesByEndpointConfig,
   optionalChainWithEmptyCheck,
-} = require('@aipyq/api');
+} = require('@because/api');
 const {
   ErrorTypes,
   EModelEndpoint,
@@ -14,7 +14,7 @@ const {
   isAgentsEndpoint,
   replaceSpecialVars,
   providerEndpointMap,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const generateArtifactsPrompt = require('~/app/clients/prompts/artifacts');
 const { getProviderConfig } = require('~/server/services/Endpoints');
 const { processFiles } = require('~/server/services/Files/process');
@@ -71,7 +71,7 @@ const initializeAgent = async ({
     ),
   );
 
-  const { resendFiles, maxContextTokens, modelOptions } = extractAipyqParams(_modelOptions);
+  const { resendFiles, maxContextTokens, modelOptions } = extractBecauseParams(_modelOptions);
 
   const provider = agent.provider;
   agent.endpoint = provider;
@@ -173,7 +173,7 @@ const initializeAgent = async ({
     agent.provider = options.provider;
   }
 
-  /** @type {import('@aipyq/agents').GenericTool[]} */
+  /** @type {import('@because/agents').GenericTool[]} */
   let tools = options.tools?.length ? options.tools : structuredTools;
   if (
     (agent.provider === Providers.GOOGLE || agent.provider === Providers.VERTEXAI) &&
@@ -191,7 +191,7 @@ const initializeAgent = async ({
     tools = structuredTools.concat(options.tools);
   }
 
-  /** @type {import('@aipyq/agents').ClientOptions} */
+  /** @type {import('@because/agents').ClientOptions} */
   agent.model_parameters = { ...options.llmConfig };
   if (options.configOptions) {
     agent.model_parameters.configuration = options.configOptions;

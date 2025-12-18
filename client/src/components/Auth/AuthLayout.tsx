@@ -1,4 +1,4 @@
-import { TStartupConfig } from '@aipyq/data-provider';
+import { TStartupConfig } from '@because/data-provider';
 import { ErrorMessage } from '~/components/Auth/ErrorMessage';
 import { TranslationKeys, useLocalize } from '~/hooks';
 import SocialLoginRender from './SocialLoginRender';
@@ -63,7 +63,7 @@ function AuthLayout({
           <img
             src="assets/logo.svg"
             className="h-full w-full object-contain"
-            alt={localize('com_ui_logo', { 0: startupConfig?.appTitle ?? 'Aipyq' })}
+            alt={localize('com_ui_logo', { 0: startupConfig?.appTitle ?? 'Because' })}
           />
         </div>
       </BlinkAnimation>

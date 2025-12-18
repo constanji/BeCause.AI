@@ -1,4 +1,4 @@
-import { logger } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
 
 /**
  * Processes text content by counting tokens and truncating if it exceeds the specified limit.

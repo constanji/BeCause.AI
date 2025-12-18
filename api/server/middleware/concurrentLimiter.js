@@ -1,5 +1,5 @@
-const { isEnabled } = require('@aipyq/api');
-const { Time, CacheKeys, ViolationTypes } = require('@aipyq/data-provider');
+const { isEnabled } = require('@because/api');
+const { Time, CacheKeys, ViolationTypes } = require('@because/data-provider');
 const clearPendingReq = require('~/cache/clearPendingReq');
 const { logViolation, getLogStores } = require('~/cache');
 const denyRequest = require('./denyRequest');

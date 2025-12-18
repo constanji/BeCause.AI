@@ -2,8 +2,8 @@ import {
   isAgentsEndpoint,
   tQueryParamsSchema,
   isAssistantsEndpoint,
-} from '@aipyq/data-provider';
-import type { TConversation, TPreset } from '@aipyq/data-provider';
+} from '@because/data-provider';
+import type { TConversation, TPreset } from '@because/data-provider';
 import { isEphemeralAgent } from '~/common';
 
 const allowedParams = Object.keys(tQueryParamsSchema.shape);

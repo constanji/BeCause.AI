@@ -1,4 +1,4 @@
-import { EModelEndpoint, isAssistantsEndpoint } from '@aipyq/data-provider';
+import { EModelEndpoint, isAssistantsEndpoint } from '@because/data-provider';
 
 type TUseGenerations = {
   error?: boolean;

@@ -1,11 +1,11 @@
-import { logger } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
 import { ErrorController } from './error';
 import type { Request, Response } from 'express';
 import type { ValidationError, MongoServerError, CustomError } from '~/types';
 
 // Mock the logger
-jest.mock('@aipyq/data-schemas', () => ({
-  ...jest.requireActual('@aipyq/data-schemas'),
+jest.mock('@because/data-schemas', () => ({
+  ...jest.requireActual('@because/data-schemas'),
   logger: {
     error: jest.fn(),
     warn: jest.fn(),

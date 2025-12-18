@@ -12,13 +12,13 @@ import {
   tMessageSchema,
   tConvoUpdateSchema,
   isAssistantsEndpoint,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type {
   TMessage,
   TConversation,
   EventSubmission,
   TStartupConfig,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type { TResData, TFinalResData, ConvoGenerator } from '~/common';
 import type { InfiniteData } from '@tanstack/react-query';
 import type { TGenTitleMutation } from '~/data-provider';

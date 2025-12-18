@@ -1,5 +1,5 @@
-const { handleError } = require('@aipyq/api');
-const { ViolationTypes } = require('@aipyq/data-provider');
+const { handleError } = require('@because/api');
+const { ViolationTypes } = require('@because/data-provider');
 const { getModelsConfig } = require('~/server/controllers/ModelController');
 const { logViolation } = require('~/cache');
 /**

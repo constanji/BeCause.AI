@@ -1,11 +1,11 @@
-const { isUserProvided, getOpenAIConfig, getCustomEndpointConfig } = require('@aipyq/api');
+const { isUserProvided, getOpenAIConfig, getCustomEndpointConfig } = require('@because/api');
 const {
   CacheKeys,
   ErrorTypes,
   envVarRegex,
   FetchTokenConfig,
   extractEnvVariable,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const { getUserKeyValues, checkUserKeyExpiry } = require('~/server/services/UserService');
 const { fetchModels } = require('~/server/services/ModelService');
 const OpenAIClient = require('~/app/clients/OpenAIClient');

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useMemo } from 'react';
-import { EModelEndpoint } from '@aipyq/data-provider';
-import type { MCP, Action, TPlugin } from '@aipyq/data-provider';
+import { EModelEndpoint } from '@because/data-provider';
+import type { MCP, Action, TPlugin } from '@because/data-provider';
 import type { AgentPanelContextType, MCPServerInfo } from '~/common';
 import {
   useAvailableToolsQuery,

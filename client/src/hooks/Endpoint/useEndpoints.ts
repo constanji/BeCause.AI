@@ -1,19 +1,19 @@
 import React, { useMemo, useCallback } from 'react';
-import { useGetModelsQuery } from '@aipyq/data-provider/react-query';
+import { useGetModelsQuery } from '@because/data-provider/react-query';
 import {
   Permissions,
   alternateName,
   EModelEndpoint,
   PermissionTypes,
   getEndpointField,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type {
   TEndpointsConfig,
   TAssistantsMap,
   TStartupConfig,
   Assistant,
   Agent,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type { Endpoint } from '~/common';
 import { useGetEndpointsQuery } from '~/data-provider';
 import { mapEndpoints, getIconKey } from '~/utils';

@@ -1,10 +1,10 @@
 import { EarthIcon } from 'lucide-react';
-import { ControlCombobox } from '@aipyq/client';
+import { ControlCombobox } from '@because/client';
 import { useCallback, useEffect, useRef } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
-import { AgentCapabilities, defaultAgentFormValues } from '@aipyq/data-provider';
+import { AgentCapabilities, defaultAgentFormValues } from '@because/data-provider';
 import type { UseMutationResult, QueryObserverResult } from '@tanstack/react-query';
-import type { Agent, AgentCreateParams } from '@aipyq/data-provider';
+import type { Agent, AgentCreateParams } from '@because/data-provider';
 import type { TAgentCapabilities, AgentForm } from '~/common';
 import { cn, createProviderOption, processAgentOption, getDefaultAgentFormValues } from '~/utils';
 import { useLocalize, useAgentDefaultPermissionLevel } from '~/hooks';

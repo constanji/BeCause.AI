@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Button, useToastContext } from '@aipyq/client';
+import { Button, useToastContext } from '@because/client';
 import { useQueryClient } from '@tanstack/react-query';
-import { QueryKeys } from '@aipyq/data-provider';
+import { QueryKeys } from '@because/data-provider';
 import { useGetStartupConfig } from '~/data-provider';
 import { useLocalize, useAuthContext } from '~/hooks';
 import { cn } from '~/utils';

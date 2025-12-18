@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TError } from '@aipyq/data-provider';
+import { TError } from '@because/data-provider';
 
 type ProviderValue = {
   error?: TError;

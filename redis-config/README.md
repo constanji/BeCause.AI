@@ -1,6 +1,6 @@
 # Redis Configuration and Setup
 
-This directory contains comprehensive Redis configuration files and scripts for Aipyq development and testing, supporting both cluster and single-node setups with optional TLS encryption.
+This directory contains comprehensive Redis configuration files and scripts for Because development and testing, supporting both cluster and single-node setups with optional TLS encryption.
 
 ## Supported Configurations
 
@@ -141,7 +141,7 @@ redis-config/
     # Log files would be created here if enabled in config
 ```
 
-## Using with Aipyq
+## Using with Because
 
 Update your `.env` file based on your chosen Redis configuration:
 
@@ -155,7 +155,7 @@ REDIS_URI=redis://127.0.0.1:7001,redis://127.0.0.1:7002,redis://127.0.0.1:7003
 ```bash
 USE_REDIS=true
 REDIS_URI=rediss://127.0.0.1:6380
-REDIS_CA=/path/to/Aipyq/redis-config/certs/ca-cert.pem
+REDIS_CA=/path/to/Because/redis-config/certs/ca-cert.pem
 ```
 
 ### For Standard Redis
@@ -170,7 +170,7 @@ REDIS_URI=redis://127.0.0.1:6379
 REDIS_KEY_PREFIX_VAR=K_REVISION
 
 # Or set static prefix
-REDIS_KEY_PREFIX=Aipyq
+REDIS_KEY_PREFIX=Because
 
 # Connection limits
 REDIS_MAX_LISTENERS=40
@@ -196,7 +196,7 @@ For secure Redis connections using TLS encryption with CA certificate validation
 ./start-redis-tls.sh
 ```
 
-### 2. Configure Aipyq for TLS
+### 2. Configure Because for TLS
 
 Update your `.env` file:
 
@@ -204,7 +204,7 @@ Update your `.env` file:
 # .env file - TLS Redis with CA certificate validation
 USE_REDIS=true
 REDIS_URI=rediss://127.0.0.1:6380
-REDIS_CA=/path/to/Aipyq/redis-config/certs/ca-cert.pem
+REDIS_CA=/path/to/Because/redis-config/certs/ca-cert.pem
 ```
 
 ### 3. Test TLS Connection
@@ -223,7 +223,7 @@ redis-cli --tls --cacert certs/ca-cert.pem -p 6380 get test_tls
 ### 4. Test Backend Integration
 
 ```bash
-# Start Aipyq backend
+# Start Because backend
 npm run backend
 
 # Look for these success indicators in logs:
@@ -272,10 +272,10 @@ ps aux | grep redis-server
 
 ```bash
 # Verify CA certificate path in .env
-ls -la /path/to/Aipyq/redis-config/certs/ca-cert.pem
+ls -la /path/to/Because/redis-config/certs/ca-cert.pem
 
-# Test Aipyq Redis configuration
-cd /path/to/Aipyq
+# Test Because Redis configuration
+cd /path/to/Because
 npm run backend
 # Look for Redis connection errors in output
 ```
@@ -404,5 +404,5 @@ For Redis-specific issues:
 - [Redis Documentation](https://redis.io/docs/)
 - [Redis Cluster Tutorial](https://redis.io/docs/manual/scaling/)
 
-For Aipyq integration:
-- [Aipyq Documentation](https://github.com/constanji/Aipyqchat)
+For Because integration:
+- [Because Documentation](https://github.com/constanji/Because)

@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import { Constants } from '@aipyq/data-provider';
+import { Constants } from '@because/data-provider';
 import type { Artifact } from '~/common';
 
 /** Mock dependencies */

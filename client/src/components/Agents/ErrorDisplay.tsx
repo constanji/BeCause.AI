@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@aipyq/client';
+import { Button } from '@because/client';
 import { useLocalize } from '~/hooks';
 import { cn } from '~/utils';
 

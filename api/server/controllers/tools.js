@@ -1,14 +1,14 @@
 const { nanoid } = require('nanoid');
-const { EnvVar } = require('@aipyq/agents');
-const { logger } = require('@aipyq/data-schemas');
-const { checkAccess, loadWebSearchAuth } = require('@aipyq/api');
+const { EnvVar } = require('@because/agents');
+const { logger } = require('@because/data-schemas');
+const { checkAccess, loadWebSearchAuth } = require('@because/api');
 const {
   Tools,
   AuthType,
   Permissions,
   ToolCallTypes,
   PermissionTypes,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const { processFileURL, uploadImageBuffer } = require('~/server/services/Files/process');
 const { processCodeOutput } = require('~/server/services/Files/Code/process');
 const { createToolCall, getToolCallsByConvo } = require('~/models/ToolCall');

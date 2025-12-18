@@ -9,7 +9,7 @@ import type {
   TAgentsEndpoint,
   TCustomEndpoints,
   TAssistantEndpoint,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 
 export type JsonSchemaType = {
   type: 'string' | 'number' | 'integer' | 'float' | 'boolean' | 'array' | 'object';

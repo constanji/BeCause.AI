@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
-import { getEndpointField } from '@aipyq/data-provider';
-import type { TModelSpec, TEndpointsConfig } from '@aipyq/data-provider';
+import { getEndpointField } from '@because/data-provider';
+import type { TModelSpec, TEndpointsConfig } from '@because/data-provider';
 import type { IconMapProps } from '~/common';
 import { getModelSpecIconURL, getIconKey } from '~/utils';
 import { URLIcon } from '~/components/Endpoints/URLIcon';

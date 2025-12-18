@@ -1,5 +1,5 @@
-import { useGetModelsQuery } from '@aipyq/data-provider/react-query';
-import type { TConversation } from '@aipyq/data-provider';
+import { useGetModelsQuery } from '@because/data-provider/react-query';
+import type { TConversation } from '@because/data-provider';
 import type { TSetOption } from '~/common';
 import { multiChatOptions } from './options';
 

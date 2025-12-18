@@ -9,8 +9,8 @@ import {
   isWithinInterval,
 } from 'date-fns';
 import { QueryClient } from '@tanstack/react-query';
-import { EModelEndpoint, LocalStorageKeys, QueryKeys } from '@aipyq/data-provider';
-import type { TConversation, GroupedConversations } from '@aipyq/data-provider';
+import { EModelEndpoint, LocalStorageKeys, QueryKeys } from '@because/data-provider';
+import type { TConversation, GroupedConversations } from '@because/data-provider';
 import type { InfiniteData } from '@tanstack/react-query';
 
 // Date group helpers

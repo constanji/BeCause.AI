@@ -1,7 +1,7 @@
 const path = require('path');
 const mongoose = require('mongoose');
-const { checkEmailConfig } = require('@aipyq/api');
-const { User } = require('@aipyq/data-schemas').createModels(mongoose);
+const { checkEmailConfig } = require('@because/api');
+const { User } = require('@because/data-schemas').createModels(mongoose);
 require('module-alias')({ base: path.resolve(__dirname, '..', 'api') });
 const { askQuestion, silentExit } = require('./helpers');
 const { createInvite } = require('~/models/inviteUser');
@@ -51,7 +51,7 @@ const connect = require('./connect');
   const token = await createInvite(email);
   const inviteLink = `${process.env.DOMAIN_CLIENT}/register?token=${token}`;
 
-  const appName = process.env.APP_TITLE || 'Aipyq';
+  const appName = process.env.APP_TITLE || 'Because';
 
   if (!checkEmailConfig()) {
     console.green('请将此链接发送给用户:', inviteLink);

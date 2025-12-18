@@ -2,7 +2,7 @@ const { Tool } = require('@langchain/core/tools');
 const { z } = require('zod');
 const path = require('path');
 const fs = require('fs').promises;
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 
 /**
  * SocialMedia Tool - 朋友圈内容生成工具

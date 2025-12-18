@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { TerminalSquareIcon } from 'lucide-react';
-import { CheckboxButton } from '@aipyq/client';
-import { PermissionTypes, Permissions } from '@aipyq/data-provider';
+import { CheckboxButton } from '@because/client';
+import { PermissionTypes, Permissions } from '@because/data-provider';
 import { useLocalize, useHasAccess } from '~/hooks';
 import { useBadgeRowContext } from '~/Providers';
 

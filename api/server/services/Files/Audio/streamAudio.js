@@ -4,7 +4,7 @@ const {
   SEPARATORS,
   parseTextParts,
   findLastSeparatorIndex,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const { getMessage } = require('~/models/Message');
 const { getLogStores } = require('~/cache');
 

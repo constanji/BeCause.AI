@@ -8,8 +8,8 @@ import {
   getEndpointField,
   SettingDefinition,
   tConvoUpdateSchema,
-} from '@aipyq/data-provider';
-import type { TPreset } from '@aipyq/data-provider';
+} from '@because/data-provider';
+import type { TPreset } from '@because/data-provider';
 import { SaveAsPresetDialog } from '~/components/Endpoints';
 import { useSetIndexOptions, useLocalize } from '~/hooks';
 import { useGetEndpointsQuery } from '~/data-provider';

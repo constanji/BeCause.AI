@@ -14,7 +14,7 @@ jest.mock('~/config', () => ({
 }));
 
 // Mock all other dependencies that might cause issues
-jest.mock('@aipyq/data-provider', () => ({
+jest.mock('@because/data-provider', () => ({
   isUUID: { parse: jest.fn() },
   megabyte: 1024 * 1024,
   PrincipalType: {
@@ -101,7 +101,7 @@ jest.mock('~/server/utils', () => ({
   determineFileType: jest.fn(),
 }));
 
-jest.mock('@aipyq/api', () => ({
+jest.mock('@because/api', () => ({
   parseText: jest.fn(),
   parseTextNative: jest.fn(),
 }));

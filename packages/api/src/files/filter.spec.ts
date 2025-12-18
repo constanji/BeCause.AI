@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
-import { Providers } from '@aipyq/agents';
-import { EModelEndpoint } from '@aipyq/data-provider';
-import type { IMongoFile } from '@aipyq/data-schemas';
+import { Providers } from '@because/agents';
+import { EModelEndpoint } from '@because/data-provider';
+import type { IMongoFile } from '@because/data-schemas';
 import type { ServerRequest } from '~/types';
 import { filterFilesByEndpointConfig } from './filter';
 

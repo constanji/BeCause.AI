@@ -1,9 +1,9 @@
-const { FileSources } = require('@aipyq/data-provider');
+const { FileSources } = require('@because/data-provider');
 const {
   uploadMistralOCR,
   uploadAzureMistralOCR,
   uploadGoogleVertexMistralOCR,
-} = require('@aipyq/api');
+} = require('@because/api');
 const {
   getFirebaseURL,
   prepareImageURL,

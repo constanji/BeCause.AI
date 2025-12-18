@@ -3,11 +3,11 @@ import {
   EModelEndpoint,
   validateAzureGroups,
   mapModelToAzureConfig,
-} from '@aipyq/data-provider';
-import type { TCustomConfig, TAzureConfig } from '@aipyq/data-provider';
+} from '@because/data-provider';
+import type { TCustomConfig, TAzureConfig } from '@because/data-provider';
 
 /**
- * Sets up the Azure OpenAI configuration from the config (`Aipyq.yaml`) file.
+ * Sets up the Azure OpenAI configuration from the config (`Because.yaml`) file.
  * @param config - The loaded custom configuration.
  * @returns The Azure OpenAI configuration.
  */

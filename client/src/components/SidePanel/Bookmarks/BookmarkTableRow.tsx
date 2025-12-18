@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
-import type { TConversationTag } from '@aipyq/data-provider';
-import { TableRow, TableCell, useToastContext } from '@aipyq/client';
+import type { TConversationTag } from '@because/data-provider';
+import { TableRow, TableCell, useToastContext } from '@because/client';
 import { DeleteBookmarkButton, EditBookmarkButton } from '~/components/Bookmarks';
 import { useConversationTagMutation } from '~/data-provider';
 import { NotificationSeverity } from '~/common';

@@ -1,6 +1,6 @@
 import { useMemo, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
-import { SystemRoles } from '@aipyq/data-provider';
+import { SystemRoles } from '@because/data-provider';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { ArrowLeft, MessageSquareQuote } from 'lucide-react';
 import {
@@ -14,7 +14,7 @@ import {
   // DropdownMenuItem,
   // DropdownMenuContent,
   // DropdownMenuTrigger,
-} from '@aipyq/client';
+} from '@because/client';
 import { useLocalize, useCustomLink, useAuthContext } from '~/hooks';
 import AdvancedSwitch from '~/components/Prompts/AdvancedSwitch';
 // import { RightPanel } from '../../components/Prompts/RightPanel';

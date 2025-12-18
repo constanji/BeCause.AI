@@ -1,6 +1,6 @@
 import { atom, selector } from 'recoil';
-import { EModelEndpoint } from '@aipyq/data-provider';
-import type { TEndpointsConfig } from '@aipyq/data-provider';
+import { EModelEndpoint } from '@because/data-provider';
+import type { TEndpointsConfig } from '@because/data-provider';
 
 const defaultConfig: TEndpointsConfig = {
   [EModelEndpoint.azureOpenAI]: null,

@@ -1,6 +1,6 @@
 const axios = require('axios');
-const { logAxiosError } = require('@aipyq/api');
-const { EModelEndpoint } = require('@aipyq/data-provider');
+const { logAxiosError } = require('@because/api');
+const { EModelEndpoint } = require('@because/data-provider');
 
 /**
  * @typedef {Object} RetrieveOptions

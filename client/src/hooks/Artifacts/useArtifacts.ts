@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect, useRef } from 'react';
-import { Constants } from '@aipyq/data-provider';
+import { Constants } from '@because/data-provider';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { useArtifactsContext } from '~/Providers';
 import { logger } from '~/utils';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { ListFilter } from 'lucide-react';
-import { Button, Input } from '@aipyq/client';
+import { Button, Input } from '@because/client';
 import VectorStoreButton from './VectorStoreButton';
 import VectorStoreList from './VectorStoreList';
 import { TVectorStore } from '~/common';

@@ -1,6 +1,6 @@
 const { nanoid } = require('nanoid');
-const { Tools } = require('@aipyq/data-provider');
-const { logger } = require('@aipyq/data-schemas');
+const { Tools } = require('@because/data-provider');
+const { logger } = require('@because/data-schemas');
 
 /**
  * Creates a function to handle search results and stream them as attachments

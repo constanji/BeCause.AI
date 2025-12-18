@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useToastContext } from '@aipyq/client';
+import { useToastContext } from '@because/client';
 import { useLocalize } from '~/hooks';
 
 export const useDelayedUploadToast = () => {

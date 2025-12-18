@@ -1,7 +1,7 @@
 const crypto = require('crypto');
-const { logger } = require('@aipyq/data-schemas');
-const { parseConvo } = require('@aipyq/data-provider');
-const { sendEvent, handleError } = require('@aipyq/api');
+const { logger } = require('@because/data-schemas');
+const { parseConvo } = require('@because/data-provider');
+const { sendEvent, handleError } = require('@because/api');
 const { saveMessage, getMessages } = require('~/models/Message');
 const { getConvo } = require('~/models/Conversation');
 

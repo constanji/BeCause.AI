@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import { useMediaQuery } from '@aipyq/client';
+import { useMediaQuery } from '@because/client';
 import { useOutletContext } from 'react-router-dom';
-import { getConfigDefaults, PermissionTypes, Permissions, SystemRoles, isAgentsEndpoint, Constants } from '@aipyq/data-provider';
+import { getConfigDefaults, PermissionTypes, Permissions, SystemRoles, isAgentsEndpoint, Constants } from '@because/data-provider';
 import type { ContextType } from '~/common';
 import ModelSelector from './Menus/Endpoints/ModelSelector';
 import { PresetsMenu, HeaderNewChat, OpenSidebar } from './Menus';

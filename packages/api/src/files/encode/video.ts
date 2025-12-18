@@ -1,6 +1,6 @@
-import { Providers } from '@aipyq/agents';
-import { isDocumentSupportedProvider } from '@aipyq/data-provider';
-import type { IMongoFile } from '@aipyq/data-schemas';
+import { Providers } from '@because/agents';
+import { isDocumentSupportedProvider } from '@because/data-provider';
+import type { IMongoFile } from '@because/data-schemas';
 import type { ServerRequest, StrategyFunctions, VideoResult } from '~/types';
 import { getFileStream, getConfiguredFileSizeLimit } from './utils';
 import { validateVideo } from '~/files/validation';

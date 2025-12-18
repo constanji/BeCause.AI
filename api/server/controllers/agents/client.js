@@ -1,5 +1,5 @@
 require('events').EventEmitter.defaultMaxListeners = 100;
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 const { DynamicStructuredTool } = require('@langchain/core/tools');
 const { getBufferString, HumanMessage } = require('@langchain/core/messages');
 const {
@@ -15,7 +15,7 @@ const {
   getTransactionsConfig,
   createMemoryProcessor,
   filterMalformedContentParts,
-} = require('@aipyq/api');
+} = require('@because/api');
 const {
   Callback,
   Providers,
@@ -25,7 +25,7 @@ const {
   formatAgentMessages,
   getTokenCountForMessage,
   createMetadataAggregator,
-} = require('@aipyq/agents');
+} = require('@because/agents');
 const {
   Constants,
   Permissions,
@@ -37,7 +37,7 @@ const {
   AgentCapabilities,
   bedrockInputSchema,
   removeNullishValues,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const { initializeAgent } = require('~/server/services/Endpoints/agents/agent');
 const { spendTokens, spendStructuredTokens } = require('~/models/spendTokens');
 const { getFormattedMemories, deleteMemory, setMemory } = require('~/models');
@@ -568,7 +568,7 @@ class AgentClient extends BaseClient {
       agent.model_parameters,
     );
 
-    /** @type {import('@aipyq/api').MemoryConfig} */
+    /** @type {import('@because/api').MemoryConfig} */
     const config = {
       validKeys: memoryConfig.validKeys,
       instructions: agent.instructions,
@@ -1054,7 +1054,7 @@ class AgentClient extends BaseClient {
     const appConfig = req.config;
     let endpoint = agent.endpoint;
 
-    /** @type {import('@aipyq/agents').ClientOptions} */
+    /** @type {import('@because/agents').ClientOptions} */
     let clientOptions = {
       model: agent.model || agent.model_parameters.model,
     };
@@ -1119,7 +1119,7 @@ class AgentClient extends BaseClient {
       provider = Providers.AZURE;
     }
 
-    /** @type {import('@aipyq/agents').ClientOptions} */
+    /** @type {import('@because/agents').ClientOptions} */
     clientOptions = { ...options.llmConfig };
     if (options.configOptions) {
       clientOptions.configuration = options.configOptions;

@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 const {
   logAgentMigrationWarning,
   logPromptMigrationWarning,
   checkAgentPermissionsMigration,
   checkPromptPermissionsMigration,
-} = require('@aipyq/api');
+} = require('@because/api');
 const { getProjectByName } = require('~/models/Project');
 const { Agent, PromptGroup } = require('~/db/models');
 const { findRoleByIdentifier } = require('~/models');

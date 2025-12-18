@@ -1,5 +1,5 @@
 const express = require('express');
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 const {
   generateCheckAccess,
   markPublicPromptGroups,
@@ -7,7 +7,7 @@ const {
   formatPromptGroupsResponse,
   createEmptyPromptGroupsResponse,
   filterAccessibleIdsBySharedLogic,
-} = require('@aipyq/api');
+} = require('@because/api');
 const {
   Permissions,
   SystemRoles,
@@ -16,7 +16,7 @@ const {
   PrincipalType,
   PermissionBits,
   PermissionTypes,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const {
   getListPromptGroupsByAccess,
   makePromptProduction,

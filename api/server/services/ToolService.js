@@ -1,12 +1,12 @@
-const { sleep } = require('@aipyq/agents');
-const { logger } = require('@aipyq/data-schemas');
+const { sleep } = require('@because/agents');
+const { logger } = require('@because/data-schemas');
 const { tool: toolFn, DynamicStructuredTool } = require('@langchain/core/tools');
 const {
   getToolkitKey,
   hasCustomUserVars,
   getUserMCPAuthMap,
   isActionDomainAllowed,
-} = require('@aipyq/api');
+} = require('@because/api');
 const {
   Tools,
   Constants,
@@ -21,7 +21,7 @@ const {
   validateActionDomain,
   defaultAgentCapabilities,
   validateAndParseOpenAPISpec,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const {
   createActionTool,
   decryptMetadata,

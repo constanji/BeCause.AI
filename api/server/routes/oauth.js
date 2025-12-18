@@ -2,9 +2,9 @@
 const express = require('express');
 const passport = require('passport');
 const { randomState } = require('openid-client');
-const { logger } = require('@aipyq/data-schemas');
-const { ErrorTypes } = require('@aipyq/data-provider');
-const { isEnabled, createSetBalanceConfig } = require('@aipyq/api');
+const { logger } = require('@because/data-schemas');
+const { ErrorTypes } = require('@because/data-provider');
+const { isEnabled, createSetBalanceConfig } = require('@because/api');
 const { checkDomainAllowed, loginLimiter, logHeaders, checkBan } = require('~/server/middleware');
 const { syncUserEntraGroupMemberships } = require('~/server/services/PermissionService');
 const { setAuthTokens, setOpenIDAuthTokens } = require('~/server/services/AuthService');

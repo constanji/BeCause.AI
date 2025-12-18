@@ -3,7 +3,7 @@ import {
   EModelEndpoint,
   ReasoningEffort,
   ReasoningSummary,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type { RequestInit } from 'undici';
 import type { OpenAIParameters, AzureOptions } from '~/types';
 import { getOpenAIConfig } from './config';
@@ -198,8 +198,8 @@ describe('getOpenAIConfig', () => {
 
     expect(result.configOptions?.baseURL).toBe(reverseProxyUrl);
     expect(result.configOptions?.defaultHeaders).toMatchObject({
-      'HTTP-Referer': 'https://www.aipyq.com',
-      'X-Title': 'Aipyq',
+      'HTTP-Referer': 'https://because.ai',
+      'X-Title': 'Because',
     });
     expect(result.llmConfig.include_reasoning).toBe(true);
     expect(result.provider).toBe('openrouter');
@@ -896,8 +896,8 @@ describe('getOpenAIConfig', () => {
       });
 
       expect(result.configOptions?.defaultHeaders).toEqual({
-        'HTTP-Referer': 'https://www.aipyq.com',
-        'X-Title': 'Aipyq',
+        'HTTP-Referer': 'https://because.ai',
+        'X-Title': 'Because',
         'X-Custom-Header': 'custom-value',
         Authorization: 'Bearer custom-token',
       });
@@ -1390,8 +1390,8 @@ describe('getOpenAIConfig', () => {
           apiKey: 'user_provided',
           baseURL: baseURL,
           headers: {
-            'X-Custom-Provider': 'Aipyq',
-            'User-Agent': 'Aipyq/1.0',
+            'X-Custom-Provider': 'Because',
+            'User-Agent': 'Because/1.0',
           },
           addParams: {
             custom_parameter: 'custom_value',
@@ -1463,8 +1463,8 @@ describe('getOpenAIConfig', () => {
         const clientOptions = {
           reverseProxyUrl: baseURL,
           headers: {
-            'HTTP-Referer': 'https://www.aipyq.com',
-            'X-Title': 'Aipyq',
+            'HTTP-Referer': 'https://because.ai',
+            'X-Title': 'Because',
             Authorization: `Bearer ${apiKey}`,
           },
           addParams: {
@@ -1500,8 +1500,8 @@ describe('getOpenAIConfig', () => {
           repetition_penalty: 1.1,
         });
         expect(result.configOptions?.defaultHeaders).toMatchObject({
-          'HTTP-Referer': 'https://www.aipyq.com',
-          'X-Title': 'Aipyq',
+          'HTTP-Referer': 'https://because.ai',
+          'X-Title': 'Because',
           Authorization: `Bearer ${apiKey}`,
         });
         expect(result.provider).toBe('openrouter');

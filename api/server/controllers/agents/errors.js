@@ -1,6 +1,6 @@
 // errorHandler.js
-const { logger } = require('@aipyq/data-schemas');
-const { CacheKeys, ViolationTypes } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { CacheKeys, ViolationTypes } = require('@because/data-provider');
 const { sendResponse } = require('~/server/middleware/error');
 const { recordUsage } = require('~/server/services/Threads');
 const { getConvo } = require('~/models/Conversation');

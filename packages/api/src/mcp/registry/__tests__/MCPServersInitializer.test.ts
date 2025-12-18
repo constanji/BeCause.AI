@@ -1,4 +1,4 @@
-import { logger } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
 import * as t from '~/mcp/types';
 import { MCPConnectionFactory } from '~/mcp/MCPConnectionFactory';
 import { MCPServersInitializer } from '~/mcp/registry/MCPServersInitializer';
@@ -14,7 +14,7 @@ jest.mock('../../registry/MCPServerInspector');
 jest.mock('~/cluster', () => ({
   isLeader: jest.fn().mockResolvedValue(true),
 }));
-jest.mock('@aipyq/data-schemas', () => ({
+jest.mock('@because/data-schemas', () => ({
   logger: {
     info: jest.fn(),
     warn: jest.fn(),

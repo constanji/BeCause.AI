@@ -1,6 +1,6 @@
-import { logger } from '@aipyq/data-schemas';
-import type { TokenMethods } from '@aipyq/data-schemas';
-import type { TUser } from '@aipyq/data-provider';
+import { logger } from '@because/data-schemas';
+import type { TokenMethods } from '@because/data-schemas';
+import type { TUser } from '@because/data-provider';
 import type { FlowStateManager } from '~/flow/manager';
 import type { MCPOAuthTokens } from '~/mcp/oauth';
 import type * as t from '~/mcp/types';
@@ -12,7 +12,7 @@ import { processMCPEnv } from '~/utils';
 jest.mock('~/mcp/connection');
 jest.mock('~/mcp/oauth');
 jest.mock('~/utils');
-jest.mock('@aipyq/data-schemas', () => ({
+jest.mock('@because/data-schemas', () => ({
   logger: {
     info: jest.fn(),
     warn: jest.fn(),

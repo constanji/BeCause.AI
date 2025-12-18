@@ -1,4 +1,4 @@
-import { StopGeneratingIcon } from '@aipyq/client';
+import { StopGeneratingIcon } from '@because/client';
 import type { TGenButtonProps } from '~/common';
 import { useLocalize } from '~/hooks';
 import Button from './Button';

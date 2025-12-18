@@ -1,5 +1,5 @@
-const { logger } = require('@aipyq/data-schemas');
-const { SystemRoles } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { SystemRoles } = require('@because/data-provider');
 const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
 const { getUserById, updateUser } = require('~/models');
 

@@ -1,7 +1,7 @@
 import getStream from 'get-stream';
-import { Providers } from '@aipyq/agents';
-import { FileSources, mergeFileConfig, getEndpointFileConfig } from '@aipyq/data-provider';
-import type { IMongoFile } from '@aipyq/data-schemas';
+import { Providers } from '@because/agents';
+import { FileSources, mergeFileConfig, getEndpointFileConfig } from '@because/data-provider';
+import type { IMongoFile } from '@because/data-schemas';
 import type { ServerRequest, StrategyFunctions, ProcessedFile } from '~/types';
 
 /**

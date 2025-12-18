@@ -23,7 +23,7 @@
       "~/*": ["./client/src/*"],
       "test/*": ["./client/test/*"],
       "*": ["./client/*", "../node_modules/*"],
-      "@aipyq/data-provider/*": ["./packages/data-provider/*"]
+      "@because/data-provider/*": ["./packages/data-provider/*"]
     }
   },
   "types": ["node", "jest", "@testing-library/jest-dom"],

@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { EModelEndpoint, ImageDetail } from '@aipyq/data-provider';
-import type { ConversationData } from '@aipyq/data-provider';
+import { EModelEndpoint, ImageDetail } from '@because/data-provider';
+import type { ConversationData } from '@because/data-provider';
 
 const today = new Date();
 today.setDate(today.getDate() - 3);

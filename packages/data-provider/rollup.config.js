@@ -23,7 +23,7 @@ const plugins = [
     check: false,
     /**
      * Exclude node_modules from processing to reduce memory footprint
-     * Prevents loading type declarations from dependencies like @aipyq/agents
+     * Prevents loading type declarations from dependencies like @because/agents
      */
     exclude: ['node_modules/**'],
     /**
@@ -80,7 +80,7 @@ export default [
       ...Object.keys(pkg.peerDependencies || {}),
       'react',
       'react-dom',
-      // '@aipyq/data-provider', // Marking main part as external
+      // '@because/data-provider', // Marking main part as external
     ],
     preserveSymlinks: true,
     plugins,

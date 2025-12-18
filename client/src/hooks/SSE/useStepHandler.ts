@@ -5,14 +5,14 @@ import {
   ContentTypes,
   ToolCallTypes,
   getNonEmptyValue,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type {
   Agents,
   TMessage,
   PartMetadata,
   EventSubmission,
   TMessageContentParts,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type { SetterOrUpdater } from 'recoil';
 import type { AnnounceOptions } from '~/common';
 import { MESSAGE_UPDATE_INTERVAL } from '~/common';

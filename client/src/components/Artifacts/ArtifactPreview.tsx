@@ -4,7 +4,7 @@ import type {
   SandpackProviderProps,
   SandpackPreviewRef,
 } from '@codesandbox/sandpack-react/unstyled';
-import type { TStartupConfig } from '@aipyq/data-provider';
+import type { TStartupConfig } from '@because/data-provider';
 import type { ArtifactFiles } from '~/common';
 import { sharedFiles, sharedOptions } from '~/utils/artifacts';
 

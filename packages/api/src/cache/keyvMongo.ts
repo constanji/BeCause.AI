@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { EventEmitter } from 'events';
 import { GridFSBucket } from 'mongodb';
-import { logger } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
 import type { Db, ReadPreference, Collection } from 'mongodb';
 
 interface KeyvMongoOptions {

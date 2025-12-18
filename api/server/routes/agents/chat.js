@@ -1,7 +1,7 @@
 const express = require('express');
-const { generateCheckAccess, skipAgentCheck } = require('@aipyq/api');
-const { PermissionTypes, Permissions, PermissionBits } = require('@aipyq/data-provider');
-const { logger } = require('@aipyq/data-schemas');
+const { generateCheckAccess, skipAgentCheck } = require('@because/api');
+const { PermissionTypes, Permissions, PermissionBits } = require('@because/data-provider');
+const { logger } = require('@because/data-schemas');
 const {
   setHeaders,
   moderateText,

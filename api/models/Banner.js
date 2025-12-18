@@ -1,4 +1,4 @@
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 const { Banner } = require('~/db/models');
 
 /**

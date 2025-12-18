@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { Capabilities } from '@aipyq/data-provider';
+import { Capabilities } from '@because/data-provider';
 import { useFormContext, Controller, useWatch } from 'react-hook-form';
 import {
   Checkbox,
@@ -8,7 +8,7 @@ import {
   HoverCardContent,
   HoverCardPortal,
   HoverCardTrigger,
-} from '@aipyq/client';
+} from '@because/client';
 import OptionHover from '~/components/SidePanel/Parameters/OptionHover';
 import type { AgentForm } from '~/common';
 import { useLocalize } from '~/hooks';

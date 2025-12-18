@@ -1,8 +1,8 @@
 const path = require('path');
 const fs = require('fs').promises;
 const express = require('express');
-const { logger } = require('@aipyq/data-schemas');
-const { isAgentsEndpoint } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { isAgentsEndpoint } = require('@because/data-provider');
 const {
   filterFile,
   processImageFile,

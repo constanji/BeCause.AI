@@ -6,8 +6,8 @@ import {
   EToolResources,
   LocalStorageKeys,
   defaultAgentFormValues,
-} from '@aipyq/data-provider';
-import type { Agent, TFile } from '@aipyq/data-provider';
+} from '@because/data-provider';
+import type { Agent, TFile } from '@because/data-provider';
 import type { DropdownValueSetter, TAgentOption, ExtendedFile } from '~/common';
 
 /**

@@ -1,6 +1,6 @@
-const { logger } = require('@aipyq/data-schemas');
-const { MCPOAuthHandler } = require('@aipyq/api');
-const { CacheKeys } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { MCPOAuthHandler } = require('@because/api');
+const { CacheKeys } = require('@because/data-provider');
 const {
   createMCPTool,
   createMCPTools,
@@ -10,7 +10,7 @@ const {
 } = require('./MCP');
 
 // Mock all dependencies
-jest.mock('@aipyq/data-schemas', () => ({
+jest.mock('@because/data-schemas', () => ({
   logger: {
     debug: jest.fn(),
     error: jest.fn(),
@@ -26,7 +26,7 @@ jest.mock('@langchain/core/tools', () => ({
   }),
 }));
 
-jest.mock('@aipyq/agents', () => ({
+jest.mock('@because/agents', () => ({
   Providers: {
     VERTEXAI: 'vertexai',
     GOOGLE: 'google',
@@ -43,7 +43,7 @@ jest.mock('@aipyq/agents', () => ({
   },
 }));
 
-jest.mock('@aipyq/api', () => ({
+jest.mock('@because/api', () => ({
   MCPOAuthHandler: {
     generateFlowId: jest.fn(),
   },
@@ -55,7 +55,7 @@ jest.mock('@aipyq/api', () => ({
   },
 }));
 
-jest.mock('@aipyq/data-provider', () => ({
+jest.mock('@because/data-provider', () => ({
   CacheKeys: {
     FLOWS: 'flows',
   },
@@ -112,7 +112,7 @@ describe('tests for the new helper functions used by the MCP connection status e
     mockGetFlowStateManager = require('~/config').getFlowStateManager;
     mockGetLogStores = require('~/cache').getLogStores;
     mockGetOAuthReconnectionManager = require('~/config').getOAuthReconnectionManager;
-    mockMcpServersRegistry = require('@aipyq/api').mcpServersRegistry;
+    mockMcpServersRegistry = require('@because/api').mcpServersRegistry;
   });
 
   describe('getMCPSetupData', () => {

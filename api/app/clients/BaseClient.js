@@ -1,13 +1,13 @@
 const crypto = require('crypto');
 const fetch = require('node-fetch');
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 const {
   getBalanceConfig,
   extractFileContext,
   encodeAndFormatAudios,
   encodeAndFormatVideos,
   encodeAndFormatDocuments,
-} = require('@aipyq/api');
+} = require('@because/api');
 const {
   Constants,
   ErrorTypes,
@@ -18,7 +18,7 @@ const {
   isParamEndpoint,
   isAgentsEndpoint,
   supportsBalanceCheck,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const { getMessages, saveMessage, updateMessage, saveConvo, getConvo } = require('~/models');
 const { getStrategyFunctions } = require('~/server/services/Files/strategies');
 const { checkBalance } = require('~/models/balanceMethods');
@@ -69,7 +69,7 @@ class BaseClient {
     this.fetchedConvo;
     /** @type {TMessage[]} */
     this.currentMessages = [];
-    /** @type {import('@aipyq/data-provider').VisionModes | undefined} */
+    /** @type {import('@because/data-provider').VisionModes | undefined} */
     this.visionMode;
   }
 

@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { ArrowUpDown } from 'lucide-react';
-import { Button } from '@aipyq/client';
+import { Button } from '@because/client';
 import type { ColumnDef } from '@tanstack/react-table';
-import type { TFile } from '@aipyq/data-provider';
+import type { TFile } from '@because/data-provider';
 import PanelFileCell from './PanelFileCell';
 import { useLocalize } from '~/hooks';
 import { formatDate } from '~/utils';

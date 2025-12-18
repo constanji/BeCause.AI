@@ -1,13 +1,13 @@
 // hooks/Plugins/usePluginInstall.ts
 import { useCallback } from 'react';
-import { useUpdateUserPluginsMutation } from '@aipyq/data-provider/react-query';
+import { useUpdateUserPluginsMutation } from '@because/data-provider/react-query';
 import type {
   TError,
   TUser,
   TUpdateUserPlugins,
   TPlugin,
   TPluginAction,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import { useSetRecoilState } from 'recoil';
 import store from '~/store';
 

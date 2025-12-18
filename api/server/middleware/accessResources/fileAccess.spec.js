@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { ResourceType, PrincipalType, PrincipalModel } = require('@aipyq/data-provider');
+const { ResourceType, PrincipalType, PrincipalModel } = require('@because/data-provider');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const { fileAccess } = require('./fileAccess');
 const { User, Role, AclEntry } = require('~/db/models');

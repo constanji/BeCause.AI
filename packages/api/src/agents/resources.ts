@@ -1,7 +1,7 @@
-import { logger } from '@aipyq/data-schemas';
-import { EModelEndpoint, EToolResources, AgentCapabilities } from '@aipyq/data-provider';
-import type { AgentToolResources, TFile, AgentBaseResource } from '@aipyq/data-provider';
-import type { IMongoFile, AppConfig, IUser } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
+import { EModelEndpoint, EToolResources, AgentCapabilities } from '@because/data-provider';
+import type { AgentToolResources, TFile, AgentBaseResource } from '@because/data-provider';
+import type { IMongoFile, AppConfig, IUser } from '@because/data-schemas';
 import type { FilterQuery, QueryOptions, ProjectionType } from 'mongoose';
 import type { Request as ServerRequest } from 'express';
 

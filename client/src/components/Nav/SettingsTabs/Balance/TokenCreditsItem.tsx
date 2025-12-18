@@ -1,5 +1,5 @@
 import React from 'react';
-import { Label, InfoHoverCard, ESide } from '@aipyq/client';
+import { Label, InfoHoverCard, ESide } from '@because/client';
 import { useLocalize } from '~/hooks';
 
 interface TokenCreditsItemProps {

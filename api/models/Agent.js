@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const crypto = require('node:crypto');
-const { logger } = require('@aipyq/data-schemas');
-const { ResourceType, SystemRoles, Tools, actionDelimiter } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { ResourceType, SystemRoles, Tools, actionDelimiter } = require('@because/data-provider');
 const { GLOBAL_PROJECT_NAME, EPHEMERAL_AGENT_ID, mcp_all, mcp_delimiter } =
-  require('@aipyq/data-provider').Constants;
+  require('@because/data-provider').Constants;
 const {
   removeAgentFromAllProjects,
   removeAgentIdsFromProject,
@@ -65,7 +65,7 @@ const getAgents = async (searchParameter) => await Agent.find(searchParameter).l
  * @param {string} params.spec
  * @param {string} params.agent_id
  * @param {string} params.endpoint
- * @param {import('@aipyq/agents').ClientOptions} [params.model_parameters]
+ * @param {import('@because/agents').ClientOptions} [params.model_parameters]
  * @returns {Promise<Agent|null>} The agent document as a plain object, or null if not found.
  */
 const loadEphemeralAgent = async ({ req, spec, agent_id, endpoint, model_parameters: _m }) => {
@@ -138,7 +138,7 @@ const loadEphemeralAgent = async ({ req, spec, agent_id, endpoint, model_paramet
  * @param {string} params.spec
  * @param {string} params.agent_id
  * @param {string} params.endpoint
- * @param {import('@aipyq/agents').ClientOptions} [params.model_parameters]
+ * @param {import('@because/agents').ClientOptions} [params.model_parameters]
  * @returns {Promise<Agent|null>} The agent document as a plain object, or null if not found.
  */
 const loadAgent = async ({ req, spec, agent_id, endpoint, model_parameters }) => {

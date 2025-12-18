@@ -1,6 +1,6 @@
 import { useRecoilState } from 'recoil';
-import { ForkOptions } from '@aipyq/data-provider';
-import { Dropdown, Switch, InfoHoverCard, ESide } from '@aipyq/client';
+import { ForkOptions } from '@because/data-provider';
+import { Dropdown, Switch, InfoHoverCard, ESide } from '@because/client';
 import { useLocalize } from '~/hooks';
 import store from '~/store';
 

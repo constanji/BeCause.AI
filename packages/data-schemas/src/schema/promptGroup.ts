@@ -1,5 +1,5 @@
 import { Schema } from 'mongoose';
-import { Constants } from '@aipyq/data-provider';
+import { Constants } from '@because/data-provider';
 import type { IPromptGroupDocument } from '~/types';
 
 const promptGroupSchema = new Schema<IPromptGroupDocument>(

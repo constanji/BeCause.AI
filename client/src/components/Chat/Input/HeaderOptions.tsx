@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Settings2 } from 'lucide-react';
-import { TooltipAnchor } from '@aipyq/client';
+import { TooltipAnchor } from '@because/client';
 import { Root, Anchor } from '@radix-ui/react-popover';
-import { isParamEndpoint, getEndpointField, tConvoUpdateSchema } from '@aipyq/data-provider';
-import type { TPreset, TInterfaceConfig } from '@aipyq/data-provider';
+import { isParamEndpoint, getEndpointField, tConvoUpdateSchema } from '@because/data-provider';
+import type { TPreset, TInterfaceConfig } from '@because/data-provider';
 import { EndpointSettings, SaveAsPresetDialog, AlternativeSettings } from '~/components/Endpoints';
 import { useSetIndexOptions, useLocalize } from '~/hooks';
 import { useGetEndpointsQuery } from '~/data-provider';

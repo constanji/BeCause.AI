@@ -1,4 +1,4 @@
-import type { TFile } from '@aipyq/data-provider';
+import type { TFile } from '@because/data-provider';
 import { useGetFiles } from '~/data-provider';
 import { columns } from './PanelColumns';
 import DataTable from './PanelTable';

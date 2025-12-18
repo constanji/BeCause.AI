@@ -2,13 +2,13 @@ import { useCallback } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
-import { QueryKeys, Constants, dataService, getEndpointField } from '@aipyq/data-provider';
+import { QueryKeys, Constants, dataService, getEndpointField } from '@because/data-provider';
 import type {
   TEndpointsConfig,
   TStartupConfig,
   TModelsConfig,
   TConversation,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import { getDefaultEndpoint, clearMessagesCache, buildDefaultConvo, logger } from '~/utils';
 import { useApplyModelSpecEffects } from '~/hooks/Agents';
 import store from '~/store';

@@ -1,6 +1,6 @@
-import { Input } from '@aipyq/client';
+import { Input } from '@because/client';
 import { SquareSlash } from 'lucide-react';
-import { Constants } from '@aipyq/data-provider';
+import { Constants } from '@because/data-provider';
 import { useState, useEffect } from 'react';
 import { useLocalize } from '~/hooks';
 

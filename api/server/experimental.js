@@ -10,14 +10,14 @@ const express = require('express');
 const passport = require('passport');
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 const mongoSanitize = require('express-mongo-sanitize');
 const {
   isEnabled,
   ErrorController,
   performStartupChecks,
   initializeFileStorage,
-} = require('@aipyq/api');
+} = require('@because/api');
 const { connectDb, indexSync } = require('~/db');
 const initializeOAuthReconnectManager = require('./services/initializeOAuthReconnectManager');
 const createValidateImageRequest = require('./middleware/validateImageRequest');
@@ -401,7 +401,7 @@ process.on('uncaughtException', (err) => {
     return;
   }
 
-  if (err.stack && err.stack.includes('@aipyq/agents')) {
+  if (err.stack && err.stack.includes('@because/agents')) {
     logger.error(
       '\n\nAn error occurred in the agents system. The error has been logged and the app will continue running.',
       {

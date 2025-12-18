@@ -1,5 +1,5 @@
-const { encryptV3 } = require('@aipyq/api');
-const { logger } = require('@aipyq/data-schemas');
+const { encryptV3 } = require('@because/api');
+const { logger } = require('@because/data-schemas');
 const {
   verifyTOTP,
   getTOTPSecret,
@@ -9,7 +9,7 @@ const {
 } = require('~/server/services/twoFactorService');
 const { getUserById, updateUser } = require('~/models');
 
-const safeAppTitle = (process.env.APP_TITLE || 'Aipyq').replace(/\s+/g, '');
+const safeAppTitle = (process.env.APP_TITLE || 'Because').replace(/\s+/g, '');
 
 /**
  * Enable 2FA for the user by generating a new TOTP secret and backup codes.

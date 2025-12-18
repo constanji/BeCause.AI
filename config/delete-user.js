@@ -26,7 +26,7 @@ const {
   Transaction,
   Conversation,
   ConversationTag,
-} = require('@aipyq/data-schemas').createModels(mongoose);
+} = require('@because/data-schemas').createModels(mongoose);
 require('module-alias')({ base: path.resolve(__dirname, '..', 'api') });
 const { askQuestion, silentExit } = require('./helpers');
 const connect = require('./connect');

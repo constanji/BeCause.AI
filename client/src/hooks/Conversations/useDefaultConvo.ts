@@ -1,11 +1,11 @@
-import { excludedKeys } from '@aipyq/data-provider';
-import { useGetModelsQuery } from '@aipyq/data-provider/react-query';
+import { excludedKeys } from '@because/data-provider';
+import { useGetModelsQuery } from '@because/data-provider/react-query';
 import type {
   TEndpointsConfig,
   TModelsConfig,
   TConversation,
   TPreset,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import { getDefaultEndpoint, buildDefaultConvo } from '~/utils';
 import { useGetEndpointsQuery, useGetStartupConfig } from '~/data-provider';
 

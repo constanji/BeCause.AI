@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { GearIcon } from '@aipyq/client';
-import type { Action } from '@aipyq/data-provider';
+import { GearIcon } from '@because/client';
+import type { Action } from '@because/data-provider';
 import { cn } from '~/utils';
 
 export default function Action({ action, onClick }: { action: Action; onClick: () => void }) {

@@ -1,5 +1,5 @@
-const { logger } = require('@aipyq/data-schemas');
-const { ToolCallTypes } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { ToolCallTypes } = require('@because/data-provider');
 
 /**
  * @typedef {import('openai').OpenAI} OpenAI

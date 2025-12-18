@@ -7,11 +7,11 @@ import {
   defaultSocialLogins,
   validateAzureGroups,
   defaultAgentCapabilities,
-} from '@aipyq/data-provider';
-import type { TCustomConfig } from '@aipyq/data-provider';
+} from '@because/data-provider';
+import type { TCustomConfig } from '@because/data-provider';
 
-jest.mock('@aipyq/data-schemas', () => ({
-  ...jest.requireActual('@aipyq/data-schemas'),
+jest.mock('@because/data-schemas', () => ({
+  ...jest.requireActual('@because/data-schemas'),
   logger: {
     info: jest.fn(),
     warn: jest.fn(),
@@ -20,13 +20,13 @@ jest.mock('@aipyq/data-schemas', () => ({
   },
 }));
 
-import { AppService } from '@aipyq/data-schemas';
+import { AppService } from '@because/data-schemas';
 
 const azureGroups = [
   {
-    group: 'aipyq-westus',
+    group: 'because-westus',
     apiKey: '${WESTUS_API_KEY}',
-    instanceName: 'aipyq-westus',
+    instanceName: 'because-westus',
     version: '2023-12-01-preview',
     models: {
       'gpt-4-vision-preview': {
@@ -48,9 +48,9 @@ const azureGroups = [
     },
   },
   {
-    group: 'aipyq-eastus',
+    group: 'because-eastus',
     apiKey: '${EASTUS_API_KEY}',
-    instanceName: 'aipyq-eastus',
+    instanceName: 'because-eastus',
     deploymentName: 'gpt-4-turbo',
     version: '2024-02-15-preview',
     models: {

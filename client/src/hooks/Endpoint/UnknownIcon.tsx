@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import { CustomMinimalIcon, XAIcon } from '@aipyq/client';
-import { EModelEndpoint, KnownEndpoints } from '@aipyq/data-provider';
+import { CustomMinimalIcon, XAIcon } from '@because/client';
+import { EModelEndpoint, KnownEndpoints } from '@because/data-provider';
 import { IconContext } from '~/common';
 import { cn } from '~/utils';
 

@@ -1,6 +1,6 @@
 import { ProxyAgent } from 'undici';
-import { Providers } from '@aipyq/agents';
-import { KnownEndpoints, EModelEndpoint } from '@aipyq/data-provider';
+import { Providers } from '@because/agents';
+import { KnownEndpoints, EModelEndpoint } from '@because/data-provider';
 import type * as t from '~/types';
 import { getLLMConfig as getAnthropicLLMConfig } from '~/endpoints/anthropic/llm';
 import { getOpenAILLMConfig, extractDefaultParams } from './llm';
@@ -119,8 +119,8 @@ export function getOpenAIConfig(
   if (useOpenRouter || isVercel) {
     configOptions.defaultHeaders = Object.assign(
       {
-        'HTTP-Referer': 'https://www.aipyq.com',
-        'X-Title': 'Aipyq',
+        'HTTP-Referer': 'https://because.ai',
+        'X-Title': 'Because',
       },
       headers,
     );

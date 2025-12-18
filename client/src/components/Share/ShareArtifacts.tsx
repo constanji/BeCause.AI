@@ -5,8 +5,8 @@ import {
   ResizablePanel,
   ResizableHandleAlt,
   ResizablePanelGroup,
-} from '@aipyq/client';
-import type { TMessage } from '@aipyq/data-provider';
+} from '@because/client';
+import type { TMessage } from '@because/data-provider';
 import type { ArtifactsContextValue } from '~/Providers';
 import { ArtifactsProvider, EditorProvider } from '~/Providers';
 import Artifacts from '~/components/Artifacts/Artifacts';

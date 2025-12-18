@@ -1,6 +1,6 @@
 const fs = require('fs').promises;
-const { logger } = require('@aipyq/data-schemas');
-const { FileContext } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { FileContext } = require('@because/data-provider');
 const { uploadImageBuffer, filterFile } = require('~/server/services/Files/process');
 const validateAuthor = require('~/server/middleware/assistants/validateAuthor');
 const { getStrategyFunctions } = require('~/server/services/Files/strategies');

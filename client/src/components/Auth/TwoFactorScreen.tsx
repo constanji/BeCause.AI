@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useToastContext } from '@aipyq/client';
+import { useToastContext } from '@because/client';
 import { useForm, Controller } from 'react-hook-form';
 import { REGEXP_ONLY_DIGITS, REGEXP_ONLY_DIGITS_AND_CHARS } from 'input-otp';
-import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot, Label } from '@aipyq/client';
+import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot, Label } from '@because/client';
 import { useVerifyTwoFactorTempMutation } from '~/data-provider';
 import { useLocalize } from '~/hooks';
 

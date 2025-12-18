@@ -1,8 +1,8 @@
 import axios from 'axios';
 import FormData from 'form-data';
 import { createReadStream } from 'fs';
-import { logger } from '@aipyq/data-schemas';
-import { FileSources } from '@aipyq/data-provider';
+import { logger } from '@because/data-schemas';
+import { FileSources } from '@because/data-provider';
 import type { ServerRequest } from '~/types';
 import { logAxiosError, readFileAsString } from '~/utils';
 import { generateShortLivedToken } from '~/crypto/jwt';

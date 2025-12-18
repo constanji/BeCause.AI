@@ -22,8 +22,8 @@ services:
       - MEILI_HOST=http://meilisearch:7700
       - RAG_PORT=${RAG_PORT:-9000}
       - RAG_API_URL=http://rag_api:${RAG_PORT:-9000}
-      - AIPYQ_LOG_DIR=/app/api/logs
-      - CONFIG_PATH=/app/Aipyq.yaml
+      - BECAUSE_LOG_DIR=/app/api/logs
+      - CONFIG_PATH=/app/Because.yaml
 
     volumes:
       - type: bind
@@ -34,7 +34,7 @@ services:
       - ./uploads:/app/uploads
       - ./logs:/app/api/logs
       - ./logs:/app/logs
-      - ./Aipyq.yaml:/app/Aipyq.yaml
+      - ./Because.yaml:/app/Because.yaml
       # 挂载本地静态资源
       #- ./client/dist:/app/client/dist
       #- ./client/public/assets:/app/client/public/assets

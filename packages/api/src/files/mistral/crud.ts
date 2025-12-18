@@ -1,15 +1,15 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import FormData from 'form-data';
-import { logger } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 import {
   FileSources,
   envVarRegex,
   extractEnvVariable,
   extractVariableName,
-} from '@aipyq/data-provider';
-import type { TCustomConfig } from '@aipyq/data-provider';
+} from '@because/data-provider';
+import type { TCustomConfig } from '@because/data-provider';
 import type { AxiosError, AxiosRequestConfig } from 'axios';
 import type {
   MistralFileUploadResponse,

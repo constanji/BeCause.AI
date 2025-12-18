@@ -1,5 +1,5 @@
 {
-  "name": "Aipyq",
+  "name": "Because",
   "version": "v0.8.1-rc2",
   "description": "",
   "workspaces": [
@@ -77,14 +77,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/constanji/Aipyqchat.git"
+    "url": "git+https://github.com/constanji/Because.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/constanji/Aipyqchat/issues"
+    "url": "https://github.com/constanji/Because/issues"
   },
-  "homepage": "https://www.aipyq.com/",
+  "homepage": "https://github.com/constanji/Because",
   "devDependencies": {
     "@eslint/compat": "^1.2.6",
     "@eslint/eslintrc": "^3.3.1",
@@ -151,6 +151,6 @@
     "legacyWatch": false
   },
   "peerDependencies": {
-    "@aipyq/agents": "file:agents-Aipyq"
+    "@because/agents": "file:agents-because"
   }
 }

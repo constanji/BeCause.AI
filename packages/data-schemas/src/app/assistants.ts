@@ -4,8 +4,8 @@ import {
   EModelEndpoint,
   assistantEndpointSchema,
   defaultAssistantsVersion,
-} from '@aipyq/data-provider';
-import type { TCustomConfig, TAssistantEndpoint } from '@aipyq/data-provider';
+} from '@because/data-provider';
+import type { TCustomConfig, TAssistantEndpoint } from '@because/data-provider';
 
 /**
  * Sets up the minimum, default Assistants configuration if Azure OpenAI Assistants option is enabled.
@@ -22,7 +22,7 @@ export function azureAssistantsDefaults(): {
 }
 
 /**
- * Sets up the Assistants configuration from the config (`Aipyq.yaml`) file.
+ * Sets up the Assistants configuration from the config (`Because.yaml`) file.
  * @param config - The loaded custom configuration.
  * @param assistantsEndpoint - The Assistants endpoint name.
  * - The previously loaded assistants configuration from Azure OpenAI Assistants option.

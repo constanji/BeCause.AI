@@ -6,9 +6,9 @@ import {
   DropdownMenuGroup,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from '@aipyq/client';
-import { PermissionBits } from '@aipyq/data-provider';
-import type { TPromptGroup } from '@aipyq/data-provider';
+} from '@because/client';
+import { PermissionBits } from '@because/data-provider';
+import type { TPromptGroup } from '@because/data-provider';
 import { useLocalize, useSubmitMessage, useCustomLink, useResourcePermissions } from '~/hooks';
 import VariableDialog from '~/components/Prompts/Groups/VariableDialog';
 import PreviewPrompt from '~/components/Prompts/PreviewPrompt';

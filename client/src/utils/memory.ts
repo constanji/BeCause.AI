@@ -1,4 +1,4 @@
-import type { MemoriesResponse, TUserMemory, MemoryArtifact } from '@aipyq/data-provider';
+import type { MemoriesResponse, TUserMemory, MemoryArtifact } from '@because/data-provider';
 
 type HandleMemoryArtifactParams = {
   memoryArtifact: MemoryArtifact;

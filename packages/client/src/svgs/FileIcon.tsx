@@ -1,4 +1,4 @@
-import type { TFile } from '@aipyq/data-provider';
+import type { TFile } from '@because/data-provider';
 import type { ExtendedFile } from '~/common';
 
 export default function FileIcon({

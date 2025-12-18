@@ -1,5 +1,5 @@
-const { logger } = require('@aipyq/data-schemas');
-const { ViolationTypes } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { ViolationTypes } = require('@because/data-provider');
 const { createAutoRefillTransaction } = require('./Transaction');
 const { logViolation } = require('~/cache');
 const { getMultiplier } = require('./tx');
@@ -59,7 +59,7 @@ const checkBalanceRecord = async function ({
         addIntervalToDate(lastRefillDate, record.refillIntervalValue, record.refillIntervalUnit)
     ) {
       try {
-        /** @type {{ rate: number, user: string, balance: number, transaction: import('@aipyq/data-schemas').ITransaction}} */
+        /** @type {{ rate: number, user: string, balance: number, transaction: import('@because/data-schemas').ITransaction}} */
         const result = await createAutoRefillTransaction({
           user: user,
           tokenType: 'credits',

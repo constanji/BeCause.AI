@@ -1,5 +1,5 @@
 const express = require('express');
-const { ResourceType, PermissionBits } = require('@aipyq/data-provider');
+const { ResourceType, PermissionBits } = require('@because/data-provider');
 const {
   getUserEffectivePermissions,
   updateResourcePermissions,

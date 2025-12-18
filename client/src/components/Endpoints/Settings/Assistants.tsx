@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
-import { Label, HoverCard, SelectDropDown, HoverCardTrigger } from '@aipyq/client';
-import type { Assistant, TPreset } from '@aipyq/data-provider';
+import { Label, HoverCard, SelectDropDown, HoverCardTrigger } from '@because/client';
+import type { Assistant, TPreset } from '@because/data-provider';
 import type { TModelSelectProps, Option } from '~/common';
 import {
   cn,

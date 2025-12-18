@@ -5,8 +5,8 @@ import {
   DialogTemplate,
   useToastContext,
   TrashIcon,
-} from '@aipyq/client';
-import type { Assistant, AssistantCreateParams, AssistantsEndpoint } from '@aipyq/data-provider';
+} from '@because/client';
+import type { Assistant, AssistantCreateParams, AssistantsEndpoint } from '@because/data-provider';
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useDeleteAssistantMutation } from '~/data-provider';
 import { useLocalize, useSetIndexOptions } from '~/hooks';

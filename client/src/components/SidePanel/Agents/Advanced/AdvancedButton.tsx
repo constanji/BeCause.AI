@@ -1,6 +1,6 @@
 import React from 'react';
 import { Settings2 } from 'lucide-react';
-import { Button } from '@aipyq/client';
+import { Button } from '@because/client';
 import { useLocalize } from '~/hooks';
 import { Panel } from '~/common';
 

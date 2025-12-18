@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai';
-import { Dropdown } from '@aipyq/client';
+import { Dropdown } from '@because/client';
 import { fontSizeAtom } from '~/store/fontSize';
 import { useLocalize } from '~/hooks';
 

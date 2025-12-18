@@ -7,9 +7,9 @@ import {
   StdioOptionsSchema,
   WebSocketOptionsSchema,
   StreamableHTTPOptionsSchema,
-} from '@aipyq/data-provider';
-import type { SearchResultData, UIResource, TPlugin } from '@aipyq/data-provider';
-import type { TokenMethods, JsonSchemaType, IUser } from '@aipyq/data-schemas';
+} from '@because/data-provider';
+import type { SearchResultData, UIResource, TPlugin } from '@because/data-provider';
+import type { TokenMethods, JsonSchemaType, IUser } from '@because/data-schemas';
 import type * as t from '@modelcontextprotocol/sdk/types.js';
 import type { FlowStateManager } from '~/flow/manager';
 import type { RequestBody } from '~/types/http';

@@ -1,8 +1,8 @@
 import { useState, useRef, useCallback } from 'react';
 import { Import } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
-import { QueryKeys, TStartupConfig } from '@aipyq/data-provider';
-import { Spinner, useToastContext, Label, Button } from '@aipyq/client';
+import { QueryKeys, TStartupConfig } from '@because/data-provider';
+import { Spinner, useToastContext, Label, Button } from '@because/client';
 import { useUploadConversationsMutation } from '~/data-provider';
 import { NotificationSeverity } from '~/common';
 import { useLocalize } from '~/hooks';

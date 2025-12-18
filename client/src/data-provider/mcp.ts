@@ -1,11 +1,11 @@
 /**
  * Dedicated queries for MCP (Model Context Protocol) tools
- * Decoupled from regular Aipyq tools
+ * Decoupled from regular Because tools
  */
 import { useQuery } from '@tanstack/react-query';
-import { QueryKeys, dataService } from '@aipyq/data-provider';
+import { QueryKeys, dataService } from '@because/data-provider';
 import type { UseQueryOptions, QueryObserverResult } from '@tanstack/react-query';
-import type { MCPServersResponse } from '@aipyq/data-provider';
+import type { MCPServersResponse } from '@because/data-provider';
 
 /**
  * Hook for fetching MCP-specific tools

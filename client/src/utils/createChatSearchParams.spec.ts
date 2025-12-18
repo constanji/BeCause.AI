@@ -1,5 +1,5 @@
-import { EModelEndpoint, Constants } from '@aipyq/data-provider';
-import type { TConversation, TPreset } from '@aipyq/data-provider';
+import { EModelEndpoint, Constants } from '@because/data-provider';
+import type { TConversation, TPreset } from '@because/data-provider';
 import createChatSearchParams from './createChatSearchParams';
 
 describe('createChatSearchParams', () => {

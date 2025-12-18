@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Copy, CopyCheck } from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
-import { AuthTypeEnum } from '@aipyq/data-provider';
-import { Button, useToastContext } from '@aipyq/client';
+import { AuthTypeEnum } from '@because/data-provider';
+import { Button, useToastContext } from '@because/client';
 import { useLocalize, useCopyToClipboard } from '~/hooks';
 import { cn } from '~/utils';
 

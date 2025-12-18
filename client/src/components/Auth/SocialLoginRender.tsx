@@ -6,13 +6,13 @@ import {
   DiscordIcon,
   AppleIcon,
   SamlIcon,
-} from '@aipyq/client';
+} from '@because/client';
 
 import SocialButton from './SocialButton';
 
 import { useLocalize } from '~/hooks';
 
-import { TStartupConfig } from '@aipyq/data-provider';
+import { TStartupConfig } from '@because/data-provider';
 
 function SocialLoginRender({
   startupConfig,

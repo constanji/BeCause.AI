@@ -1,8 +1,8 @@
 import React, { useRef, useState, useMemo, useEffect } from 'react';
 import copy from 'copy-to-clipboard';
 import { InfoIcon } from 'lucide-react';
-import { Tools } from '@aipyq/data-provider';
-import { Clipboard, CheckMark } from '@aipyq/client';
+import { Tools } from '@because/data-provider';
+import { Clipboard, CheckMark } from '@because/client';
 import type { CodeBarProps } from '~/common';
 import ResultSwitcher from '~/components/Messages/Content/ResultSwitcher';
 import { useToolCallsMapContext, useMessageContext } from '~/Providers';

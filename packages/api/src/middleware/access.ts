@@ -1,13 +1,13 @@
-import { logger } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
 import {
   Permissions,
   EndpointURLs,
   EModelEndpoint,
   PermissionTypes,
   isAgentsEndpoint,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type { NextFunction, Request as ServerRequest, Response as ServerResponse } from 'express';
-import type { IRole, IUser } from '@aipyq/data-schemas';
+import type { IRole, IUser } from '@because/data-schemas';
 
 export function skipAgentCheck(req?: ServerRequest): boolean {
   if (!req || !req?.body?.endpoint) {

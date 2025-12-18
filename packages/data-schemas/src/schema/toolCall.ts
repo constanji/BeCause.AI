@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document, Types } from 'mongoose';
-import type { TAttachment } from '@aipyq/data-provider';
+import type { TAttachment } from '@because/data-provider';
 
 export interface IToolCallData extends Document {
   conversationId: string;

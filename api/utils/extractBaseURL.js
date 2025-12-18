@@ -1,4 +1,4 @@
-const { CohereConstants } = require('@aipyq/data-provider');
+const { CohereConstants } = require('@because/data-provider');
 
 /**
  * Extracts a valid OpenAI baseURL from a given string, matching "url/v1," followed by an optional suffix.

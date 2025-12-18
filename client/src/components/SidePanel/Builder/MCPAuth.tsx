@@ -4,7 +4,7 @@ import {
   AuthorizationTypeEnum,
   TokenExchangeMethodEnum,
   AuthTypeEnum,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import ActionsAuth from '~/components/SidePanel/Builder/ActionsAuth';
 
 export default function MCPAuth() {

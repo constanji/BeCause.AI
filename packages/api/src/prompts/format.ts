@@ -1,5 +1,5 @@
-import { SystemCategories } from '@aipyq/data-provider';
-import type { IPromptGroupDocument as IPromptGroup } from '@aipyq/data-schemas';
+import { SystemCategories } from '@because/data-provider';
+import type { IPromptGroupDocument as IPromptGroup } from '@because/data-schemas';
 import type { Types } from 'mongoose';
 import type { PromptGroupsListResponse } from '~/types';
 

@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const { MeiliSearch } = require('meilisearch');
-const { logger } = require('@aipyq/data-schemas');
-const { CacheKeys } = require('@aipyq/data-provider');
-const { isEnabled, FlowStateManager } = require('@aipyq/api');
+const { logger } = require('@because/data-schemas');
+const { CacheKeys } = require('@because/data-provider');
+const { isEnabled, FlowStateManager } = require('@because/api');
 const { getLogStores } = require('~/cache');
 
 const Conversation = mongoose.models.Conversation;

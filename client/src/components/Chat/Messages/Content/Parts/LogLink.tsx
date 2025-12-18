@@ -1,5 +1,5 @@
 import React from 'react';
-import { useToastContext } from '@aipyq/client';
+import { useToastContext } from '@because/client';
 import { useCodeOutputDownload } from '~/data-provider';
 
 interface LogLinkProps {

@@ -1,15 +1,15 @@
 import { useRecoilValue } from 'recoil';
 import { ChevronDownIcon } from 'lucide-react';
 import { useState, useEffect, useMemo } from 'react';
-import { useAvailablePluginsQuery } from '@aipyq/data-provider/react-query';
+import { useAvailablePluginsQuery } from '@because/data-provider/react-query';
 import {
   Button,
   SelectDropDown,
   SelectDropDownPop,
   MultiSelectDropDown,
   useMediaQuery,
-} from '@aipyq/client';
-import type { TPlugin } from '@aipyq/data-provider';
+} from '@because/client';
+import type { TPlugin } from '@because/data-provider';
 import type { TModelSelectProps } from '~/common';
 import { useSetIndexOptions, useAuthContext, useLocalize } from '~/hooks';
 import { cn, cardStyle, selectPlugins, processPlugins } from '~/utils';

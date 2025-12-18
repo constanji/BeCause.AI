@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import { OptionTypes } from '@aipyq/data-provider';
-import type { DynamicSettingProps } from '@aipyq/data-provider';
-import { Label, Checkbox, HoverCard, HoverCardTrigger } from '@aipyq/client';
+import { OptionTypes } from '@because/data-provider';
+import type { DynamicSettingProps } from '@because/data-provider';
+import { Label, Checkbox, HoverCard, HoverCardTrigger } from '@because/client';
 import { TranslationKeys, useLocalize, useDebouncedInput, useParameterEffects } from '~/hooks';
 import { useChatContext } from '~/Providers';
 import OptionHover from './OptionHover';

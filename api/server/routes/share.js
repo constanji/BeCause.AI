@@ -1,6 +1,6 @@
 const express = require('express');
-const { isEnabled } = require('@aipyq/api');
-const { logger } = require('@aipyq/data-schemas');
+const { isEnabled } = require('@because/api');
+const { logger } = require('@because/data-schemas');
 const {
   getSharedMessages,
   createSharedLink,

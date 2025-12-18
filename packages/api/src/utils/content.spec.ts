@@ -1,5 +1,5 @@
-import { ContentTypes, ToolCallTypes } from '@aipyq/data-provider';
-import type { Agents, PartMetadata, TMessageContentParts } from '@aipyq/data-provider';
+import { ContentTypes, ToolCallTypes } from '@because/data-provider';
+import type { Agents, PartMetadata, TMessageContentParts } from '@because/data-provider';
 import type { ToolCall } from '@langchain/core/messages/tool';
 import { filterMalformedContentParts } from './content';
 

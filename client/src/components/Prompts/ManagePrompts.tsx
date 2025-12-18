@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { Button } from '@aipyq/client';
+import { Button } from '@because/client';
 import { useLocalize, useCustomLink } from '~/hooks';
 import { cn } from '~/utils';
 import store from '~/store';

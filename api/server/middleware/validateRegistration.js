@@ -1,4 +1,4 @@
-const { isEnabled } = require('@aipyq/api');
+const { isEnabled } = require('@because/api');
 
 function validateRegistration(req, res, next) {
   if (req.invite) {

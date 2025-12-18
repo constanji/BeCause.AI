@@ -1,4 +1,4 @@
-import type * as t from '@aipyq/data-provider';
+import type * as t from '@because/data-provider';
 import type { TPluginMap } from '~/common';
 
 /** Maps Attachments by `toolCallId` for quick lookup */

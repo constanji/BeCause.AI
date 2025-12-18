@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, useMediaQuery } from '@aipyq/client';
+import { Button, useMediaQuery } from '@because/client';
 import { Users, X, ExternalLink } from 'lucide-react';
-import { ResourceType } from '@aipyq/data-provider';
-import type { TPrincipal, AccessRoleIds } from '@aipyq/data-provider';
+import { ResourceType } from '@because/data-provider';
+import type { TPrincipal, AccessRoleIds } from '@because/data-provider';
 import AccessRolesPicker from '~/components/Sharing/AccessRolesPicker';
 import PrincipalAvatar from '~/components/Sharing/PrincipalAvatar';
 import { useLocalize } from '~/hooks';

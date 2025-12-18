@@ -1,5 +1,5 @@
-const { getLLMConfig } = require('@aipyq/api');
-const { EModelEndpoint } = require('@aipyq/data-provider');
+const { getLLMConfig } = require('@because/api');
+const { EModelEndpoint } = require('@because/data-provider');
 const { getUserKey, checkUserKeyExpiry } = require('~/server/services/UserService');
 const AnthropicClient = require('~/app/clients/AnthropicClient');
 

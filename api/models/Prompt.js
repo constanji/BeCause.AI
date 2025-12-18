@@ -1,11 +1,11 @@
 const { ObjectId } = require('mongodb');
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 const {
   Constants,
   SystemRoles,
   ResourceType,
   SystemCategories,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const {
   removeGroupFromAllProjects,
   removeGroupIdsFromProject,

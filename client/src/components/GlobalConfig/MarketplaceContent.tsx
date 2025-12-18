@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
-import { useMediaQuery } from '@aipyq/client';
-import { PermissionTypes, Permissions, QueryKeys, SystemRoles, PermissionBits } from '@aipyq/data-provider';
-import type t from '@aipyq/data-provider';
+import { useMediaQuery } from '@because/client';
+import { PermissionTypes, Permissions, QueryKeys, SystemRoles, PermissionBits } from '@because/data-provider';
+import type t from '@because/data-provider';
 import { useHasAccess, useLocalize, TranslationKeys, useAuthContext } from '~/hooks';
 import { useGetEndpointsQuery, useGetAgentCategoriesQuery } from '~/data-provider';
 import { useMarketplaceAgentsInfiniteQuery } from '~/data-provider/Agents';

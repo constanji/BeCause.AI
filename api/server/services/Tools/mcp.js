@@ -1,5 +1,5 @@
-const { logger } = require('@aipyq/data-schemas');
-const { CacheKeys, Constants } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { CacheKeys, Constants } = require('@because/data-provider');
 const { findToken, createToken, updateToken, deleteTokens } = require('~/models');
 const { getMCPManager, getFlowStateManager } = require('~/config');
 const { updateMCPServerTools } = require('~/server/services/Config');

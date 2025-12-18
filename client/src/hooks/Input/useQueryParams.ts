@@ -9,13 +9,13 @@ import {
   tQueryParamsSchema,
   isAssistantsEndpoint,
   PermissionBits,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type {
   TPreset,
   TEndpointsConfig,
   TStartupConfig,
   AgentListResponse,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type { ZodAny } from 'zod';
 import { getConvoSwitchLogic, getModelSpecIconURL, removeUnavailableTools, logger } from '~/utils';
 import { useAuthContext, useAgentsMap, useDefaultConvo, useSubmitMessage } from '~/hooks';

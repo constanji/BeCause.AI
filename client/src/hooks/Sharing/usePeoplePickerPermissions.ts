@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { PermissionTypes, PrincipalType, Permissions } from '@aipyq/data-provider';
+import { PermissionTypes, PrincipalType, Permissions } from '@because/data-provider';
 import { useHasAccess } from '~/hooks';
 
 /**

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { AuthKeys, googleBaseSchema } from '@aipyq/data-provider';
+import { AuthKeys, googleBaseSchema } from '@because/data-provider';
 
 export type GoogleParameters = z.infer<typeof googleBaseSchema>;
 

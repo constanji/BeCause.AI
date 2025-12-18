@@ -90,7 +90,7 @@ const createDefinition = (
   return { ...base, ...overrides } as SettingDefinition;
 };
 
-export const aipyq = {
+export const because = {
   modelLabel: {
     key: 'modelLabel',
     label: 'com_endpoint_custom_name',
@@ -155,10 +155,10 @@ export const aipyq = {
 
 const openAIParams: Record<string, SettingDefinition> = {
   chatGptLabel: {
-    ...aipyq.modelLabel,
+    ...because.modelLabel,
     key: 'chatGptLabel',
   },
-  promptPrefix: aipyq.promptPrefix,
+  promptPrefix: because.promptPrefix,
   temperature: createDefinition(baseDefinitions.temperature, {
     default: openAISettings.temperature.default,
     range: {
@@ -641,50 +641,50 @@ const google: Record<string, SettingDefinition> = {
 };
 
 const googleConfig: SettingsConfiguration = [
-  aipyq.modelLabel,
-  aipyq.promptPrefix,
-  aipyq.maxContextTokens,
+  because.modelLabel,
+  because.promptPrefix,
+  because.maxContextTokens,
   google.maxOutputTokens,
   google.temperature,
   google.topP,
   google.topK,
-  aipyq.resendFiles,
+  because.resendFiles,
   google.thinking,
   google.thinkingBudget,
   google.web_search,
-  aipyq.fileTokenLimit,
+  because.fileTokenLimit,
 ];
 
 const googleCol1: SettingsConfiguration = [
   baseDefinitions.model as SettingDefinition,
-  aipyq.modelLabel,
-  aipyq.promptPrefix,
+  because.modelLabel,
+  because.promptPrefix,
 ];
 
 const googleCol2: SettingsConfiguration = [
-  aipyq.maxContextTokens,
+  because.maxContextTokens,
   google.maxOutputTokens,
   google.temperature,
   google.topP,
   google.topK,
-  aipyq.resendFiles,
+  because.resendFiles,
   google.thinking,
   google.thinkingBudget,
   google.web_search,
-  aipyq.fileTokenLimit,
+  because.fileTokenLimit,
 ];
 
 const openAI: SettingsConfiguration = [
-  aipyq.modelLabel,
-  aipyq.promptPrefix,
-  aipyq.maxContextTokens,
+  because.modelLabel,
+  because.promptPrefix,
+  because.maxContextTokens,
   openAIParams.max_tokens,
   openAIParams.temperature,
   openAIParams.top_p,
   openAIParams.frequency_penalty,
   openAIParams.presence_penalty,
   baseDefinitions.stop,
-  aipyq.resendFiles,
+  because.resendFiles,
   baseDefinitions.imageDetail,
   openAIParams.web_search,
   openAIParams.reasoning_effort,
@@ -692,24 +692,24 @@ const openAI: SettingsConfiguration = [
   openAIParams.reasoning_summary,
   openAIParams.verbosity,
   openAIParams.disableStreaming,
-  aipyq.fileTokenLimit,
+  because.fileTokenLimit,
 ];
 
 const openAICol1: SettingsConfiguration = [
   baseDefinitions.model as SettingDefinition,
-  aipyq.modelLabel,
-  aipyq.promptPrefix,
+  because.modelLabel,
+  because.promptPrefix,
 ];
 
 const openAICol2: SettingsConfiguration = [
-  aipyq.maxContextTokens,
+  because.maxContextTokens,
   openAIParams.max_tokens,
   openAIParams.temperature,
   openAIParams.top_p,
   openAIParams.frequency_penalty,
   openAIParams.presence_penalty,
   baseDefinitions.stop,
-  aipyq.resendFiles,
+  because.resendFiles,
   baseDefinitions.imageDetail,
   openAIParams.reasoning_effort,
   openAIParams.reasoning_summary,
@@ -717,165 +717,165 @@ const openAICol2: SettingsConfiguration = [
   openAIParams.useResponsesApi,
   openAIParams.web_search,
   openAIParams.disableStreaming,
-  aipyq.fileTokenLimit,
+  because.fileTokenLimit,
 ];
 
 const anthropicConfig: SettingsConfiguration = [
-  aipyq.modelLabel,
-  aipyq.promptPrefix,
-  aipyq.maxContextTokens,
+  because.modelLabel,
+  because.promptPrefix,
+  because.maxContextTokens,
   anthropic.maxOutputTokens,
   anthropic.temperature,
   anthropic.topP,
   anthropic.topK,
-  aipyq.resendFiles,
+  because.resendFiles,
   anthropic.promptCache,
   anthropic.thinking,
   anthropic.thinkingBudget,
   anthropic.web_search,
-  aipyq.fileTokenLimit,
+  because.fileTokenLimit,
 ];
 
 const anthropicCol1: SettingsConfiguration = [
   baseDefinitions.model as SettingDefinition,
-  aipyq.modelLabel,
-  aipyq.promptPrefix,
+  because.modelLabel,
+  because.promptPrefix,
 ];
 
 const anthropicCol2: SettingsConfiguration = [
-  aipyq.maxContextTokens,
+  because.maxContextTokens,
   anthropic.maxOutputTokens,
   anthropic.temperature,
   anthropic.topP,
   anthropic.topK,
-  aipyq.resendFiles,
+  because.resendFiles,
   anthropic.promptCache,
   anthropic.thinking,
   anthropic.thinkingBudget,
   anthropic.web_search,
-  aipyq.fileTokenLimit,
+  because.fileTokenLimit,
 ];
 
 const bedrockAnthropic: SettingsConfiguration = [
-  aipyq.modelLabel,
+  because.modelLabel,
   bedrock.system,
-  aipyq.maxContextTokens,
+  because.maxContextTokens,
   bedrock.maxTokens,
   bedrock.temperature,
   bedrock.topP,
   bedrock.topK,
   baseDefinitions.stop,
-  aipyq.resendFiles,
+  because.resendFiles,
   bedrock.region,
   bedrock.promptCache,
   anthropic.thinking,
   anthropic.thinkingBudget,
-  aipyq.fileTokenLimit,
+  because.fileTokenLimit,
 ];
 
 const bedrockMistral: SettingsConfiguration = [
-  aipyq.modelLabel,
-  aipyq.promptPrefix,
-  aipyq.maxContextTokens,
+  because.modelLabel,
+  because.promptPrefix,
+  because.maxContextTokens,
   bedrock.maxTokens,
   mistral.temperature,
   mistral.topP,
-  aipyq.resendFiles,
+  because.resendFiles,
   bedrock.region,
-  aipyq.fileTokenLimit,
+  because.fileTokenLimit,
 ];
 
 const bedrockCohere: SettingsConfiguration = [
-  aipyq.modelLabel,
-  aipyq.promptPrefix,
-  aipyq.maxContextTokens,
+  because.modelLabel,
+  because.promptPrefix,
+  because.maxContextTokens,
   bedrock.maxTokens,
   cohere.temperature,
   cohere.topP,
-  aipyq.resendFiles,
+  because.resendFiles,
   bedrock.region,
-  aipyq.fileTokenLimit,
+  because.fileTokenLimit,
 ];
 
 const bedrockGeneral: SettingsConfiguration = [
-  aipyq.modelLabel,
-  aipyq.promptPrefix,
-  aipyq.maxContextTokens,
+  because.modelLabel,
+  because.promptPrefix,
+  because.maxContextTokens,
   meta.temperature,
   meta.topP,
-  aipyq.resendFiles,
+  because.resendFiles,
   bedrock.region,
   bedrock.promptCache,
-  aipyq.fileTokenLimit,
+  because.fileTokenLimit,
 ];
 
 const bedrockAnthropicCol1: SettingsConfiguration = [
   baseDefinitions.model as SettingDefinition,
-  aipyq.modelLabel,
+  because.modelLabel,
   bedrock.system,
   baseDefinitions.stop,
 ];
 
 const bedrockAnthropicCol2: SettingsConfiguration = [
-  aipyq.maxContextTokens,
+  because.maxContextTokens,
   bedrock.maxTokens,
   bedrock.temperature,
   bedrock.topP,
   bedrock.topK,
-  aipyq.resendFiles,
+  because.resendFiles,
   bedrock.region,
   bedrock.promptCache,
   anthropic.thinking,
   anthropic.thinkingBudget,
-  aipyq.fileTokenLimit,
+  because.fileTokenLimit,
 ];
 
 const bedrockMistralCol1: SettingsConfiguration = [
   baseDefinitions.model as SettingDefinition,
-  aipyq.modelLabel,
-  aipyq.promptPrefix,
+  because.modelLabel,
+  because.promptPrefix,
 ];
 
 const bedrockMistralCol2: SettingsConfiguration = [
-  aipyq.maxContextTokens,
+  because.maxContextTokens,
   bedrock.maxTokens,
   mistral.temperature,
   mistral.topP,
-  aipyq.resendFiles,
+  because.resendFiles,
   bedrock.region,
-  aipyq.fileTokenLimit,
+  because.fileTokenLimit,
 ];
 
 const bedrockCohereCol1: SettingsConfiguration = [
   baseDefinitions.model as SettingDefinition,
-  aipyq.modelLabel,
-  aipyq.promptPrefix,
+  because.modelLabel,
+  because.promptPrefix,
 ];
 
 const bedrockCohereCol2: SettingsConfiguration = [
-  aipyq.maxContextTokens,
+  because.maxContextTokens,
   bedrock.maxTokens,
   cohere.temperature,
   cohere.topP,
-  aipyq.resendFiles,
+  because.resendFiles,
   bedrock.region,
-  aipyq.fileTokenLimit,
+  because.fileTokenLimit,
 ];
 
 const bedrockGeneralCol1: SettingsConfiguration = [
   baseDefinitions.model as SettingDefinition,
-  aipyq.modelLabel,
-  aipyq.promptPrefix,
+  because.modelLabel,
+  because.promptPrefix,
 ];
 
 const bedrockGeneralCol2: SettingsConfiguration = [
-  aipyq.maxContextTokens,
+  because.maxContextTokens,
   meta.temperature,
   meta.topP,
-  aipyq.resendFiles,
+  because.resendFiles,
   bedrock.region,
   bedrock.promptCache,
-  aipyq.fileTokenLimit,
+  because.fileTokenLimit,
 ];
 
 export const paramSettings: Record<string, SettingsConfiguration | undefined> = {

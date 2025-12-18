@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 const {
   verifyTOTP,
   getTOTPSecret,

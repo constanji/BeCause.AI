@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Input } from '@aipyq/client';
+import { Input } from '@because/client';
 import { useLocalize } from '~/hooks';
 import { Info } from 'lucide-react';
 

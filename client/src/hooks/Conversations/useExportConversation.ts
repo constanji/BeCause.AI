@@ -10,13 +10,13 @@ import {
   ToolCallTypes,
   imageGenTools,
   isImageVisionTool,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type {
   TMessageContentParts,
   TConversation,
   TMessage,
   TPreset,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import useBuildMessageTree from '~/hooks/Messages/useBuildMessageTree';
 import { useScreenshot } from '~/hooks/ScreenshotContext';
 import { cleanupPreset } from '~/utils';

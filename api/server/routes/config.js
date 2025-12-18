@@ -1,18 +1,18 @@
 const express = require('express');
-const { logger } = require('@aipyq/data-schemas');
-const { isEnabled, getBalanceConfig } = require('@aipyq/api');
+const { logger } = require('@because/data-schemas');
+const { isEnabled, getBalanceConfig } = require('@because/api');
 const {
   Constants,
   CacheKeys,
   removeNullishValues,
   defaultSocialLogins,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const { getLdapConfig } = require('~/server/services/Config/ldap');
 const { getAppConfig } = require('~/server/services/Config/app');
 const { getProjectByName } = require('~/models/Project');
 const { getMCPManager } = require('~/config');
 const { getLogStores } = require('~/cache');
-const { mcpServersRegistry } = require('@aipyq/api');
+const { mcpServersRegistry } = require('@because/api');
 const { requireJwtAuth, checkAdmin } = require('~/server/middleware');
 
 const router = express.Router();
@@ -117,7 +117,7 @@ router.get('/', async function (req, res) {
 
     /** @type {TStartupConfig} */
     const payload = {
-      appTitle: process.env.APP_TITLE || 'Aipyq',
+      appTitle: process.env.APP_TITLE || 'Because',
       socialLogins: appConfig?.registration?.socialLogins ?? defaultSocialLogins,
       discordLoginEnabled: !!process.env.DISCORD_CLIENT_ID && !!process.env.DISCORD_CLIENT_SECRET,
       facebookLoginEnabled:
@@ -150,7 +150,7 @@ router.get('/', async function (req, res) {
         isBirthday() ||
         isEnabled(process.env.SHOW_BIRTHDAY_ICON) ||
         process.env.SHOW_BIRTHDAY_ICON === '',
-      helpAndFaqURL: process.env.HELP_AND_FAQ_URL || 'https://www.aipyq.com',
+      helpAndFaqURL: process.env.HELP_AND_FAQ_URL || 'https://because.ai',
       interface: appConfig?.interfaceConfig,
       turnstile: appConfig?.turnstileConfig,
       modelSpecs: appConfig?.modelSpecs,

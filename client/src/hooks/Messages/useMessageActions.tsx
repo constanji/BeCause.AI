@@ -1,6 +1,6 @@
 import { useRecoilValue } from 'recoil';
 import { useCallback, useMemo, useState } from 'react';
-import { useUpdateFeedbackMutation } from '@aipyq/data-provider/react-query';
+import { useUpdateFeedbackMutation } from '@because/data-provider/react-query';
 import {
   isAssistantsEndpoint,
   isAgentsEndpoint,
@@ -9,7 +9,7 @@ import {
   TFeedback,
   toMinimalFeedback,
   SearchResultData,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type { TMessageProps } from '~/common';
 import {
   useChatContext,

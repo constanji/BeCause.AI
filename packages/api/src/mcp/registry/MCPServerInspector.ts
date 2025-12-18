@@ -1,5 +1,5 @@
-import { Constants } from '@aipyq/data-provider';
-import type { JsonSchemaType } from '@aipyq/data-schemas';
+import { Constants } from '@because/data-provider';
+import type { JsonSchemaType } from '@because/data-schemas';
 import type { MCPConnection } from '~/mcp/connection';
 import type * as t from '~/mcp/types';
 import { detectOAuthRequirement } from '~/mcp/oauth';
@@ -94,10 +94,10 @@ export class MCPServerInspector {
   }
 
   /**
-   * Converts server tools to Aipyq-compatible tool functions format.
+   * Converts server tools to Because-compatible tool functions format.
    * @param serverName - The name of the server
    * @param connection - The MCP connection
-   * @returns Tool functions formatted for Aipyq
+   * @returns Tool functions formatted for Because
    */
   public static async getToolFunctions(
     serverName: string,

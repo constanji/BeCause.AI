@@ -1,8 +1,8 @@
 import { Plus } from 'lucide-react';
 import React, { useMemo, useCallback, useRef, useState } from 'react';
-import { Button, useToastContext } from '@aipyq/client';
+import { Button, useToastContext } from '@because/client';
 import { useWatch, useForm, FormProvider, type FieldNamesMarkedBoolean } from 'react-hook-form';
-import { useGetModelsQuery } from '@aipyq/data-provider/react-query';
+import { useGetModelsQuery } from '@because/data-provider/react-query';
 import {
   Tools,
   SystemRoles,
@@ -10,9 +10,9 @@ import {
   EModelEndpoint,
   PermissionBits,
   isAssistantsEndpoint,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type { AgentForm, StringOption } from '~/common';
-import type { Agent } from '@aipyq/data-provider';
+import type { Agent } from '@because/data-provider';
 import {
   useCreateAgentMutation,
   useUpdateAgentMutation,

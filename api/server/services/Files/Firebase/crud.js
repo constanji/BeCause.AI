@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 const fetch = require('node-fetch');
-const { logger } = require('@aipyq/data-schemas');
-const { getFirebaseStorage } = require('@aipyq/api');
+const { logger } = require('@because/data-schemas');
+const { getFirebaseStorage } = require('@because/api');
 const { ref, uploadBytes, getDownloadURL, deleteObject } = require('firebase/storage');
 const { getBufferMetadata } = require('~/server/utils');
 

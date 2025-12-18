@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { ViolationTypes, ErrorTypes } from '@aipyq/data-provider';
-import type { Agent, TModelsConfig } from '@aipyq/data-provider';
+import { ViolationTypes, ErrorTypes } from '@because/data-provider';
+import type { Agent, TModelsConfig } from '@because/data-provider';
 import type { Request, Response } from 'express';
 
 /** Avatar schema shared between create and update */

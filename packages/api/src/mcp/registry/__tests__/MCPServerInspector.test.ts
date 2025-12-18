@@ -271,7 +271,7 @@ describe('MCPServerInspector', () => {
   });
 
   describe('getToolFunctions()', () => {
-    it('should convert MCP tools to Aipyq tool functions format', async () => {
+    it('should convert MCP tools to Because tool functions format', async () => {
       mockConnection.client.listTools = jest.fn().mockResolvedValue({
         tools: [
           {

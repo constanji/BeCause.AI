@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Spinner } from '@aipyq/client';
+import { Spinner } from '@because/client';
 import { MenuItem } from '@headlessui/react';
 import { BookmarkFilledIcon, BookmarkIcon } from '@radix-ui/react-icons';
 import type { FC } from 'react';

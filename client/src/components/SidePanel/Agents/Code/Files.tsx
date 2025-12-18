@@ -1,13 +1,13 @@
 import { useState, useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { AttachmentIcon } from '@aipyq/client';
+import { AttachmentIcon } from '@because/client';
 import {
   EToolResources,
   EModelEndpoint,
   mergeFileConfig,
   AgentCapabilities,
   getEndpointFileConfig,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type { ExtendedFile, AgentForm } from '~/common';
 import { useFileHandling, useLocalize, useLazyEffect } from '~/hooks';
 import FileRow from '~/components/Chat/Input/Files/FileRow';

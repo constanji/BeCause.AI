@@ -5,7 +5,7 @@ import {
   TConversation,
   tConvoUpdateSchema,
   EModelEndpoint,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type { TSetExample, TSetOption, TSetOptionsPayload } from '~/common';
 import usePresetIndexOptions from './usePresetIndexOptions';
 import { useChatContext } from '~/Providers/ChatContext';

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useMemo } from 'react';
-import type { EModelEndpoint, TConversation } from '@aipyq/data-provider';
+import type { EModelEndpoint, TConversation } from '@because/data-provider';
 import { useChatContext } from '~/Providers/ChatContext';
 
 interface ModelSelectorChatContextValue {

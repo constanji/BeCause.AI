@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { QueryKeys } from '@aipyq/data-provider';
+import { QueryKeys } from '@because/data-provider';
 import { useQueryClient } from '@tanstack/react-query';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
@@ -10,8 +10,8 @@ import {
   OGDialogHeader,
   OGDialogContent,
   useToastContext,
-} from '@aipyq/client';
-import type { TMessage } from '@aipyq/data-provider';
+} from '@because/client';
+import type { TMessage } from '@because/data-provider';
 import { useDeleteConversationMutation } from '~/data-provider';
 import { useLocalize, useNewConvo } from '~/hooks';
 import { NotificationSeverity } from '~/common';

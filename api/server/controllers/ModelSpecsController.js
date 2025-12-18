@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 const getConfigPath = require('~/server/utils/getConfigPath');
 
 // 保存模型规格配置
@@ -106,7 +106,7 @@ async function saveModelSpecsConfig(req, res) {
 
     // 清除缓存，强制重新加载配置
     const { getLogStores } = require('~/cache');
-    const { CacheKeys } = require('@aipyq/data-provider');
+    const { CacheKeys } = require('@because/data-provider');
     const cache = getLogStores(CacheKeys.CONFIG_STORE);
     await cache.delete(CacheKeys.STARTUP_CONFIG);
     await cache.delete(CacheKeys.APP_CONFIG);

@@ -1,5 +1,5 @@
-const { getBalanceConfig } = require('@aipyq/api');
-const { FileSources } = require('@aipyq/data-provider');
+const { getBalanceConfig } = require('@because/api');
+const { FileSources } = require('@because/data-provider');
 const { getStrategyFunctions } = require('~/server/services/Files/strategies');
 const { resizeAvatar } = require('~/server/services/Files/images/avatar');
 const { updateUser, createUser, getUserById } = require('~/models');

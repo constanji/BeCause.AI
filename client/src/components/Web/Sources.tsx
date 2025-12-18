@@ -2,7 +2,7 @@ import React, { useMemo, useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
 import * as Ariakit from '@ariakit/react';
 import { VisuallyHidden } from '@ariakit/react';
-import { Tools } from '@aipyq/data-provider';
+import { Tools } from '@because/data-provider';
 import { X, Globe, Newspaper, Image, ChevronDown, File, Download } from 'lucide-react';
 import {
   OGDialog,
@@ -12,8 +12,8 @@ import {
   OGDialogContent,
   OGDialogTrigger,
   useToastContext,
-} from '@aipyq/client';
-import type { ValidSource, ImageResult } from '@aipyq/data-provider';
+} from '@because/client';
+import type { ValidSource, ImageResult } from '@because/data-provider';
 import { FaviconImage, getCleanDomain } from '~/components/Web/SourceHovercard';
 import SourcesErrorBoundary from './SourcesErrorBoundary';
 import { useFileDownload } from '~/data-provider';

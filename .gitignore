@@ -68,8 +68,8 @@ bower_components/
 .flooignore
 
 #config file
-Aipyq.yaml
-Aipyq.yml
+because.yaml
+because.yml
 
 # Environment
 .npmrc
@@ -119,7 +119,7 @@ uploads/
 release/
 
 # Helm
-helm/Aipyq/Chart.lock
+helm/because/Chart.lock
 helm/**/charts/
 helm/**/.values.yaml
 

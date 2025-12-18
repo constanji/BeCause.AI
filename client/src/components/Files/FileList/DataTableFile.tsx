@@ -15,7 +15,7 @@ import type {
   VisibilityState,
   ColumnFiltersState,
 } from '@tanstack/react-table';
-import { FileContext } from '@aipyq/data-provider';
+import { FileContext } from '@because/data-provider';
 import {
   Input,
   Table,
@@ -31,8 +31,8 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
   DropdownMenuCheckboxItem,
-} from '@aipyq/client';
-import type { TFile } from '@aipyq/data-provider';
+} from '@because/client';
+import type { TFile } from '@because/data-provider';
 import type { AugmentedColumnDef } from '~/common';
 import ActionButton from '~/components/Files/ActionButton';
 import { useDeleteFilesFromTable } from '~/hooks/Files';

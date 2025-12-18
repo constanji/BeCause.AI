@@ -1,5 +1,5 @@
 /* eslint-disable i18next/no-literal-string */
-import { Button } from '@aipyq/client';
+import { Button } from '@because/client';
 import { useRouteError } from 'react-router-dom';
 import { useLocalize } from '~/hooks';
 import logger from '~/utils/logger';

@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { EModelEndpoint, Constants, openAISettings } = require('@aipyq/data-provider');
+const { EModelEndpoint, Constants, openAISettings } = require('@because/data-provider');
 const { bulkSaveConvos: _bulkSaveConvos } = require('~/models/Conversation');
 const { getImporter, processAssistantMessage } = require('./importers');
 const { ImportBatchBuilder } = require('./importBatchBuilder');
@@ -499,9 +499,9 @@ describe('importChatGptConvo', () => {
   });
 });
 
-describe('importAipyqConvo', () => {
+describe('importBecauseConvo', () => {
   const jsonDataNonRecursiveBranches = JSON.parse(
-    fs.readFileSync(path.join(__dirname, '__data__', 'Aipyq-opts-nonr-branches.json'), 'utf8'),
+    fs.readFileSync(path.join(__dirname, '__data__', 'Because-opts-nonr-branches.json'), 'utf8'),
   );
 
   it('should import conversation correctly', async () => {
@@ -510,7 +510,7 @@ describe('importAipyqConvo', () => {
     });
     const expectedNumberOfMessages = 6;
     const jsonData = JSON.parse(
-      fs.readFileSync(path.join(__dirname, '__data__', 'Aipyq-export.json'), 'utf8'),
+      fs.readFileSync(path.join(__dirname, '__data__', 'Because-export.json'), 'utf8'),
     );
     const requestUserId = 'user-123';
     const importBatchBuilder = new ImportBatchBuilder(requestUserId);
@@ -536,7 +536,7 @@ describe('importAipyqConvo', () => {
     });
 
     const jsonData = JSON.parse(
-      fs.readFileSync(path.join(__dirname, '__data__', 'Aipyq-linear.json'), 'utf8'),
+      fs.readFileSync(path.join(__dirname, '__data__', 'Because-linear.json'), 'utf8'),
     );
     const requestUserId = 'user-123';
     const importBatchBuilder = new ImportBatchBuilder(requestUserId);
@@ -566,7 +566,7 @@ describe('importAipyqConvo', () => {
 
   it('should maintain correct message hierarchy (tree parent/children relationship)', async () => {
     const jsonData = JSON.parse(
-      fs.readFileSync(path.join(__dirname, '__data__', 'Aipyq-tree.json'), 'utf8'),
+      fs.readFileSync(path.join(__dirname, '__data__', 'Because-tree.json'), 'utf8'),
     );
     const requestUserId = 'user-123';
     const importBatchBuilder = new ImportBatchBuilder(requestUserId);

@@ -1,4 +1,4 @@
-import { ErrorTypes, EModelEndpoint, mapModelToAzureConfig } from '@aipyq/data-provider';
+import { ErrorTypes, EModelEndpoint, mapModelToAzureConfig } from '@because/data-provider';
 import type {
   InitializeOpenAIOptionsParams,
   OpenAIConfigOptions,

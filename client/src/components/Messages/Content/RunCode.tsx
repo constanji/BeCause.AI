@@ -1,8 +1,8 @@
 import React, { useMemo, useCallback, useEffect } from 'react';
 import debounce from 'lodash/debounce';
 import { TerminalSquareIcon } from 'lucide-react';
-import { Tools, AuthType } from '@aipyq/data-provider';
-import { Spinner, useToastContext } from '@aipyq/client';
+import { Tools, AuthType } from '@because/data-provider';
+import { Spinner, useToastContext } from '@because/client';
 import type { CodeBarProps } from '~/common';
 import { useVerifyAgentToolAuth, useToolCallMutation } from '~/data-provider';
 import ApiKeyDialog from '~/components/SidePanel/Agents/Code/ApiKeyDialog';

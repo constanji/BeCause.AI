@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { PlusIcon } from 'lucide-react';
-import { Button, Checkbox, DotsIcon, FileIcon } from '@aipyq/client';
+import { Button, Checkbox, DotsIcon, FileIcon } from '@because/client';
 import type { ColumnDef } from '@tanstack/react-table';
-import type { TFile } from '@aipyq/data-provider';
+import type { TFile } from '@because/data-provider';
 import { formatDate, getFileType } from '~/utils';
 import { useLocalize } from '~/hooks';
 

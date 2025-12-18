@@ -1,6 +1,6 @@
-const { sleep } = require('@aipyq/agents');
-const { logger } = require('@aipyq/data-schemas');
-const { RunStatus, defaultOrderQuery, CacheKeys } = require('@aipyq/data-provider');
+const { sleep } = require('@because/agents');
+const { logger } = require('@because/data-schemas');
+const { RunStatus, defaultOrderQuery, CacheKeys } = require('@because/data-provider');
 const getLogStores = require('~/cache/getLogStores');
 const { retrieveRun } = require('./methods');
 const RunManager = require('./RunManager');

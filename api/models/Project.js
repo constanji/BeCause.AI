@@ -1,4 +1,4 @@
-const { GLOBAL_PROJECT_NAME } = require('@aipyq/data-provider').Constants;
+const { GLOBAL_PROJECT_NAME } = require('@because/data-provider').Constants;
 const { Project } = require('~/db/models');
 
 /**

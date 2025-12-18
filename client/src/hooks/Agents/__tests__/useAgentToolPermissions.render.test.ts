@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react';
-import { Tools, Constants, EToolResources } from '@aipyq/data-provider';
-import type { TEphemeralAgent } from '@aipyq/data-provider';
+import { Tools, Constants, EToolResources } from '@because/data-provider';
+import type { TEphemeralAgent } from '@because/data-provider';
 import useAgentToolPermissions from '../useAgentToolPermissions';
 
 // Mock dependencies

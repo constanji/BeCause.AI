@@ -1,17 +1,17 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Edit, Trash2, Eye, EyeOff, List, Grid } from 'lucide-react';
-import { Button, useToastContext } from '@aipyq/client';
-import { SystemRoles, ResourceType, AccessRoleIds } from '@aipyq/data-provider';
+import { Button, useToastContext } from '@because/client';
+import { SystemRoles, ResourceType, AccessRoleIds } from '@because/data-provider';
 import { useListAgentsQuery, useDeleteAgentMutation } from '~/data-provider';
-import { useUpdateResourcePermissionsMutation } from '@aipyq/data-provider/react-query';
-import { dataService } from '@aipyq/data-provider';
+import { useUpdateResourcePermissionsMutation } from '@because/data-provider/react-query';
+import { dataService } from '@because/data-provider';
 import { useAuthContext, useLocalize, useAgentDefaultPermissionLevel } from '~/hooks';
 import { AgentPanelProvider, useAgentPanelContext } from '~/Providers/AgentPanelContext';
 import { AgentPanelSwitchWithContext } from '~/components/SidePanel/Agents/AgentPanelSwitch';
 import { cn } from '~/utils';
 import { getAgentAvatarUrl } from '~/utils/agents';
-import type { Agent } from '@aipyq/data-provider';
+import type { Agent } from '@because/data-provider';
 
 // 包装组件，用于在编辑模式下设置agent_id
 function AgentPanelProviderWithAgentId({

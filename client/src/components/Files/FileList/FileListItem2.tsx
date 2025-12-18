@@ -1,7 +1,7 @@
 import React from 'react';
 import { FileIcon, PlusIcon } from 'lucide-react';
-import { Button, DotsIcon, TrashIcon } from '@aipyq/client';
-import type { TFile } from '@aipyq/data-provider';
+import { Button, DotsIcon, TrashIcon } from '@because/client';
+import type { TFile } from '@because/data-provider';
 import { useNavigate } from 'react-router-dom';
 
 type FileListItemProps = {

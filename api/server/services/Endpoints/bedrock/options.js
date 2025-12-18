@@ -5,7 +5,7 @@ const {
   bedrockInputParser,
   bedrockOutputParser,
   removeNullishValues,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const { getUserKey, checkUserKeyExpiry } = require('~/server/services/UserService');
 
 const getOptions = async ({ req, overrideModel, endpointOption }) => {

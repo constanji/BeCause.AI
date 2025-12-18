@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { logger, balanceSchema } from '@aipyq/data-schemas';
+import { logger, balanceSchema } from '@because/data-schemas';
 import type { NextFunction, Request as ServerRequest, Response as ServerResponse } from 'express';
-import type { IBalance } from '@aipyq/data-schemas';
+import type { IBalance } from '@because/data-schemas';
 import { createSetBalanceConfig } from './balance';
 
-jest.mock('@aipyq/data-schemas', () => ({
-  ...jest.requireActual('@aipyq/data-schemas'),
+jest.mock('@because/data-schemas', () => ({
+  ...jest.requireActual('@because/data-schemas'),
   logger: {
     error: jest.fn(),
   },

@@ -1,5 +1,5 @@
 import TextareaAutosize from 'react-textarea-autosize';
-import { EModelEndpoint, endpointSettings } from '@aipyq/data-provider';
+import { EModelEndpoint, endpointSettings } from '@because/data-provider';
 import {
   Input,
   Label,
@@ -8,7 +8,7 @@ import {
   InputNumber,
   SelectDropDown,
   HoverCardTrigger,
-} from '@aipyq/client';
+} from '@because/client';
 import type { TModelSelectProps, OnInputNumberChange } from '~/common';
 import { cn, defaultTextProps, optionText, removeFocusOutlines, removeFocusRings } from '~/utils';
 import OptionHoverAlt from '~/components/SidePanel/Parameters/OptionHover';

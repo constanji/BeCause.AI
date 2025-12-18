@@ -1,6 +1,6 @@
 /**
  * Loads theme configuration from environment variables
- * @returns {import('@aipyq/client').IThemeRGB | undefined}
+ * @returns {import('@because/client').IThemeRGB | undefined}
  */
 export function getThemeFromEnv() {
   // Check if any theme environment variables are set

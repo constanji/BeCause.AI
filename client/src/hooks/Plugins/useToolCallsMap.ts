@@ -1,4 +1,4 @@
-import { ToolCallResult } from '@aipyq/data-provider';
+import { ToolCallResult } from '@because/data-provider';
 import { useMemo } from 'react';
 import { useGetToolCalls } from '~/data-provider';
 import { mapToolCalls, logger } from '~/utils';

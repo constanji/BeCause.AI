@@ -1,14 +1,14 @@
 import { Suspense, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
-import { DelayedRender } from '@aipyq/client';
-import { ContentTypes } from '@aipyq/data-provider';
+import { DelayedRender } from '@because/client';
+import { ContentTypes } from '@because/data-provider';
 import type {
   Agents,
   TMessage,
   TAttachment,
   SearchResultData,
   TMessageContentParts,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import { UnfinishedMessage } from './MessageContent';
 import Sources from '~/components/Web/Sources';
 import { cn, mapAttachments } from '~/utils';

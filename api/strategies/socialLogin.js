@@ -1,6 +1,6 @@
-const { logger } = require('@aipyq/data-schemas');
-const { ErrorTypes } = require('@aipyq/data-provider');
-const { isEnabled, isEmailDomainAllowed } = require('@aipyq/api');
+const { logger } = require('@because/data-schemas');
+const { ErrorTypes } = require('@because/data-provider');
+const { isEnabled, isEmailDomainAllowed } = require('@because/api');
 const { createSocialUser, handleExistingUser } = require('./process');
 const { getAppConfig } = require('~/server/services/Config');
 const { findUser } = require('~/models');

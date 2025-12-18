@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
-import { OGDialog, OGDialogTemplate } from '@aipyq/client';
+import { OGDialog, OGDialogTemplate } from '@because/client';
 import {
   EToolResources,
   EModelEndpoint,
   defaultAgentCapabilities,
   isDocumentSupportedProvider,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import {
   ImageUpIcon,
   FileSearch,

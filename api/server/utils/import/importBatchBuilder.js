@@ -1,6 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
-const { logger } = require('@aipyq/data-schemas');
-const { EModelEndpoint, Constants, openAISettings } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { EModelEndpoint, Constants, openAISettings } = require('@because/data-provider');
 const { bulkIncrementTagCounts } = require('~/models/ConversationTag');
 const { bulkSaveConvos } = require('~/models/Conversation');
 const { bulkSaveMessages } = require('~/models/Message');

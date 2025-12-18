@@ -1,4 +1,4 @@
-import { Skeleton } from '@aipyq/client';
+import { Skeleton } from '@because/client';
 
 export default function SkeletonForm() {
   return (

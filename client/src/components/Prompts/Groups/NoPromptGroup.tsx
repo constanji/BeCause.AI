@@ -1,4 +1,4 @@
-import { Button } from '@aipyq/client';
+import { Button } from '@because/client';
 import { useNavigate } from 'react-router-dom';
 import { useLocalize } from '~/hooks';
 

@@ -1,11 +1,11 @@
-const { handleError } = require('@aipyq/api');
-const { logger } = require('@aipyq/data-schemas');
+const { handleError } = require('@because/api');
+const { logger } = require('@because/data-schemas');
 const {
   EndpointURLs,
   EModelEndpoint,
   isAgentsEndpoint,
   parseCompactConvo,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const azureAssistants = require('~/server/services/Endpoints/azureAssistants');
 const assistants = require('~/server/services/Endpoints/assistants');
 const { processFiles } = require('~/server/services/Files/process');

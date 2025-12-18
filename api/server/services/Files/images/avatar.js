@@ -1,8 +1,8 @@
 const sharp = require('sharp');
 const fs = require('fs').promises;
 const fetch = require('node-fetch');
-const { logger } = require('@aipyq/data-schemas');
-const { EImageOutputType } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { EImageOutputType } = require('@because/data-provider');
 const { resizeAndConvert } = require('./resize');
 
 /**

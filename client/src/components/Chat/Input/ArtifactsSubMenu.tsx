@@ -1,8 +1,8 @@
 import React from 'react';
 import * as Ariakit from '@ariakit/react';
-import { PinIcon } from '@aipyq/client';
+import { PinIcon } from '@because/client';
 import { ChevronRight, WandSparkles } from 'lucide-react';
-import { ArtifactModes } from '@aipyq/data-provider';
+import { ArtifactModes } from '@because/data-provider';
 import { useLocalize } from '~/hooks';
 import { cn } from '~/utils';
 

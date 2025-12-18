@@ -1,4 +1,4 @@
-const { EModelEndpoint, getEnabledEndpoints } = require('@aipyq/data-provider');
+const { EModelEndpoint, getEnabledEndpoints } = require('@because/data-provider');
 const loadAsyncEndpoints = require('./loadAsyncEndpoints');
 const { config } = require('./EndpointService');
 

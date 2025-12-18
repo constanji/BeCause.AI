@@ -1,4 +1,4 @@
-const { SystemRoles } = require('@aipyq/data-provider');
+const { SystemRoles } = require('@because/data-provider');
 const { getAssistant } = require('~/models/Assistant');
 
 /**

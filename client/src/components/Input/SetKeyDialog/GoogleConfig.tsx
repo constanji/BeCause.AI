@@ -1,7 +1,7 @@
 import React from 'react';
 import { object, string } from 'zod';
-import { Label } from '@aipyq/client';
-import { AuthKeys } from '@aipyq/data-provider';
+import { Label } from '@because/client';
+import { AuthKeys } from '@because/data-provider';
 import type { TConfigProps } from '~/common';
 import FileUpload from '~/components/Chat/Input/Files/FileUpload';
 import { useLocalize, useMultipleKeys } from '~/hooks';

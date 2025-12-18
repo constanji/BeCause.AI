@@ -1,5 +1,5 @@
-import { EModelEndpoint } from '@aipyq/data-provider';
-import type { TAssistantsMap } from '@aipyq/data-provider';
+import { EModelEndpoint } from '@because/data-provider';
+import type { TAssistantsMap } from '@because/data-provider';
 import { useListAssistantsQuery } from '~/data-provider';
 import { mapAssistants } from '~/utils';
 

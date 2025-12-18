@@ -2,7 +2,7 @@ const path = require('path');
 const bcrypt = require('bcryptjs');
 const readline = require('readline');
 const mongoose = require('mongoose');
-const { User } = require('@aipyq/data-schemas').createModels(mongoose);
+const { User } = require('@because/data-schemas').createModels(mongoose);
 require('module-alias')({ base: path.resolve(__dirname, '..', 'api') });
 const connect = require('./connect');
 

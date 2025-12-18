@@ -1,6 +1,6 @@
 import React from 'react';
-import { useMediaQuery } from '@aipyq/client';
-import type t from '@aipyq/data-provider';
+import { useMediaQuery } from '@because/client';
+import type t from '@because/data-provider';
 import { useLocalize, TranslationKeys } from '~/hooks';
 import { SmartLoader } from './SmartLoader';
 import { cn } from '~/utils';

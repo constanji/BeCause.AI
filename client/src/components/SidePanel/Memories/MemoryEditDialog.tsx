@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PermissionTypes, Permissions } from '@aipyq/data-provider';
+import { PermissionTypes, Permissions } from '@because/data-provider';
 import {
   OGDialog,
   OGDialogTemplate,
@@ -8,8 +8,8 @@ import {
   Input,
   Spinner,
   useToastContext,
-} from '@aipyq/client';
-import type { TUserMemory } from '@aipyq/data-provider';
+} from '@because/client';
+import type { TUserMemory } from '@because/data-provider';
 import { useUpdateMemoryMutation, useMemoriesQuery } from '~/data-provider';
 import { useLocalize, useHasAccess } from '~/hooks';
 

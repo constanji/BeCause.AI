@@ -1,6 +1,6 @@
 const cookies = require('cookie');
 const passport = require('passport');
-const { isEnabled } = require('@aipyq/api');
+const { isEnabled } = require('@because/api');
 
 /**
  * Custom Middleware to handle JWT authentication, with support for OpenID token reuse

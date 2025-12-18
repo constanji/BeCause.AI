@@ -1,5 +1,5 @@
-import { Capabilities, EModelEndpoint } from '@aipyq/data-provider';
-import type { Assistant, AssistantsEndpoint } from '@aipyq/data-provider';
+import { Capabilities, EModelEndpoint } from '@because/data-provider';
+import type { Assistant, AssistantsEndpoint } from '@because/data-provider';
 import type { Option, ExtendedFile } from './types';
 
 export type ActionsEndpoint = AssistantsEndpoint | EModelEndpoint.agents;

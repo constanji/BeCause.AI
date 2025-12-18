@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { AuthType, Tools, QueryKeys } from '@aipyq/data-provider';
-import { useUpdateUserPluginsMutation } from '@aipyq/data-provider/react-query';
+import { AuthType, Tools, QueryKeys } from '@because/data-provider';
+import { useUpdateUserPluginsMutation } from '@because/data-provider/react-query';
 
 const useAuthCodeTool = (options?: { isEntityTool: boolean }) => {
   const queryClient = useQueryClient();
@@ -26,7 +26,7 @@ const useAuthCodeTool = (options?: { isEntityTool: boolean }) => {
       updateUserPlugins.mutate({
         pluginKey: Tools.execute_code,
         action: 'install',
-        auth: { AIPYQ_CODE_API_KEY: apiKey },
+        auth: { BECAUSE_CODE_API_KEY: apiKey },
         isEntityTool,
       });
     },
@@ -37,7 +37,7 @@ const useAuthCodeTool = (options?: { isEntityTool: boolean }) => {
     updateUserPlugins.mutate({
       pluginKey: Tools.execute_code,
       action: 'uninstall',
-      auth: { AIPYQ_CODE_API_KEY: null },
+      auth: { BECAUSE_CODE_API_KEY: null },
       isEntityTool,
     });
   }, [updateUserPlugins, isEntityTool]);

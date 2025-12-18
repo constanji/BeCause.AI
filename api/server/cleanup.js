@@ -1,4 +1,4 @@
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 
 /** WeakMap to hold temporary data associated with requests */
 const requestDataMap = new WeakMap();

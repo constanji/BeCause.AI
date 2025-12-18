@@ -1,7 +1,7 @@
 import React from 'react';
-import { Spinner } from '@aipyq/client';
+import { Spinner } from '@because/client';
 import { SettingsIcon, AlertTriangle, KeyRound, PlugZap, X } from 'lucide-react';
-import type { MCPServerStatus, TPlugin } from '@aipyq/data-provider';
+import type { MCPServerStatus, TPlugin } from '@because/data-provider';
 import { useLocalize } from '~/hooks';
 
 let localize: ReturnType<typeof useLocalize>;

@@ -1,6 +1,6 @@
-import { EModelEndpoint } from '@aipyq/data-provider';
+import { EModelEndpoint } from '@because/data-provider';
 import { getPresetTitle, removeUnavailableTools } from '../presets';
-import type { TPreset, TPlugin } from '@aipyq/data-provider';
+import type { TPreset, TPlugin } from '@because/data-provider';
 
 describe('presets utils', () => {
   describe('getPresetTitle', () => {

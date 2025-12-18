@@ -1,7 +1,7 @@
 const { v4 } = require('uuid');
-const { sleep } = require('@aipyq/agents');
-const { logger } = require('@aipyq/data-schemas');
-const { sendEvent, getBalanceConfig, getModelMaxTokens } = require('@aipyq/api');
+const { sleep } = require('@because/agents');
+const { logger } = require('@because/data-schemas');
+const { sendEvent, getBalanceConfig, getModelMaxTokens } = require('@because/api');
 const {
   Time,
   Constants,
@@ -12,7 +12,7 @@ const {
   EModelEndpoint,
   retrievalMimeTypes,
   AssistantStreamEvents,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const {
   initThread,
   recordUsage,
@@ -72,7 +72,7 @@ const chatV2 = async (req, res) => {
   let parentMessageId = _parentId;
   /** @type {TMessage[]} */
   let previousMessages = [];
-  /** @type {import('@aipyq/data-provider').TConversation | null} */
+  /** @type {import('@because/data-provider').TConversation | null} */
   let conversation = null;
   /** @type {string[]} */
   let file_ids = [];

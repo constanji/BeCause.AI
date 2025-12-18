@@ -1,5 +1,5 @@
 const passport = require('passport');
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 
 const requireLocalAuth = (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {

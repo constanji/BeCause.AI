@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import Cookies from 'js-cookie';
 import { useRecoilState } from 'recoil';
-import { Dropdown } from '@aipyq/client';
+import { Dropdown } from '@because/client';
 import ArchivedChats from './ArchivedChats';
 import ToggleSwitch from '../ToggleSwitch';
 import { useLocalize } from '~/hooks';

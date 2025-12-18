@@ -1,7 +1,7 @@
 import { useMemo, useCallback, useState, useEffect, useRef } from 'react';
 import { easings } from '@react-spring/web';
-import { EModelEndpoint } from '@aipyq/data-provider';
-import { BirthdayIcon, TooltipAnchor, SplitText } from '@aipyq/client';
+import { EModelEndpoint } from '@because/data-provider';
+import { BirthdayIcon, TooltipAnchor, SplitText } from '@because/client';
 import { useChatContext, useAgentsMapContext, useAssistantsMapContext } from '~/Providers';
 import { useGetEndpointsQuery, useGetStartupConfig } from '~/data-provider';
 import ConvoIcon from '~/components/Endpoints/ConvoIcon';

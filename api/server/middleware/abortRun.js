@@ -1,6 +1,6 @@
-const { sendEvent } = require('@aipyq/api');
-const { logger } = require('@aipyq/data-schemas');
-const { CacheKeys, RunStatus, isUUID } = require('@aipyq/data-provider');
+const { sendEvent } = require('@because/api');
+const { logger } = require('@because/data-schemas');
+const { CacheKeys, RunStatus, isUUID } = require('@because/data-provider');
 const { initializeClient } = require('~/server/services/Endpoints/assistants');
 const { checkMessageGaps, recordUsage } = require('~/server/services/Threads');
 const { deleteMessages } = require('~/models/Message');

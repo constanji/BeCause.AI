@@ -8,7 +8,7 @@ const {
   memoryPermissionsSchema,
   marketplacePermissionsSchema,
   peoplePickerPermissionsSchema,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const { checkAdmin, requireJwtAuth } = require('~/server/middleware');
 const { updateRoleByName, getRoleByName } = require('~/models/Role');
 

@@ -1,5 +1,5 @@
-import { Spinner, FileIcon } from '@aipyq/client';
-import type { TFile } from '@aipyq/data-provider';
+import { Spinner, FileIcon } from '@because/client';
+import type { TFile } from '@because/data-provider';
 import type { ExtendedFile } from '~/common';
 import SourceIcon from './SourceIcon';
 import { cn } from '~/utils';

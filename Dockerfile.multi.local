@@ -1,5 +1,5 @@
 # Dockerfile.multi.local - 使用本地已构建的 dist 目录
-# 适用于本地已有构建好的 agents-Aipyq/dist 的情况
+# 适用于本地已有构建好的 agents-because/dist 的情况
 
 # Base for all builds
 FROM node:20-alpine AS base-min
@@ -20,20 +20,20 @@ COPY packages/client/package*.json ./packages/client/
 COPY client/package*.json ./client/
 COPY api/package*.json ./api/
 
-# Use pre-built agents-Aipyq dist (skip build)
+# Use pre-built agents-because dist (skip build)
 FROM base-min AS agents-build
 WORKDIR /app
-COPY agents-Aipyq/package.json ./agents-Aipyq/package.json
-COPY agents-Aipyq/husky-setup.js ./agents-Aipyq/
-COPY agents-Aipyq/dist ./agents-Aipyq/dist
+COPY agents-because/package.json ./agents-because/package.json
+COPY agents-because/husky-setup.js ./agents-because/
+COPY agents-because/dist ./agents-because/dist
 
 # Install all dependencies for every build
 FROM base-min AS base
 WORKDIR /app
 ENV NODE_OPTIONS="--max-old-space-size=8192"
-COPY --from=agents-build /app/agents-Aipyq/dist ./agents-Aipyq/dist
-COPY --from=agents-build /app/agents-Aipyq/package.json ./agents-Aipyq/package.json
-COPY --from=agents-build /app/agents-Aipyq/husky-setup.js ./agents-Aipyq/
+COPY --from=agents-build /app/agents-because/dist ./agents-because/dist
+COPY --from=agents-build /app/agents-because/package.json ./agents-because/package.json
+COPY --from=agents-build /app/agents-because/husky-setup.js ./agents-because/
 RUN npm ci
 
 # Build `data-provider` package
@@ -79,17 +79,17 @@ FROM base-min AS api-build
 COPY --from=ghcr.io/astral-sh/uv:0.6.13 /uv /uvx /bin/
 RUN uv --version
 WORKDIR /app
-# Copy package files and agents-Aipyq dist before installing dependencies
+# Copy package files and agents-because dist before installing dependencies
 COPY package*.json ./
-COPY --from=agents-build /app/agents-Aipyq/dist ./agents-Aipyq/dist
-COPY --from=agents-build /app/agents-Aipyq/package.json ./agents-Aipyq/package.json
-COPY --from=agents-build /app/agents-Aipyq/husky-setup.js ./agents-Aipyq/
+COPY --from=agents-build /app/agents-because/dist ./agents-because/dist
+COPY --from=agents-build /app/agents-because/package.json ./agents-because/package.json
+COPY --from=agents-build /app/agents-because/husky-setup.js ./agents-because/
 # Install only production deps
 RUN npm ci --omit=dev
 # 某些构建产物需要 mongodb 运行时依赖（可能未列为 prod dep），显式安装
 RUN npm install mongodb --omit=dev
-# 兼容大小写导入：@Aipyq/* -> @aipyq/*
-RUN ln -s /app/node_modules/@aipyq /app/node_modules/@Aipyq || true
+# 兼容大小写导入：@Because/* -> @because/*
+RUN ln -s /app/node_modules/@because /app/node_modules/@Because || true
 COPY api ./api
 COPY config ./config
 COPY specs ./specs

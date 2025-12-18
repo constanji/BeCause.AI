@@ -5,11 +5,11 @@
  * Make sure to install `tiktoken` and have it configured properly.
  */
 
-import { logger } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
 import type { Tiktoken } from 'tiktoken';
 import Tokenizer from './tokenizer';
 
-jest.mock('@aipyq/data-schemas', () => ({
+jest.mock('@because/data-schemas', () => ({
   logger: {
     error: jest.fn(),
   },

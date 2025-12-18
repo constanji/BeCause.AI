@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { EModelEndpoint } from '@aipyq/data-provider';
+import { EModelEndpoint } from '@because/data-provider';
 
 export const useKeyDialog = () => {
   const [keyDialogOpen, setKeyDialogOpen] = useState(false);

@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 const jwtDecode = require('jsonwebtoken/decode');
-const { ErrorTypes } = require('@aipyq/data-provider');
+const { ErrorTypes } = require('@because/data-provider');
 const { findUser, createUser, updateUser } = require('~/models');
 const { setupOpenId } = require('./openidStrategy');
 
@@ -15,11 +15,11 @@ jest.mock('~/server/services/Files/strategies', () => ({
 jest.mock('~/server/services/Config', () => ({
   getAppConfig: jest.fn().mockResolvedValue({}),
 }));
-jest.mock('@aipyq/api', () => ({
-  ...jest.requireActual('@aipyq/api'),
+jest.mock('@because/api', () => ({
+  ...jest.requireActual('@because/api'),
   isEnabled: jest.fn(() => false),
   isEmailDomainAllowed: jest.fn(() => true),
-  findOpenIDUser: jest.requireActual('@aipyq/api').findOpenIDUser,
+  findOpenIDUser: jest.requireActual('@because/api').findOpenIDUser,
   getBalanceConfig: jest.fn(() => ({
     enabled: false,
   })),
@@ -29,8 +29,8 @@ jest.mock('~/models', () => ({
   createUser: jest.fn(),
   updateUser: jest.fn(),
 }));
-jest.mock('@aipyq/data-schemas', () => ({
-  ...jest.requireActual('@aipyq/api'),
+jest.mock('@because/data-schemas', () => ({
+  ...jest.requireActual('@because/api'),
   logger: {
     info: jest.fn(),
     warn: jest.fn(),
@@ -535,7 +535,7 @@ describe('setupOpenId', () => {
       permissions: ['not-admin'],
     });
 
-    const { logger } = require('@aipyq/data-schemas');
+    const { logger } = require('@because/data-schemas');
 
     // Act
     const { user } = await validate(tokenset);
@@ -642,7 +642,7 @@ describe('setupOpenId', () => {
     });
 
     it('should log error and reject login when required role path does not exist in token', async () => {
-      const { logger } = require('@aipyq/data-schemas');
+      const { logger } = require('@because/data-schemas');
       process.env.OPENID_REQUIRED_ROLE = 'app-user';
       process.env.OPENID_REQUIRED_ROLE_PARAMETER_PATH = 'resource_access.nonexistent.roles';
 
@@ -669,7 +669,7 @@ describe('setupOpenId', () => {
     });
 
     it('should handle missing intermediate nested path gracefully', async () => {
-      const { logger } = require('@aipyq/data-schemas');
+      const { logger } = require('@because/data-schemas');
       process.env.OPENID_REQUIRED_ROLE = 'user';
       process.env.OPENID_REQUIRED_ROLE_PARAMETER_PATH = 'org.team.roles';
 
@@ -855,7 +855,7 @@ describe('setupOpenId', () => {
     });
 
     it('should handle empty object at nested path', async () => {
-      const { logger } = require('@aipyq/data-schemas');
+      const { logger } = require('@because/data-schemas');
       process.env.OPENID_REQUIRED_ROLE = 'user';
       process.env.OPENID_REQUIRED_ROLE_PARAMETER_PATH = 'access.roles';
 
@@ -875,7 +875,7 @@ describe('setupOpenId', () => {
     });
 
     it('should handle null value at intermediate path', async () => {
-      const { logger } = require('@aipyq/data-schemas');
+      const { logger } = require('@because/data-schemas');
       process.env.OPENID_REQUIRED_ROLE = 'user';
       process.env.OPENID_REQUIRED_ROLE_PARAMETER_PATH = 'data.roles';
 
@@ -899,7 +899,7 @@ describe('setupOpenId', () => {
       process.env.OPENID_ADMIN_ROLE_PARAMETER_PATH = 'roles';
       process.env.OPENID_ADMIN_ROLE_TOKEN_KIND = 'invalid';
 
-      const { logger } = require('@aipyq/data-schemas');
+      const { logger } = require('@because/data-schemas');
 
       jwtDecode.mockReturnValue({
         roles: ['requiredRole', 'admin'],
@@ -918,7 +918,7 @@ describe('setupOpenId', () => {
     });
 
     it('should reject login when roles path returns invalid type (object)', async () => {
-      const { logger } = require('@aipyq/data-schemas');
+      const { logger } = require('@because/data-schemas');
       process.env.OPENID_REQUIRED_ROLE = 'app-user';
       process.env.OPENID_REQUIRED_ROLE_PARAMETER_PATH = 'roles';
 
@@ -939,7 +939,7 @@ describe('setupOpenId', () => {
     });
 
     it('should reject login when roles path returns invalid type (number)', async () => {
-      const { logger } = require('@aipyq/data-schemas');
+      const { logger } = require('@because/data-schemas');
       process.env.OPENID_REQUIRED_ROLE = 'user';
       process.env.OPENID_REQUIRED_ROLE_PARAMETER_PATH = 'roleCount';
 

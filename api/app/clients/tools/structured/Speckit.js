@@ -4,12 +4,12 @@ const path = require('path');
 const { exec } = require('child_process');
 const { promisify } = require('util');
 const fs = require('fs').promises;
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 
 const execAsync = promisify(exec);
 
 /**
- * Speckit Tool - Spec-Driven Development commands for Aipyq
+ * Speckit Tool - Spec-Driven Development commands for Because
  * 
  * This tool allows agents to execute speckit commands like:
  * - /speckit.specify - Create feature specifications

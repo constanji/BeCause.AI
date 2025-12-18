@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Button, ThemeSelector } from '@aipyq/client';
+import { Button, ThemeSelector } from '@because/client';
 import { useLocalize } from '~/hooks';
 
 function PanelNavigation({

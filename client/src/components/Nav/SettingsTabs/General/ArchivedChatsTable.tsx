@@ -14,8 +14,8 @@ import {
   DataTable,
   useToastContext,
   useMediaQuery,
-} from '@aipyq/client';
-import type { ConversationListParams, TConversation } from '@aipyq/data-provider';
+} from '@because/client';
+import type { ConversationListParams, TConversation } from '@because/data-provider';
 import {
   useArchiveConvoMutation,
   useConversationsInfiniteQuery,

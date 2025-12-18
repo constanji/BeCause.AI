@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import type { TStartupConfig } from '@aipyq/data-provider';
+import type { TStartupConfig } from '@because/data-provider';
 import { useGetStartupConfig } from '~/data-provider';
 import { cn } from '~/utils';
 import AgentsManagement from './AgentsManagement';

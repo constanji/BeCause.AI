@@ -1,6 +1,6 @@
-import { logger } from '@aipyq/data-schemas';
-import { FileSources } from '@aipyq/data-provider';
-import type { AppConfig } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
+import { FileSources } from '@because/data-provider';
+import type { AppConfig } from '@because/data-schemas';
 import { initializeAzureBlobService } from '~/cdn/azure';
 import { initializeFirebase } from '~/cdn/firebase';
 import { initializeS3 } from '~/cdn/s3';

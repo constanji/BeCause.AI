@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
-import { EModelEndpoint } from '@aipyq/data-provider';
+import { EModelEndpoint } from '@because/data-provider';
 import { X, Waypoints, PlusCircle, ChevronDown } from 'lucide-react';
 import {
   Label,
@@ -11,8 +11,8 @@ import {
   ControlCombobox,
   HoverCardContent,
   HoverCardTrigger,
-} from '@aipyq/client';
-import type { TMessage, GraphEdge } from '@aipyq/data-provider';
+} from '@because/client';
+import type { TMessage, GraphEdge } from '@because/data-provider';
 import type { ControllerRenderProps } from 'react-hook-form';
 import type { AgentForm, OptionWithIcon } from '~/common';
 import MessageIcon from '~/components/Share/MessageIcon';

@@ -1,11 +1,11 @@
 const express = require('express');
 const request = require('supertest');
 
-jest.mock('@aipyq/agents', () => ({
+jest.mock('@because/agents', () => ({
   sleep: jest.fn(),
 }));
 
-jest.mock('@aipyq/api', () => ({
+jest.mock('@because/api', () => ({
   isEnabled: jest.fn(),
   createAxiosInstance: jest.fn(() => ({
     get: jest.fn(),
@@ -16,7 +16,7 @@ jest.mock('@aipyq/api', () => ({
   logAxiosError: jest.fn(),
 }));
 
-jest.mock('@aipyq/data-schemas', () => ({
+jest.mock('@because/data-schemas', () => ({
   logger: {
     debug: jest.fn(),
     info: jest.fn(),
@@ -86,7 +86,7 @@ jest.mock('multer', () => {
   }));
 });
 
-jest.mock('@aipyq/data-provider', () => ({
+jest.mock('@because/data-provider', () => ({
   CacheKeys: {
     GEN_TITLE: 'GEN_TITLE',
   },
@@ -191,7 +191,7 @@ describe('Convos Routes', () => {
       expect(response.text).toBe('Error clearing conversations');
 
       /** Verify error was logged */
-      const { logger } = require('@aipyq/data-schemas');
+      const { logger } = require('@because/data-schemas');
       expect(logger.error).toHaveBeenCalledWith('Error clearing conversations', expect.any(Error));
     });
 

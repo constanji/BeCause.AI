@@ -1,7 +1,7 @@
 const multer = require('multer');
 const express = require('express');
-const { logger } = require('@aipyq/data-schemas');
-const { CacheKeys } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { CacheKeys } = require('@because/data-provider');
 const { getVoices, streamAudio, textToSpeech } = require('~/server/services/Files/Audio');
 const { getLogStores } = require('~/cache');
 

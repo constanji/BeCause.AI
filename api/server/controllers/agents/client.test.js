@@ -1,17 +1,17 @@
-const { Providers } = require('@aipyq/agents');
-const { Constants, EModelEndpoint } = require('@aipyq/data-provider');
+const { Providers } = require('@because/agents');
+const { Constants, EModelEndpoint } = require('@because/data-provider');
 const AgentClient = require('./client');
 
-jest.mock('@aipyq/agents', () => ({
-  ...jest.requireActual('@aipyq/agents'),
+jest.mock('@because/agents', () => ({
+  ...jest.requireActual('@because/agents'),
   createMetadataAggregator: () => ({
     handleLLMEnd: jest.fn(),
     collected: [],
   }),
 }));
 
-jest.mock('@aipyq/api', () => ({
-  ...jest.requireActual('@aipyq/api'),
+jest.mock('@because/api', () => ({
+  ...jest.requireActual('@because/api'),
 }));
 
 // Mock getMCPManager
@@ -1513,7 +1513,7 @@ describe('AgentClient - titleConvo', () => {
 
     it('should handle mixed content types correctly', async () => {
       const { HumanMessage } = require('@langchain/core/messages');
-      const { ContentTypes } = require('@aipyq/data-provider');
+      const { ContentTypes } = require('@because/data-provider');
 
       const messages = [
         new HumanMessage({

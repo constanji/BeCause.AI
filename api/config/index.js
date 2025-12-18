@@ -1,6 +1,6 @@
 const { EventSource } = require('eventsource');
-const { Time } = require('@aipyq/data-provider');
-const { MCPManager, FlowStateManager, OAuthReconnectionManager } = require('@aipyq/api');
+const { Time } = require('@because/data-provider');
+const { MCPManager, FlowStateManager, OAuthReconnectionManager } = require('@because/api');
 const logger = require('./winston');
 
 global.EventSource = EventSource;

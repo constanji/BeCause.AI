@@ -36,7 +36,7 @@ export default {
       /**
        * Note: @rollup/plugin-typescript uses transpileModule by default.
        * Ensure tsconfig.json has skipLibCheck: true to skip type checking
-       * of declaration files from dependencies like @aipyq/agents.
+       * of declaration files from dependencies like @because/agents.
        */
     }),
   ],

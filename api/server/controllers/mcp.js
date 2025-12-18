@@ -1,16 +1,16 @@
 /**
  * MCP Tools Controller
- * Handles MCP-specific tool endpoints, decoupled from regular Aipyq tools
+ * Handles MCP-specific tool endpoints, decoupled from regular Because tools
  */
-const { logger } = require('@aipyq/data-schemas');
-const { Constants } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { Constants } = require('@because/data-provider');
 const {
   cacheMCPServerTools,
   getMCPServerTools,
   getAppConfig,
 } = require('~/server/services/Config');
 const { getMCPManager } = require('~/config');
-const { mcpServersRegistry } = require('@aipyq/api');
+const { mcpServersRegistry } = require('@because/api');
 
 /**
  * Get all MCP tools available to the user

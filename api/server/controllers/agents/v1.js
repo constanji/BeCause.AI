@@ -1,13 +1,13 @@
 const { z } = require('zod');
 const fs = require('fs').promises;
 const { nanoid } = require('nanoid');
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 const {
   agentCreateSchema,
   agentUpdateSchema,
   mergeAgentOcrConversion,
   convertOcrToContextInPlace,
-} = require('@aipyq/api');
+} = require('@because/api');
 const {
   Tools,
   Constants,
@@ -22,7 +22,7 @@ const {
   CacheKeys,
   Time,
   SystemRoles,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const {
   getListAgentsByAccess,
   countPromotedAgents,

@@ -1,5 +1,5 @@
 import { Schema } from 'mongoose';
-import { PermissionTypes, Permissions } from '@aipyq/data-provider';
+import { PermissionTypes, Permissions } from '@because/data-provider';
 import type { IRole } from '~/types';
 
 /**

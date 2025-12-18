@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { BookCopy } from 'lucide-react';
-import { TooltipAnchor } from '@aipyq/client';
+import { TooltipAnchor } from '@because/client';
 import { Content, Portal, Root, Trigger } from '@radix-ui/react-popover';
 import { EditPresetDialog, PresetItems } from './Presets';
 import { useLocalize, usePresets } from '~/hooks';

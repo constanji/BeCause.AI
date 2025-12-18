@@ -1,5 +1,5 @@
 {
-  "name": "@aipyq/data-provider/react-query",
+  "name": "@because/data-provider/react-query",
   "private": true,
   "main": "../index.js",
   "module": "./index.es.js",

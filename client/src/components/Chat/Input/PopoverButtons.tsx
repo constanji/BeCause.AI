@@ -1,6 +1,6 @@
 import { useRecoilState } from 'recoil';
-import { EModelEndpoint, SettingsViews } from '@aipyq/data-provider';
-import { Button, MessagesSquared, GPTIcon, AssistantIcon, DataIcon } from '@aipyq/client';
+import { EModelEndpoint, SettingsViews } from '@because/data-provider';
+import { Button, MessagesSquared, GPTIcon, AssistantIcon, DataIcon } from '@because/client';
 import type { ReactNode } from 'react';
 import { useChatContext } from '~/Providers';
 import { useLocalize } from '~/hooks';

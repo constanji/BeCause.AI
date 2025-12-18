@@ -1,7 +1,7 @@
 const fs = require('fs');
-const { sleep } = require('@aipyq/agents');
-const { logger } = require('@aipyq/data-schemas');
-const { FilePurpose } = require('@aipyq/data-provider');
+const { sleep } = require('@because/agents');
+const { logger } = require('@because/data-schemas');
+const { FilePurpose } = require('@because/data-provider');
 
 /**
  * Uploads a file that can be used across various OpenAI services.

@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
-import { QueryKeys, Constants } from '@aipyq/data-provider';
-import { TooltipAnchor, NewChatIcon, MobileSidebar, Sidebar, Button } from '@aipyq/client';
-import type { TMessage } from '@aipyq/data-provider';
+import { QueryKeys, Constants } from '@because/data-provider';
+import { TooltipAnchor, NewChatIcon, MobileSidebar, Sidebar, Button } from '@because/client';
+import type { TMessage } from '@because/data-provider';
 import { useLocalize, useNewConvo } from '~/hooks';
 import { clearMessagesCache } from '~/utils';
 import store from '~/store';

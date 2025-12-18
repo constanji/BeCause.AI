@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react';
-import { Tools, EToolResources } from '@aipyq/data-provider';
+import { Tools, EToolResources } from '@because/data-provider';
 import useAgentToolPermissions from '../useAgentToolPermissions';
 
 // Mock the dependencies

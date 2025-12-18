@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Button, OGDialog, OGDialogContent, TooltipAnchor } from '@aipyq/client';
+import { Button, OGDialog, OGDialogContent, TooltipAnchor } from '@because/client';
 import { X, ArrowDownToLine, PanelLeftOpen, PanelLeftClose, RotateCcw } from 'lucide-react';
 import { useLocalize } from '~/hooks';
 

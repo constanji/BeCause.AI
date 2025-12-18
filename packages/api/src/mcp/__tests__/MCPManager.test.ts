@@ -1,4 +1,4 @@
-import { logger } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
 import type * as t from '~/mcp/types';
 import { MCPManager } from '~/mcp/MCPManager';
 import { mcpServersRegistry } from '~/mcp/registry/MCPServersRegistry';
@@ -8,7 +8,7 @@ import { ConnectionsRepository } from '~/mcp/ConnectionsRepository';
 import { MCPConnection } from '../connection';
 
 // Mock external dependencies
-jest.mock('@aipyq/data-schemas', () => ({
+jest.mock('@because/data-schemas', () => ({
   logger: {
     info: jest.fn(),
     warn: jest.fn(),

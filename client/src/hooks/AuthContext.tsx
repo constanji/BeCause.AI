@@ -11,8 +11,8 @@ import {
 import { debounce } from 'lodash';
 import { useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
-import { setTokenHeader, SystemRoles } from '@aipyq/data-provider';
-import type * as t from '@aipyq/data-provider';
+import { setTokenHeader, SystemRoles } from '@because/data-provider';
+import type * as t from '@because/data-provider';
 import {
   useGetRole,
   useGetUserQuery,

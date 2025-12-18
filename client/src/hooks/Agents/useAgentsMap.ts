@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { PermissionBits } from '@aipyq/data-provider';
-import type { TAgentsMap } from '@aipyq/data-provider';
+import { PermissionBits } from '@because/data-provider';
+import type { TAgentsMap } from '@because/data-provider';
 import { useListAgentsQuery } from '~/data-provider';
 import { mapAgents } from '~/utils';
 

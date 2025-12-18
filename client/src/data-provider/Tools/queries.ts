@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { Constants, QueryKeys, dataService } from '@aipyq/data-provider';
+import { Constants, QueryKeys, dataService } from '@because/data-provider';
 import type { QueryObserverResult, UseQueryOptions } from '@tanstack/react-query';
-import type t from '@aipyq/data-provider';
+import type t from '@because/data-provider';
 
 export const useVerifyAgentToolAuth = (
   params: t.VerifyToolAuthParams,

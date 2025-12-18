@@ -6,7 +6,7 @@ import {
   HoverCardPortal,
   HoverCardTrigger,
   Checkbox,
-} from '@aipyq/client';
+} from '@because/client';
 import type { AssistantForm } from '~/common';
 import { useLocalize } from '~/hooks';
 import { ESide } from '~/common';

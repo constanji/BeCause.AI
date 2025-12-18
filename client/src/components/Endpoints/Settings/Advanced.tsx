@@ -1,5 +1,5 @@
 import TextareaAutosize from 'react-textarea-autosize';
-import { ImageDetail, imageDetailNumeric, imageDetailValue } from '@aipyq/data-provider';
+import { ImageDetail, imageDetailNumeric, imageDetailValue } from '@because/data-provider';
 import {
   Input,
   Label,
@@ -8,7 +8,7 @@ import {
   HoverCard,
   InputNumber,
   HoverCardTrigger,
-} from '@aipyq/client';
+} from '@because/client';
 import type { ValueType } from '@rc-component/mini-decimal';
 import type { TModelSelectProps } from '~/common';
 import { cn, defaultTextProps, optionText, removeFocusOutlines } from '~/utils';

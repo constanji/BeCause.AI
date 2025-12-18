@@ -1,5 +1,5 @@
-const { maxTokensMap } = require('@aipyq/api');
-const { EModelEndpoint } = require('@aipyq/data-provider');
+const { maxTokensMap } = require('@because/api');
+const { EModelEndpoint } = require('@because/data-provider');
 const {
   defaultRate,
   tokenValues,

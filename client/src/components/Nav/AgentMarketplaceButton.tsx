@@ -1,8 +1,8 @@
 import React, { useCallback, useContext } from 'react';
 import { LayoutGrid } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { PermissionTypes, Permissions } from '@aipyq/data-provider';
-import { TooltipAnchor, Button } from '@aipyq/client';
+import { PermissionTypes, Permissions } from '@because/data-provider';
+import { TooltipAnchor, Button } from '@because/client';
 import { useLocalize, useHasAccess, AuthContext } from '~/hooks';
 
 interface AgentMarketplaceButtonProps {

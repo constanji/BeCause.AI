@@ -1,9 +1,9 @@
 import React, { useMemo, useState, useCallback, useEffect, useLayoutEffect, useRef } from 'react';
-import { Button, useToastContext } from '@aipyq/client';
+import { Button, useToastContext } from '@because/client';
 import { useQueryClient } from '@tanstack/react-query';
-import { QueryKeys } from '@aipyq/data-provider';
-import { useReinitializeMCPServerMutation } from '@aipyq/data-provider/react-query';
-import type { TStartupConfig } from '@aipyq/data-provider';
+import { QueryKeys } from '@because/data-provider';
+import { useReinitializeMCPServerMutation } from '@because/data-provider/react-query';
+import type { TStartupConfig } from '@because/data-provider';
 import { useLocalize, useMCPConnectionStatus, useAuthContext } from '~/hooks';
 import { useGetStartupConfig } from '~/data-provider';
 import { cn } from '~/utils';

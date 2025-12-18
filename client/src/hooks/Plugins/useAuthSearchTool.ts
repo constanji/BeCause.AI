@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { AuthType, Tools, QueryKeys } from '@aipyq/data-provider';
-import { useUpdateUserPluginsMutation } from '@aipyq/data-provider/react-query';
+import { AuthType, Tools, QueryKeys } from '@because/data-provider';
+import { useUpdateUserPluginsMutation } from '@because/data-provider/react-query';
 
 export type SearchApiKeyFormData = {
   // Selected options

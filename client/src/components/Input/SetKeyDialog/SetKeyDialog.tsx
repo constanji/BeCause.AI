@@ -12,12 +12,12 @@ import {
   Label,
   OGDialogTrigger,
   Spinner,
-} from '@aipyq/client';
-import { EModelEndpoint, alternateName, isAssistantsEndpoint } from '@aipyq/data-provider';
+} from '@because/client';
+import { EModelEndpoint, alternateName, isAssistantsEndpoint } from '@because/data-provider';
 import {
   useRevokeAllUserKeysMutation,
   useRevokeUserKeyMutation,
-} from '@aipyq/data-provider/react-query';
+} from '@because/data-provider/react-query';
 import type { TDialogProps } from '~/common';
 import { useGetEndpointsQuery } from '~/data-provider';
 import { useUserKey, useLocalize } from '~/hooks';

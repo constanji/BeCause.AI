@@ -5,14 +5,14 @@ import { useRecoilValue } from 'recoil';
 import { Menu, Rocket } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import { useForm, FormProvider } from 'react-hook-form';
-import { Button, Skeleton, useToastContext } from '@aipyq/client';
+import { Button, Skeleton, useToastContext } from '@because/client';
 import {
   Permissions,
   ResourceType,
   PermissionBits,
   PermissionTypes,
-} from '@aipyq/data-provider';
-import type { TCreatePrompt, TPrompt, TPromptGroup } from '@aipyq/data-provider';
+} from '@because/data-provider';
+import type { TCreatePrompt, TPrompt, TPromptGroup } from '@because/data-provider';
 import {
   useGetPrompts,
   useGetPromptGroup,

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { Tools, EToolResources } from '@aipyq/data-provider';
-import type { TEphemeralAgent } from '@aipyq/data-provider';
+import { Tools, EToolResources } from '@because/data-provider';
+import type { TEphemeralAgent } from '@because/data-provider';
 import { useGetAgentByIdQuery } from '~/data-provider';
 import { useAgentsMapContext } from '~/Providers';
 import { isEphemeralAgent } from '~/common';

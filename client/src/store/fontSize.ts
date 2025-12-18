@@ -1,4 +1,4 @@
-import { applyFontSize } from '@aipyq/client';
+import { applyFontSize } from '@because/client';
 import { createStorageAtomWithEffect, initializeFromStorage } from './jotai-utils';
 
 const DEFAULT_FONT_SIZE = 'text-base';

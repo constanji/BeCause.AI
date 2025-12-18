@@ -3,7 +3,7 @@ const {
   EModelEndpoint,
   defaultOrderQuery,
   defaultAssistantsVersion,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const {
   initializeClient: initAzureClient,
 } = require('~/server/services/Endpoints/azureAssistants');

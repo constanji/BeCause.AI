@@ -1,6 +1,6 @@
 import React, { useRef, Dispatch, SetStateAction } from 'react';
-import { TConversationTag } from '@aipyq/data-provider';
-import { OGDialogTemplate, OGDialog, Button, Spinner, useToastContext } from '@aipyq/client';
+import { TConversationTag } from '@because/data-provider';
+import { OGDialogTemplate, OGDialog, Button, Spinner, useToastContext } from '@because/client';
 import { useConversationTagMutation } from '~/data-provider';
 import { NotificationSeverity } from '~/common';
 import BookmarkForm from './BookmarkForm';

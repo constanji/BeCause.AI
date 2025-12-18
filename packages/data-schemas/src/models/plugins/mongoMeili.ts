@@ -101,7 +101,7 @@ const getSyncConfig = () => ({
 });
 
 /**
- * Local implementation of parseTextParts to avoid dependency on @aipyq/data-provider
+ * Local implementation of parseTextParts to avoid dependency on @because/data-provider
  * Extracts text content from an array of content items
  */
 const parseTextParts = (content: ContentItem[]): string => {

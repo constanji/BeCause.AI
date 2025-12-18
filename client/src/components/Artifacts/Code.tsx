@@ -2,7 +2,7 @@ import React, { memo, useEffect, useRef, useState } from 'react';
 import copy from 'copy-to-clipboard';
 import rehypeKatex from 'rehype-katex';
 import ReactMarkdown from 'react-markdown';
-import { Button } from '@aipyq/client';
+import { Button } from '@because/client';
 import rehypeHighlight from 'rehype-highlight';
 import { Copy, CircleCheckBig } from 'lucide-react';
 import { handleDoubleClick, langSubset } from '~/utils';

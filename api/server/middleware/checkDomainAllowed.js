@@ -1,5 +1,5 @@
-const { logger } = require('@aipyq/data-schemas');
-const { isEmailDomainAllowed } = require('@aipyq/api');
+const { logger } = require('@because/data-schemas');
+const { isEmailDomainAllowed } = require('@because/api');
 const { getAppConfig } = require('~/server/services/Config');
 
 /**

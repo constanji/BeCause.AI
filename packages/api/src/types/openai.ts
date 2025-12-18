@@ -1,9 +1,9 @@
 import { z } from 'zod';
-import { openAISchema, EModelEndpoint } from '@aipyq/data-provider';
-import type { TEndpointOption, TAzureConfig, TEndpoint, TConfig } from '@aipyq/data-provider';
+import { openAISchema, EModelEndpoint } from '@because/data-provider';
+import type { TEndpointOption, TAzureConfig, TEndpoint, TConfig } from '@because/data-provider';
 import type { BindToolsInput } from '@langchain/core/language_models/chat_models';
-import type { OpenAIClientOptions, Providers } from '@aipyq/agents';
-import type { AppConfig } from '@aipyq/data-schemas';
+import type { OpenAIClientOptions, Providers } from '@because/agents';
+import type { AppConfig } from '@because/data-schemas';
 import type { AzureOptions } from './azure';
 
 export type OpenAIParameters = z.infer<typeof openAISchema>;

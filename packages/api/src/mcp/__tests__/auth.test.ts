@@ -1,5 +1,5 @@
-import type { PluginAuthMethods } from '@aipyq/data-schemas';
-import type { GenericTool } from '@aipyq/agents';
+import type { PluginAuthMethods } from '@because/data-schemas';
+import type { GenericTool } from '@because/agents';
 import { getPluginAuthMap } from '~/agents/auth';
 import { getUserMCPAuthMap } from '../auth';
 

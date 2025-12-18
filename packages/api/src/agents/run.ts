@@ -1,6 +1,6 @@
-import { Run, Providers } from '@aipyq/agents';
-import { providerEndpointMap, KnownEndpoints } from '@aipyq/data-provider';
-import { logger } from '@aipyq/data-schemas';
+import { Run, Providers } from '@because/agents';
+import { providerEndpointMap, KnownEndpoints } from '@because/data-provider';
+import { logger } from '@because/data-schemas';
 import type {
   MultiAgentGraphConfig,
   OpenAIClientOptions,
@@ -9,9 +9,9 @@ import type {
   GenericTool,
   RunConfig,
   IState,
-} from '@aipyq/agents';
-import type { IUser } from '@aipyq/data-schemas';
-import type { Agent } from '@aipyq/data-provider';
+} from '@because/agents';
+import type { IUser } from '@because/data-schemas';
+import type { Agent } from '@because/data-provider';
 import type * as t from '~/types';
 import { resolveHeaders, createSafeUser } from '~/utils/env';
 

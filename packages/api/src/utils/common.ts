@@ -1,4 +1,4 @@
-import { AuthType } from '@aipyq/data-provider';
+import { AuthType } from '@because/data-provider';
 
 /**
  * Checks if the given value is truthy by being either the boolean `true` or a string

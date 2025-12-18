@@ -1,16 +1,16 @@
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 const {
   EnvVar,
   Calculator,
   createSearchTool,
   createCodeExecutionTool,
-} = require('@aipyq/agents');
+} = require('@because/agents');
 const {
   checkAccess,
   createSafeUser,
   mcpToolPattern,
   loadWebSearchAuth,
-} = require('@aipyq/api');
+} = require('@because/api');
 const {
   Tools,
   Constants,
@@ -18,7 +18,7 @@ const {
   EToolResources,
   PermissionTypes,
   replaceSpecialVars,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const {
   availableTools,
   manifestToolMap,

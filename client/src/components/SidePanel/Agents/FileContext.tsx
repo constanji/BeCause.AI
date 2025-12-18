@@ -6,7 +6,7 @@ import {
   EToolResources,
   mergeFileConfig,
   getEndpointFileConfig,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import {
   HoverCard,
   DropdownPopup,
@@ -16,7 +16,7 @@ import {
   HoverCardPortal,
   HoverCardContent,
   HoverCardTrigger,
-} from '@aipyq/client';
+} from '@because/client';
 import type { ExtendedFile } from '~/common';
 import { useFileHandling, useLocalize, useLazyEffect, useSharePointFileHandling } from '~/hooks';
 import { useGetFileConfig, useGetStartupConfig } from '~/data-provider';

@@ -1,13 +1,13 @@
 import { useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
-import { EModelEndpoint, isAgentsEndpoint, isAssistantsEndpoint } from '@aipyq/data-provider';
+import { EModelEndpoint, isAgentsEndpoint, isAssistantsEndpoint } from '@because/data-provider';
 import type {
   TPreset,
   TModelSpec,
   TConversation,
   TAssistantsMap,
   TEndpointsConfig,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type { MentionOption, ConvoGenerator } from '~/common';
 import { getConvoSwitchLogic, getModelSpecIconURL, removeUnavailableTools, logger } from '~/utils';
 import { useDefaultConvo } from '~/hooks';

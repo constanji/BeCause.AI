@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { SettingsIcon } from 'lucide-react';
-import { TooltipAnchor, Spinner } from '@aipyq/client';
-import { EModelEndpoint, isAgentsEndpoint, isAssistantsEndpoint } from '@aipyq/data-provider';
-import type { TModelSpec } from '@aipyq/data-provider';
+import { TooltipAnchor, Spinner } from '@because/client';
+import { EModelEndpoint, isAgentsEndpoint, isAssistantsEndpoint } from '@because/data-provider';
+import type { TModelSpec } from '@because/data-provider';
 import type { Endpoint } from '~/common';
 import { CustomMenu as Menu, CustomMenuItem as MenuItem } from '../CustomMenu';
 import { useModelSelectorContext } from '../ModelSelectorContext';

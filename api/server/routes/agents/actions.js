@@ -1,7 +1,7 @@
 const express = require('express');
 const { nanoid } = require('nanoid');
-const { logger } = require('@aipyq/data-schemas');
-const { generateCheckAccess, isActionDomainAllowed } = require('@aipyq/api');
+const { logger } = require('@because/data-schemas');
+const { generateCheckAccess, isActionDomainAllowed } = require('@because/api');
 const {
   Permissions,
   ResourceType,
@@ -11,7 +11,7 @@ const {
   removeNullishValues,
   validateActionDomain,
   validateAndParseOpenAPISpec,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const { encryptMetadata, domainParser } = require('~/server/services/ActionService');
 const { findAccessibleResources } = require('~/server/services/PermissionService');
 const { getAgent, updateAgent, getListAgentsByAccess } = require('~/models/Agent');

@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Constants } from '@aipyq/data-provider';
-import { useToastContext } from '@aipyq/client';
+import { Constants } from '@because/data-provider';
+import { useToastContext } from '@because/client';
 import type { AgentForm } from '~/common';
 import { useLocalize } from '~/hooks';
 

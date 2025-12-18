@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { OGDialog, DialogTemplate, useToastContext } from '@aipyq/client';
-import type { TTermsOfService } from '@aipyq/data-provider';
+import { OGDialog, DialogTemplate, useToastContext } from '@because/client';
+import type { TTermsOfService } from '@because/data-provider';
 import MarkdownLite from '~/components/Chat/Messages/Content/MarkdownLite';
 import { useAcceptTermsMutation } from '~/data-provider';
 import { useLocalize } from '~/hooks';

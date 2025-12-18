@@ -1,4 +1,4 @@
-import { SelectDropDown } from '@aipyq/client';
+import { SelectDropDown } from '@because/client';
 import type { TModelSelectProps } from '~/common';
 import SelectDropDownPop from '~/components/Input/ModelSelect/SelectDropDownPop';
 import { cn, cardStyle } from '~/utils';

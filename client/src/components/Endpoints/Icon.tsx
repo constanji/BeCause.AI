@@ -1,6 +1,6 @@
 import React, { memo, useState } from 'react';
-import { UserIcon, useAvatar } from '@aipyq/client';
-import type { TUser } from '@aipyq/data-provider';
+import { UserIcon, useAvatar } from '@because/client';
+import type { TUser } from '@because/data-provider';
 import type { IconProps } from '~/common';
 import MessageEndpointIcon from './MessageEndpointIcon';
 import { useAuthContext } from '~/hooks/AuthContext';

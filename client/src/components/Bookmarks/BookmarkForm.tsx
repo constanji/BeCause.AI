@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import { QueryKeys } from '@aipyq/data-provider';
+import { QueryKeys } from '@because/data-provider';
 import { Controller, useForm } from 'react-hook-form';
 import { useQueryClient } from '@tanstack/react-query';
-import { Checkbox, Label, TextareaAutosize, Input, useToastContext } from '@aipyq/client';
-import type { TConversationTag, TConversationTagRequest } from '@aipyq/data-provider';
+import { Checkbox, Label, TextareaAutosize, Input, useToastContext } from '@because/client';
+import type { TConversationTag, TConversationTagRequest } from '@because/data-provider';
 import { useBookmarkContext } from '~/Providers/BookmarkContext';
 import { useConversationTagMutation } from '~/data-provider';
 import { useLocalize } from '~/hooks';

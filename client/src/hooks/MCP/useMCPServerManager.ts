@@ -1,13 +1,13 @@
 import { useCallback, useState, useMemo, useRef, useEffect } from 'react';
-import { useToastContext } from '@aipyq/client';
+import { useToastContext } from '@because/client';
 import { useQueryClient } from '@tanstack/react-query';
-import { Constants, QueryKeys } from '@aipyq/data-provider';
+import { Constants, QueryKeys } from '@because/data-provider';
 import {
   useCancelMCPOAuthMutation,
   useUpdateUserPluginsMutation,
   useReinitializeMCPServerMutation,
-} from '@aipyq/data-provider/react-query';
-import type { TUpdateUserPlugins, TPlugin, MCPServersResponse } from '@aipyq/data-provider';
+} from '@because/data-provider/react-query';
+import type { TUpdateUserPlugins, TPlugin, MCPServersResponse } from '@because/data-provider';
 import type { ConfigFieldDetail } from '~/common';
 import { useLocalize, useMCPSelect, useMCPConnectionStatus } from '~/hooks';
 import { useGetStartupConfig } from '~/data-provider';

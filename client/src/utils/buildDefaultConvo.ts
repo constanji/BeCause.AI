@@ -3,8 +3,8 @@ import {
   EModelEndpoint,
   isAssistantsEndpoint,
   isAgentsEndpoint,
-} from '@aipyq/data-provider';
-import type { TConversation, EndpointSchemaKey, TStartupConfig } from '@aipyq/data-provider';
+} from '@because/data-provider';
+import type { TConversation, EndpointSchemaKey, TStartupConfig } from '@because/data-provider';
 import { getLocalStorageItems } from './localStorage';
 
 const buildDefaultConvo = ({

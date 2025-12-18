@@ -1,6 +1,6 @@
-import { logger } from '@aipyq/data-schemas';
-import { FileSources, mergeFileConfig } from '@aipyq/data-provider';
-import type { IMongoFile } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
+import { FileSources, mergeFileConfig } from '@because/data-provider';
+import type { IMongoFile } from '@because/data-schemas';
 import type { ServerRequest } from '~/types';
 import { processTextWithTokenLimit } from '~/utils/text';
 

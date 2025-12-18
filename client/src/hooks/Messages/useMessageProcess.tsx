@@ -1,8 +1,8 @@
 import throttle from 'lodash/throttle';
 import { useRecoilValue } from 'recoil';
-import { Constants } from '@aipyq/data-provider';
+import { Constants } from '@because/data-provider';
 import { useEffect, useRef, useCallback, useMemo, useState } from 'react';
-import type { TMessage } from '@aipyq/data-provider';
+import type { TMessage } from '@because/data-provider';
 import { getTextKey, TEXT_KEY_DIVIDER, logger } from '~/utils';
 import { useMessagesViewContext } from '~/Providers';
 import store from '~/store';

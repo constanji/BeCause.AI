@@ -1,6 +1,6 @@
 import { ChevronLeft } from 'lucide-react';
 import { useCallback, useMemo } from 'react';
-import { useToastContext } from '@aipyq/client';
+import { useToastContext } from '@because/client';
 import { useGetAgentByIdQuery, useRevertAgentVersionMutation } from '~/data-provider';
 import type { AgentWithVersions, VersionContext } from './types';
 import { isActiveVersion } from './isActiveVersion';

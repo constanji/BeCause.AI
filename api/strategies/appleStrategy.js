@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 const { Strategy: AppleStrategy } = require('passport-apple');
 const socialLogin = require('./socialLogin');
 

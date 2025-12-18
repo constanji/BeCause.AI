@@ -1,5 +1,5 @@
 import React from 'react';
-import { Skeleton } from '@aipyq/client';
+import { Skeleton } from '@because/client';
 
 export default function MCPPanelSkeleton() {
   return (

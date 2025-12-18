@@ -1,6 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
-const { logger } = require('@aipyq/data-schemas');
-const { EModelEndpoint, Constants, openAISettings, CacheKeys } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { EModelEndpoint, Constants, openAISettings, CacheKeys } = require('@because/data-provider');
 const { createImportBatchBuilder } = require('./importBatchBuilder');
 const { cloneMessagesWithTimestamps } = require('./fork');
 const getLogStores = require('~/cache/getLogStores');
@@ -25,10 +25,10 @@ function getImporter(jsonData) {
     return importChatBotUiConvo;
   }
 
-  // For Aipyq
+  // For Because
   if (jsonData.conversationId && (jsonData.messagesTree || jsonData.messages)) {
-    logger.info('Importing Aipyq conversation');
-    return importAipyqConvo;
+    logger.info('Importing Because conversation');
+    return importBecauseConvo;
   }
 
   throw new Error('Unsupported import type');
@@ -72,14 +72,14 @@ async function importChatBotUiConvo(
 }
 
 /**
- * Imports an Aipyq conversation from JSON.
+ * Imports an Because conversation from JSON.
  *
  * @param {Object} jsonData - The JSON data representing the conversation.
  * @param {string} requestUserId - The ID of the user making the import request.
  * @param {Function} [builderFactory=createImportBatchBuilder] - The factory function to create an import batch builder.
  * @returns {Promise<void>} - A promise that resolves when the import is complete.
  */
-async function importAipyqConvo(
+async function importBecauseConvo(
   jsonData,
   requestUserId,
   builderFactory = createImportBatchBuilder,
@@ -151,7 +151,7 @@ async function importAipyqConvo(
         }
       }
     } else {
-      throw new Error('Invalid Aipyq file format');
+      throw new Error('Invalid Because file format');
     }
 
     if (firstMessageDate === 'Invalid Date') {
@@ -162,7 +162,7 @@ async function importAipyqConvo(
     await importBatchBuilder.saveBatch();
     logger.debug(`user: ${requestUserId} | Conversation "${jsonData.title}" imported`);
   } catch (error) {
-    logger.error(`user: ${requestUserId} | Error creating conversation from Aipyq file`, error);
+    logger.error(`user: ${requestUserId} | Error creating conversation from Because file`, error);
   }
 }
 

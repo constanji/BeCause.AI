@@ -1,10 +1,10 @@
 /**
- * @import { TUpdateResourcePermissionsRequest, TUpdateResourcePermissionsResponse } from '@aipyq/data-provider'
+ * @import { TUpdateResourcePermissionsRequest, TUpdateResourcePermissionsResponse } from '@because/data-provider'
  */
 
 const mongoose = require('mongoose');
-const { logger } = require('@aipyq/data-schemas');
-const { ResourceType, PrincipalType } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { ResourceType, PrincipalType } = require('@because/data-provider');
 const {
   bulkUpdateResourcePermissions,
   ensureGroupPrincipalExists,

@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import { describe, it, expect, jest } from '@jest/globals';
-import { Constants, type Agent } from '@aipyq/data-provider';
+import { Constants, type Agent } from '@because/data-provider';
 import type { FieldNamesMarkedBoolean } from 'react-hook-form';
 import type { AgentForm } from '~/common';
 import {

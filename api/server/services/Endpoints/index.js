@@ -1,6 +1,6 @@
-const { Providers } = require('@aipyq/agents');
-const { EModelEndpoint, normalizeEndpointName } = require('@aipyq/data-provider');
-const { getCustomEndpointConfig } = require('@aipyq/api');
+const { Providers } = require('@because/agents');
+const { EModelEndpoint, normalizeEndpointName } = require('@because/data-provider');
+const { getCustomEndpointConfig } = require('@because/api');
 const initAnthropic = require('~/server/services/Endpoints/anthropic/initialize');
 const getBedrockOptions = require('~/server/services/Endpoints/bedrock/options');
 const initOpenAI = require('~/server/services/Endpoints/openAI/initialize');
@@ -89,7 +89,7 @@ function getProviderConfig({ provider, appConfig }) {
     }
     
     if (!customEndpointConfig) {
-      throw new Error(`Provider ${provider} not supported. Please ensure a custom endpoint named "${overrideProvider}" (or "${normalizedProvider}") is configured in your Aipyq.yaml file.`);
+      throw new Error(`Provider ${provider} not supported. Please ensure a custom endpoint named "${overrideProvider}" (or "${normalizedProvider}") is configured in your Because.yaml file.`);
     }
   }
 

@@ -1,4 +1,4 @@
-import type { SearchRefType } from '@aipyq/data-provider';
+import type { SearchRefType } from '@because/data-provider';
 export type Citation = { turn: number; refType: SearchRefType | string; index: number };
 
 export type CitationProps = {

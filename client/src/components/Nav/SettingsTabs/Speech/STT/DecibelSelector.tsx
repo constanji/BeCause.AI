@@ -1,5 +1,5 @@
 import React from 'react';
-import { Slider, InputNumber } from '@aipyq/client';
+import { Slider, InputNumber } from '@because/client';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { cn, defaultTextProps, optionText } from '~/utils';
 import { useLocalize } from '~/hooks';

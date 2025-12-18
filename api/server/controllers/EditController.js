@@ -1,6 +1,6 @@
-const { sendEvent } = require('@aipyq/api');
-const { logger } = require('@aipyq/data-schemas');
-const { getResponseSender } = require('@aipyq/data-provider');
+const { sendEvent } = require('@because/api');
+const { logger } = require('@because/data-schemas');
+const { getResponseSender } = require('@because/data-provider');
 const {
   handleAbortError,
   createAbortController,

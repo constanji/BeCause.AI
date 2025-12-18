@@ -1,10 +1,10 @@
 const { Tool } = require('@langchain/core/tools');
 const { z } = require('zod');
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 const BeCauseService = require('~/server/services/BeCauseService');
 
 /**
- * BeCause Tool - Text-to-SQL prompt template system for Aipyq
+ * BeCause Tool - Text-to-SQL prompt template system for Because
  *
  * 这是从 LBchat / BeCause 体系迁移过来的 BeCause 工具，用于自然语言问数（Text-to-SQL）
  * 的提示词模板系统。它不直接生成 SQL，而是向 LLM 返回「命令模板 + Prompt 模板加载说明 +

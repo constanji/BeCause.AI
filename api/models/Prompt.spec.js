@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { ObjectId } = require('mongodb');
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const {
   SystemRoles,
@@ -8,7 +8,7 @@ const {
   AccessRoleIds,
   PrincipalType,
   PermissionBits,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 
 // Mock the config/connect module to prevent connection attempts during tests
 jest.mock('../../config/connect', () => jest.fn().mockResolvedValue(true));

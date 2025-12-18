@@ -2,7 +2,7 @@ import React, { createRef } from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import BookmarkForm from '../BookmarkForm';
-import type { TConversationTag } from '@aipyq/data-provider';
+import type { TConversationTag } from '@because/data-provider';
 
 const mockMutate = jest.fn();
 const mockShowToast = jest.fn();
@@ -26,7 +26,7 @@ jest.mock('~/hooks', () => ({
   },
 }));
 
-jest.mock('@aipyq/client', () => {
+jest.mock('@because/client', () => {
   const ActualReact = jest.requireActual<typeof import('react')>('react');
   return {
     Checkbox: ({

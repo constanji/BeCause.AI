@@ -1,7 +1,7 @@
 import { useRecoilValue } from 'recoil';
 import { Close } from '@radix-ui/react-popover';
 import { Flipper, Flipped } from 'react-flip-toolkit';
-import { getEndpointField } from '@aipyq/data-provider';
+import { getEndpointField } from '@because/data-provider';
 import {
   Dialog,
   Label,
@@ -10,8 +10,8 @@ import {
   TrashIcon,
   DialogTrigger,
   DialogTemplate,
-} from '@aipyq/client';
-import type { TPreset } from '@aipyq/data-provider';
+} from '@because/client';
+import type { TPreset } from '@because/data-provider';
 import type { FC } from 'react';
 import FileUpload from '~/components/Chat/Input/Files/FileUpload';
 import { useGetEndpointsQuery } from '~/data-provider';

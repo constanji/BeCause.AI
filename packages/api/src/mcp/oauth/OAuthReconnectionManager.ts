@@ -1,5 +1,5 @@
-import { logger } from '@aipyq/data-schemas';
-import type { TokenMethods, IUser } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
+import type { TokenMethods, IUser } from '@because/data-schemas';
 import type { MCPOAuthTokens } from './types';
 import { OAuthReconnectionTracker } from './OAuthReconnectionTracker';
 import { FlowStateManager } from '~/flow/manager';

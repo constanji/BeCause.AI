@@ -1,6 +1,6 @@
 import { useRef, useCallback } from 'react';
 import { useRecoilState } from 'recoil';
-import { useToastContext } from '@aipyq/client';
+import { useToastContext } from '@because/client';
 import type { SPPickerConfig } from '~/components/SidePanel/Agents/config';
 import { useLocalize, useAuthContext } from '~/hooks';
 import { useGetStartupConfig } from '~/data-provider';

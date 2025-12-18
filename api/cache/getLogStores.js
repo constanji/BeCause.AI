@@ -1,5 +1,5 @@
 const { Keyv } = require('keyv');
-const { Time, CacheKeys, ViolationTypes } = require('@aipyq/data-provider');
+const { Time, CacheKeys, ViolationTypes } = require('@because/data-provider');
 const {
   logFile,
   keyvMongo,
@@ -7,7 +7,7 @@ const {
   sessionCache,
   standardCache,
   violationCache,
-} = require('@aipyq/api');
+} = require('@because/api');
 
 const namespaces = {
   [ViolationTypes.GENERAL]: new Keyv({ store: logFile, namespace: 'violations' }),

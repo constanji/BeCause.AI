@@ -3,16 +3,16 @@ import {
   SafeSearchTypes,
   SearchCategories,
   extractVariableName,
-} from '@aipyq/data-provider';
-import { webSearchAuth } from '@aipyq/data-schemas';
+} from '@because/data-provider';
+import { webSearchAuth } from '@because/data-schemas';
 import type {
   RerankerTypes,
   TCustomConfig,
   SearchProviders,
   ScraperProviders,
   TWebSearchConfig,
-} from '@aipyq/data-provider';
-import type { TWebSearchKeys, TWebSearchCategories } from '@aipyq/data-schemas';
+} from '@because/data-provider';
+import type { TWebSearchKeys, TWebSearchCategories } from '@because/data-schemas';
 
 export function extractWebSearchEnvVars({
   keys,

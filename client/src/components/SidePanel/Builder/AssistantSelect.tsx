@@ -1,6 +1,6 @@
 import { useMemo, useCallback, useEffect, useRef } from 'react';
 import { Plus } from 'lucide-react';
-import { SelectDropDown } from '@aipyq/client';
+import { SelectDropDown } from '@because/client';
 import {
   Tools,
   FileSources,
@@ -9,14 +9,14 @@ import {
   LocalStorageKeys,
   isImageVisionTool,
   defaultAssistantFormValues,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type {
   TPlugin,
   Assistant,
   AssistantDocument,
   AssistantsEndpoint,
   AssistantCreateParams,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type {
   Actions,
   ExtendedFile,

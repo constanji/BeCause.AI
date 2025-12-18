@@ -2,7 +2,7 @@ import {
   TConversationTagRequest,
   TConversationTagResponse,
   TConversationTagsResponse,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 
 export const updateConversationTag = (
   queryCache: TConversationTagsResponse,

@@ -1,10 +1,10 @@
-const { getModelMaxTokens } = require('@aipyq/api');
-const { createContentAggregator } = require('@aipyq/agents');
+const { getModelMaxTokens } = require('@because/api');
+const { createContentAggregator } = require('@because/agents');
 const {
   EModelEndpoint,
   providerEndpointMap,
   getResponseSender,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const { getDefaultHandlers } = require('~/server/controllers/agents/callbacks');
 const getOptions = require('~/server/services/Endpoints/bedrock/options');
 const AgentClient = require('~/server/controllers/agents/client');

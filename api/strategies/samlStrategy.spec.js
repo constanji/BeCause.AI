@@ -4,7 +4,7 @@ jest.mock('fs');
 jest.mock('path');
 jest.mock('node-fetch');
 jest.mock('@node-saml/passport-saml');
-jest.mock('@aipyq/data-schemas', () => ({
+jest.mock('@because/data-schemas', () => ({
   logger: {
     info: jest.fn(),
     debug: jest.fn(),
@@ -25,7 +25,7 @@ jest.mock('~/server/services/Config', () => ({
   },
   getAppConfig: jest.fn().mockResolvedValue({}),
 }));
-jest.mock('@aipyq/api', () => ({
+jest.mock('@because/api', () => ({
   isEmailDomainAllowed: jest.fn(() => true),
   getBalanceConfig: jest.fn(() => ({
     tokenCredits: 1000,
@@ -421,7 +421,7 @@ u7wlOSk+oFzDIO/UILIA
     const result = await validate(profile);
 
     expect(result.user).toBe(false);
-    expect(result.details.message).toBe(require('@aipyq/data-provider').ErrorTypes.AUTH_FAILED);
+    expect(result.details.message).toBe(require('@because/data-provider').ErrorTypes.AUTH_FAILED);
   });
 
   it('should attempt to download and save the avatar if picture is provided', async () => {

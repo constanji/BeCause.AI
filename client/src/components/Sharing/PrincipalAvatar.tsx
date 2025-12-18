@@ -1,7 +1,7 @@
 import React from 'react';
 import { Users, User, Shield } from 'lucide-react';
-import { PrincipalType } from '@aipyq/data-provider';
-import type { TPrincipal } from '@aipyq/data-provider';
+import { PrincipalType } from '@because/data-provider';
+import type { TPrincipal } from '@because/data-provider';
 import { cn } from '~/utils';
 
 interface PrincipalAvatarProps {

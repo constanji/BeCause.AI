@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-import { FileSources } from '@aipyq/data-provider';
+import { FileSources } from '@because/data-provider';
 import type { IMongoFile } from '~/types';
 
 const file: Schema<IMongoFile> = new Schema(

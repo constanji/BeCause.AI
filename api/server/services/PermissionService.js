@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const { isEnabled } = require('@aipyq/api');
-const { getTransactionSupport, logger } = require('@aipyq/data-schemas');
-const { ResourceType, PrincipalType, PrincipalModel } = require('@aipyq/data-provider');
+const { isEnabled } = require('@because/api');
+const { getTransactionSupport, logger } = require('@because/data-schemas');
+const { ResourceType, PrincipalType, PrincipalModel } = require('@because/data-provider');
 const {
   entraIdPrincipalFeatureEnabled,
   getUserOwnedEntraGroups,
@@ -41,7 +41,7 @@ const validateResourceType = (resourceType) => {
 };
 
 /**
- * @import { TPrincipal } from '@aipyq/data-provider'
+ * @import { TPrincipal } from '@because/data-provider'
  */
 /**
  * Grant a permission to a principal for a resource using a role

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { SquirclePlusIcon } from '@aipyq/client';
+import { SquirclePlusIcon } from '@because/client';
 import { useLocalize } from '~/hooks';
 
 interface MCPIconProps {

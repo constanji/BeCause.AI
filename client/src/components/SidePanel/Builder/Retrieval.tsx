@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
-import { Capabilities } from '@aipyq/data-provider';
-import type { AssistantsEndpoint } from '@aipyq/data-provider';
+import { Capabilities } from '@because/data-provider';
+import type { AssistantsEndpoint } from '@because/data-provider';
 import { useFormContext, Controller, useWatch } from 'react-hook-form';
 import {
   Checkbox,
@@ -9,7 +9,7 @@ import {
   HoverCardPortal,
   HoverCardTrigger,
   CircleHelpIcon,
-} from '@aipyq/client';
+} from '@because/client';
 import OptionHover from '~/components/SidePanel/Parameters/OptionHover';
 import type { AssistantForm } from '~/common';
 import { useLocalize } from '~/hooks';

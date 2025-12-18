@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import {
   useGetResourcePermissionsQuery,
   useUpdateResourcePermissionsMutation,
-} from '@aipyq/data-provider/react-query';
-import type { TPrincipal, ResourceType, AccessRoleIds } from '@aipyq/data-provider';
+} from '@because/data-provider/react-query';
+import type { TPrincipal, ResourceType, AccessRoleIds } from '@because/data-provider';
 import { getResourceConfig } from '~/utils';
 
 /**

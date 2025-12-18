@@ -1,7 +1,7 @@
-const { ytToolkit } = require('@aipyq/api');
+const { ytToolkit } = require('@because/api');
 const { tool } = require('@langchain/core/tools');
 const { youtube } = require('@googleapis/youtube');
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 const { YoutubeTranscript } = require('youtube-transcript');
 const { getApiKey } = require('./credentials');
 

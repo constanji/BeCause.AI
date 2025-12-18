@@ -1,5 +1,5 @@
 const express = require('express');
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 const requireJwtAuth = require('~/server/middleware/requireJwtAuth');
 const { countTokens } = require('~/server/utils');
 

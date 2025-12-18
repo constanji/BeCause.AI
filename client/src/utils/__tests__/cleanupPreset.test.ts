@@ -1,10 +1,10 @@
-import { EModelEndpoint } from '@aipyq/data-provider';
+import { EModelEndpoint } from '@because/data-provider';
 import cleanupPreset from '../cleanupPreset';
-import type { TPreset } from '@aipyq/data-provider';
+import type { TPreset } from '@because/data-provider';
 
 // Mock parseConvo since we're focusing on testing the chatGptLabel migration logic
-jest.mock('@aipyq/data-provider', () => ({
-  ...jest.requireActual('@aipyq/data-provider'),
+jest.mock('@because/data-provider', () => ({
+  ...jest.requireActual('@because/data-provider'),
   parseConvo: jest.fn((input) => {
     // Return a simplified mock that passes through most properties
     const { conversation } = input;

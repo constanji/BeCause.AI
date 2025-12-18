@@ -1,5 +1,5 @@
-const { isEnabled } = require('@aipyq/api');
-const { EModelEndpoint } = require('@aipyq/data-provider');
+const { isEnabled } = require('@because/api');
+const { EModelEndpoint } = require('@because/data-provider');
 const {
   validateConvoAccess,
   messageUserLimiter,

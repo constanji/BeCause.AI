@@ -1,5 +1,5 @@
-const { logger } = require('@aipyq/data-schemas');
-const { Constants, isAgentsEndpoint, ResourceType } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { Constants, isAgentsEndpoint, ResourceType } = require('@because/data-provider');
 const { canAccessResource } = require('./canAccessResource');
 const { getAgent } = require('~/models/Agent');
 

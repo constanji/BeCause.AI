@@ -1,11 +1,11 @@
 const express = require('express');
 const request = require('supertest');
-const { isEnabled } = require('@aipyq/api');
+const { isEnabled } = require('@because/api');
 const { getLdapConfig } = require('~/server/services/Config/ldap');
 
 jest.mock('~/server/services/Config/ldap');
-jest.mock('@aipyq/api', () => ({
-  ...jest.requireActual('@aipyq/api'),
+jest.mock('@because/api', () => ({
+  ...jest.requireActual('@because/api'),
   isEnabled: jest.fn(),
 }));
 

@@ -6,8 +6,8 @@ import { MemoryRouter, useNavigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RecoilRoot } from 'recoil';
 
-import type t from '@aipyq/data-provider';
-import { Constants, EModelEndpoint } from '@aipyq/data-provider';
+import type t from '@because/data-provider';
+import { Constants, EModelEndpoint } from '@because/data-provider';
 
 import AgentDetail from '../AgentDetail';
 
@@ -23,8 +23,8 @@ jest.mock('~/hooks', () => ({
   useDefaultConvo: jest.fn(),
 }));
 
-jest.mock('@aipyq/client', () => ({
-  ...jest.requireActual('@aipyq/client'),
+jest.mock('@because/client', () => ({
+  ...jest.requireActual('@because/client'),
   useToastContext: jest.fn(),
 }));
 
@@ -110,7 +110,7 @@ describe('AgentDetail', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
-    const { useToastContext } = require('@aipyq/client');
+    const { useToastContext } = require('@because/client');
     (useToastContext as jest.Mock).mockReturnValue({ showToast: mockShowToast });
     const { useLocalize, useDefaultConvo } = require('~/hooks');
     (useLocalize as jest.Mock).mockReturnValue(mockLocalize);

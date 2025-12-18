@@ -1,4 +1,4 @@
-import { AgentListResponse } from '@aipyq/data-provider';
+import { AgentListResponse } from '@because/data-provider';
 import React, { useState, useEffect } from 'react';
 
 interface SmartLoaderProps {

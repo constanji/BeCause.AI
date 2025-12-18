@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { useToastContext } from '@aipyq/client';
+import { useToastContext } from '@because/client';
 import type { SharePointFile, SharePointBatchProgress } from '~/data-provider/Files';
 import { useSharePointBatchDownload } from '~/data-provider/Files';
 import useSharePointToken from './useSharePointToken';

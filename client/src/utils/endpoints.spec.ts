@@ -1,5 +1,5 @@
-import { EModelEndpoint, getEndpointField } from '@aipyq/data-provider';
-import type { TEndpointsConfig, TConfig } from '@aipyq/data-provider';
+import { EModelEndpoint, getEndpointField } from '@because/data-provider';
+import type { TEndpointsConfig, TConfig } from '@because/data-provider';
 import { getAvailableEndpoints, getEndpointsFilter, mapEndpoints } from './endpoints';
 
 const mockEndpointsConfig: TEndpointsConfig = {

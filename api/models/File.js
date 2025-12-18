@@ -1,5 +1,5 @@
-const { logger } = require('@aipyq/data-schemas');
-const { EToolResources, FileContext } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { EToolResources, FileContext } = require('@because/data-provider');
 const { File } = require('~/db/models');
 
 /**

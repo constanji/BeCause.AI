@@ -1,6 +1,6 @@
 const axios = require('axios');
-const { logger } = require('@aipyq/data-schemas');
-const { logAxiosError, validateImage } = require('@aipyq/api');
+const { logger } = require('@because/data-schemas');
+const { logAxiosError, validateImage } = require('@because/api');
 const {
   FileSources,
   VisionModes,
@@ -9,7 +9,7 @@ const {
   EModelEndpoint,
   mergeFileConfig,
   getEndpointFileConfig,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const { getStrategyFunctions } = require('~/server/services/Files/strategies');
 
 /**

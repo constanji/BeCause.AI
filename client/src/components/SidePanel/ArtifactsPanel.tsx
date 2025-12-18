@@ -1,5 +1,5 @@
 import { useRef, useEffect, memo } from 'react';
-import { ResizableHandleAlt, ResizablePanel } from '@aipyq/client';
+import { ResizableHandleAlt, ResizablePanel } from '@because/client';
 import type { ImperativePanelHandle } from 'react-resizable-panels';
 
 interface ArtifactsPanelProps {

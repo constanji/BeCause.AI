@@ -5,7 +5,7 @@ import { loadServiceKey } from './key';
 
 jest.mock('fs');
 jest.mock('axios');
-jest.mock('@aipyq/data-schemas', () => ({
+jest.mock('@because/data-schemas', () => ({
   logger: {
     error: jest.fn(),
   },

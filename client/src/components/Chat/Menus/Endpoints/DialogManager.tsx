@@ -1,5 +1,5 @@
 import React from 'react';
-import { EModelEndpoint, getEndpointField } from '@aipyq/data-provider';
+import { EModelEndpoint, getEndpointField } from '@because/data-provider';
 import { SetKeyDialog } from '~/components/Input/SetKeyDialog';
 
 interface DialogManagerProps {

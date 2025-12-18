@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Spinner } from '@aipyq/client';
-import { SystemRoles } from '@aipyq/data-provider';
+import { Spinner } from '@because/client';
+import { SystemRoles } from '@because/data-provider';
 import { useGetEndpointsQuery } from '~/data-provider';
 import { useAuthContext } from '~/hooks';
 import useAuthRedirect from './useAuthRedirect';

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
-import type { TAttachment } from '@aipyq/data-provider';
+import type { TAttachment } from '@because/data-provider';
 import { useSearchResultsByTurn } from './useSearchResultsByTurn';
 import store from '~/store';
 

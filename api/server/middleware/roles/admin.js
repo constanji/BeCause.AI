@@ -1,5 +1,5 @@
-const { SystemRoles } = require('@aipyq/data-provider');
-const { logger } = require('@aipyq/data-schemas');
+const { SystemRoles } = require('@because/data-provider');
+const { logger } = require('@because/data-schemas');
 
 function checkAdmin(req, res, next) {
   try {

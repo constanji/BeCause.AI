@@ -1,6 +1,6 @@
-import { Providers } from '@aipyq/agents';
-import { mbToBytes } from '@aipyq/data-provider';
-import type { AppConfig, IMongoFile } from '@aipyq/data-schemas';
+import { Providers } from '@because/agents';
+import { mbToBytes } from '@because/data-provider';
+import type { AppConfig, IMongoFile } from '@because/data-schemas';
 import type { ServerRequest } from '~/types';
 import { encodeAndFormatDocuments } from './document';
 

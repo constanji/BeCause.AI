@@ -1,5 +1,5 @@
-import { parseConvo } from '@aipyq/data-provider';
-import type { TPreset } from '@aipyq/data-provider';
+import { parseConvo } from '@because/data-provider';
+import type { TPreset } from '@because/data-provider';
 
 type UIPreset = Partial<TPreset> & { presetOverride?: Partial<TPreset> };
 type TCleanupPreset = {

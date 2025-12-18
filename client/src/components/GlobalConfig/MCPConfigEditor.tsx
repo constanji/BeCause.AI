@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, useToastContext } from '@aipyq/client';
+import { Button, useToastContext } from '@because/client';
 import { useForm, Controller } from 'react-hook-form';
 import { useLocalize } from '~/hooks';
 import { cn, defaultTextProps } from '~/utils';

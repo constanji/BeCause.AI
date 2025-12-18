@@ -82,8 +82,8 @@ jest.mock('~/utils', () => ({
 }));
 
 // Mock the tQueryParamsSchema
-jest.mock('@aipyq/data-provider', () => ({
-  ...jest.requireActual('@aipyq/data-provider'),
+jest.mock('@because/data-provider', () => ({
+  ...jest.requireActual('@because/data-provider'),
   tQueryParamsSchema: {
     shape: {
       model: { parse: jest.fn((value) => value) },

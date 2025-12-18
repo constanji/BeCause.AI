@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Wrench, ArrowRight } from 'lucide-react';
-import { CheckMark, useOnClickOutside, useMultiSearch } from '@aipyq/client';
+import { CheckMark, useOnClickOutside, useMultiSearch } from '@because/client';
 import {
   Listbox,
   ListboxButton,
@@ -9,7 +9,7 @@ import {
   ListboxOption,
   Transition,
 } from '@headlessui/react';
-import type { TPlugin } from '@aipyq/data-provider';
+import type { TPlugin } from '@because/data-provider';
 import { cn } from '~/utils/';
 
 export type TMultiSelectDropDownProps = {

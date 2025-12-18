@@ -1,9 +1,9 @@
 /** Memories */
 import { z } from 'zod';
 import { tool } from '@langchain/core/tools';
-import { Tools } from '@aipyq/data-provider';
-import { logger } from '@aipyq/data-schemas';
-import { Run, Providers, GraphEvents } from '@aipyq/agents';
+import { Tools } from '@because/data-provider';
+import { logger } from '@because/data-schemas';
+import { Run, Providers, GraphEvents } from '@because/agents';
 import type {
   OpenAIClientOptions,
   StreamEventData,
@@ -12,9 +12,9 @@ import type {
   EventHandler,
   ToolEndData,
   LLMConfig,
-} from '@aipyq/agents';
-import type { TAttachment, MemoryArtifact } from '@aipyq/data-provider';
-import type { ObjectId, MemoryMethods } from '@aipyq/data-schemas';
+} from '@because/agents';
+import type { TAttachment, MemoryArtifact } from '@because/data-provider';
+import type { ObjectId, MemoryMethods } from '@because/data-schemas';
 import type { BaseMessage, ToolMessage } from '@langchain/core/messages';
 import type { Response as ServerResponse } from 'express';
 import { Tokenizer } from '~/utils';

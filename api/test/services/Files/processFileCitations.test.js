@@ -1,4 +1,4 @@
-const { Tools } = require('@aipyq/data-provider');
+const { Tools } = require('@because/data-provider');
 const {
   processFileCitations,
   applyCitationLimits,
@@ -16,7 +16,7 @@ jest.mock('~/models/Role', () => ({
   getRoleByName: jest.fn(),
 }));
 
-jest.mock('@aipyq/api', () => ({
+jest.mock('@because/api', () => ({
   checkAccess: jest.fn().mockResolvedValue(true),
 }));
 

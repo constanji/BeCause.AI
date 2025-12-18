@@ -1,7 +1,7 @@
 const axios = require('axios');
-const { isEnabled } = require('@aipyq/api');
-const { logger } = require('@aipyq/data-schemas');
-const { ErrorTypes } = require('@aipyq/data-provider');
+const { isEnabled } = require('@because/api');
+const { logger } = require('@because/data-schemas');
+const { ErrorTypes } = require('@because/data-provider');
 const denyRequest = require('./denyRequest');
 
 async function moderateText(req, res, next) {

@@ -1,5 +1,5 @@
-import { EModelEndpoint, extractEnvVariable, normalizeEndpointName } from '@aipyq/data-provider';
-import type { TCustomEndpoints, TEndpoint, TConfig } from '@aipyq/data-provider';
+import { EModelEndpoint, extractEnvVariable, normalizeEndpointName } from '@because/data-provider';
+import type { TCustomEndpoints, TEndpoint, TConfig } from '@because/data-provider';
 import type { TCustomEndpointsConfig } from '~/types/endpoints';
 import { isUserProvided } from '~/utils';
 

@@ -1,7 +1,7 @@
 import { useRecoilValue } from 'recoil';
-import { useGetModelsQuery } from '@aipyq/data-provider/react-query';
-import { getEndpointField, SettingsViews } from '@aipyq/data-provider';
-import type { TConversation } from '@aipyq/data-provider';
+import { useGetModelsQuery } from '@because/data-provider/react-query';
+import { getEndpointField, SettingsViews } from '@because/data-provider';
+import type { TConversation } from '@because/data-provider';
 import type { TSettingsProps } from '~/common';
 import { useGetEndpointsQuery } from '~/data-provider';
 import { getSettings } from './Settings';

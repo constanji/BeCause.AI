@@ -1,7 +1,7 @@
-import { logger } from '@aipyq/data-schemas';
-import { Constants } from '@aipyq/data-provider';
-import type { PluginAuthMethods } from '@aipyq/data-schemas';
-import type { GenericTool } from '@aipyq/agents';
+import { logger } from '@because/data-schemas';
+import { Constants } from '@because/data-provider';
+import type { PluginAuthMethods } from '@because/data-schemas';
+import type { GenericTool } from '@because/agents';
 import { getPluginAuthMap } from '~/agents/auth';
 
 export async function getUserMCPAuthMap({

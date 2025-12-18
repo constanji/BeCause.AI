@@ -1,5 +1,5 @@
-import { EToolResources } from '@aipyq/data-provider';
-import type { AgentToolResources, TFile } from '@aipyq/data-provider';
+import { EToolResources } from '@because/data-provider';
+import type { AgentToolResources, TFile } from '@because/data-provider';
 
 /**
  * Converts OCR tool resource to context tool resource in place.

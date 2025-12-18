@@ -1,4 +1,4 @@
-const { Constants, ForkOptions } = require('@aipyq/data-provider');
+const { Constants, ForkOptions } = require('@because/data-provider');
 
 jest.mock('~/models/Conversation', () => ({
   getConvo: jest.fn(),

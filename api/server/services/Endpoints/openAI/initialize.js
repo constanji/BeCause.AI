@@ -1,11 +1,11 @@
-const { ErrorTypes, EModelEndpoint, mapModelToAzureConfig } = require('@aipyq/data-provider');
+const { ErrorTypes, EModelEndpoint, mapModelToAzureConfig } = require('@because/data-provider');
 const {
   isEnabled,
   resolveHeaders,
   isUserProvided,
   getOpenAIConfig,
   getAzureCredentials,
-} = require('@aipyq/api');
+} = require('@because/api');
 const { getUserKeyValues, checkUserKeyExpiry } = require('~/server/services/UserService');
 const OpenAIClient = require('~/app/clients/OpenAIClient');
 

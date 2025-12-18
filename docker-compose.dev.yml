@@ -28,8 +28,8 @@ services:
       - NODE_ENV=development
       - MONGO_URI=mongodb://mongodb:27017/BecauseAi  # 容器内部使用 27017，外部映射到 27034
       - MEILI_HOST=http://meilisearch:7700
-      - AIPYQ_LOG_DIR=/app/api/logs
-      - CONFIG_PATH=/app/Aipyq.yaml
+      - BECAUSE_LOG_DIR=/app/api/logs
+      - CONFIG_PATH=/app/Because.yaml
       - DOMAIN_CLIENT=http://localhost:4514
       - DOMAIN_SERVER=http://localhost:1145
       - ENDPOINTS=agents  # 只启用 agents 标准端点，自定义端点（deepseek、modelscope）会自动加载
@@ -44,9 +44,9 @@ services:
       - /app/packages/data-schemas/node_modules
       - /app/packages/api/node_modules
       - /app/packages/client/node_modules
-      - /app/agents-Aipyq/node_modules
+      - /app/agents-because/node_modules
       # 配置文件和数据
-      - ./Aipyq.yaml:/app/Aipyq.yaml
+      - ./Because.yaml:/app/Because.yaml
       - ./images:/app/client/public/images
       - ./uploads:/app/uploads
       - ./logs:/app/api/logs
@@ -85,7 +85,7 @@ services:
       - /app/packages/data-schemas/node_modules
       - /app/packages/api/node_modules
       - /app/packages/client/node_modules
-      - /app/agents-Aipyq/node_modules
+      - /app/agents-because/node_modules
     command: npm run frontend:dev
     restart: unless-stopped
 

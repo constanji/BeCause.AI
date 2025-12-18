@@ -1,5 +1,5 @@
-import { removeNullishValues } from '@aipyq/data-provider';
-import type { TCustomConfig, TConfigDefaults } from '@aipyq/data-provider';
+import { removeNullishValues } from '@because/data-provider';
+import type { TCustomConfig, TConfigDefaults } from '@because/data-provider';
 import type { AppConfig } from '~/types/app';
 import { isMemoryEnabled } from './memory';
 

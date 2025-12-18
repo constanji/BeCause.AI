@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import { EToolResources, mergeFileConfig, getEndpointFileConfig } from '@aipyq/data-provider';
-import type { AssistantsEndpoint } from '@aipyq/data-provider';
+import { EToolResources, mergeFileConfig, getEndpointFileConfig } from '@because/data-provider';
+import type { AssistantsEndpoint } from '@because/data-provider';
 import type { ExtendedFile } from '~/common';
 import FileRow from '~/components/Chat/Input/Files/FileRow';
 import { useGetFileConfig } from '~/data-provider';

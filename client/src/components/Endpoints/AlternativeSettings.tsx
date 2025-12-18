@@ -1,5 +1,5 @@
 import { useRecoilValue } from 'recoil';
-import { SettingsViews } from '@aipyq/data-provider';
+import { SettingsViews } from '@because/data-provider';
 import type { TSettingsProps } from '~/common';
 import { Advanced } from './Settings';
 import { cn } from '~/utils';

@@ -1,5 +1,5 @@
-const { logger } = require('@aipyq/data-schemas');
-const { CacheKeys } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { CacheKeys } = require('@because/data-provider');
 const { loadDefaultModels, loadConfigModels } = require('~/server/services/Config');
 const { getLogStores } = require('~/cache');
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { useUpdateUserPluginsMutation } from '@aipyq/data-provider/react-query';
+import { useUpdateUserPluginsMutation } from '@because/data-provider/react-query';
 import {
   OGDialog,
   TrashIcon,
@@ -8,8 +8,8 @@ import {
   useToastContext,
   OGDialogTrigger,
   OGDialogTemplate,
-} from '@aipyq/client';
-import type { TPlugin } from '@aipyq/data-provider';
+} from '@because/client';
+import type { TPlugin } from '@because/data-provider';
 import type { AgentForm } from '~/common';
 import { useLocalize } from '~/hooks';
 import { cn } from '~/utils';

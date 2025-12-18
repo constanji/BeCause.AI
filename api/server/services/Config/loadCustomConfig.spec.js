@@ -1,11 +1,11 @@
 jest.mock('axios');
 jest.mock('~/cache/getLogStores');
-jest.mock('@aipyq/api', () => ({
-  ...jest.requireActual('@aipyq/api'),
+jest.mock('@because/api', () => ({
+  ...jest.requireActual('@because/api'),
   loadYaml: jest.fn(),
 }));
-jest.mock('@aipyq/data-provider', () => {
-  const actual = jest.requireActual('@aipyq/data-provider');
+jest.mock('@because/data-provider', () => {
+  const actual = jest.requireActual('@because/data-provider');
   return {
     ...actual,
     paramSettings: { foo: {}, bar: {}, custom: {} },
@@ -33,7 +33,7 @@ jest.mock('@aipyq/data-provider', () => {
   };
 });
 
-jest.mock('@aipyq/data-schemas', () => {
+jest.mock('@because/data-schemas', () => {
   return {
     logger: {
       info: jest.fn(),
@@ -45,8 +45,8 @@ jest.mock('@aipyq/data-schemas', () => {
 });
 
 const axios = require('axios');
-const { loadYaml } = require('@aipyq/api');
-const { logger } = require('@aipyq/data-schemas');
+const { loadYaml } = require('@because/api');
+const { logger } = require('@because/data-schemas');
 const loadCustomConfig = require('./loadCustomConfig');
 
 describe('loadCustomConfig', () => {

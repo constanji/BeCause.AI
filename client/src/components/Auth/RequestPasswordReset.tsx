@@ -1,10 +1,10 @@
 import { useForm } from 'react-hook-form';
 import { useState, ReactNode } from 'react';
-import { Spinner, Button } from '@aipyq/client';
+import { Spinner, Button } from '@because/client';
 import { useOutletContext } from 'react-router-dom';
-import { useRequestPasswordResetMutation } from '@aipyq/data-provider/react-query';
-import { loginPage } from '@aipyq/data-provider';
-import type { TRequestPasswordReset, TRequestPasswordResetResponse } from '@aipyq/data-provider';
+import { useRequestPasswordResetMutation } from '@because/data-provider/react-query';
+import { loginPage } from '@because/data-provider';
+import type { TRequestPasswordReset, TRequestPasswordResetResponse } from '@because/data-provider';
 import type { TLoginLayoutContext } from '~/common';
 import type { FC } from 'react';
 import { useLocalize } from '~/hooks';

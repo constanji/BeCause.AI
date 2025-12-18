@@ -1,8 +1,8 @@
-import { extractAipyqParams } from './llm';
+import { extractBecauseParams } from './llm';
 
-describe('extractAipyqParams', () => {
+describe('extractBecauseParams', () => {
   it('should return defaults when options is undefined', () => {
-    const result = extractAipyqParams(undefined);
+    const result = extractBecauseParams(undefined);
 
     expect(result.resendFiles).toBe(true);
     expect(result.promptPrefix).toBeUndefined();
@@ -13,7 +13,7 @@ describe('extractAipyqParams', () => {
   });
 
   it('should return defaults when options is null', () => {
-    const result = extractAipyqParams();
+    const result = extractBecauseParams();
 
     expect(result.resendFiles).toBe(true);
     expect(result.promptPrefix).toBeUndefined();
@@ -23,7 +23,7 @@ describe('extractAipyqParams', () => {
     expect(result.modelOptions).toEqual({});
   });
 
-  it('should extract all Aipyq params and leave model options', () => {
+  it('should extract all Because params and leave model options', () => {
     const options = {
       resendFiles: false,
       promptPrefix: 'You are a helpful assistant',
@@ -35,7 +35,7 @@ describe('extractAipyqParams', () => {
       max_tokens: 1000,
     };
 
-    const result = extractAipyqParams(options);
+    const result = extractBecauseParams(options);
 
     expect(result.resendFiles).toBe(false);
     expect(result.promptPrefix).toBe('You are a helpful assistant');
@@ -49,7 +49,7 @@ describe('extractAipyqParams', () => {
     });
   });
 
-  it('should handle null values for Aipyq params', () => {
+  it('should handle null values for Because params', () => {
     const options = {
       resendFiles: true,
       promptPrefix: null,
@@ -59,7 +59,7 @@ describe('extractAipyqParams', () => {
       model: 'claude-3',
     };
 
-    const result = extractAipyqParams(options);
+    const result = extractBecauseParams(options);
 
     expect(result.resendFiles).toBe(true);
     expect(result.promptPrefix).toBeNull();
@@ -78,7 +78,7 @@ describe('extractAipyqParams', () => {
       temperature: 0.5,
     };
 
-    const result = extractAipyqParams(options);
+    const result = extractBecauseParams(options);
 
     expect(result.resendFiles).toBe(true); // Should use default
     expect(result.promptPrefix).toBe('Test prefix');
@@ -92,7 +92,7 @@ describe('extractAipyqParams', () => {
   });
 
   it('should handle empty options object', () => {
-    const result = extractAipyqParams({});
+    const result = extractBecauseParams({});
 
     expect(result.resendFiles).toBe(true); // Should use default
     expect(result.promptPrefix).toBeUndefined();
@@ -102,7 +102,7 @@ describe('extractAipyqParams', () => {
     expect(result.modelOptions).toEqual({});
   });
 
-  it('should only extract known Aipyq params', () => {
+  it('should only extract known Because params', () => {
     const options = {
       resendFiles: false,
       promptPrefix: 'Custom prompt',
@@ -120,9 +120,9 @@ describe('extractAipyqParams', () => {
       customSetting: 123,
     };
 
-    const result = extractAipyqParams(options);
+    const result = extractBecauseParams(options);
 
-    // Aipyq params extracted
+    // Because params extracted
     expect(result.resendFiles).toBe(false);
     expect(result.promptPrefix).toBe('Custom prompt');
     expect(result.maxContextTokens).toBe(8192);
@@ -150,13 +150,13 @@ describe('extractAipyqParams', () => {
     };
     const originalOptions = { ...options };
 
-    extractAipyqParams(options);
+    extractBecauseParams(options);
 
     // Original object should remain unchanged
     expect(options).toEqual(originalOptions);
   });
 
-  it('should handle undefined values for optional Aipyq params', () => {
+  it('should handle undefined values for optional Because params', () => {
     const options = {
       resendFiles: false,
       promptPrefix: undefined,
@@ -165,7 +165,7 @@ describe('extractAipyqParams', () => {
       model: 'claude-2',
     };
 
-    const result = extractAipyqParams(options);
+    const result = extractBecauseParams(options);
 
     expect(result.resendFiles).toBe(false);
     expect(result.promptPrefix).toBeUndefined();
@@ -185,7 +185,7 @@ describe('extractAipyqParams', () => {
       stop: ['\\n', '\\n\\n'],
     };
 
-    const result = extractAipyqParams(options);
+    const result = extractBecauseParams(options);
 
     expect(result.resendFiles).toBe(true); // default
     expect(result.promptPrefix).toBeNull();

@@ -1,4 +1,4 @@
-import { Spinner } from '@aipyq/client';
+import { Spinner } from '@because/client';
 import { useWatch, useFormContext } from 'react-hook-form';
 import {
   SystemRoles,
@@ -6,7 +6,7 @@ import {
   ResourceType,
   PermissionBits,
   PermissionTypes,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type { AgentForm, AgentPanelProps } from '~/common';
 import { useLocalize, useAuthContext, useHasAccess, useResourcePermissions } from '~/hooks';
 import { GenericGrantAccessDialog } from '~/components/Sharing';

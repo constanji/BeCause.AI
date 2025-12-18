@@ -1,12 +1,12 @@
-import { webSearchAuth } from '@aipyq/data-schemas';
-import { SafeSearchTypes, AuthType } from '@aipyq/data-provider';
+import { webSearchAuth } from '@because/data-schemas';
+import { SafeSearchTypes, AuthType } from '@because/data-provider';
 import type {
   ScraperProviders,
   TWebSearchConfig,
   SearchProviders,
   TCustomConfig,
   RerankerTypes,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import { loadWebSearchAuth, extractWebSearchEnvVars } from './web';
 
 // Mock the extractVariableName function

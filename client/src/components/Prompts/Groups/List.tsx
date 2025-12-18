@@ -1,8 +1,8 @@
 import { Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Skeleton } from '@aipyq/client';
-import { PermissionTypes, Permissions } from '@aipyq/data-provider';
-import type { TPromptGroup, TStartupConfig } from '@aipyq/data-provider';
+import { Button, Skeleton } from '@because/client';
+import { PermissionTypes, Permissions } from '@because/data-provider';
+import type { TPromptGroup, TStartupConfig } from '@because/data-provider';
 import DashGroupItem from '~/components/Prompts/Groups/DashGroupItem';
 import ChatGroupItem from '~/components/Prompts/Groups/ChatGroupItem';
 import { useGetStartupConfig } from '~/data-provider';

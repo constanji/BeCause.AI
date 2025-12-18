@@ -1,6 +1,6 @@
 const express = require('express');
 const { MeiliSearch } = require('meilisearch');
-const { isEnabled } = require('@aipyq/api');
+const { isEnabled } = require('@because/api');
 const requireJwtAuth = require('~/server/middleware/requireJwtAuth');
 
 const router = express.Router();

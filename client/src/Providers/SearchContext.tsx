@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import type { SearchResultData } from '@aipyq/data-provider';
+import type { SearchResultData } from '@because/data-provider';
 
 type SearchContext = {
   searchResults?: { [key: string]: SearchResultData };

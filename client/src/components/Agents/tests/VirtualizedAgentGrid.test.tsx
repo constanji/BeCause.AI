@@ -3,7 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { jest } from '@jest/globals';
 import VirtualizedAgentGrid from '../VirtualizedAgentGrid';
-import type t from '@aipyq/data-provider';
+import type t from '@because/data-provider';
 
 // Mock react-virtualized
 jest.mock('react-virtualized', () => ({

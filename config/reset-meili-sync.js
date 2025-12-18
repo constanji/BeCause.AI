@@ -50,7 +50,7 @@ const connect = require('./connect');
     console.green('MeiliSearch 同步标志已成功重置!');
     console.cyan(`\n待同步的消息总数: ${totalMessages}`);
     console.cyan(`待同步的对话总数: ${totalConversations}`);
-    console.yellow('\n下次 Aipyq 启动或执行同步检查时，');
+    console.yellow('\n下次 Because 启动或执行同步检查时，');
     console.yellow('所有数据将被重新索引到 MeiliSearch。');
     console.purple('---------------------------------------\n');
 
@@ -59,7 +59,7 @@ const connect = require('./connect');
 
     if (showAdvanced.toLowerCase() === 'y') {
       console.cyan('\n高级选项:');
-      console.yellow('1. 要立即触发同步，请重启 Aipyq');
+      console.yellow('1. 要立即触发同步，请重启 Because');
       console.yellow('2. 要禁用同步，在 .env 中设置 MEILI_NO_SYNC=true');
       console.yellow(
         '3. 要调整同步批次大小，在 .env 中设置 MEILI_SYNC_BATCH_SIZE (默认: 100)',

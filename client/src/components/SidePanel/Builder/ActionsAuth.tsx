@@ -5,7 +5,7 @@ import {
   AuthTypeEnum,
   AuthorizationTypeEnum,
   TokenExchangeMethodEnum,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import {
   OGDialog,
   OGDialogClose,
@@ -13,7 +13,7 @@ import {
   OGDialogHeader,
   OGDialogContent,
   OGDialogTrigger,
-} from '@aipyq/client';
+} from '@because/client';
 import { TranslationKeys, useLocalize } from '~/hooks';
 import { cn } from '~/utils';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, DotsIcon, TrashIcon } from '@aipyq/client';
+import { Button, DotsIcon, TrashIcon } from '@because/client';
 import { TVectorStore } from '~/common';
 
 type VectorStoreListItemProps = {

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import { EModelEndpoint } from '@aipyq/data-provider';
-import type { TMessage } from '@aipyq/data-provider';
+import { EModelEndpoint } from '@because/data-provider';
+import type { TMessage } from '@because/data-provider';
 import MessageIcon from '~/components/Share/MessageIcon';
 import { useAgentsMapContext } from '~/Providers';
 import { useLocalize } from '~/hooks';

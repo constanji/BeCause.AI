@@ -8,8 +8,8 @@ import {
   Label,
   Checkbox,
   Dropdown,
-} from '@aipyq/client';
-import type { TConversation } from '@aipyq/data-provider';
+} from '@because/client';
+import type { TConversation } from '@because/data-provider';
 import { useLocalize, useExportConversation } from '~/hooks';
 
 const TYPE_OPTIONS = [

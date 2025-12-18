@@ -1,6 +1,6 @@
 /**
  * SQL API Server - 医院预约挂号系统 (hsp)
- * 用于 Aipyq 智能体查询 MySQL 数据库
+ * 用于 Because 智能体查询 MySQL 数据库
  */
 
 require('dotenv').config();
@@ -41,7 +41,7 @@ const pool = mysql.createPool({
 app.post('/sql_query', async (req, res) => {
   let { sql, input } = req.body;
   
-  // 处理嵌套的 input 格式（Aipyq Actions 可能发送这种格式）
+  // 处理嵌套的 input 格式（Because Actions 可能发送这种格式）
   if (!sql && input) {
     try {
       const parsedInput = typeof input === 'string' ? JSON.parse(input) : input;

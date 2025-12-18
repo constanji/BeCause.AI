@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
-const { checkAccess, generateCheckAccess } = require('@aipyq/api');
-const { PermissionTypes, Permissions } = require('@aipyq/data-provider');
+const { checkAccess, generateCheckAccess } = require('@because/api');
+const { PermissionTypes, Permissions } = require('@because/data-provider');
 const { getRoleByName } = require('~/models/Role');
 const { Role } = require('~/db/models');
 
-// Mock the logger from @aipyq/data-schemas
-jest.mock('@aipyq/data-schemas', () => ({
-  ...jest.requireActual('@aipyq/data-schemas'),
+// Mock the logger from @because/data-schemas
+jest.mock('@because/data-schemas', () => ({
+  ...jest.requireActual('@because/data-schemas'),
   logger: {
     warn: jest.fn(),
     error: jest.fn(),

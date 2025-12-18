@@ -3,7 +3,7 @@ import { useSetRecoilState } from 'recoil';
 // @ts-ignore - no type definitions available
 import AvatarEditor from 'react-avatar-editor';
 import { FileImage, RotateCw, Upload, ZoomIn, ZoomOut, Move, X } from 'lucide-react';
-import { fileConfig as defaultFileConfig, mergeFileConfig } from '@aipyq/data-provider';
+import { fileConfig as defaultFileConfig, mergeFileConfig } from '@because/data-provider';
 import {
   Label,
   Slider,
@@ -15,8 +15,8 @@ import {
   OGDialogTitle,
   OGDialogTrigger,
   useToastContext,
-} from '@aipyq/client';
-import type { TUser } from '@aipyq/data-provider';
+} from '@because/client';
+import type { TUser } from '@because/data-provider';
 import { useUploadAvatarMutation, useGetFileConfig } from '~/data-provider';
 import { cn, formatBytes } from '~/utils';
 import { useLocalize } from '~/hooks';

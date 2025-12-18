@@ -1,10 +1,10 @@
-jest.mock('@aipyq/data-provider', () => ({
-  ...jest.requireActual('@aipyq/data-provider'),
+jest.mock('@because/data-provider', () => ({
+  ...jest.requireActual('@because/data-provider'),
   extractVariableName: jest.fn(),
 }));
 
-jest.mock('@aipyq/data-schemas', () => ({
-  ...jest.requireActual('@aipyq/data-schemas'),
+jest.mock('@because/data-schemas', () => ({
+  ...jest.requireActual('@because/data-schemas'),
   logger: {
     debug: jest.fn(),
     warn: jest.fn(),
@@ -13,8 +13,8 @@ jest.mock('@aipyq/data-schemas', () => ({
 
 import { handleRateLimits } from './limits';
 import { checkWebSearchConfig } from './checks';
-import { logger } from '@aipyq/data-schemas';
-import { extractVariableName as extract } from '@aipyq/data-provider';
+import { logger } from '@because/data-schemas';
+import { extractVariableName as extract } from '@because/data-provider';
 
 const extractVariableName = extract as jest.MockedFunction<typeof extract>;
 
@@ -147,7 +147,7 @@ describe('checkWebSearchConfig', () => {
 
       expect(logger.warn).toHaveBeenCalledWith(
         expect.stringContaining(
-          'More info: https://www.aipyq.com/docs/configuration/aipyq_yaml/web_search',
+          'More info: https://because.ai/docs/configuration/because_yaml/web_search',
         ),
       );
     });

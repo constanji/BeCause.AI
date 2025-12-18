@@ -1,5 +1,5 @@
-import { EModelEndpoint, getConfigDefaults } from '@aipyq/data-provider';
-import type { TCustomConfig, FileSources, DeepPartial } from '@aipyq/data-provider';
+import { EModelEndpoint, getConfigDefaults } from '@because/data-provider';
+import type { TCustomConfig, FileSources, DeepPartial } from '@because/data-provider';
 import type { AppConfig, FunctionTool } from '~/types/app';
 import { loadDefaultInterface } from './interface';
 import { loadTurnstileConfig } from './turnstile';

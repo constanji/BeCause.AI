@@ -1,6 +1,6 @@
-import { Constants } from '@aipyq/data-provider';
+import { Constants } from '@because/data-provider';
 import { atomFamily, useRecoilCallback } from 'recoil';
-import type { TEphemeralAgent } from '@aipyq/data-provider';
+import type { TEphemeralAgent } from '@because/data-provider';
 import { logger } from '~/utils';
 
 export const ephemeralAgentByConvoId = atomFamily<TEphemeralAgent | null, string>({

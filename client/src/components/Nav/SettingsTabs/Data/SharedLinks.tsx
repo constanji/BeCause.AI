@@ -3,7 +3,7 @@ import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
 import { Link } from 'react-router-dom';
 import { TrashIcon, MessageSquare, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
-import type { SharedLinkItem, SharedLinksListParams } from '@aipyq/data-provider';
+import type { SharedLinkItem, SharedLinksListParams } from '@because/data-provider';
 import {
   OGDialog,
   useToastContext,
@@ -17,7 +17,7 @@ import {
   Spinner,
   Button,
   Label,
-} from '@aipyq/client';
+} from '@because/client';
 import { useDeleteSharedLinkMutation, useSharedLinksQuery } from '~/data-provider';
 import { useLocalize } from '~/hooks';
 import { NotificationSeverity } from '~/common';

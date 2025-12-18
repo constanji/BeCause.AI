@@ -30,7 +30,7 @@ jest.mock('~/server/services/Config', () => ({
   }),
 }));
 
-const { Calculator } = require('@aipyq/agents');
+const { Calculator } = require('@because/agents');
 
 const { User } = require('~/db/models');
 const PluginService = require('~/server/services/PluginService');

@@ -1,10 +1,10 @@
-import { getEndpointField, isAssistantsEndpoint } from '@aipyq/data-provider';
+import { getEndpointField, isAssistantsEndpoint } from '@because/data-provider';
 import type {
   TPreset,
   TConversation,
   TAssistantsMap,
   TEndpointsConfig,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import ConvoIconURL from '~/components/Endpoints/ConvoIconURL';
 import MinimalIcon from '~/components/Endpoints/MinimalIcon';
 import { getIconEndpoint } from '~/utils';

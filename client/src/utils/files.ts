@@ -5,7 +5,7 @@ import {
   AudioPaths,
   VideoPaths,
   SheetPaths,
-} from '@aipyq/client';
+} from '@because/client';
 import {
   megabyte,
   QueryKeys,
@@ -13,8 +13,8 @@ import {
   EToolResources,
   codeTypeMapping,
   fileConfig as defaultFileConfig,
-} from '@aipyq/data-provider';
-import type { TFile, EndpointFileConfig, FileConfig } from '@aipyq/data-provider';
+} from '@because/data-provider';
+import type { TFile, EndpointFileConfig, FileConfig } from '@because/data-provider';
 import type { QueryClient } from '@tanstack/react-query';
 import type { ExtendedFile } from '~/common';
 

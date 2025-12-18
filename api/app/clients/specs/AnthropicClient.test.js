@@ -1,5 +1,5 @@
-const { SplitStreamHandler } = require('@aipyq/agents');
-const { anthropicSettings } = require('@aipyq/data-provider');
+const { SplitStreamHandler } = require('@because/agents');
+const { anthropicSettings } = require('@because/data-provider');
 const AnthropicClient = require('~/app/clients/AnthropicClient');
 
 const HUMAN_PROMPT = '\n\nHuman:';

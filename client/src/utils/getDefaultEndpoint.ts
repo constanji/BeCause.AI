@@ -4,8 +4,8 @@ import type {
   EModelEndpoint,
   TEndpointsConfig,
   TStartupConfig,
-} from '@aipyq/data-provider';
-import { isAgentsEndpoint } from '@aipyq/data-provider';
+} from '@because/data-provider';
+import { isAgentsEndpoint } from '@because/data-provider';
 import { getLocalStorageItems } from './localStorage';
 import { mapEndpoints } from './endpoints';
 

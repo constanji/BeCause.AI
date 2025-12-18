@@ -1,7 +1,7 @@
 const { Tool } = require('@langchain/core/tools');
 const { z } = require('zod');
 const axios = require('axios');
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 
 /**
  * SQL Executor Tool - 执行 SQL 查询并返回结果和归因分析

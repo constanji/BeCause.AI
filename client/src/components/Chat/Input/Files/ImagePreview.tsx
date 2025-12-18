@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Maximize2 } from 'lucide-react';
-import { FileSources } from '@aipyq/data-provider';
-import { OGDialog, OGDialogContent } from '@aipyq/client';
+import { FileSources } from '@because/data-provider';
+import { OGDialog, OGDialogContent } from '@because/client';
 import ProgressCircle from './ProgressCircle';
 import SourceIcon from './SourceIcon';
 import { cn } from '~/utils';

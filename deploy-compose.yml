@@ -27,8 +27,8 @@ services:
       # - RAG_API_URL=http://rag_api:${RAG_PORT:-8000}
     volumes:
       - type: bind
-        source: ./Aipyq.yaml
-        target: /app/Aipyq.yaml
+        source: ./Because.yaml
+        target: /app/Because.yaml
       - ./specs:/app/specs
       - ./images:/app/client/public/images
       - ./uploads:/app/uploads

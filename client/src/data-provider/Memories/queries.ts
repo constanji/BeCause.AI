@@ -1,12 +1,12 @@
 /* Memories */
-import { QueryKeys, MutationKeys, dataService } from '@aipyq/data-provider';
+import { QueryKeys, MutationKeys, dataService } from '@because/data-provider';
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import type {
   UseQueryOptions,
   UseMutationOptions,
   QueryObserverResult,
 } from '@tanstack/react-query';
-import type { TUserMemory, MemoriesResponse } from '@aipyq/data-provider';
+import type { TUserMemory, MemoriesResponse } from '@because/data-provider';
 
 export const useMemoriesQuery = (
   config?: UseQueryOptions<MemoriesResponse>,

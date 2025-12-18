@@ -1,4 +1,4 @@
-import { HoverCardPortal, HoverCardContent } from '@aipyq/client';
+import { HoverCardPortal, HoverCardContent } from '@because/client';
 import './styles.module.css';
 
 type TPluginTooltipProps = {

@@ -2,7 +2,7 @@ const { Tool } = require('@langchain/core/tools');
 const { z } = require('zod');
 const path = require('path');
 const fs = require('fs').promises;
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 
 /**
  * BaziAstrology Tool - 生辰八字/星座分析工具

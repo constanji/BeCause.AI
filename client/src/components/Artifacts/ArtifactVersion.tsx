@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MenuButton } from '@ariakit/react';
 import { History, Check } from 'lucide-react';
-import { DropdownPopup, TooltipAnchor, Button, useMediaQuery } from '@aipyq/client';
+import { DropdownPopup, TooltipAnchor, Button, useMediaQuery } from '@because/client';
 import { useLocalize } from '~/hooks';
 
 interface ArtifactVersionProps {

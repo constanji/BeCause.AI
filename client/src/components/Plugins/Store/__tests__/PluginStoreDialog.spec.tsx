@@ -1,11 +1,11 @@
 import { render, screen, fireEvent } from 'test/layout-test-utils';
 import PluginStoreDialog from '../PluginStoreDialog';
 import userEvent from '@testing-library/user-event';
-import * as mockDataProvider from '@aipyq/data-provider/react-query';
+import * as mockDataProvider from '@because/data-provider/react-query';
 import * as authMutations from '~/data-provider/Auth/mutations';
 import * as authQueries from '~/data-provider/Auth/queries';
 
-jest.mock('@aipyq/data-provider/react-query');
+jest.mock('@because/data-provider/react-query');
 
 class ResizeObserver {
   observe() {

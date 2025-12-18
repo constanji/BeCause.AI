@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { ChevronLeft } from 'lucide-react';
-import { AgentCapabilities } from '@aipyq/data-provider';
+import { AgentCapabilities } from '@because/data-provider';
 import { useFormContext, Controller } from 'react-hook-form';
 import type { AgentForm } from '~/common';
 import { useAgentPanelContext } from '~/Providers';

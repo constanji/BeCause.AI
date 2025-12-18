@@ -1,4 +1,4 @@
-import type { AppConfig } from '@aipyq/data-schemas';
+import type { AppConfig } from '@because/data-schemas';
 import {
   createTempChatExpirationDate,
   getTempChatRetentionHours,

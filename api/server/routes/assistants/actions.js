@@ -1,8 +1,8 @@
 const express = require('express');
 const { nanoid } = require('nanoid');
-const { logger } = require('@aipyq/data-schemas');
-const { isActionDomainAllowed } = require('@aipyq/api');
-const { actionDelimiter, EModelEndpoint, removeNullishValues } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { isActionDomainAllowed } = require('@because/api');
+const { actionDelimiter, EModelEndpoint, removeNullishValues } = require('@because/data-provider');
 const { encryptMetadata, domainParser } = require('~/server/services/ActionService');
 const { getOpenAIClient } = require('~/server/controllers/assistants/helpers');
 const { updateAction, getActions, deleteAction } = require('~/models/Action');

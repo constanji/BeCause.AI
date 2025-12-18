@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { RefreshCcw } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { TBackupCode, TRegenerateBackupCodesResponse, type TUser } from '@aipyq/data-provider';
+import { TBackupCode, TRegenerateBackupCodesResponse, type TUser } from '@because/data-provider';
 import {
   OGDialog,
   OGDialogContent,
@@ -12,7 +12,7 @@ import {
   Spinner,
   TooltipAnchor,
   useToastContext,
-} from '@aipyq/client';
+} from '@because/client';
 import { useRegenerateBackupCodesMutation } from '~/data-provider';
 import { useAuthContext, useLocalize } from '~/hooks';
 import { useSetRecoilState } from 'recoil';

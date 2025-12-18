@@ -1,4 +1,4 @@
-import { EModelEndpoint } from '@aipyq/data-provider';
+import { EModelEndpoint } from '@because/data-provider';
 import { useFormContext, Controller } from 'react-hook-form';
 import InputWithLabel from './InputWithLabel';
 

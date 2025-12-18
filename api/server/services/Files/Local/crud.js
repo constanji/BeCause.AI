@@ -1,9 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
-const { logger } = require('@aipyq/data-schemas');
-const { EModelEndpoint } = require('@aipyq/data-provider');
-const { generateShortLivedToken } = require('@aipyq/api');
+const { logger } = require('@because/data-schemas');
+const { EModelEndpoint } = require('@because/data-provider');
+const { generateShortLivedToken } = require('@because/api');
 const { resizeImageBuffer } = require('~/server/services/Files/images/resize');
 const { getBufferMetadata } = require('~/server/utils');
 const paths = require('~/config/paths');

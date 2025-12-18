@@ -6,8 +6,8 @@ const {
   defaultRetrievalModels,
   defaultAssistantsVersion,
   defaultAgentCapabilities,
-} = require('@aipyq/data-provider');
-const { sendEvent } = require('@aipyq/api');
+} = require('@because/data-provider');
+const { sendEvent } = require('@because/api');
 const partialRight = require('lodash/partialRight');
 
 /** Helper function to escape special characters in regex

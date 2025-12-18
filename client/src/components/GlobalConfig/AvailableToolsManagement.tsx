@@ -1,5 +1,5 @@
 import React from 'react';
-import { EModelEndpoint } from '@aipyq/data-provider';
+import { EModelEndpoint } from '@because/data-provider';
 import { Wrench } from 'lucide-react';
 import { useAvailableToolsQuery } from '~/data-provider';
 import { useLocalize } from '~/hooks';

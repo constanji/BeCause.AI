@@ -1,7 +1,7 @@
 import React from 'react';
 import { QrCode } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Button, Spinner } from '@aipyq/client';
+import { Button, Spinner } from '@because/client';
 import { useLocalize } from '~/hooks';
 
 const fadeAnimation = {

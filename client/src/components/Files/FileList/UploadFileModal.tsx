@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent } from 'react';
-import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input } from '@aipyq/client';
+import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, Input } from '@because/client';
 import { useLocalize } from '~/hooks';
 import { cn } from '~/utils';
 

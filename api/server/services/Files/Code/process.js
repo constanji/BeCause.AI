@@ -1,16 +1,16 @@
 const path = require('path');
 const { v4 } = require('uuid');
 const axios = require('axios');
-const { logger } = require('@aipyq/data-schemas');
-const { getCodeBaseURL } = require('@aipyq/agents');
-const { logAxiosError, getBasePath } = require('@aipyq/api');
+const { logger } = require('@because/data-schemas');
+const { getCodeBaseURL } = require('@because/agents');
+const { logAxiosError, getBasePath } = require('@because/api');
 const {
   Tools,
   FileContext,
   FileSources,
   imageExtRegex,
   EToolResources,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const { filterFilesByAgentAccess } = require('~/server/services/Files/permissions');
 const { getStrategyFunctions } = require('~/server/services/Files/strategies');
 const { convertImage } = require('~/server/services/Files/images/convert');
@@ -62,7 +62,7 @@ const processCodeOutput = async ({
       url: `${baseURL}/download/${session_id}/${id}`,
       responseType: 'arraybuffer',
       headers: {
-        'User-Agent': 'Aipyq/1.0',
+        'User-Agent': 'Because/1.0',
         'X-API-Key': apiKey,
       },
       timeout: 15000,
@@ -134,7 +134,7 @@ async function getSessionInfo(fileIdentifier, apiKey) {
         ...queryParams,
       },
       headers: {
-        'User-Agent': 'Aipyq/1.0',
+        'User-Agent': 'Because/1.0',
         'X-API-Key': apiKey,
       },
       timeout: 5000,

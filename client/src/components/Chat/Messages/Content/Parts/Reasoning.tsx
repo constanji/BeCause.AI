@@ -1,7 +1,7 @@
 import { memo, useMemo, useState, useCallback } from 'react';
 import { useAtom } from 'jotai';
 import type { MouseEvent } from 'react';
-import { ContentTypes } from '@aipyq/data-provider';
+import { ContentTypes } from '@because/data-provider';
 import { ThinkingContent, ThinkingButton } from './Thinking';
 import { showThinkingAtom } from '~/store/showThinking';
 import { useMessageContext } from '~/Providers';

@@ -5,7 +5,7 @@ import {
   OGDialogPortal,
   OGDialogOverlay,
   OGDialogContent,
-} from '@aipyq/client';
+} from '@because/client';
 import type { SharePointBatchProgress } from '~/data-provider/Files/sharepoint';
 import { useSharePointPicker, useLocalize } from '~/hooks';
 

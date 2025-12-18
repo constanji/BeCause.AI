@@ -1,6 +1,6 @@
 const cookies = require('cookie');
-const { isEnabled } = require('@aipyq/api');
-const { logger } = require('@aipyq/data-schemas');
+const { isEnabled } = require('@because/api');
+const { logger } = require('@because/data-schemas');
 const { logoutUser } = require('~/server/services/AuthService');
 const { getOpenIdConfig } = require('~/strategies');
 

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { AgentCapabilities } from '@aipyq/data-provider';
+import { AgentCapabilities } from '@because/data-provider';
 
 interface AgentCapabilitiesResult {
   toolsEnabled: boolean;

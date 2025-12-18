@@ -5,7 +5,7 @@ import {
   AuthTypeEnum,
   AuthorizationTypeEnum,
   TokenExchangeMethodEnum,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import {
   Label,
   OGDialog,
@@ -13,7 +13,7 @@ import {
   OGDialogTrigger,
   useToastContext,
   OGDialogTemplate,
-} from '@aipyq/client';
+} from '@because/client';
 import type { ActionAuthForm } from '~/common';
 import ActionsAuth from '~/components/SidePanel/Builder/ActionsAuth';
 import { useAgentPanelContext } from '~/Providers/AgentPanelContext';

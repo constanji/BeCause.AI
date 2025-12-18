@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { dataService, QueryKeys, Constants } from '@aipyq/data-provider';
+import { dataService, QueryKeys, Constants } from '@because/data-provider';
 import type { UseMutationResult, UseMutationOptions } from '@tanstack/react-query';
-import type * as t from '@aipyq/data-provider';
+import type * as t from '@because/data-provider';
 
 type EditArtifactContext = {
   previousMessages: Record<string, t.TMessage[] | undefined>;

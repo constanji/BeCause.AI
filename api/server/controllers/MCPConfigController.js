@@ -1,11 +1,11 @@
 const fs = require('fs').promises;
 const path = require('path');
 const yaml = require('js-yaml');
-const { logger } = require('@aipyq/data-schemas');
-const { CacheKeys } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { CacheKeys } = require('@because/data-provider');
 const { getLogStores } = require('~/cache');
 const getConfigPath = require('~/server/utils/getConfigPath');
-const { mcpServersRegistry } = require('@aipyq/api');
+const { mcpServersRegistry } = require('@because/api');
 const { clearAppConfigCache } = require('~/server/services/Config/app');
 
 // 获取自定义 MCP 服务器配置
@@ -16,7 +16,7 @@ async function getCustomMCPServersConfig(req, res) {
     // Check if config file exists and is a local file (not a URL)
     if (/^https?:\/\//.test(configPath)) {
       return res.status(400).json({
-        error: 'Cannot read remote config file. Please use a local Aipyq.yaml file.',
+        error: 'Cannot read remote config file. Please use a local Because.yaml file.',
       });
     }
 
@@ -79,7 +79,7 @@ async function saveCustomMCPServersConfig(req, res) {
     // Check if config file exists and is a local file (not a URL)
     if (/^https?:\/\//.test(configPath)) {
       return res.status(400).json({
-        error: 'Cannot update remote config file. Please use a local Aipyq.yaml file.',
+        error: 'Cannot update remote config file. Please use a local Because.yaml file.',
       });
     }
 
@@ -172,7 +172,7 @@ async function deleteCustomMCPServersConfig(req, res) {
     // Check if config file exists and is a local file (not a URL)
     if (/^https?:\/\//.test(configPath)) {
       return res.status(400).json({
-        error: 'Cannot update remote config file. Please use a local Aipyq.yaml file.',
+        error: 'Cannot update remote config file. Please use a local Because.yaml file.',
       });
     }
 

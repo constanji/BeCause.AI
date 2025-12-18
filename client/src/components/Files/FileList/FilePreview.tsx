@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { TFile } from '@aipyq/data-provider/dist/types';
-import { CheckMark, TrashIcon, Button } from '@aipyq/client';
+import { TFile } from '@because/data-provider/dist/types';
+import { CheckMark, TrashIcon, Button } from '@because/client';
 import VectorStoreButton from '../VectorStore/VectorStoreButton';
 import { CircleIcon, Clock3Icon, InfoIcon } from 'lucide-react';
 import DeleteIconButton from '../DeleteIconButton';

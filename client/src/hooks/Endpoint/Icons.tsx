@@ -1,5 +1,5 @@
 import { Feather } from 'lucide-react';
-import { EModelEndpoint } from '@aipyq/data-provider';
+import { EModelEndpoint } from '@because/data-provider';
 import {
   MinimalPlugin,
   GPTIcon,
@@ -11,7 +11,7 @@ import {
   LightningIcon,
   BedrockIcon,
   Sparkles,
-} from '@aipyq/client';
+} from '@because/client';
 import type { IconMapProps, AgentIconMapProps, IconsRecord } from '~/common';
 import UnknownIcon from './UnknownIcon';
 import { cn } from '~/utils';

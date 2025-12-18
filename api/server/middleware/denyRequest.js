@@ -1,6 +1,6 @@
 const crypto = require('crypto');
-const { sendEvent } = require('@aipyq/api');
-const { getResponseSender, Constants } = require('@aipyq/data-provider');
+const { sendEvent } = require('@because/api');
+const { getResponseSender, Constants } = require('@because/data-provider');
 const { sendError } = require('~/server/middleware/error');
 const { saveMessage } = require('~/models');
 

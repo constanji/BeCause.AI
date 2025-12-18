@@ -1,5 +1,5 @@
-const { logger } = require('@aipyq/data-schemas');
-const { isAgentsEndpoint, removeNullishValues, Constants } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { isAgentsEndpoint, removeNullishValues, Constants } = require('@because/data-provider');
 const { loadAgent } = require('~/models/Agent');
 
 const buildOptions = (req, endpoint, parsedBody, endpointType) => {

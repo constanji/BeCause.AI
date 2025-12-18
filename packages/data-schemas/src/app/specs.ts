@@ -1,9 +1,9 @@
 import logger from '~/config/winston';
-import { EModelEndpoint, normalizeEndpointName } from '@aipyq/data-provider';
-import type { TCustomConfig } from '@aipyq/data-provider';
+import { EModelEndpoint, normalizeEndpointName } from '@because/data-provider';
+import type { TCustomConfig } from '@because/data-provider';
 
 /**
- * Sets up Model Specs from the config (`Aipyq.yaml`) file.
+ * Sets up Model Specs from the config (`Because.yaml`) file.
  * @param [endpoints] - The loaded custom configuration for endpoints.
  * @param [modelSpecs] - The loaded custom configuration for model specs.
  * @param [interfaceConfig] - The loaded interface configuration.
@@ -66,7 +66,7 @@ export function processModelSpecs(
     if (!endpoint) {
       logger.warn(`Model spec with endpoint "${currentEndpoint}" was skipped: Endpoint not found in configuration. The \`endpoint\` value must exactly match either a system-defined endpoint or a custom endpoint defined by the user.
 
-For more information, see the documentation at https://www.aipyq.com/docs/configuration/aipyq_yaml/object_structure/model_specs#endpoint`);
+For more information, see the documentation at https://because.ai/docs/configuration/because_yaml/object_structure/model_specs#endpoint`);
       continue;
     }
 

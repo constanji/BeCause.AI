@@ -1,5 +1,5 @@
 // --- Mocks ---
-jest.mock('@aipyq/data-schemas', () => ({
+jest.mock('@because/data-schemas', () => ({
   logger: {
     info: jest.fn(),
     warn: jest.fn(),
@@ -8,7 +8,7 @@ jest.mock('@aipyq/data-schemas', () => ({
   },
 }));
 
-jest.mock('@aipyq/api', () => ({
+jest.mock('@because/api', () => ({
   // isEnabled used for TLS flags
   isEnabled: jest.fn(() => false),
   isEmailDomainAllowed: jest.fn(() => true),
@@ -35,8 +35,8 @@ jest.mock('passport-ldapauth', () => {
   });
 });
 
-const { ErrorTypes } = require('@aipyq/data-provider');
-const { isEmailDomainAllowed } = require('@aipyq/api');
+const { ErrorTypes } = require('@because/data-provider');
+const { isEmailDomainAllowed } = require('@because/api');
 const { findUser, createUser, updateUser, countUsers } = require('~/models');
 
 // Helper to call the verify callback and wrap in a Promise for convenience

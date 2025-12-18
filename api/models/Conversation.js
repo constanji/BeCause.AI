@@ -1,5 +1,5 @@
-const { logger } = require('@aipyq/data-schemas');
-const { createTempChatExpirationDate } = require('@aipyq/api');
+const { logger } = require('@because/data-schemas');
+const { createTempChatExpirationDate } = require('@because/api');
 const { getMessages, deleteMessages } = require('./Message');
 const { Conversation } = require('~/db/models');
 

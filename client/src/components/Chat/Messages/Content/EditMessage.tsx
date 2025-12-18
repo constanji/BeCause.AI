@@ -1,8 +1,8 @@
 import { useRef, useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { TextareaAutosize, TooltipAnchor } from '@aipyq/client';
-import { useUpdateMessageMutation } from '@aipyq/data-provider/react-query';
+import { TextareaAutosize, TooltipAnchor } from '@because/client';
+import { useUpdateMessageMutation } from '@because/data-provider/react-query';
 import type { TEditProps } from '~/common';
 import { useMessagesOperations, useMessagesConversation, useAddedChatContext } from '~/Providers';
 import { cn, removeFocusRings } from '~/utils';

@@ -1,6 +1,6 @@
-import { Tools, PermissionTypes, Permissions } from '@aipyq/data-provider';
+import { Tools, PermissionTypes, Permissions } from '@because/data-provider';
 import { useState, useRef, useMemo, useLayoutEffect, useEffect } from 'react';
-import type { MemoryArtifact, TAttachment } from '@aipyq/data-provider';
+import type { MemoryArtifact, TAttachment } from '@because/data-provider';
 import MemoryInfo from './MemoryInfo';
 import { useLocalize, useHasAccess } from '~/hooks';
 import { cn } from '~/utils';

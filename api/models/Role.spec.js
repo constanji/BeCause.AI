@@ -5,7 +5,7 @@ const {
   Permissions,
   roleDefaults,
   PermissionTypes,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const { getRoleByName, updateAccessPermissions } = require('~/models/Role');
 const getLogStores = require('~/cache/getLogStores');
 const { initializeRoles } = require('~/models');

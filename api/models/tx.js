@@ -1,4 +1,4 @@
-const { matchModelName, findMatchingPattern } = require('@aipyq/api');
+const { matchModelName, findMatchingPattern } = require('@because/api');
 const defaultRate = 6;
 
 /**

@@ -1,5 +1,5 @@
 import { useRecoilState } from 'recoil';
-import { Switch } from '@aipyq/client';
+import { Switch } from '@because/client';
 import { useLocalize } from '~/hooks';
 import { cn } from '~/utils';
 import store from '~/store';

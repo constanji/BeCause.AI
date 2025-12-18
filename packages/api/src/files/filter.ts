@@ -1,5 +1,5 @@
-import { getEndpointFileConfig, mergeFileConfig, fileConfig } from '@aipyq/data-provider';
-import type { IMongoFile } from '@aipyq/data-schemas';
+import { getEndpointFileConfig, mergeFileConfig, fileConfig } from '@because/data-provider';
+import type { IMongoFile } from '@because/data-schemas';
 import type { ServerRequest } from '~/types';
 
 /**

@@ -1,6 +1,6 @@
-import { logger } from '@aipyq/data-schemas';
-import { ErrorTypes } from '@aipyq/data-provider';
-import type { IUser, UserMethods } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
+import { ErrorTypes } from '@because/data-provider';
+import type { IUser, UserMethods } from '@because/data-schemas';
 
 /**
  * Finds or migrates a user for OpenID authentication

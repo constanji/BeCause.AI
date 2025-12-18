@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
-import { Spinner } from '@aipyq/client';
-import { PermissionTypes, Permissions, SystemRoles } from '@aipyq/data-provider';
+import { Spinner } from '@because/client';
+import { PermissionTypes, Permissions, SystemRoles } from '@because/data-provider';
 import { useGetStartupConfig, useGetEndpointsQuery } from '~/data-provider';
 import { useAppStartup, useHasAccess, useLocalize, useAuthContext } from '~/hooks';
 import { AgentPanelProvider, ChatContext } from '~/Providers';

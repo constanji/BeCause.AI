@@ -1,8 +1,8 @@
 import React from 'react';
-import { Tools } from '@aipyq/data-provider';
+import { Tools } from '@because/data-provider';
 import { UIResourceRenderer } from '@mcp-ui/client';
 import { render, screen } from '@testing-library/react';
-import type { TAttachment } from '@aipyq/data-provider';
+import type { TAttachment } from '@because/data-provider';
 import UIResourceCarousel from '~/components/Chat/Messages/Content/UIResourceCarousel';
 import ToolCallInfo from '~/components/Chat/Messages/Content/ToolCallInfo';
 

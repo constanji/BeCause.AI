@@ -1,4 +1,4 @@
-import { logger } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
 import type { mongo } from 'mongoose';
 
 /**

@@ -1,7 +1,7 @@
-import { TokenExchangeMethodEnum } from '@aipyq/data-provider';
+import { TokenExchangeMethodEnum } from '@because/data-provider';
 import { resolveHeaders, resolveNestedObject, processMCPEnv } from './env';
-import type { MCPOptions } from '@aipyq/data-provider';
-import type { IUser } from '@aipyq/data-schemas';
+import type { MCPOptions } from '@because/data-provider';
+import type { IUser } from '@because/data-schemas';
 import { Types } from 'mongoose';
 
 function isStdioOptions(options: MCPOptions): options is Extract<MCPOptions, { type?: 'stdio' }> {
@@ -79,7 +79,7 @@ describe('resolveHeaders', () => {
   it('should process user ID placeholder when user has id', () => {
     const user = { id: 'test-user-123' };
     const headers = {
-      'User-Id': '{{AIPYQ_USER_ID}}',
+      'User-Id': '{{BECAUSE_USER_ID}}',
       'Content-Type': 'application/json',
     };
 
@@ -93,14 +93,14 @@ describe('resolveHeaders', () => {
 
   it('should not process user ID placeholder when user is undefined', () => {
     const headers = {
-      'User-Id': '{{AIPYQ_USER_ID}}',
+      'User-Id': '{{BECAUSE_USER_ID}}',
       'Content-Type': 'application/json',
     };
 
     const result = resolveHeaders({ headers });
 
     expect(result).toEqual({
-      'User-Id': '{{AIPYQ_USER_ID}}',
+      'User-Id': '{{BECAUSE_USER_ID}}',
       'Content-Type': 'application/json',
     });
   });
@@ -108,14 +108,14 @@ describe('resolveHeaders', () => {
   it('should not process user ID placeholder when user has no id', () => {
     const user = { id: '' };
     const headers = {
-      'User-Id': '{{AIPYQ_USER_ID}}',
+      'User-Id': '{{BECAUSE_USER_ID}}',
       'Content-Type': 'application/json',
     };
 
     const result = resolveHeaders({ headers, user });
 
     expect(result).toEqual({
-      'User-Id': '{{AIPYQ_USER_ID}}',
+      'User-Id': '{{BECAUSE_USER_ID}}',
       'Content-Type': 'application/json',
     });
   });
@@ -130,11 +130,11 @@ describe('resolveHeaders', () => {
     });
 
     const headers = {
-      'User-Email': '{{AIPYQ_USER_EMAIL}}',
-      'User-Name': '{{AIPYQ_USER_NAME}}',
-      'User-Username': '{{AIPYQ_USER_USERNAME}}',
-      'User-Role': '{{AIPYQ_USER_ROLE}}',
-      'User-Id': '{{AIPYQ_USER_ID}}',
+      'User-Email': '{{BECAUSE_USER_EMAIL}}',
+      'User-Name': '{{BECAUSE_USER_NAME}}',
+      'User-Username': '{{BECAUSE_USER_USERNAME}}',
+      'User-Role': '{{BECAUSE_USER_ROLE}}',
+      'User-Id': '{{BECAUSE_USER_ID}}',
       'Content-Type': 'application/json',
     };
 
@@ -158,9 +158,9 @@ describe('resolveHeaders', () => {
     });
 
     const headers = {
-      'User-Email': '{{AIPYQ_USER_EMAIL}}',
-      'User-Username': '{{AIPYQ_USER_USERNAME}}',
-      'Non-Existent': '{{AIPYQ_USER_NONEXISTENT}}',
+      'User-Email': '{{BECAUSE_USER_EMAIL}}',
+      'User-Username': '{{BECAUSE_USER_USERNAME}}',
+      'Non-Existent': '{{BECAUSE_USER_NONEXISTENT}}',
     };
 
     const result = resolveHeaders({ headers, user });
@@ -168,7 +168,7 @@ describe('resolveHeaders', () => {
     expect(result).toEqual({
       'User-Email': 'test@example.com',
       'User-Username': '',
-      'Non-Existent': '{{AIPYQ_USER_NONEXISTENT}}',
+      'Non-Existent': '{{BECAUSE_USER_NONEXISTENT}}',
     });
   });
 
@@ -183,7 +183,7 @@ describe('resolveHeaders', () => {
       Authorization: 'Bearer {{CUSTOM_TOKEN}}',
       'X-Region': '{{REGION}}',
       'X-System-Key': '${TEST_API_KEY}',
-      'X-User-Id': '{{AIPYQ_USER_ID}}',
+      'X-User-Id': '{{BECAUSE_USER_ID}}',
     };
 
     const result = resolveHeaders({ headers, user, customUserVars });
@@ -202,11 +202,11 @@ describe('resolveHeaders', () => {
       email: 'user-email@example.com',
     });
     const customUserVars = {
-      AIPYQ_USER_EMAIL: 'custom-email@example.com',
+      BECAUSE_USER_EMAIL: 'custom-email@example.com',
     };
 
     const headers = {
-      'Test-Email': '{{AIPYQ_USER_EMAIL}}',
+      'Test-Email': '{{BECAUSE_USER_EMAIL}}',
     };
 
     const result = resolveHeaders({ headers, user, customUserVars });
@@ -224,8 +224,8 @@ describe('resolveHeaders', () => {
     });
 
     const headers = {
-      'User-Role': '{{AIPYQ_USER_ROLE}}',
-      'User-Id': '{{AIPYQ_USER_ID}}',
+      'User-Role': '{{BECAUSE_USER_ROLE}}',
+      'User-Id': '{{BECAUSE_USER_ID}}',
     };
 
     const result = resolveHeaders({ headers, user });
@@ -243,9 +243,9 @@ describe('resolveHeaders', () => {
     });
 
     const headers = {
-      'Primary-Email': '{{AIPYQ_USER_EMAIL}}',
-      'Secondary-Email': '{{AIPYQ_USER_EMAIL}}',
-      'Backup-Email': '{{AIPYQ_USER_EMAIL}}',
+      'Primary-Email': '{{BECAUSE_USER_EMAIL}}',
+      'Secondary-Email': '{{BECAUSE_USER_EMAIL}}',
+      'Backup-Email': '{{BECAUSE_USER_EMAIL}}',
     };
 
     const result = resolveHeaders({ headers, user });
@@ -268,9 +268,9 @@ describe('resolveHeaders', () => {
 
     const headers = {
       Authorization: 'Bearer {{CUSTOM_TOKEN}}',
-      'X-User-Id': '{{AIPYQ_USER_ID}}',
+      'X-User-Id': '{{BECAUSE_USER_ID}}',
       'X-System-Key': '${TEST_API_KEY}',
-      'X-User-Email': '{{AIPYQ_USER_EMAIL}}',
+      'X-User-Email': '{{BECAUSE_USER_EMAIL}}',
       'Content-Type': 'application/json',
     };
 
@@ -288,7 +288,7 @@ describe('resolveHeaders', () => {
   it('should not modify the original headers object', () => {
     const originalHeaders = {
       Authorization: '${TEST_API_KEY}',
-      'User-Id': '{{AIPYQ_USER_ID}}',
+      'User-Id': '{{BECAUSE_USER_ID}}',
     };
     const user = { id: 'user-123' };
 
@@ -301,7 +301,7 @@ describe('resolveHeaders', () => {
 
     expect(originalHeaders).toEqual({
       Authorization: '${TEST_API_KEY}',
-      'User-Id': '{{AIPYQ_USER_ID}}',
+      'User-Id': '{{BECAUSE_USER_ID}}',
     });
   });
 
@@ -350,23 +350,23 @@ describe('resolveHeaders', () => {
     };
 
     const headers = {
-      'X-User-ID': '{{AIPYQ_USER_ID}}',
-      'X-User-Name': '{{AIPYQ_USER_NAME}}',
-      'X-User-Username': '{{AIPYQ_USER_USERNAME}}',
-      'X-User-Email': '{{AIPYQ_USER_EMAIL}}',
-      'X-User-Provider': '{{AIPYQ_USER_PROVIDER}}',
-      'X-User-Role': '{{AIPYQ_USER_ROLE}}',
-      'X-User-GoogleId': '{{AIPYQ_USER_GOOGLEID}}',
-      'X-User-FacebookId': '{{AIPYQ_USER_FACEBOOKID}}',
-      'X-User-OpenIdId': '{{AIPYQ_USER_OPENIDID}}',
-      'X-User-SamlId': '{{AIPYQ_USER_SAMLID}}',
-      'X-User-LdapId': '{{AIPYQ_USER_LDAPID}}',
-      'X-User-GithubId': '{{AIPYQ_USER_GITHUBID}}',
-      'X-User-DiscordId': '{{AIPYQ_USER_DISCORDID}}',
-      'X-User-AppleId': '{{AIPYQ_USER_APPLEID}}',
-      'X-User-EmailVerified': '{{AIPYQ_USER_EMAILVERIFIED}}',
-      'X-User-TwoFactorEnabled': '{{AIPYQ_USER_TWOFACTORENABLED}}',
-      'X-User-TermsAccepted': '{{AIPYQ_USER_TERMSACCEPTED}}',
+      'X-User-ID': '{{BECAUSE_USER_ID}}',
+      'X-User-Name': '{{BECAUSE_USER_NAME}}',
+      'X-User-Username': '{{BECAUSE_USER_USERNAME}}',
+      'X-User-Email': '{{BECAUSE_USER_EMAIL}}',
+      'X-User-Provider': '{{BECAUSE_USER_PROVIDER}}',
+      'X-User-Role': '{{BECAUSE_USER_ROLE}}',
+      'X-User-GoogleId': '{{BECAUSE_USER_GOOGLEID}}',
+      'X-User-FacebookId': '{{BECAUSE_USER_FACEBOOKID}}',
+      'X-User-OpenIdId': '{{BECAUSE_USER_OPENIDID}}',
+      'X-User-SamlId': '{{BECAUSE_USER_SAMLID}}',
+      'X-User-LdapId': '{{BECAUSE_USER_LDAPID}}',
+      'X-User-GithubId': '{{BECAUSE_USER_GITHUBID}}',
+      'X-User-DiscordId': '{{BECAUSE_USER_DISCORDID}}',
+      'X-User-AppleId': '{{BECAUSE_USER_APPLEID}}',
+      'X-User-EmailVerified': '{{BECAUSE_USER_EMAILVERIFIED}}',
+      'X-User-TwoFactorEnabled': '{{BECAUSE_USER_TWOFACTORENABLED}}',
+      'X-User-TermsAccepted': '{{BECAUSE_USER_TERMSACCEPTED}}',
     };
 
     const result = resolveHeaders({ headers, user });
@@ -393,7 +393,7 @@ describe('resolveHeaders', () => {
   it('should handle multiple placeholders in one value', () => {
     const user = { id: 'abc', email: 'me@example.com' };
     const headers = {
-      'X-Multi': 'User: {{AIPYQ_USER_ID}}, Env: ${TEST_API_KEY}, Custom: {{MY_CUSTOM}}',
+      'X-Multi': 'User: {{BECAUSE_USER_ID}}, Env: ${TEST_API_KEY}, Custom: {{MY_CUSTOM}}',
     };
     const customVars = { MY_CUSTOM: 'custom-value' };
     const result = resolveHeaders({ headers, user, customUserVars: customVars });
@@ -404,7 +404,7 @@ describe('resolveHeaders', () => {
     const user = { id: 'abc' };
     const headers = {
       'X-Unknown': '{{SOMETHING_NOT_RECOGNIZED}}',
-      'X-Known': '{{AIPYQ_USER_ID}}',
+      'X-Known': '{{BECAUSE_USER_ID}}',
     };
     const result = resolveHeaders({ headers, user });
     expect(result['X-Unknown']).toBe('{{SOMETHING_NOT_RECOGNIZED}}');
@@ -419,13 +419,13 @@ describe('resolveHeaders', () => {
       twoFactorEnabled: false,
     };
     const headers = {
-      'X-User': '{{AIPYQ_USER_ID}}',
+      'X-User': '{{BECAUSE_USER_ID}}',
       'X-Env': '${TEST_API_KEY}',
       'X-Custom': '{{MY_CUSTOM}}',
-      'X-Multi': 'ID: {{AIPYQ_USER_ID}}, ENV: ${TEST_API_KEY}, CUSTOM: {{MY_CUSTOM}}',
+      'X-Multi': 'ID: {{BECAUSE_USER_ID}}, ENV: ${TEST_API_KEY}, CUSTOM: {{MY_CUSTOM}}',
       'X-Unknown': '{{NOT_A_REAL_PLACEHOLDER}}',
       'X-Empty': '',
-      'X-Boolean': '{{AIPYQ_USER_EMAILVERIFIED}}',
+      'X-Boolean': '{{BECAUSE_USER_EMAILVERIFIED}}',
     };
     const customVars = { MY_CUSTOM: 'custom-value' };
     const result = resolveHeaders({ headers, user, customUserVars: customVars });
@@ -439,13 +439,13 @@ describe('resolveHeaders', () => {
     expect(result['X-Boolean']).toBe('true');
   });
 
-  it('should process AIPYQ_BODY placeholders', () => {
+  it('should process BECAUSE_BODY placeholders', () => {
     const body = {
       conversationId: 'conv-123',
       parentMessageId: 'parent-456',
       messageId: 'msg-789',
     };
-    const headers = { 'X-Conversation': '{{AIPYQ_BODY_CONVERSATIONID}}' };
+    const headers = { 'X-Conversation': '{{BECAUSE_BODY_CONVERSATIONID}}' };
     const result = resolveHeaders({ headers, body });
     expect(result['X-Conversation']).toBe('conv-123');
   });
@@ -489,7 +489,7 @@ describe('resolveHeaders', () => {
       const user = { id: 'user-123' };
       const headers = {
         'X-Number': 42 as unknown as string,
-        'X-String-With-Placeholder': '{{AIPYQ_USER_ID}}',
+        'X-String-With-Placeholder': '{{BECAUSE_USER_ID}}',
       };
       const result = resolveHeaders({ headers, user });
       expect(result['X-Number']).toBe('42');
@@ -536,7 +536,7 @@ describe('resolveHeaders', () => {
       };
       const headers = {
         'X-Number': 999 as unknown as string,
-        'X-Conv': '{{AIPYQ_BODY_CONVERSATIONID}}',
+        'X-Conv': '{{BECAUSE_BODY_CONVERSATIONID}}',
       };
       const result = resolveHeaders({ headers, body });
       expect(result['X-Number']).toBe('999');
@@ -549,7 +549,7 @@ describe('resolveHeaders', () => {
       const headers = {
         'X-Number': 42 as unknown as string,
         'X-Boolean': true as unknown as string,
-        'X-User-Id': '{{AIPYQ_USER_ID}}',
+        'X-User-Id': '{{BECAUSE_USER_ID}}',
         'X-Custom': '{{CUSTOM_TOKEN}}',
         'X-String': 'normal',
       };
@@ -568,7 +568,7 @@ describe('resolveHeaders', () => {
         messageId: 'msg-789',
       };
       const headers = {
-        'X-Conv-Id': '{{AIPYQ_BODY_CONVERSATIONID}}',
+        'X-Conv-Id': '{{BECAUSE_BODY_CONVERSATIONID}}',
         'X-Number': 999 as unknown as string,
       };
       expect(() => resolveHeaders({ headers, body })).not.toThrow();
@@ -619,7 +619,7 @@ describe('resolveNestedObject', () => {
       thinking: {
         type: 'enabled',
         budget_tokens: 2000,
-        user_context: '{{AIPYQ_USER_ID}}',
+        user_context: '{{BECAUSE_USER_ID}}',
       },
       anthropic_beta: ['output-128k-2025-02-19'],
       api_key: '${TEST_API_KEY}',
@@ -643,9 +643,9 @@ describe('resolveNestedObject', () => {
   it('should process strings in arrays', () => {
     const user = { id: 'user-123' };
     const obj = {
-      headers: ['Authorization: Bearer ${TEST_API_KEY}', 'X-User-Id: {{AIPYQ_USER_ID}}'],
+      headers: ['Authorization: Bearer ${TEST_API_KEY}', 'X-User-Id: {{BECAUSE_USER_ID}}'],
       values: [1, 2, 3],
-      mixed: ['string', 42, true, '{{AIPYQ_USER_ID}}'],
+      mixed: ['string', 42, true, '{{BECAUSE_USER_ID}}'],
     };
 
     const result = resolveNestedObject({ obj, user });
@@ -663,7 +663,7 @@ describe('resolveNestedObject', () => {
       level1: {
         level2: {
           level3: {
-            user_id: '{{AIPYQ_USER_ID}}',
+            user_id: '{{BECAUSE_USER_ID}}',
             settings: {
               api_key: '${TEST_API_KEY}',
               enabled: true,
@@ -728,8 +728,8 @@ describe('resolveNestedObject', () => {
     };
     const obj = {
       metadata: {
-        conversation: '{{AIPYQ_BODY_CONVERSATIONID}}',
-        parent: '{{AIPYQ_BODY_PARENTMESSAGEID}}',
+        conversation: '{{BECAUSE_BODY_CONVERSATIONID}}',
+        parent: '{{BECAUSE_BODY_PARENTMESSAGEID}}',
         count: 5,
       },
     };
@@ -776,12 +776,12 @@ describe('resolveNestedObject', () => {
 
     const obj = {
       config: {
-        user_id: '{{AIPYQ_USER_ID}}',
+        user_id: '{{BECAUSE_USER_ID}}',
         custom: '{{CUSTOM_VAR}}',
         api_key: '${TEST_API_KEY}',
-        conversation: '{{AIPYQ_BODY_CONVERSATIONID}}',
+        conversation: '{{BECAUSE_BODY_CONVERSATIONID}}',
         nested: {
-          email: '{{AIPYQ_USER_EMAIL}}',
+          email: '{{BECAUSE_USER_EMAIL}}',
           port: 8080,
         },
       },
@@ -841,8 +841,8 @@ describe('resolveNestedObject', () => {
     const user = { id: 'user-123' };
     const obj = {
       items: [
-        { name: 'item1', user: '{{AIPYQ_USER_ID}}', count: 1 },
-        { name: 'item2', user: '{{AIPYQ_USER_ID}}', count: 2 },
+        { name: 'item1', user: '{{BECAUSE_USER_ID}}', count: 1 },
+        { name: 'item2', user: '{{BECAUSE_USER_ID}}', count: 2 },
       ],
     };
 
@@ -862,14 +862,14 @@ describe('resolveNestedObject', () => {
       thinking: {
         type: 'enabled',
         budget_tokens: 2000,
-        user_id: '{{AIPYQ_USER_ID}}',
+        user_id: '{{BECAUSE_USER_ID}}',
       },
     };
 
     const result = resolveNestedObject({ obj: originalObj, user });
 
     expect(result.thinking.user_id).toBe('user-123');
-    expect(originalObj.thinking.user_id).toBe('{{AIPYQ_USER_ID}}');
+    expect(originalObj.thinking.user_id).toBe('{{BECAUSE_USER_ID}}');
   });
 });
 
@@ -985,11 +985,11 @@ describe('processMCPEnv', () => {
       type: 'stdio',
       command: 'mcp-server',
       env: {
-        USER_ID: '{{AIPYQ_USER_ID}}',
-        USER_EMAIL: '{{AIPYQ_USER_EMAIL}}',
-        USER_ROLE: '{{AIPYQ_USER_ROLE}}',
+        USER_ID: '{{BECAUSE_USER_ID}}',
+        USER_EMAIL: '{{BECAUSE_USER_EMAIL}}',
+        USER_ROLE: '{{BECAUSE_USER_ROLE}}',
       },
-      args: ['--user', '{{AIPYQ_USER_USERNAME}}', '--id', '{{AIPYQ_USER_ID}}'],
+      args: ['--user', '{{BECAUSE_USER_USERNAME}}', '--id', '{{BECAUSE_USER_ID}}'],
     };
 
     const result = processMCPEnv({ options, user });
@@ -1042,10 +1042,10 @@ describe('processMCPEnv', () => {
 
     const options: MCPOptions = {
       type: 'streamable-http',
-      url: 'https://api.example.com/conversations/{{AIPYQ_BODY_CONVERSATIONID}}',
+      url: 'https://api.example.com/conversations/{{BECAUSE_BODY_CONVERSATIONID}}',
       headers: {
-        'X-Parent-Message': '{{AIPYQ_BODY_PARENTMESSAGEID}}',
-        'X-Message-Id': '{{AIPYQ_BODY_MESSAGEID}}',
+        'X-Parent-Message': '{{BECAUSE_BODY_PARENTMESSAGEID}}',
+        'X-Message-Id': '{{BECAUSE_BODY_MESSAGEID}}',
       },
     };
 
@@ -1081,8 +1081,8 @@ describe('processMCPEnv', () => {
         token_url: 'https://auth.example.com/{{TENANT_ID}}/token',
         client_id: '${OAUTH_CLIENT_ID}',
         client_secret: '${OAUTH_CLIENT_SECRET}',
-        scope: 'user:{{AIPYQ_USER_ID}} conversation:{{AIPYQ_BODY_CONVERSATIONID}}',
-        redirect_uri: 'http://localhost:3000/user/{{AIPYQ_USER_EMAIL}}/callback',
+        scope: 'user:{{BECAUSE_USER_ID}} conversation:{{BECAUSE_BODY_CONVERSATIONID}}',
+        redirect_uri: 'http://localhost:3000/user/{{BECAUSE_USER_EMAIL}}/callback',
       },
     };
 
@@ -1186,7 +1186,7 @@ describe('processMCPEnv', () => {
       args: [],
       env: {
         COMPLEX_VALUE:
-          'User: {{AIPYQ_USER_ID}}, Custom: {{CUSTOM_VAR}}, Body: {{AIPYQ_BODY_CONVERSATIONID}}, Env: ${TEST_API_KEY}',
+          'User: {{BECAUSE_USER_ID}}, Custom: {{CUSTOM_VAR}}, Body: {{BECAUSE_BODY_CONVERSATIONID}}, Env: ${TEST_API_KEY}',
       },
     };
 
@@ -1318,7 +1318,7 @@ describe('processMCPEnv', () => {
         args: [],
         env: {
           PORT: 8080 as unknown as string,
-          USER_ID: '{{AIPYQ_USER_ID}}',
+          USER_ID: '{{BECAUSE_USER_ID}}',
           API_KEY: '${TEST_API_KEY}',
         },
       };
@@ -1364,7 +1364,7 @@ describe('processMCPEnv', () => {
         command: 'mcp-server',
         args: [],
         env: {
-          CONV_ID: '{{AIPYQ_BODY_CONVERSATIONID}}',
+          CONV_ID: '{{BECAUSE_BODY_CONVERSATIONID}}',
           PORT: 8080 as unknown as string,
         },
       };

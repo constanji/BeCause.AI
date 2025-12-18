@@ -1,6 +1,6 @@
-import { QueryKeys } from '@aipyq/data-provider';
+import { QueryKeys } from '@because/data-provider';
 import { useQueryClient } from '@tanstack/react-query';
-import { TooltipAnchor, Button, NewChatIcon } from '@aipyq/client';
+import { TooltipAnchor, Button, NewChatIcon } from '@because/client';
 import { useChatContext } from '~/Providers';
 import { clearMessagesCache } from '~/utils';
 import { useLocalize } from '~/hooks';

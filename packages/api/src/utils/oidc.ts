@@ -1,5 +1,5 @@
-import { logger } from '@aipyq/data-schemas';
-import type { IUser } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
+import type { IUser } from '@because/data-schemas';
 
 export interface OpenIDTokenInfo {
   accessToken?: string;
@@ -119,7 +119,7 @@ export function processOpenIDPlaceholders(
   let processedValue = value;
 
   for (const field of OPENID_TOKEN_FIELDS) {
-    const placeholder = `{{AIPYQ_OPENID_${field}}}`;
+    const placeholder = `{{BECAUSE_OPENID_${field}}}`;
     if (!processedValue.includes(placeholder)) {
       continue;
     }
@@ -150,7 +150,7 @@ export function processOpenIDPlaceholders(
     processedValue = processedValue.replace(new RegExp(placeholder, 'g'), replacementValue);
   }
 
-  const genericPlaceholder = '{{AIPYQ_OPENID_TOKEN}}';
+  const genericPlaceholder = '{{BECAUSE_OPENID_TOKEN}}';
   if (processedValue.includes(genericPlaceholder)) {
     const replacementValue = tokenInfo.accessToken || '';
     processedValue = processedValue.replace(new RegExp(genericPlaceholder, 'g'), replacementValue);

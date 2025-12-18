@@ -1,5 +1,5 @@
-const { isEnabled } = require('@aipyq/api');
-const { Time, CacheKeys } = require('@aipyq/data-provider');
+const { isEnabled } = require('@because/api');
+const { Time, CacheKeys } = require('@because/data-provider');
 const getLogStores = require('./getLogStores');
 
 const { USE_REDIS, LIMIT_CONCURRENT_MESSAGES } = process.env ?? {};

@@ -1,5 +1,5 @@
-import { FileSources } from '@aipyq/data-provider';
-import type { TFile } from '@aipyq/data-provider';
+import { FileSources } from '@because/data-provider';
+import type { TFile } from '@because/data-provider';
 
 export const files: TFile[] = [
   {

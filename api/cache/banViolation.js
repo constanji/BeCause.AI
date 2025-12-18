@@ -1,6 +1,6 @@
-const { logger } = require('@aipyq/data-schemas');
-const { isEnabled, math } = require('@aipyq/api');
-const { ViolationTypes } = require('@aipyq/data-provider');
+const { logger } = require('@because/data-schemas');
+const { isEnabled, math } = require('@because/api');
+const { ViolationTypes } = require('@because/data-provider');
 const { deleteAllUserSessions } = require('~/models');
 const { removePorts } = require('~/server/utils');
 const getLogStores = require('./getLogStores');

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { GearIcon, MCPIcon } from '@aipyq/client';
-import type { MCP } from '@aipyq/data-provider';
+import { GearIcon, MCPIcon } from '@because/client';
+import type { MCP } from '@because/data-provider';
 import { cn } from '~/utils';
 
 type MCPProps = {

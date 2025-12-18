@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useMemo } from 'react';
-import { getEndpointField } from '@aipyq/data-provider';
-import type { EModelEndpoint } from '@aipyq/data-provider';
+import { getEndpointField } from '@because/data-provider';
+import type { EModelEndpoint } from '@because/data-provider';
 import { useGetEndpointsQuery } from '~/data-provider';
 import { useChatContext } from './ChatContext';
 

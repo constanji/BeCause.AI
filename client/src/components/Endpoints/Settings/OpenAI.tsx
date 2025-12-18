@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
-import { getSettingsKeys } from '@aipyq/data-provider';
-import type { SettingDefinition } from '@aipyq/data-provider';
+import { getSettingsKeys } from '@because/data-provider';
+import type { SettingDefinition } from '@because/data-provider';
 import type { TModelSelectProps } from '~/common';
 import { componentMapping } from '~/components/SidePanel/Parameters/components';
-import { presetSettings } from '@aipyq/data-provider';
+import { presetSettings } from '@because/data-provider';
 
 export default function OpenAISettings({
   conversation,

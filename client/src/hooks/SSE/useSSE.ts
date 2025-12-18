@@ -9,8 +9,8 @@ import {
   createPayload,
   LocalStorageKeys,
   removeNullishValues,
-} from '@aipyq/data-provider';
-import type { TMessage, TPayload, TSubmission, EventSubmission } from '@aipyq/data-provider';
+} from '@because/data-provider';
+import type { TMessage, TPayload, TSubmission, EventSubmission } from '@because/data-provider';
 import type { EventHandlerParams } from './useEventHandlers';
 import type { TResData } from '~/common';
 import { useGenTitleMutation, useGetStartupConfig, useGetUserBalance } from '~/data-provider';

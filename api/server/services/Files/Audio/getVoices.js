@@ -1,4 +1,4 @@
-const { TTSProviders } = require('@aipyq/data-provider');
+const { TTSProviders } = require('@because/data-provider');
 const { getAppConfig } = require('~/server/services/Config');
 const { getProvider } = require('./TTSService');
 

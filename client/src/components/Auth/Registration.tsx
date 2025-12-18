@@ -1,11 +1,11 @@
 import { useForm } from 'react-hook-form';
 import React, { useContext, useState } from 'react';
 import { Turnstile } from '@marsidev/react-turnstile';
-import { ThemeContext, Spinner, Button, isDark } from '@aipyq/client';
+import { ThemeContext, Spinner, Button, isDark } from '@because/client';
 import { useNavigate, useOutletContext, useLocation } from 'react-router-dom';
-import { useRegisterUserMutation } from '@aipyq/data-provider/react-query';
-import { loginPage } from '@aipyq/data-provider';
-import type { TRegisterUser, TError } from '@aipyq/data-provider';
+import { useRegisterUserMutation } from '@because/data-provider/react-query';
+import { loginPage } from '@because/data-provider';
+import type { TRegisterUser, TError } from '@because/data-provider';
 import type { TLoginLayoutContext } from '~/common';
 import { useLocalize, TranslationKeys } from '~/hooks';
 import { ErrorMessage } from './ErrorMessage';

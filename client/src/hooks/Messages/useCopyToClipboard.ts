@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import copy from 'copy-to-clipboard';
-import { ContentTypes, SearchResultData } from '@aipyq/data-provider';
-import type { TMessage } from '@aipyq/data-provider';
+import { ContentTypes, SearchResultData } from '@because/data-provider';
+import type { TMessage } from '@because/data-provider';
 import {
   SPAN_REGEX,
   CLEANUP_REGEX,

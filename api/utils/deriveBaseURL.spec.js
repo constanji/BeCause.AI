@@ -1,7 +1,7 @@
 const axios = require('axios');
 const deriveBaseURL = require('./deriveBaseURL');
-jest.mock('@aipyq/api', () => {
-  const originalUtils = jest.requireActual('@aipyq/api');
+jest.mock('@because/api', () => {
+  const originalUtils = jest.requireActual('@because/api');
   return {
     ...originalUtils,
     processModelData: jest.fn((...args) => {

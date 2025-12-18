@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { QueryKeys } from '@aipyq/data-provider';
-import type { BatchFile, TFile } from '@aipyq/data-provider';
+import { QueryKeys } from '@because/data-provider';
+import type { BatchFile, TFile } from '@because/data-provider';
 import { useDeleteFilesMutation } from '~/data-provider';
 import useFileDeletion from './useFileDeletion';
 

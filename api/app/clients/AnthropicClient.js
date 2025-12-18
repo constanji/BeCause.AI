@@ -1,5 +1,5 @@
 const Anthropic = require('@anthropic-ai/sdk');
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 const { HttpsProxyAgent } = require('https-proxy-agent');
 const {
   Constants,
@@ -9,8 +9,8 @@ const {
   anthropicSettings,
   getResponseSender,
   validateVisionModel,
-} = require('@aipyq/data-provider');
-const { sleep, SplitStreamHandler: _Handler, addCacheControl } = require('@aipyq/agents');
+} = require('@because/data-provider');
+const { sleep, SplitStreamHandler: _Handler, addCacheControl } = require('@because/agents');
 const {
   Tokenizer,
   createFetch,
@@ -21,7 +21,7 @@ const {
   checkPromptCacheSupport,
   getModelMaxOutputTokens,
   createStreamEventHandlers,
-} = require('@aipyq/api');
+} = require('@because/api');
 const {
   truncateText,
   formatMessage,
@@ -254,7 +254,7 @@ class AnthropicClient extends BaseClient {
   }
 
   /**
-   * Get Token Count for Aipyq Message
+   * Get Token Count for Because Message
    * @param {TMessage} responseMessage
    * @returns {number}
    */

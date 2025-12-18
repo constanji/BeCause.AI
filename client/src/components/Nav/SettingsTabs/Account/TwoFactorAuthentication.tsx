@@ -9,8 +9,8 @@ import {
   OGDialogHeader,
   OGDialogTitle,
   Progress,
-} from '@aipyq/client';
-import type { TUser, TVerify2FARequest } from '@aipyq/data-provider';
+} from '@because/client';
+import type { TUser, TVerify2FARequest } from '@because/data-provider';
 import {
   useConfirmTwoFactorMutation,
   useDisableTwoFactorMutation,

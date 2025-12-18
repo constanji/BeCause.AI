@@ -1,5 +1,5 @@
-import type { TPreset, TPlugin } from '@aipyq/data-provider';
-import { EModelEndpoint } from '@aipyq/data-provider';
+import type { TPreset, TPlugin } from '@because/data-provider';
+import { EModelEndpoint } from '@because/data-provider';
 
 type TEndpoints = Array<string | EModelEndpoint>;
 

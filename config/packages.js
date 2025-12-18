@@ -28,16 +28,16 @@ if (fs.existsSync(packageLockPath)) {
   // Delete all node_modules
   directories.forEach(deleteNodeModules);
 
-  // Build agents-Aipyq if dist doesn't exist
-  const agentsDistPath = path.resolve(rootDir, 'agents-Aipyq', 'dist');
+  // Build agents-because if dist doesn't exist
+  const agentsDistPath = path.resolve(rootDir, 'agents-because', 'dist');
   if (!fs.existsSync(agentsDistPath)) {
-    console.purple('Building agents-Aipyq...');
-    const agentsDir = path.resolve(rootDir, 'agents-Aipyq');
+    console.purple('Building agents-because...');
+    const agentsDir = path.resolve(rootDir, 'agents-because');
     if (fs.existsSync(path.resolve(agentsDir, 'package.json'))) {
       execSync('npm install', { cwd: agentsDir, stdio: 'inherit' });
       execSync('npm run build', { cwd: agentsDir, stdio: 'inherit' });
     } else {
-      console.orange('Warning: agents-Aipyq directory not found, skipping build');
+      console.orange('Warning: agents-because directory not found, skipping build');
     }
   }
 
@@ -45,7 +45,7 @@ if (fs.existsSync(packageLockPath)) {
   console.purple('Cleaning npm cache...');
   execSync('npm cache clean --force', { stdio: 'inherit' });
 
-  // Install dependencies (will use local agents-Aipyq from package.json)
+  // Install dependencies (will use local agents-because from package.json)
   console.purple('Installing dependencies...');
   execSync('npm install', { stdio: 'inherit' });
 })();

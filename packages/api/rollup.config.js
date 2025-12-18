@@ -5,7 +5,7 @@ import replace from '@rollup/plugin-replace';
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 // Use rollup-plugin-typescript2 which supports check: false to skip type checking
-// This significantly reduces memory usage when processing large dependencies like @aipyq/agents
+// This significantly reduces memory usage when processing large dependencies like @because/agents
 import typescript from 'rollup-plugin-typescript2';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 
@@ -40,7 +40,7 @@ const plugins = [
     check: false,
     /**
      * Exclude node_modules from processing to reduce memory footprint
-     * Prevents loading type declarations from dependencies like @aipyq/agents
+     * Prevents loading type declarations from dependencies like @because/agents
      */
     exclude: ['node_modules/**'],
     /**

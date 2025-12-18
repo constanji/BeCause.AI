@@ -1,5 +1,5 @@
 import { useFormContext } from 'react-hook-form';
-import { ArtifactModes, AgentCapabilities } from '@aipyq/data-provider';
+import { ArtifactModes, AgentCapabilities } from '@because/data-provider';
 import {
   Switch,
   HoverCard,
@@ -7,7 +7,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
   CircleHelpIcon,
-} from '@aipyq/client';
+} from '@because/client';
 import type { AgentForm } from '~/common';
 import { useLocalize } from '~/hooks';
 import { ESide } from '~/common';

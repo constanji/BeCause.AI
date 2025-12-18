@@ -1,8 +1,8 @@
 const path = require('path');
-const { logger } = require('@aipyq/data-schemas');
-const { ensureRequiredCollectionsExist } = require('@aipyq/api');
-const { AccessRoleIds, ResourceType, PrincipalType } = require('@aipyq/data-provider');
-const { GLOBAL_PROJECT_NAME } = require('@aipyq/data-provider').Constants;
+const { logger } = require('@because/data-schemas');
+const { ensureRequiredCollectionsExist } = require('@because/api');
+const { AccessRoleIds, ResourceType, PrincipalType } = require('@because/data-provider');
+const { GLOBAL_PROJECT_NAME } = require('@because/data-provider').Constants;
 
 require('module-alias')({ base: path.resolve(__dirname, '..', 'api') });
 const connect = require('./connect');

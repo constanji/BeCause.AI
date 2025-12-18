@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { JsonSchemaType, ConvertJsonSchemaToZodOptions } from '@aipyq/data-schemas';
+import type { JsonSchemaType, ConvertJsonSchemaToZodOptions } from '@because/data-schemas';
 
 function isEmptyObjectSchema(jsonSchema?: JsonSchemaType): boolean {
   return (

@@ -31,7 +31,7 @@ export enum EModelEndpoint {
   gptPlugins = 'gptPlugins',
 }
 
-/** Mirrors `@aipyq/agents` providers */
+/** Mirrors `@because/agents` providers */
 export enum Providers {
   OPENAI = 'openAI',
   ANTHROPIC = 'anthropic',
@@ -812,7 +812,7 @@ export const tConvoUpdateSchema = tConversationSchema.merge(
 
 export const tQueryParamsSchema = tConversationSchema
   .pick({
-    // aipyq settings
+    // because settings
     /** The model spec to be used */
     spec: true,
     /** The AI context window, overrides the system-defined window as determined by `model` value */

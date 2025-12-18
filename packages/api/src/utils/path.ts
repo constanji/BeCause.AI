@@ -1,9 +1,9 @@
-import { logger } from '@aipyq/data-schemas';
+import { logger } from '@because/data-schemas';
 
 /**
  * Gets the base path from the DOMAIN_CLIENT environment variable.
- * This is useful for constructing URLs when Aipyq is served from a subdirectory.
- * @returns {string} The base path (e.g., '/aipyq' or '')
+ * This is useful for constructing URLs when Because is served from a subdirectory.
+ * @returns {string} The base path (e.g., '/because' or '')
  */
 export function getBasePath(): string {
   if (!process.env.DOMAIN_CLIENT) {

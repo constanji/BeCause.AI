@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
-const { RoleBits, createModels } = require('@aipyq/data-schemas');
+const { RoleBits, createModels } = require('@because/data-schemas');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const {
   ResourceType,
   AccessRoleIds,
   PrincipalType,
   PrincipalModel,
-} = require('@aipyq/data-provider');
+} = require('@because/data-provider');
 const {
   bulkUpdateResourcePermissions,
   getEffectivePermissions,
@@ -18,10 +18,10 @@ const {
 const { findRoleByIdentifier, getUserPrincipals, seedDefaultRoles } = require('~/models');
 
 // Mock the getTransactionSupport function for testing
-jest.mock('@aipyq/data-schemas', () => ({
-  ...jest.requireActual('@aipyq/data-schemas'),
+jest.mock('@because/data-schemas', () => ({
+  ...jest.requireActual('@because/data-schemas'),
   getTransactionSupport: jest.fn().mockResolvedValue(false),
-  createModels: jest.requireActual('@aipyq/data-schemas').createModels,
+  createModels: jest.requireActual('@because/data-schemas').createModels,
 }));
 
 // Mock GraphApiService to prevent config loading issues

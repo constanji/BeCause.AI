@@ -1,9 +1,9 @@
 const OpenAI = require('openai');
-const { logger } = require('@aipyq/data-schemas');
+const { logger } = require('@because/data-schemas');
 const DALLE3 = require('../DALLE3');
 
 jest.mock('openai');
-jest.mock('@aipyq/data-schemas', () => {
+jest.mock('@because/data-schemas', () => {
   return {
     logger: {
       info: jest.fn(),

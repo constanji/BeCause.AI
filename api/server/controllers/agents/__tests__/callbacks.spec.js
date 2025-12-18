@@ -1,21 +1,21 @@
-const { Tools } = require('@aipyq/data-provider');
+const { Tools } = require('@because/data-provider');
 
 // Mock all dependencies before requiring the module
 jest.mock('nanoid', () => ({
   nanoid: jest.fn(() => 'mock-id'),
 }));
 
-jest.mock('@aipyq/api', () => ({
+jest.mock('@because/api', () => ({
   sendEvent: jest.fn(),
 }));
 
-jest.mock('@aipyq/data-schemas', () => ({
+jest.mock('@because/data-schemas', () => ({
   logger: {
     error: jest.fn(),
   },
 }));
 
-jest.mock('@aipyq/agents', () => ({
+jest.mock('@because/agents', () => ({
   EnvVar: { CODE_API_KEY: 'CODE_API_KEY' },
   Providers: { GOOGLE: 'google' },
   GraphEvents: {},
@@ -49,7 +49,7 @@ describe('createToolEndCallback', () => {
     jest.clearAllMocks();
 
     // Get the mocked logger
-    logger = require('@aipyq/data-schemas').logger;
+    logger = require('@because/data-schemas').logger;
 
     // Now require the module after all mocks are set up
     const callbacks = require('../callbacks');

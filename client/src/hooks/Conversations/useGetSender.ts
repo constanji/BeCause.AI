@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import { getResponseSender } from '@aipyq/data-provider';
-import type { TEndpointOption, TEndpointsConfig } from '@aipyq/data-provider';
+import { getResponseSender } from '@because/data-provider';
+import type { TEndpointOption, TEndpointsConfig } from '@because/data-provider';
 import { useGetEndpointsQuery } from '~/data-provider';
 
 export default function useGetSender() {

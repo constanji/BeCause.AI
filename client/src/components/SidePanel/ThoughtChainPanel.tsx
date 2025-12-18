@@ -3,7 +3,7 @@ import { ConfigProvider, Typography, Flex } from 'antd';
 import type { ThoughtChainItemType } from '@ant-design/x';
 import { ThoughtChain, CodeHighlighter } from '@ant-design/x';
 import { CheckCircleTwoTone, LoadingOutlined, CloseCircleTwoTone, CodeOutlined } from '@ant-design/icons';
-import { actionDelimiter, actionDomainSeparator, Constants } from '@aipyq/data-provider';
+import { actionDelimiter, actionDomainSeparator, Constants } from '@because/data-provider';
 import { useChatContext } from '~/Providers';
 import type { MessageToolCalls, MessageContentItem } from '~/utils/parseDatServerResponse';
 import { mapAttachments } from '~/utils/map';

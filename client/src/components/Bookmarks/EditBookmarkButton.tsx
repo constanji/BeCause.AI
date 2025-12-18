@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { TooltipAnchor, OGDialogTrigger, EditIcon, Button } from '@aipyq/client';
-import type { TConversationTag } from '@aipyq/data-provider';
+import { TooltipAnchor, OGDialogTrigger, EditIcon, Button } from '@because/client';
+import type { TConversationTag } from '@because/data-provider';
 import type { FC } from 'react';
 import BookmarkEditDialog from './BookmarkEditDialog';
 import { useLocalize } from '~/hooks';

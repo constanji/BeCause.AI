@@ -1,7 +1,7 @@
-import { loadDefaultInterface } from '@aipyq/data-schemas';
-import { SystemRoles, Permissions, PermissionTypes, roleDefaults } from '@aipyq/data-provider';
-import type { TConfigDefaults, TCustomConfig } from '@aipyq/data-provider';
-import type { AppConfig } from '@aipyq/data-schemas';
+import { loadDefaultInterface } from '@because/data-schemas';
+import { SystemRoles, Permissions, PermissionTypes, roleDefaults } from '@because/data-provider';
+import type { TConfigDefaults, TCustomConfig } from '@because/data-provider';
+import type { AppConfig } from '@because/data-schemas';
 import { updateInterfacePermissions } from './permissions';
 
 const mockUpdateAccessPermissions = jest.fn();

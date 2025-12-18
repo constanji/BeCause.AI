@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import { PrincipalType, PrincipalModel } from '@aipyq/data-provider';
+import { PrincipalType, PrincipalModel } from '@because/data-provider';
 import type { Model, DeleteResult, ClientSession } from 'mongoose';
 import type { IAclEntry } from '~/types';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { TStartupConfig } from '@aipyq/data-provider';
+import { TStartupConfig } from '@because/data-provider';
 
 export interface Endpoint {
   value: string;

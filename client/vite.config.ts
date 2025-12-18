@@ -58,8 +58,8 @@ export default defineConfig(({ command }) => ({
       },
       includeAssets: [],
       manifest: {
-        name: 'Aipyq',
-        short_name: 'Aipyq',
+        name: 'Because',
+        short_name: 'Because',
         display: 'standalone',
         background_color: '#000000',
         theme_color: '#009688',
@@ -257,9 +257,9 @@ export default defineConfig(({ command }) => ({
       '~': path.join(__dirname, 'src/'),
       $fonts: path.resolve(__dirname, 'public/fonts'),
       'micromark-extension-math': 'micromark-extension-llm-math',
-      '@aipyq/client': path.resolve(__dirname, '../packages/client/dist/index.es.js'),
-      '@aipyq/data-provider/react-query': path.resolve(__dirname, '../packages/data-provider/dist/react-query/index.es.js'),
-      '@aipyq/data-provider': path.resolve(__dirname, '../packages/data-provider/dist/index.es.js'),
+      '@because/client': path.resolve(__dirname, '../packages/client/dist/index.es.js'),
+      '@because/data-provider/react-query': path.resolve(__dirname, '../packages/data-provider/dist/react-query/index.es.js'),
+      '@because/data-provider': path.resolve(__dirname, '../packages/data-provider/dist/index.es.js'),
     },
   },
 }));

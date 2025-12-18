@@ -1,5 +1,5 @@
-import { specialVariables } from '@aipyq/data-provider';
-import type { TPromptGroup } from '@aipyq/data-provider';
+import { specialVariables } from '@because/data-provider';
+import type { TPromptGroup } from '@because/data-provider';
 
 /**
  * Detects the presence of variables in the given text, excluding those found in `specialVariables`.

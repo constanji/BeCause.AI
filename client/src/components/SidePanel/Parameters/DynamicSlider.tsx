@@ -1,7 +1,7 @@
 import { useMemo, useCallback } from 'react';
-import { OptionTypes } from '@aipyq/data-provider';
-import type { DynamicSettingProps } from '@aipyq/data-provider';
-import { Label, Slider, HoverCard, Input, InputNumber, HoverCardTrigger } from '@aipyq/client';
+import { OptionTypes } from '@because/data-provider';
+import type { DynamicSettingProps } from '@because/data-provider';
+import { Label, Slider, HoverCard, Input, InputNumber, HoverCardTrigger } from '@because/client';
 import { useLocalize, useDebouncedInput, useParameterEffects, TranslationKeys } from '~/hooks';
 import { cn, defaultTextProps, optionText } from '~/utils';
 import { ESide, defaultDebouncedDelay } from '~/common';

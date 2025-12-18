@@ -1,10 +1,10 @@
-import { InfiniteCollections, QueryKeys } from '@aipyq/data-provider';
+import { InfiniteCollections, QueryKeys } from '@because/data-provider';
 import type { InfiniteData, QueryClient } from '@tanstack/react-query';
 import type {
   PromptGroupListResponse,
   PromptGroupListData,
   TPromptGroup,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import {
   addData,
   deleteData,

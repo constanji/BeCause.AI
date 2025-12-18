@@ -1,9 +1,9 @@
 const fs = require('fs');
 const axios = require('axios');
 const FormData = require('form-data');
-const { logger } = require('@aipyq/data-schemas');
-const { FileSources } = require('@aipyq/data-provider');
-const { logAxiosError, generateShortLivedToken } = require('@aipyq/api');
+const { logger } = require('@because/data-schemas');
+const { FileSources } = require('@because/data-provider');
+const { logAxiosError, generateShortLivedToken } = require('@because/api');
 
 /**
  * Deletes a file from the vector database. This function takes a file object, constructs the full path, and

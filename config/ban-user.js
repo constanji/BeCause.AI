@@ -1,7 +1,7 @@
 const path = require('path');
 const mongoose = require('mongoose');
-const { User } = require('@aipyq/data-schemas').createModels(mongoose);
-const { ViolationTypes } = require('@aipyq/data-provider');
+const { User } = require('@because/data-schemas').createModels(mongoose);
+const { ViolationTypes } = require('@because/data-provider');
 require('module-alias')({ base: path.resolve(__dirname, '..', 'api') });
 const { askQuestion, silentExit } = require('./helpers');
 const banViolation = require('~/cache/banViolation');

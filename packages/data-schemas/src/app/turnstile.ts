@@ -1,6 +1,6 @@
 import logger from '~/config/winston';
-import { removeNullishValues } from '@aipyq/data-provider';
-import type { TCustomConfig, TConfigDefaults } from '@aipyq/data-provider';
+import { removeNullishValues } from '@because/data-provider';
+import type { TCustomConfig, TConfigDefaults } from '@because/data-provider';
 
 /**
  * Loads and maps the Cloudflare Turnstile configuration.

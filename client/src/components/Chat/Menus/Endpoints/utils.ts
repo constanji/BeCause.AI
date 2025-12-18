@@ -1,12 +1,12 @@
 import React from 'react';
 import { Bot } from 'lucide-react';
-import { isAgentsEndpoint, isAssistantsEndpoint } from '@aipyq/data-provider';
+import { isAgentsEndpoint, isAssistantsEndpoint } from '@because/data-provider';
 import type {
   TModelSpec,
   TAgentsMap,
   TAssistantsMap,
   TEndpointsConfig,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type { useLocalize } from '~/hooks';
 import SpecIcon from '~/components/Chat/Menus/Endpoints/components/SpecIcon';
 import { Endpoint, SelectedValues } from '~/common';

@@ -10,8 +10,8 @@ import {
   TableCell,
   TableHeader,
   OGDialogTrigger,
-} from '@aipyq/client';
-import type { ConversationTagsResponse, TConversationTag } from '@aipyq/data-provider';
+} from '@because/client';
+import type { ConversationTagsResponse, TConversationTag } from '@because/data-provider';
 import { BookmarkContext, useBookmarkContext } from '~/Providers/BookmarkContext';
 import { BookmarkEditDialog } from '~/components/Bookmarks';
 import BookmarkTableRow from './BookmarkTableRow';

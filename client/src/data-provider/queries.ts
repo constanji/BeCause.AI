@@ -5,7 +5,7 @@ import {
   isAgentsEndpoint,
   defaultOrderQuery,
   defaultAssistantsVersion,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import { useQuery, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import type {
   UseInfiniteQueryOptions,
@@ -13,7 +13,7 @@ import type {
   UseQueryOptions,
   InfiniteData,
 } from '@tanstack/react-query';
-import type t from '@aipyq/data-provider';
+import type t from '@because/data-provider';
 import type {
   Action,
   TPreset,
@@ -29,7 +29,7 @@ import type {
   TCheckUserKeyResponse,
   SharedLinksListParams,
   SharedLinksResponse,
-} from '@aipyq/data-provider';
+} from '@because/data-provider';
 import type { ConversationCursorData } from '~/utils/convos';
 import { findConversationInInfinite, logger } from '~/utils';
 
@@ -197,7 +197,7 @@ export const useConversationTagsQuery = (
  */
 
 /**
- * Hook for getting available Aipyq tools (excludes MCP tools)
+ * Hook for getting available Because tools (excludes MCP tools)
  * For MCP tools, use `useMCPToolsQuery` from mcp-queries.ts
  */
 export const useAvailableToolsQuery = <TData = t.TPlugin[]>(

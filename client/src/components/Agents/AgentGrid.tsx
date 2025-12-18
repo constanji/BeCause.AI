@@ -1,7 +1,7 @@
 import React, { useMemo, useEffect } from 'react';
-import { Spinner } from '@aipyq/client';
-import { PermissionBits } from '@aipyq/data-provider';
-import type t from '@aipyq/data-provider';
+import { Spinner } from '@because/client';
+import { PermissionBits } from '@because/data-provider';
+import type t from '@because/data-provider';
 import { useMarketplaceAgentsInfiniteQuery } from '~/data-provider/Agents';
 import { useAgentCategories, useLocalize } from '~/hooks';
 import { useInfiniteScroll } from '~/hooks/useInfiniteScroll';

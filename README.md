@@ -110,7 +110,7 @@
     
 3. **构建Agent包**
     ```bash
-    cd agents-Aipyq
+    cd agents-because
     npm install           # 首次建议跑一下
     npm run build:dev     # 生成 dist/esm 和 dist/cjs
     ```
@@ -125,7 +125,7 @@
 5. **配置环境变量**
    ```bash
    cp .env.example .env
-   cp Aipyq.yaml.example Aipyq.yaml
+   cp Because.yaml.example Because.yaml
    # 按需编辑 .env，配置数据库、密钥等
    ```
 
@@ -149,14 +149,14 @@
 
 1. **克隆项目并进入目录**
    ```bash
-   git clone https://github.com/constanji/Aipyqchat
-   cd AipyqChat
+   git clone https://github.com/constanji/Because
+   cd Because
    ```
 
 2. **配置环境变量**
    ```bash
    cp .env.example .env
-   cp Aipyq.yaml.example Aipyq.yaml
+   cp Because.yaml.example Because.yaml
    ```
 
 3. **构建镜像并启动服务**

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import TextareaAutosize from 'react-textarea-autosize';
-import { useAvailablePluginsQuery } from '@aipyq/data-provider/react-query';
+import { useAvailablePluginsQuery } from '@because/data-provider/react-query';
 import {
   Input,
   Label,
@@ -10,9 +10,9 @@ import {
   InputNumber,
   SelectDropDown,
   HoverCardTrigger,
-} from '@aipyq/client';
+} from '@because/client';
 import type { TModelSelectProps, OnInputNumberChange } from '~/common';
-import type { TPlugin } from '@aipyq/data-provider';
+import type { TPlugin } from '@because/data-provider';
 import {
   removeFocusOutlines,
   defaultTextProps,

@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from 'react';
-import { MultiSelect, MCPIcon } from '@aipyq/client';
+import { MultiSelect, MCPIcon } from '@because/client';
 import MCPServerStatusIcon from '~/components/MCP/MCPServerStatusIcon';
 import MCPConfigDialog from '~/components/MCP/MCPConfigDialog';
 import { useBadgeRowContext } from '~/Providers';

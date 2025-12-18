@@ -4,8 +4,8 @@ const {
   roleDefaults,
   permissionsSchema,
   removeNullishValues,
-} = require('@aipyq/data-provider');
-const { logger } = require('@aipyq/data-schemas');
+} = require('@because/data-provider');
+const { logger } = require('@because/data-schemas');
 const getLogStores = require('~/cache/getLogStores');
 const { Role } = require('~/db/models');
 

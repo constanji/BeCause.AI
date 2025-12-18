@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import { InfoHoverCard, ESide } from '@aipyq/client';
-import { PermissionTypes, Permissions } from '@aipyq/data-provider';
+import { InfoHoverCard, ESide } from '@because/client';
+import { PermissionTypes, Permissions } from '@because/data-provider';
 import { useLocalize, useHasAccess } from '~/hooks';
 import ToggleSwitch from '../ToggleSwitch';
 import store from '~/store';

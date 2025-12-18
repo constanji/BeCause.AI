@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { EModelEndpoint } from '@aipyq/data-provider';
+import { EModelEndpoint } from '@because/data-provider';
 import { useLocalize } from '~/hooks';
 
 function HelpText({ endpoint }: { endpoint: string }) {

@@ -17,7 +17,7 @@ function ModelSelectorContent() {
   const localize = useLocalize();
 
   const {
-    // Aipyq
+    // Because
     agentsMap,
     modelSpecs,
     mappedEndpoints,

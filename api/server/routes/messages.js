@@ -1,7 +1,7 @@
 const express = require('express');
-const { unescapeLaTeX } = require('@aipyq/api');
-const { logger } = require('@aipyq/data-schemas');
-const { ContentTypes } = require('@aipyq/data-provider');
+const { unescapeLaTeX } = require('@because/api');
+const { logger } = require('@because/data-schemas');
+const { ContentTypes } = require('@because/data-provider');
 const {
   saveConvo,
   getMessage,

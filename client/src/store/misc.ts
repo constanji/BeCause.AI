@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { TAttachment } from '@aipyq/data-provider';
+import { TAttachment } from '@because/data-provider';
 import { atomWithLocalStorage } from './utils';
 import { BadgeItem } from '~/common';
 

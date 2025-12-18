@@ -21,12 +21,12 @@
       {
         "authField": "GOOGLE_CSE_ID",
         "label": "Google CSE ID",
-        "description": "这是你的 Google Custom Search Engine ID。获取方法请参阅：<a href='https://github.com/constanji/Aipyq/blob/main/docs/features/plugins/google_search.md'>我们的文档</a>。"
+        "description": "这是你的 Google Custom Search Engine ID。获取方法请参阅：<a href='https://github.com/constanji/Because/blob/main/docs/features/plugins/google_search.md'>我们的文档</a>。"
       },
       {
         "authField": "GOOGLE_SEARCH_API_KEY",
         "label": "Google API Key",
-        "description": "这是你的 Google Custom Search API Key。获取方法请参阅：<a href='https://github.com/constanji/Aipyq/blob/main/docs/features/plugins/google_search.md'>我们的文档</a>。"
+        "description": "这是你的 Google Custom Search API Key。获取方法请参阅：<a href='https://github.com/constanji/Because/blob/main/docs/features/plugins/google_search.md'>我们的文档</a>。"
       }
     ]
   },

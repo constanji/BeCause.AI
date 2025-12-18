@@ -1,6 +1,6 @@
 const path = require('path');
-const { EModelEndpoint, AuthKeys } = require('@aipyq/data-provider');
-const { getGoogleConfig, isEnabled, loadServiceKey } = require('@aipyq/api');
+const { EModelEndpoint, AuthKeys } = require('@because/data-provider');
+const { getGoogleConfig, isEnabled, loadServiceKey } = require('@because/api');
 const { getUserKey, checkUserKeyExpiry } = require('~/server/services/UserService');
 const { GoogleClient } = require('~/app');
 

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { Constants } from '@aipyq/data-provider';
-import type { TPlugin } from '@aipyq/data-provider';
+import { Constants } from '@because/data-provider';
+import type { TPlugin } from '@because/data-provider';
 import type { MCPServerInfo } from '~/common';
 
 interface VisibleToolsResult {
@@ -10,10 +10,10 @@ interface VisibleToolsResult {
 
 /**
  * Custom hook to calculate visible tool IDs based on selected tools.
- * Separates regular Aipyq tools from MCP servers.
+ * Separates regular Because tools from MCP servers.
  *
  * @param selectedToolIds - Array of selected tool IDs
- * @param regularTools - Array of regular Aipyq tools
+ * @param regularTools - Array of regular Because tools
  * @param mcpServersMap - Map of all MCP servers
  * @returns Object containing separate arrays of visible tool IDs for regular and MCP tools
  */
@@ -38,7 +38,7 @@ export function useVisibleTools(
       else if (mcpServersMap.has(toolId)) {
         mcpServers.add(toolId);
       }
-      // Regular Aipyq tools
+      // Regular Because tools
       else if (regularTools?.some((t) => t.pluginKey === toolId)) {
         regularToolIds.push(toolId);
       }

@@ -1,5 +1,5 @@
 /**
- * Client-side image resizing utility for Aipyq
+ * Client-side image resizing utility for Because
  * Resizes images to prevent backend upload errors while maintaining quality
  */
 

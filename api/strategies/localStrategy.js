@@ -1,6 +1,6 @@
-const { logger } = require('@aipyq/data-schemas');
-const { errorsToString } = require('@aipyq/data-provider');
-const { isEnabled, checkEmailConfig } = require('@aipyq/api');
+const { logger } = require('@because/data-schemas');
+const { errorsToString } = require('@because/data-provider');
+const { isEnabled, checkEmailConfig } = require('@because/api');
 const { Strategy: PassportLocalStrategy } = require('passport-local');
 const { findUser, comparePassword, updateUser } = require('~/models');
 const { loginSchema } = require('./validators');

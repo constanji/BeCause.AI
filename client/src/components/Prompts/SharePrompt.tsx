@@ -6,9 +6,9 @@ import {
   ResourceType,
   PermissionBits,
   PermissionTypes,
-} from '@aipyq/data-provider';
-import { Button } from '@aipyq/client';
-import type { TPromptGroup } from '@aipyq/data-provider';
+} from '@because/data-provider';
+import { Button } from '@because/client';
+import type { TPromptGroup } from '@because/data-provider';
 import { useAuthContext, useHasAccess, useResourcePermissions } from '~/hooks';
 import { GenericGrantAccessDialog } from '~/components/Sharing';
 

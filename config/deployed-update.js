@@ -40,8 +40,8 @@ const shouldRebase = process.argv.includes('--rebase');
   console.orange(downCommand);
   execSync(downCommand, { stdio: 'inherit' });
 
-  console.purple('正在移除所有 Aipyq `deployed` 镜像标签...');
-  const repositories = ['ghcr.io/constanji/Aipyq-dev-api', 'aipyq-client'];
+  console.purple('正在移除所有 Because `deployed` 镜像标签...');
+  const repositories = ['ghcr.io/constanji/Because-dev-api', 'because-client'];
   repositories.forEach((repo) => {
     const tags = execSync(`sudo docker images ${repo} -q`, { encoding: 'utf8' })
       .split('\n')
@@ -53,13 +53,13 @@ const shouldRebase = process.argv.includes('--rebase');
     });
   });
 
-  console.purple('正在拉取最新 Aipyq 镜像...');
+  console.purple('正在拉取最新 Because 镜像...');
   const pullCommand = 'sudo docker compose -f ./deploy-compose.yml pull api';
   console.orange(pullCommand);
   execSync(pullCommand, { stdio: 'inherit' });
 
   let startCommand = 'sudo docker compose -f ./deploy-compose.yml up -d';
-  console.green('您的 Aipyq 应用现已更新！使用以下命令启动应用:');
+  console.green('您的 Because 应用现已更新！使用以下命令启动应用:');
   console.purple(startCommand);
   console.orange(
     "注意: 建议清除浏览器的 cookies 和 localStorage，以确保完全干净的安装。",
