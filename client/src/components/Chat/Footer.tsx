@@ -78,7 +78,7 @@ export default function Footer({ className }: { className?: string }) {
           href={linkUrl}
           target="_blank"
           rel="noreferrer"
-          className="text-green-500"
+          className="text-sm text-green-500"
         >
           {linkText}
         </a>
@@ -116,7 +116,7 @@ export default function Footer({ className }: { className?: string }) {
     const mainContentParts = (
       typeof config?.customFooter === 'string'
         ? config.customFooter
-        : '因为智能  \n[浙ICP备2021031999号-3](https://beian.miit.gov.cn/)  Copyright © 2025-2026 Powered By [because.ai](https://because.ai)'
+        : '因为智能  \n[浙ICP备2021031999号-3](https://beian.miit.gov.cn/)  Copyright © 2026 Powered By [BeCause.Ai](https://because.ai)'
     ).split('|');
 
     const parts = mainContentParts.map((part) => part.trim()).filter(Boolean);
@@ -133,7 +133,7 @@ export default function Footer({ className }: { className?: string }) {
               <img
                 src="/assets/logo.svg"
                 alt="Logo"
-                className="inline-block h-3 w-3 mr-1 align-text-bottom -mt-0.5"
+                className="inline-block h-3.5 w-3.5 mr-1 align-middle relative top-[-1px]"
               />
             )}
             {parseMarkdownLinks(part)}
@@ -166,7 +166,7 @@ export default function Footer({ className }: { className?: string }) {
       <div
         className={
           className ??
-          'absolute bottom-0 left-0 right-0 hidden items-center justify-center gap-2 px-2 py-2 text-center text-xs text-text-primary sm:flex md:px-[60px]'
+          'absolute bottom-0 left-0 right-0 hidden items-center justify-center gap-2 px-2 py-2 text-center text-sm text-text-primary sm:flex md:px-[60px]'
         }
         role="contentinfo"
       >
