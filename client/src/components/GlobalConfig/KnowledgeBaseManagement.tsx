@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Database, MessageSquare, BookOpen, FileText, Plus, Trash2, Eye, Upload, X, ChevronRight, ChevronDown, Folder, FolderOpen } from 'lucide-react';
+import { Database, MessageSquare, BookOpen, FileText, Plus, Trash2, Eye, Upload, X, ChevronRight, ChevronDown, Folder, FolderOpen, Server } from 'lucide-react';
 import * as yaml from 'js-yaml';
 import { Button, useToastContext } from '@because/client';
 import {
@@ -7,6 +7,8 @@ import {
   useAddKnowledgeMutation,
   useDeleteKnowledgeMutation,
 } from '~/data-provider';
+import { useListDataSourcesQuery } from '~/data-provider/DataSources';
+import type { DataSource } from '@because/data-provider';
 import { dataService } from '@because/data-provider';
 import { cn } from '~/utils';
 
@@ -50,10 +52,20 @@ export default function KnowledgeBaseManagement() {
   const [activeTab, setActiveTab] = useState<KnowledgeType>('semantic_model');
   const [showAddModal, setShowAddModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState<KnowledgeEntry | null>(null);
+  const [selectedDataSourceId, setSelectedDataSourceId] = useState<string | null>(null);
+
+  // 获取数据源列表
+  const { data: dataSourcesResponse } = useListDataSourcesQuery();
+  const dataSources = dataSourcesResponse?.data || [];
+  const selectedDataSource = selectedDataSourceId 
+    ? dataSources.find((ds: DataSource) => ds._id === selectedDataSourceId)
+    : null;
 
   // 语义模型需要包含子项以支持层级展示，但默认只显示父级
+  // 根据选中的数据源过滤知识库（使用 entityId）
   const { data: knowledgeData, refetch } = useListKnowledgeQuery({
     type: activeTab,
+    entityId: selectedDataSourceId || undefined, // 使用数据源 ID 作为 entityId
     includeChildren: activeTab === 'semantic_model', // 语义模型需要包含子项数据，但前端只显示父级
     limit: 100,
   });
@@ -114,10 +126,51 @@ export default function KnowledgeBaseManagement() {
           type="button"
           onClick={() => setShowAddModal(true)}
           className="btn btn-primary relative flex items-center gap-2 rounded-lg px-3 py-2"
+          disabled={!selectedDataSourceId}
+          title={!selectedDataSourceId ? '请先选择数据源' : ''}
         >
           <Plus className="h-4 w-4" />
           添加{activeTabConfig?.label}
         </Button>
+      </div>
+
+      {/* 数据源选择器 */}
+      <div className="mb-4 rounded-lg border border-border-light bg-surface-secondary p-4">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <Server className="h-4 w-4 text-text-secondary" />
+            <label className="text-sm font-medium text-text-primary">选择数据源：</label>
+          </div>
+          <select
+            value={selectedDataSourceId || ''}
+            onChange={(e) => setSelectedDataSourceId(e.target.value || null)}
+            className="flex-1 rounded border border-border-light bg-surface-primary px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
+            aria-label="选择数据源"
+            title="选择数据源"
+          >
+            <option value="">-- 请选择数据源 --</option>
+            {dataSources.map((ds: DataSource) => (
+              <option key={ds._id} value={ds._id}>
+                {ds.name} ({ds.type} - {ds.database})
+              </option>
+            ))}
+          </select>
+          {selectedDataSource && (
+            <div className="flex items-center gap-2 text-xs text-text-secondary">
+              <span className="rounded bg-surface-primary px-2 py-1">
+                {selectedDataSource.type}
+              </span>
+              <span className="rounded bg-surface-primary px-2 py-1">
+                {selectedDataSource.host}:{selectedDataSource.port}
+              </span>
+            </div>
+          )}
+        </div>
+        {!selectedDataSourceId && (
+          <p className="mt-2 text-xs text-text-tertiary">
+            请先选择数据源，然后管理该数据源绑定的知识库
+          </p>
+        )}
       </div>
 
       {/* 标签页 */}
@@ -142,7 +195,17 @@ export default function KnowledgeBaseManagement() {
 
       {/* 内容区域 */}
       <div className="flex-1 overflow-auto">
-        {knowledgeEntries.length === 0 ? (
+        {!selectedDataSourceId ? (
+          <div className="flex h-64 items-center justify-center text-text-secondary">
+            <div className="text-center">
+              <Server className="mx-auto h-12 w-12 text-text-tertiary mb-4" />
+              <p className="text-sm">请先选择数据源</p>
+              <p className="mt-2 text-xs text-text-tertiary">
+                在上方选择数据源后，可以管理该数据源绑定的知识库
+              </p>
+            </div>
+          </div>
+        ) : knowledgeEntries.length === 0 ? (
           <div className="flex h-64 items-center justify-center text-text-secondary">
             <div className="text-center">
               <p className="text-sm">暂无{activeTabConfig?.label}</p>
@@ -166,9 +229,10 @@ export default function KnowledgeBaseManagement() {
       </div>
 
       {/* 添加模态框 */}
-      {showAddModal && (
+      {showAddModal && selectedDataSourceId && (
         <AddKnowledgeModal
           type={activeTab}
+          dataSourceId={selectedDataSourceId}
           onClose={() => setShowAddModal(false)}
           onAdd={(payload) => addMutation.mutate(payload)}
           isLoading={addMutation.isLoading}
@@ -225,7 +289,7 @@ function KnowledgeEntryCard({ entry, onView, onDelete }: KnowledgeEntryCardProps
                 <Database className="h-4 w-4 text-text-secondary" />
               )}
               <h4 className="font-medium text-text-primary">{entry.title}</h4>
-              {hasChildren && (
+              {hasChildren && entry.children && (
                 <span className="text-xs text-text-tertiary">
                   ({entry.children.length} 个表)
                 </span>
@@ -279,7 +343,7 @@ function KnowledgeEntryCard({ entry, onView, onDelete }: KnowledgeEntryCardProps
       </div>
       
       {/* 子项展示（可展开/折叠） */}
-      {hasChildren && isExpanded && (
+      {hasChildren && isExpanded && entry.children && (
         <div className="border-t border-border-light bg-surface-primary pl-8 pr-4 py-2">
           <div className="space-y-2">
             {entry.children.map((child) => (
@@ -320,12 +384,13 @@ function KnowledgeEntryCard({ entry, onView, onDelete }: KnowledgeEntryCardProps
 
 interface AddKnowledgeModalProps {
   type: KnowledgeType;
+  dataSourceId: string;
   onClose: () => void;
   onAdd: (payload: AddKnowledgeRequest) => void;
   isLoading: boolean;
 }
 
-function AddKnowledgeModal({ type, onClose, onAdd, isLoading }: AddKnowledgeModalProps) {
+function AddKnowledgeModal({ type, dataSourceId, onClose, onAdd, isLoading }: AddKnowledgeModalProps) {
   const { showToast } = useToastContext();
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [fileContent, setFileContent] = useState<string>('');
@@ -405,7 +470,10 @@ function AddKnowledgeModal({ type, onClose, onAdd, isLoading }: AddKnowledgeModa
                 databaseName: databaseName,
                 semanticModels: semanticData.semantic_models,
                 databaseContent: JSON.stringify(semanticData), // 整个文件内容作为数据库级别的内容
-                metadata: semanticData.metadata || {},
+                metadata: {
+                  ...semanticData.metadata,
+                  entity_id: dataSourceId, // 关联数据源
+                },
               },
             });
             showToast({
@@ -423,6 +491,7 @@ function AddKnowledgeModal({ type, onClose, onAdd, isLoading }: AddKnowledgeModa
                 databaseName: semanticData.database || '',
                 tableName: semanticData.name || semanticData.model,
                 content: JSON.stringify(semanticData),
+                entityId: dataSourceId, // 关联数据源
               },
             });
           }
@@ -448,6 +517,7 @@ function AddKnowledgeModal({ type, onClose, onAdd, isLoading }: AddKnowledgeModa
             databaseName: formData.databaseName || '',
             tableName: formData.tableName || '',
             content: formData.content || JSON.stringify({}),
+            entityId: dataSourceId, // 关联数据源
           },
         });
       }
@@ -464,6 +534,7 @@ function AddKnowledgeModal({ type, onClose, onAdd, isLoading }: AddKnowledgeModa
         data: {
           question: formData.question || '',
           answer: formData.answer || '',
+          entityId: dataSourceId, // 关联数据源
         },
       });
     } else if (type === 'synonym') {
@@ -481,6 +552,7 @@ function AddKnowledgeModal({ type, onClose, onAdd, isLoading }: AddKnowledgeModa
           synonyms: Array.isArray(formData.synonyms)
             ? formData.synonyms
             : formData.synonyms?.split(',').map((s: string) => s.trim()) || [],
+          entityId: dataSourceId, // 关联数据源
         },
       });
     } else if (type === 'business_knowledge') {
@@ -500,6 +572,7 @@ function AddKnowledgeModal({ type, onClose, onAdd, isLoading }: AddKnowledgeModa
           tags: Array.isArray(formData.tags)
             ? formData.tags
             : formData.tags?.split(',').map((s: string) => s.trim()) || [],
+          entityId: dataSourceId, // 关联数据源
         },
       });
     }

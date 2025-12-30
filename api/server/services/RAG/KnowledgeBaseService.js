@@ -618,10 +618,17 @@ class KnowledgeBaseService {
           });
         
         if (parentIds.length > 0) {
-          const children = await KnowledgeEntry.find({
+          const childrenQuery = {
             user: userId,
             parent_id: { $in: parentIds },
-          })
+          };
+          
+          // 如果提供了 entityId，子项查询也需要过滤 entityId，确保数据源隔离
+          if (entityId) {
+            childrenQuery['metadata.entity_id'] = entityId;
+          }
+          
+          const children = await KnowledgeEntry.find(childrenQuery)
             .sort({ createdAt: -1 })
             .lean();
 
