@@ -9,6 +9,11 @@ const BeCauseService = require('~/server/services/BeCauseService');
  * 这是从 LBchat / BeCause 体系迁移过来的 BeCause 工具，用于自然语言问数（Text-to-SQL）
  * 的提示词模板系统。它不直接生成 SQL，而是向 LLM 返回「命令模板 + Prompt 模板加载说明 +
  * 变量说明」，由上层 Agent 按模板调用 LLM 生成 SQL 或进行数据问答。
+ *
+ * 重要更新（v2.0.0）：
+ * - 所有命令模板已集成 RAG 知识检索步骤
+ * - Agent 在执行命令时需要先调用 RAG 服务检索相关知识
+ * - RAG 检索结果会自动填充到提示词变量中（rag_semantic_models, rag_qa_pairs, rag_synonyms, rag_business_knowledge）
  */
 class BeCause extends Tool {
   name = 'because';
@@ -95,12 +100,14 @@ class BeCause extends Tool {
             user: userPromptTemplate ? 'Loaded' : 'Not found',
           },
           instructions: [
-            '1. 阅读命令模板，理解执行步骤和变量说明',
-            `2. 从 BeCauseNode/templates/prompt-templates/${templateMode}/ 加载对应的 system/user Prompt 模板`,
-            '3. 准备变量（semantic_models、query、query_time、language 等）',
-            '4. 使用 Jinja2 或等价模板能力替换变量，构造最终的 Prompt',
-            '5. 调用 LLM 生成 ANSI SQL',
-            '6. 校验 SQL 语法与安全性，并返回最终 SQL 查询',
+            '1. 阅读命令模板，理解执行步骤和变量说明（注意：命令模板包含RAG检索步骤）',
+            '2. 执行RAG知识检索：调用 POST /api/rag/query 检索相关语义模型、QA对、同义词、业务知识',
+            '3. 从检索结果提取 rag_semantic_models, rag_qa_pairs, rag_synonyms, rag_business_knowledge',
+            `4. 从 BeCauseNode/templates/prompt-templates/${templateMode}/ 加载对应的 system/user Prompt 模板`,
+            '5. 准备变量（优先使用RAG变量：rag_semantic_models等，传统变量仅作为回退）',
+            '6. 使用 Jinja2 或等价模板能力替换变量，构造最终的 Prompt',
+            '7. 调用 LLM 生成 ANSI SQL',
+            '8. 校验 SQL 语法与安全性，并返回最终 SQL 查询',
           ],
         },
         null,
@@ -160,11 +167,13 @@ class BeCause extends Tool {
           },
           intent_types: ['TEXT_TO_SQL', 'GENERAL', 'MISLEADING_QUERY'],
           instructions: [
-            '1. 阅读命令模板，理解执行步骤与变量',
-            '2. 从 templates/prompt-templates/default/ 加载 system/user Prompt 模板',
-            '3. 准备变量（query、histories、language 等）',
-            '4. 使用模板生成 Prompt 并调用 LLM',
-            '5. 解析 LLM 响应，得到意图类型和推理说明',
+            '1. 阅读命令模板，理解执行步骤与变量（注意：命令模板包含RAG检索步骤）',
+            '2. 执行RAG知识检索：调用 POST /api/rag/query 检索相关语义模型、QA对、业务知识',
+            '3. 从检索结果提取 rag_semantic_models, rag_qa_pairs, rag_business_knowledge',
+            '4. 从 templates/prompt-templates/default/ 加载 system/user Prompt 模板',
+            '5. 准备变量（优先使用RAG变量，传统变量仅作为回退）',
+            '6. 使用模板生成 Prompt 并调用 LLM',
+            '7. 解析 LLM 响应，得到意图类型和推理说明',
           ],
         },
         null,
@@ -231,10 +240,13 @@ class BeCause extends Tool {
             user: userPromptTemplate ? 'Loaded' : 'Not found',
           },
           instructions: [
-            '1. 阅读命令模板，理解执行步骤和变量（query、semantic_models、language 等）',
-            `2. 从 templates/prompt-templates/${templateMode}/ 加载 system/user Prompt 模板`,
-            '3. 使用模板生成 Prompt 并调用 LLM',
-            '4. 基于数据库 Schema 和语义模型，为用户提供数据解释与辅助',
+            '1. 阅读命令模板，理解执行步骤和变量（注意：命令模板包含RAG检索步骤）',
+            '2. 执行RAG知识检索：调用 POST /api/rag/query 检索相关语义模型、QA对（可参考类似问题的答案）、业务知识',
+            '3. 从检索结果提取 rag_semantic_models, rag_qa_pairs, rag_business_knowledge',
+            `4. 从 templates/prompt-templates/${templateMode}/ 加载 system/user Prompt 模板`,
+            '5. 准备变量（优先使用RAG变量，如果检索到高度相关的QA对可直接参考）',
+            '6. 使用模板生成 Prompt 并调用 LLM',
+            '7. 基于RAG检索的知识，为用户提供数据解释与辅助',
           ],
         },
         null,
@@ -285,6 +297,7 @@ class BeCause extends Tool {
             '1. 阅读命令模板，理解 Agentic 主代理的职责与流程',
             '2. 从 templates/prompt-templates/agentic/ 加载对应 Prompt 模板',
             '3. 根据模板中的 Agentic 工作流路由到合适的子代理（如 text-to-sql / data-assistance 等）',
+            '4. 注意：子代理在执行时会进行RAG知识检索，主代理需要协调整个流程',
           ],
         },
         null,
@@ -326,10 +339,11 @@ class BeCause extends Tool {
           command_template: commandTemplate,
           command_info: commandInfo,
           instructions: [
-            '1. 阅读命令模板，理解执行步骤',
-            '2. 加载需要的 Prompt 模板（如有）',
-            '3. 按模板准备变量并生成 Prompt',
-            '4. 调用 LLM 并处理响应结果',
+            '1. 阅读命令模板，理解执行步骤（注意：命令模板可能包含RAG检索步骤）',
+            '2. 如命令模板包含RAG检索步骤，先执行RAG知识检索',
+            '3. 加载需要的 Prompt 模板（如有）',
+            '4. 按模板准备变量并生成 Prompt（优先使用RAG变量）',
+            '5. 调用 LLM 并处理响应结果',
           ],
         },
         null,

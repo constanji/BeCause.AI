@@ -80,7 +80,24 @@ async function saveMessage(req, params, metadata) {
       { upsert: true, new: true },
     );
 
-    return message.toObject();
+    const savedMessage = message.toObject();
+
+    // 如果是AI回复消息，尝试自动提取知识
+    if (!savedMessage.isCreatedByUser && process.env.AUTO_EXTRACT_KNOWLEDGE === 'true') {
+      try {
+        const messageKnowledgeHook = require('~/server/services/RAG/MessageKnowledgeHook');
+        // 异步执行，不阻塞消息保存
+        setImmediate(() => {
+          messageKnowledgeHook.onAIMessageSaved(req, savedMessage).catch(err => {
+            logger.error('[saveMessage] 自动提取知识失败:', err);
+          });
+        });
+      } catch (error) {
+        logger.warn('[saveMessage] 无法加载知识提取钩子:', error.message);
+      }
+    }
+
+    return savedMessage;
   } catch (err) {
     logger.error('Error saving message:', err);
     logger.info(`---\`saveMessage\` context: ${metadata?.context}`);

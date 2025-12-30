@@ -23,20 +23,110 @@
 
 #### semantic_models
 - **类型**：列表（字符串数组）
-- **说明**：语义模型列表，描述数据库结构和业务含义
-- **示例**：
-  ```yaml
-  - name: covid_data
-    description: COVID-19 病例数据
-    entities:
-      - name: country
-        description: 国家名称
-    measures:
-      - name: cases
-        description: 病例数量
-        agg: sum
+- **说明**：语义模型列表，描述数据库结构和业务含义（传统方式，已废弃）
+- **状态**：已废弃，优先使用 `rag_semantic_models`
+- **使用位置**：SQL 生成、意图分类、数据辅助、误导查询处理（仅作为回退）
+
+#### rag_semantic_models
+- **类型**：列表（对象数组）
+- **说明**：通过RAG服务检索到的语义模型，自动根据用户查询检索相关模型
+- **来源**：RAG服务自动检索（`POST /api/rag/query`）
+- **格式**：
+  ```json
+  [
+    {
+      "rank": 1,
+      "type": "semantic_model",
+      "title": "语义模型: mall_demo.orders",
+      "content": "...",
+      "score": 0.95,
+      "metadata": {
+        "semantic_model_id": "...",
+        "database_name": "mall_demo",
+        "table_name": "orders"
+      }
+    }
+  ]
   ```
-- **使用位置**：SQL 生成、意图分类、数据辅助、误导查询处理
+- **使用位置**：SQL 生成、意图分类、数据辅助（推荐使用）
+
+#### rag_qa_pairs
+- **类型**：列表（对象数组）
+- **说明**：通过RAG服务检索到的相关QA对，包含常见问题和答案
+- **来源**：RAG服务自动检索，QA对由系统自动从对话中提取
+- **格式**：
+  ```json
+  [
+    {
+      "rank": 1,
+      "type": "qa_pair",
+      "title": "QA对",
+      "content": "...",
+      "score": 0.92,
+      "question": "如何查询订单总数？",
+      "answer": "使用 SELECT COUNT(*) FROM orders"
+    }
+  ]
+  ```
+- **使用位置**：SQL 生成、数据辅助、意图分类
+
+#### rag_synonyms
+- **类型**：列表（对象数组）
+- **说明**：通过RAG服务检索到的同义词，用于理解业务术语
+- **来源**：RAG服务自动检索
+- **格式**：
+  ```json
+  [
+    {
+      "rank": 1,
+      "type": "synonym",
+      "title": "同义词",
+      "content": "...",
+      "score": 0.88,
+      "noun": "订单",
+      "synonyms": ["order", "purchase", "交易"]
+    }
+  ]
+  ```
+- **使用位置**：SQL 生成、意图分类
+
+#### rag_business_knowledge
+- **类型**：列表（对象数组）
+- **说明**：通过RAG服务检索到的业务知识，包含业务规则和文档
+- **来源**：RAG服务自动检索
+- **格式**：
+  ```json
+  [
+    {
+      "rank": 1,
+      "type": "business_knowledge",
+      "title": "业务知识",
+      "content": "...",
+      "score": 0.85,
+      "category": "订单规则",
+      "tags": ["订单", "规则"]
+    }
+  ]
+  ```
+- **使用位置**：SQL 生成、数据辅助
+
+#### rag_results
+- **类型**：对象
+- **说明**：完整的RAG检索结果，包含所有类型的知识
+- **格式**：
+  ```json
+  {
+    "query": "用户查询",
+    "results": [...],
+    "total": 10,
+    "metadata": {
+      "retrievalCount": 20,
+      "reranked": true,
+      "enhancedReranking": false
+    }
+  }
+  ```
+- **使用位置**：所有命令（当需要完整检索信息时）
 
 #### language
 - **类型**：字符串
@@ -89,17 +179,15 @@
 
 #### synonyms
 - **类型**：列表（对象数组）
-- **说明**：同义词列表，用于理解业务术语
-- **格式**：
-  ```json
-  [
-    {
-      "noun": "病例",
-      "synonyms": ["感染", "确诊", "患者"]
-    }
-  ]
-  ```
-- **使用位置**：SQL 生成、推理生成
+- **说明**：同义词列表，用于理解业务术语（传统方式，已废弃）
+- **状态**：已废弃，优先使用 `rag_synonyms`
+- **使用位置**：SQL 生成、推理生成（仅作为回退）
+
+#### docs
+- **类型**：列表（字符串数组）
+- **说明**：业务知识文档，提供额外的业务上下文（传统方式，已废弃）
+- **状态**：已废弃，优先使用 `rag_business_knowledge`
+- **使用位置**：SQL 生成、推理生成（仅作为回退）
 
 #### docs
 - **类型**：列表（字符串数组）

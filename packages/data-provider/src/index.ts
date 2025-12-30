@@ -27,6 +27,7 @@ export * from './types/queries';
 export * from './types/runs';
 export * from './types/web';
 export * from './types/graph';
+export * from './types/dataSource';
 /* access permissions */
 export * from './accessPermissions';
 /* query/mutation keys */
@@ -35,8 +36,8 @@ export * from './keys';
 export * from './headers-helpers';
 export { loginPage, registerPage, apiBaseUrl } from './api-endpoints';
 export { default as request } from './request';
-export { dataService };
 import * as dataService from './data-service';
+export { dataService };
 /* general helpers */
 export * from './utils';
 export * from './actions';

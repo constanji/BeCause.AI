@@ -11,21 +11,30 @@ services:
       - pgdata2:/var/lib/postgresql/data
     ports:
       - "5434:5432"
+    networks:
+      - because_default  # 使用 docker-compose.yml 的默认网络
 
-  rag_api:
-    image: ghcr.io/constanji/because-rag-api-dev:latest
-    environment:
-      - DB_HOST=vectordb
-      - DB_PORT=5432
-      - POSTGRES_DB=mydatabase
-      - POSTGRES_USER=myuser
-      - POSTGRES_PASSWORD=mypassword
-    ports:
-      - "${RAG_PORT:-9002}:8000"
-    depends_on:
-      - vectordb
-    env_file:
-      - .env
+  # RAG API 服务已本地化，使用 ONNX 模型，不再需要外部服务
+  # rag_api:
+  #   image: ghcr.io/danny-avila/librechat-rag-api-dev:latest
+  #   environment:
+  #     - DB_HOST=vectordb
+  #     - DB_PORT=5432
+  #     - POSTGRES_DB=mydatabase
+  #     - POSTGRES_USER=myuser
+  #     - POSTGRES_PASSWORD=mypassword
+  #   ports:
+  #     - "${RAG_PORT:-9002}:8000"
+  #   depends_on:
+  #     - vectordb
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - because_default  # 使用 docker-compose.yml 的默认网络
 
 volumes:
   pgdata2:
+
+networks:
+  because_default:
+    external: true  # 使用已存在的网络

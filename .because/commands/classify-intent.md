@@ -25,25 +25,58 @@ $ARGUMENTS
    - 识别是否有查询历史
    - 确定需要的上下文信息
 
-2. **选择提示词模板**
+2. **RAG 知识检索**（新增，优先执行）
+   
+   a. **调用 RAG 服务**：
+      - 使用用户查询调用 RAG 服务：`POST /api/rag/query`
+      - 检索类型：`semantic_model`, `qa_pair`, `business_knowledge`
+      - 检索参数：
+        ```json
+        {
+          "query": "用户查询文本",
+          "userId": "用户ID",
+          "options": {
+            "types": ["semantic_model", "qa_pair", "business_knowledge"],
+            "topK": 5,
+            "useReranking": true
+          }
+        }
+        ```
+   
+   b. **处理检索结果**：
+      - 提取语义模型：判断查询是否与数据库模式相关
+      - 提取QA对：查找类似的问题和答案
+      - 提取业务知识：理解业务上下文
+   
+   c. **准备RAG变量**：
+      - `rag_semantic_models`：用于判断是否为TEXT_TO_SQL意图
+      - `rag_qa_pairs`：参考类似问题的处理方式
+      - `rag_business_knowledge`：理解业务上下文
+
+3. **选择提示词模板**
    
    a. **加载提示词文件**：
       - System Prompt：`templates/prompt-templates/default/intent_classification_system_prompt.txt`
       - User Prompt Template：`templates/prompt-templates/default/intent_classification_user_prompt_template.txt`
 
-3. **准备变量数据**
+4. **准备变量数据**
 
    a. **必需变量**：
       - `query`：当前用户查询
       - `query_time`：当前系统时间（格式：YYYY-MM-DD HH:mm:ss）
       - `language`：输出语言（如："简体中文"、"English"）
 
-   b. **可选变量**（如果提供）：
-      - `semantic_models`：语义模型列表
+   b. **RAG检索变量**（自动填充，推荐使用）：
+      - `rag_semantic_models`：RAG检索到的语义模型（用于判断TEXT_TO_SQL意图）
+      - `rag_qa_pairs`：相关的QA对（参考类似问题的处理）
+      - `rag_business_knowledge`：相关的业务知识（理解业务上下文）
+
+   c. **可选变量**（如果提供）：
+      - `semantic_models`：传统语义模型列表（仅作为RAG检索失败时的回退）
       - `histories`：之前的查询历史
       - `instruction`：用户自定义指令
 
-4. **执行变量替换**
+5. **执行变量替换**
 
    a. **加载 Jinja2 模板**：
       - 读取 System Prompt 模板文件
@@ -104,6 +137,13 @@ $ARGUMENTS
   - **TEXT_TO_SQL**：查询与数据库模式相关，需要生成 SQL
   - **GENERAL**：查询关于数据库模式的一般信息
   - **MISLEADING_QUERY**：查询与数据库模式无关或缺乏详细信息
+
+
+- **RAG检索优先**：
+  - 优先使用RAG检索到的语义模型判断意图
+  - 如果检索到相关语义模型，更可能是TEXT_TO_SQL意图
+  - 参考QA对中类似问题的意图分类
+  - 使用业务知识理解查询的业务上下文
 
 - **上下文考虑**：
   - 如果有查询历史，必须结合上下文理解当前查询

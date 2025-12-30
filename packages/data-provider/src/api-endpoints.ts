@@ -230,6 +230,23 @@ export const mcp = {
   tools: `${BASE_URL}/api/mcp/tools`,
 };
 
+export const dataSources = {
+  list: () => `${BASE_URL}/api/config/data-sources`,
+  get: (id: string) => `${BASE_URL}/api/config/data-sources/${id}`,
+  create: () => `${BASE_URL}/api/config/data-sources`,
+  update: (id: string) => `${BASE_URL}/api/config/data-sources/${id}`,
+  delete: (id: string) => `${BASE_URL}/api/config/data-sources/${id}`,
+  test: (id: string) => `${BASE_URL}/api/config/data-sources/${id}/test`,
+  testConnection: () => `${BASE_URL}/api/config/data-sources/test`,
+};
+
+export const rag = {
+  query: () => `${BASE_URL}/api/rag/query`,
+  knowledge: () => `${BASE_URL}/api/rag/knowledge`,
+  knowledgeBatch: () => `${BASE_URL}/api/rag/knowledge/batch`,
+  knowledgeById: (id: string) => `${BASE_URL}/api/rag/knowledge/${id}`,
+};
+
 export const revertAgentVersion = (agent_id: string) => `${agents({ path: `${agent_id}/revert` })}`;
 
 export const files = () => `${BASE_URL}/api/files`;

@@ -41,6 +41,7 @@ const {
   DatabaseSchema,
   SqlExecutor,
   BeCause,
+  SemanticModelGenerator,
 } = require('../');
 const { primeFiles: primeCodeFiles } = require('~/server/services/Files/Code/process');
 const { createFileSearchTool, primeFiles: primeSearchFiles } = require('./fileSearch');
@@ -192,6 +193,7 @@ const loadTools = async ({
     social: SocialMedia,
     bazi_astrology: BaziAstrology,
     sql_executor: SqlExecutor,
+    semantic_model_generator: SemanticModelGenerator,
   };
 
   const customConstructors = {
@@ -262,6 +264,19 @@ const loadTools = async ({
     },
     speckit: {
       projectRoot: paths.root,
+    },
+    because: {
+      projectRoot: paths.root,
+    },
+    database_schema: {
+      apiUrl: process.env.SQL_API_URL || 'http://localhost:3001',
+    },
+    sql_executor: {
+      apiUrl: process.env.SQL_API_URL || 'http://localhost:3001',
+    },
+    semantic_model_generator: {
+      projectRoot: paths.root,
+      sqlApiUrl: process.env.SQL_API_URL || 'http://localhost:3001',
     },
   };
 

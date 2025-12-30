@@ -25,20 +25,54 @@ $ARGUMENTS
    - 识别问题类型（结构性问题、功能性问题等）
    - 确定需要的语义模型信息
 
-2. **选择提示词模板**
+2. **RAG 知识检索**（新增，优先执行）
+   
+   a. **调用 RAG 服务**：
+      - 使用用户查询调用 RAG 服务：`POST /api/rag/query`
+      - 检索类型：`semantic_model`, `qa_pair`, `business_knowledge`
+      - 检索参数：
+        ```json
+        {
+          "query": "用户查询文本",
+          "userId": "用户ID",
+          "options": {
+            "types": ["semantic_model", "qa_pair", "business_knowledge"],
+            "topK": 10,
+            "useReranking": true
+          }
+        }
+        ```
+   
+   b. **处理检索结果**：
+      - 提取语义模型：获取数据库结构信息
+      - 提取QA对：查找类似问题的答案
+      - 提取业务知识：获取业务规则和文档
+   
+   c. **准备RAG变量**：
+      - `rag_semantic_models`：数据库结构信息
+      - `rag_qa_pairs`：类似问题的答案（可直接参考）
+      - `rag_business_knowledge`：业务知识文档
+
+3. **选择提示词模板**
    
    a. **加载提示词文件**：
       - System Prompt：`templates/prompt-templates/default/data_assistance_system_prompt.txt`
       - User Prompt Template：`templates/prompt-templates/default/data_assistance_user_prompt_template.txt`
 
-3. **准备变量数据**
+4. **准备变量数据**
 
    a. **必需变量**：
-      - `semantic_models`：语义模型列表
       - `query`：用户查询问题
       - `language`：输出语言（如："简体中文"、"English"）
+      - `rag_semantic_models`：从RAG检索结果中提取的语义模型（优先使用）
+      - `semantic_models`：传统语义模型列表（仅作为RAG检索失败时的回退）
 
-4. **执行变量替换**
+   b. **RAG检索变量**（自动填充，推荐使用）：
+      - `rag_semantic_models`：RAG检索到的语义模型（包含数据库结构信息）
+      - `rag_qa_pairs`：相关的QA对（可直接参考类似问题的答案）
+      - `rag_business_knowledge`：相关的业务知识（包含业务规则和文档）
+
+5. **执行变量替换**
 
    a. **加载 Jinja2 模板**：
       - 读取 System Prompt 模板文件
@@ -85,6 +119,12 @@ $ARGUMENTS
 
 ## 行为规则
 
+- **RAG检索优先**：
+  - 优先使用RAG检索到的QA对中的答案（如果问题相似）
+  - 使用RAG检索到的语义模型提供数据库结构信息
+  - 参考RAG检索到的业务知识提供业务上下文
+  - 如果检索到高度相关的QA对（相似度>0.9），可以直接参考其答案
+
 - **回答格式**：
   - 必须使用 Markdown 格式
   - 不能包含 SQL 代码
@@ -101,6 +141,7 @@ $ARGUMENTS
   - 回答应该易于理解
   - 帮助用户理解数据库结构和功能
   - 提供清晰、有用的信息
+  - 优先参考RAG检索到的QA对和业务知识
 
 ## 示例执行
 

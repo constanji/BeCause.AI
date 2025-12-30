@@ -28,6 +28,15 @@ const {
   deleteCustomMCPServersConfig,
 } = require('~/server/controllers/MCPConfigController');
 const {
+  getDataSourcesHandler,
+  getDataSourceHandler,
+  createDataSourceHandler,
+  updateDataSourceHandler,
+  deleteDataSourceHandler,
+  testDataSourceConnectionHandler,
+  testConnectionHandler,
+} = require('~/server/controllers/DataSourceController');
+const {
   saveModelSpecsConfig,
 } = require('~/server/controllers/ModelSpecsController');
 const emailLoginEnabled =
@@ -228,5 +237,14 @@ router.delete('/endpoints/custom/:endpointName', requireJwtAuth, checkAdmin, del
 router.get('/mcp/custom', requireJwtAuth, checkAdmin, getCustomMCPServersConfig);
 router.post('/mcp/custom', requireJwtAuth, checkAdmin, saveCustomMCPServersConfig);
 router.delete('/mcp/custom/:serverName', requireJwtAuth, checkAdmin, deleteCustomMCPServersConfig);
+
+// 数据源配置路由（需要管理员权限）
+router.get('/data-sources', requireJwtAuth, checkAdmin, getDataSourcesHandler);
+router.get('/data-sources/:id', requireJwtAuth, checkAdmin, getDataSourceHandler);
+router.post('/data-sources', requireJwtAuth, checkAdmin, createDataSourceHandler);
+router.put('/data-sources/:id', requireJwtAuth, checkAdmin, updateDataSourceHandler);
+router.delete('/data-sources/:id', requireJwtAuth, checkAdmin, deleteDataSourceHandler);
+router.post('/data-sources/:id/test', requireJwtAuth, checkAdmin, testDataSourceConnectionHandler);
+router.post('/data-sources/test', requireJwtAuth, checkAdmin, testConnectionHandler);
 
 module.exports = router;

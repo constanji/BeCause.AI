@@ -510,3 +510,62 @@ export const useMCPServerConnectionStatusQuery = (
     },
   );
 };
+
+/* RAG Knowledge Base Hooks */
+
+export const useListKnowledgeQuery = (
+  params?: dataService.KnowledgeListParams,
+  config?: UseQueryOptions<dataService.KnowledgeListResponse>,
+): QueryObserverResult<dataService.KnowledgeListResponse> => {
+  return useQuery<dataService.KnowledgeListResponse>(
+    [QueryKeys.knowledgeBase, params],
+    () => dataService.listKnowledge(params),
+    {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      ...config,
+    },
+  );
+};
+
+export const useAddKnowledgeMutation = (): UseMutationResult<
+  dataService.AddKnowledgeResponse,
+  Error,
+  dataService.AddKnowledgeRequest
+> => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload) => dataService.addKnowledge(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.knowledgeBase]);
+    },
+  });
+};
+
+export const useAddKnowledgeBatchMutation = (): UseMutationResult<
+  dataService.KnowledgeListResponse,
+  Error,
+  { entries: dataService.AddKnowledgeRequest[] }
+> => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload) => dataService.addKnowledgeBatch(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.knowledgeBase]);
+    },
+  });
+};
+
+export const useDeleteKnowledgeMutation = (): UseMutationResult<
+  { success: boolean; message: string },
+  Error,
+  string
+> => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id) => dataService.deleteKnowledge(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.knowledgeBase]);
+    },
+  });
+};

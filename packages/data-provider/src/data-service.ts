@@ -6,6 +6,7 @@ import * as ag from './types/agents';
 import * as m from './types/mutations';
 import * as q from './types/queries';
 import * as f from './types/files';
+import * as d from './types/dataSource';
 import * as config from './config';
 import request from './request';
 import * as s from './schemas';
@@ -538,6 +539,42 @@ export const deleteAgentAction = async ({
     }),
   );
 
+/* Data Sources */
+
+export const listDataSources = (): Promise<d.DataSourceListResponse> => {
+  return request.get(endpoints.dataSources.list());
+};
+
+export const getDataSourceById = ({ id }: { id: string }): Promise<d.DataSourceResponse> => {
+  return request.get(endpoints.dataSources.get(id));
+};
+
+export const createDataSource = (data: d.DataSourceCreateParams): Promise<d.DataSourceResponse> => {
+  return request.post(endpoints.dataSources.create(), data);
+};
+
+export const updateDataSource = ({
+  id,
+  data,
+}: {
+  id: string;
+  data: d.DataSourceUpdateParams;
+}): Promise<d.DataSourceResponse> => {
+  return request.put(endpoints.dataSources.update(id), data);
+};
+
+export const deleteDataSource = ({ id }: { id: string }): Promise<{ success: boolean; message?: string }> => {
+  return request.delete(endpoints.dataSources.delete(id));
+};
+
+export const testDataSourceConnection = ({ id }: { id: string }): Promise<d.DataSourceTestResponse> => {
+  return request.post(endpoints.dataSources.test(id));
+};
+
+export const testConnection = (data: d.DataSourceCreateParams): Promise<d.DataSourceTestResponse> => {
+  return request.post(endpoints.dataSources.testConnection(), data);
+};
+
 /**
  * Imports a conversations file.
  *
@@ -965,3 +1002,57 @@ export function getGraphApiToken(params: q.GraphTokenParams): Promise<q.GraphTok
 export function getDomainServerBaseUrl(): string {
   return `${endpoints.apiBaseUrl()}/api`;
 }
+
+/* RAG Knowledge Base */
+
+export interface KnowledgeEntry {
+  _id: string;
+  user: string;
+  type: 'semantic_model' | 'qa_pair' | 'synonym' | 'business_knowledge' | 'file';
+  title: string;
+  content: string;
+  embedding?: number[];
+  metadata?: Record<string, any>;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface KnowledgeListParams {
+  type?: string;
+  entityId?: string;
+  includeChildren?: boolean; // 是否包含子项（用于层级展示）
+  limit?: number;
+  skip?: number;
+}
+
+export interface KnowledgeListResponse {
+  success: boolean;
+  count: number;
+  data: KnowledgeEntry[];
+}
+
+export interface AddKnowledgeRequest {
+  type: string;
+  data: Record<string, any>;
+}
+
+export interface AddKnowledgeResponse {
+  success: boolean;
+  data: KnowledgeEntry;
+}
+
+export const listKnowledge = (params?: KnowledgeListParams): Promise<KnowledgeListResponse> => {
+  return request.get(endpoints.rag.knowledge(), { params });
+};
+
+export const addKnowledge = (payload: AddKnowledgeRequest): Promise<AddKnowledgeResponse> => {
+  return request.post(endpoints.rag.knowledge(), payload);
+};
+
+export const addKnowledgeBatch = (payload: { entries: AddKnowledgeRequest[] }): Promise<KnowledgeListResponse> => {
+  return request.post(endpoints.rag.knowledgeBatch(), payload);
+};
+
+export const deleteKnowledge = (id: string): Promise<{ success: boolean; message: string }> => {
+  return request.delete(endpoints.rag.knowledgeById(id));
+};

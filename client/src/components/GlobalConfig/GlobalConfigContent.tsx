@@ -10,6 +10,8 @@ import UsersManagement from './UsersManagement';
 import FeaturesManagement from './FeaturesManagement';
 import MarketplaceContent from './MarketplaceContent';
 import AvailableToolsManagement from './AvailableToolsManagement';
+import KnowledgeBaseManagement from './KnowledgeBaseManagement';
+import DataSourceManagement from './DataSourceManagement';
 
 interface GlobalConfigContentProps {
   startupConfig?: TStartupConfig;
@@ -22,7 +24,9 @@ type TabType =
   | 'mcp'
   | 'availableTools'
   | 'users'
-  | 'features';
+  | 'features'
+  | 'knowledgeBase'
+  | 'dataSources';
 
 const isValidTab = (tab: string | null): tab is TabType => {
   return (
@@ -32,7 +36,9 @@ const isValidTab = (tab: string | null): tab is TabType => {
     tab === 'mcp' ||
     tab === 'availableTools' ||
     tab === 'users' ||
-    tab === 'features'
+    tab === 'features' ||
+    tab === 'knowledgeBase' ||
+    tab === 'dataSources'
   );
 };
 
@@ -92,6 +98,16 @@ export default function GlobalConfigContent({ startupConfig: propStartupConfig }
       id: 'features',
       label: '初始界面配置',
       description: '管理初始界面的欢迎语和模型',
+    },
+    {
+      id: 'knowledgeBase',
+      label: '知识库管理',
+      description: '管理向量数据库中的语义模型、QA对、同义词和业务知识',
+    },
+    {
+      id: 'dataSources',
+      label: '数据源管理',
+      description: '管理数据库连接配置，支持 MySQL 和 PostgreSQL',
     },
   ];
 
@@ -155,6 +171,16 @@ export default function GlobalConfigContent({ startupConfig: propStartupConfig }
         {activeTab === 'features' && (
           <div className="h-full overflow-hidden px-4 py-4">
             <FeaturesManagement startupConfig={startupConfig} />
+          </div>
+        )}
+        {activeTab === 'knowledgeBase' && (
+          <div className="h-full overflow-hidden px-4 py-4">
+            <KnowledgeBaseManagement />
+          </div>
+        )}
+        {activeTab === 'dataSources' && (
+          <div className="h-full overflow-hidden px-4 py-4">
+            <DataSourceManagement />
           </div>
         )}
       </div>

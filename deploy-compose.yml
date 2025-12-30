@@ -9,7 +9,8 @@ services:
       - 4082:3080
     depends_on:
       - mongodb
-      # - rag_api  # 如果 RAG 镜像不可用，可以注释掉这行
+      # RAG API 已本地化，使用 ONNX 模型，不再需要外部服务
+      # - rag_api
     restart: always
     networks:
       - because-network
@@ -23,8 +24,9 @@ services:
       - NODE_ENV=production
       - MONGO_URI=mongodb://mongodb:27017/BecauseAi
       - MEILI_HOST=http://meilisearch:7700
-      # - RAG_PORT=${RAG_PORT:-8000}  # 如果禁用 RAG，注释这些
-      # - RAG_API_URL=http://rag_api:${RAG_PORT:-8000}
+      # RAG API 已本地化，使用 ONNX 模型，不再需要外部服务
+      # - RAG_PORT=${RAG_PORT:-9002}
+      # - RAG_API_URL=http://rag_api:8000
     volumes:
       - type: bind
         source: ./Because.yaml
@@ -74,21 +76,33 @@ services:
       - MEILI_NO_ANALYTICS=true
     volumes:
       - ./meili_data_v1.12:/meili_data
-  # vectordb:  # 主要用于 RAG，如果禁用 RAG 可以注释
-  #   image: pgvector/pgvector:0.8.0-pg15-trixie
-  #   environment:
-  #     POSTGRES_DB: mydatabase
-  #     POSTGRES_USER: myuser
-  #     POSTGRES_PASSWORD: mypassword
-  #   restart: always
-  #   volumes:
-  #     - pgdata2:/var/lib/postgresql/data
-  # rag_api:  # 如果镜像不可用或不需要 RAG 功能，可以注释掉整个服务
-  #   image: ghcr.io/constanji/because-rag-api-dev-lite:latest
+  vectordb:
+    container_name: Because-VectorDB
+    image: pgvector/pgvector:0.8.0-pg15-trixie
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    restart: always
+    networks:
+      - because-network
+    volumes:
+      - pgdata2:/var/lib/postgresql/data
+  # RAG API 服务已本地化，使用 ONNX 模型，不再需要外部服务
+  # rag_api:
+  #   container_name: Because-RAG-API
+  #   image: ghcr.io/danny-avila/librechat-rag-api-dev:latest
   #   environment:
   #     - DB_HOST=vectordb
-  #     - RAG_PORT=${RAG_PORT:-8000}
+  #     - DB_PORT=5432
+  #     - POSTGRES_DB=mydatabase
+  #     - POSTGRES_USER=myuser
+  #     - POSTGRES_PASSWORD=mypassword
+  #   ports:
+  #     - "${RAG_PORT:-9002}:8000"
   #   restart: always
+  #   networks:
+  #     - because-network
   #   depends_on:
   #     - vectordb
   #   env_file:
