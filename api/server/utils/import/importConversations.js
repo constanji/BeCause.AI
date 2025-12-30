@@ -1,4 +1,6 @@
 const fs = require('fs').promises;
+const path = require('path');
+const yaml = require('js-yaml');
 const { logger } = require('@because/data-schemas');
 const { getImporter } = require('./importers');
 
@@ -20,7 +22,16 @@ const importConversations = async (job) => {
     }
 
     const fileData = await fs.readFile(filepath, 'utf8');
-    const jsonData = JSON.parse(fileData);
+    const ext = path.extname(filepath).toLowerCase();
+    let jsonData;
+    
+    // 支持 JSON 和 YAML 文件解析
+    if (ext === '.yaml' || ext === '.yml') {
+      jsonData = yaml.load(fileData);
+    } else {
+      jsonData = JSON.parse(fileData);
+    }
+    
     const importer = getImporter(jsonData);
     await importer(jsonData, requestUserId);
     logger.debug(`user: ${requestUserId} | Finished importing conversations`);

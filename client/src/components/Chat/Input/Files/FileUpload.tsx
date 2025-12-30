@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FileUp } from 'lucide-react';
+import * as yaml from 'js-yaml';
 import { cn } from '~/utils/';
 import { useLocalize } from '~/hooks';
 
@@ -36,19 +37,34 @@ const FileUpload: React.FC<FileUploadProps> = ({
 
     const reader = new FileReader();
     reader.onload = (e) => {
-      const jsonData = JSON.parse(e.target?.result as string);
-      if (validator && !validator(jsonData)) {
+      try {
+        const fileContent = e.target?.result as string;
+        const fileName = file.name.toLowerCase();
+        let jsonData: Record<string, unknown>;
+        
+        // 支持 JSON 和 YAML 文件解析
+        if (fileName.endsWith('.yaml') || fileName.endsWith('.yml')) {
+          jsonData = yaml.load(fileContent) as Record<string, unknown>;
+        } else {
+          jsonData = JSON.parse(fileContent);
+        }
+        
+        if (validator && !validator(jsonData)) {
+          setStatus('invalid');
+          setStatusColor('text-red-600');
+          return;
+        }
+
+        if (validator) {
+          setStatus('success');
+          setStatusColor('text-green-500 dark:text-green-500');
+        }
+
+        onFileSelected(jsonData);
+      } catch (error) {
         setStatus('invalid');
         setStatusColor('text-red-600');
-        return;
       }
-
-      if (validator) {
-        setStatus('success');
-        setStatusColor('text-green-500 dark:text-green-500');
-      }
-
-      onFileSelected(jsonData);
     };
     reader.readAsText(file);
   };
@@ -89,7 +105,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
         value=""
         type="file"
         className={cn('hidden', className)}
-        accept=".json"
+        accept=".json,.yaml,.yml"
         onChange={handleFileChange}
         tabIndex={-1}
       />

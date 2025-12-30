@@ -35,7 +35,11 @@ const {
   deleteDataSourceHandler,
   testDataSourceConnectionHandler,
   testConnectionHandler,
+  getDataSourceSchemaHandler,
 } = require('~/server/controllers/DataSourceController');
+const {
+  generateSemanticModelHandler,
+} = require('~/server/controllers/SemanticModelController');
 const {
   saveModelSpecsConfig,
 } = require('~/server/controllers/ModelSpecsController');
@@ -246,5 +250,7 @@ router.put('/data-sources/:id', requireJwtAuth, checkAdmin, updateDataSourceHand
 router.delete('/data-sources/:id', requireJwtAuth, checkAdmin, deleteDataSourceHandler);
 router.post('/data-sources/:id/test', requireJwtAuth, checkAdmin, testDataSourceConnectionHandler);
 router.post('/data-sources/test', requireJwtAuth, checkAdmin, testConnectionHandler);
+router.get('/data-sources/:id/schema', requireJwtAuth, checkAdmin, getDataSourceSchemaHandler);
+router.post('/data-sources/:id/generate-semantic-model', requireJwtAuth, checkAdmin, generateSemanticModelHandler);
 
 module.exports = router;

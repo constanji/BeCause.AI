@@ -28,12 +28,13 @@ const storage = multer.diskStorage({
 });
 
 const importFileFilter = (req, file, cb) => {
-  if (file.mimetype === 'application/json') {
+  const ext = path.extname(file.originalname).toLowerCase();
+  if (file.mimetype === 'application/json' || ext === '.json') {
     cb(null, true);
-  } else if (path.extname(file.originalname).toLowerCase() === '.json') {
+  } else if (file.mimetype === 'application/x-yaml' || file.mimetype === 'text/yaml' || ext === '.yaml' || ext === '.yml') {
     cb(null, true);
   } else {
-    cb(new Error('Only JSON files are allowed'), false);
+    cb(new Error('Only JSON and YAML files are allowed'), false);
   }
 };
 

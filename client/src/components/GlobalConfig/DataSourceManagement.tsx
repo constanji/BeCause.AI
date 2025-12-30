@@ -10,8 +10,9 @@ import {
   useTestDataSourceConnectionMutation,
 } from '~/data-provider/DataSources';
 import type { DataSource, DataSourceCreateParams } from '@because/data-provider';
-import { Plus, Edit, Trash2, TestTube, CheckCircle2, XCircle, Clock } from 'lucide-react';
+import { Plus, Edit, Trash2, TestTube, CheckCircle2, XCircle, Clock, Database } from 'lucide-react';
 import DataSourceEditor from './DataSourceEditor';
+import SemanticModelConfig from './SemanticModelConfig';
 
 export default function DataSourceManagement() {
   const localize = useLocalize();
@@ -19,6 +20,7 @@ export default function DataSourceManagement() {
   const [showEditor, setShowEditor] = useState(false);
   const [editingDataSource, setEditingDataSource] = useState<DataSource | undefined>(undefined);
   const [testingIds, setTestingIds] = useState<Set<string>>(new Set());
+  const [semanticModelDataSourceId, setSemanticModelDataSourceId] = useState<string | null>(null);
 
   const { data: dataSourcesResponse, isLoading, refetch } = useListDataSourcesQuery();
   const dataSources = dataSourcesResponse?.data || [];
@@ -130,6 +132,15 @@ export default function DataSourceManagement() {
     return <Clock className="h-4 w-4 text-gray-400" />;
   };
 
+  if (semanticModelDataSourceId) {
+    return (
+      <SemanticModelConfig
+        dataSourceId={semanticModelDataSourceId}
+        onBack={() => setSemanticModelDataSourceId(null)}
+      />
+    );
+  }
+
   if (showEditor) {
     return (
       <DataSourceEditor
@@ -231,6 +242,14 @@ export default function DataSourceManagement() {
                     )}
                   </div>
                   <div className="flex gap-2 ml-4">
+                    <Button
+                      onClick={() => setSemanticModelDataSourceId(dataSource._id)}
+                      className="btn btn-neutral border-token-border-light relative flex items-center gap-2 rounded-lg px-3 py-2"
+                      title="语义模型配置"
+                    >
+                      <Database className="h-4 w-4" />
+                      语义模型
+                    </Button>
                     <Button
                       onClick={() => handleTestConnection(dataSource._id)}
                       disabled={testingIds.has(dataSource._id)}

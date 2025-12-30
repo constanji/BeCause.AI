@@ -238,6 +238,8 @@ export const dataSources = {
   delete: (id: string) => `${BASE_URL}/api/config/data-sources/${id}`,
   test: (id: string) => `${BASE_URL}/api/config/data-sources/${id}/test`,
   testConnection: () => `${BASE_URL}/api/config/data-sources/test`,
+  getSchema: (id: string) => `${BASE_URL}/api/config/data-sources/${id}/schema`,
+  generateSemanticModel: (id: string) => `${BASE_URL}/api/config/data-sources/${id}/generate-semantic-model`,
 };
 
 export const rag = {

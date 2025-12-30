@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const mongoose = require('mongoose');
 const { logger } = require('@because/data-schemas');
 const { SystemRoles } = require('@because/data-provider');
+const { encryptV2, decryptV2 } = require('@because/api');
 const {
   createDataSource,
   getDataSources,
@@ -10,86 +11,58 @@ const {
   deleteDataSource,
 } = require('~/models/DataSource');
 
-// 加密密钥，应该从环境变量读取
-// AES-256-GCM 需要32字节（256位）的密钥
-// 如果从环境变量读取，应该是64个十六进制字符（32字节）
-// 如果没有设置，生成一个随机密钥（仅用于开发，生产环境必须设置）
-let ENCRYPTION_KEY = process.env.DATASOURCE_ENCRYPTION_KEY;
-
-if (!ENCRYPTION_KEY) {
-  // 生成一个随机密钥（仅用于开发）
-  ENCRYPTION_KEY = crypto.randomBytes(32).toString('hex');
-  logger.warn('[DataSourceController] DATASOURCE_ENCRYPTION_KEY not set, using random key. This is not secure for production!');
-} else {
-  // 验证密钥长度
-  // 如果是hex字符串，应该是64个字符（32字节）
-  // 如果是普通字符串，需要转换为32字节的buffer
-  if (ENCRYPTION_KEY.length === 64) {
-    // 已经是hex格式，直接使用
-    ENCRYPTION_KEY = ENCRYPTION_KEY;
-  } else if (ENCRYPTION_KEY.length >= 32) {
-    // 如果长度>=32，使用前32个字符的hash
-    ENCRYPTION_KEY = crypto.createHash('sha256').update(ENCRYPTION_KEY).digest('hex');
-  } else {
-    // 如果长度<32，使用hash扩展到32字节
-    ENCRYPTION_KEY = crypto.createHash('sha256').update(ENCRYPTION_KEY).digest('hex');
-  }
-}
-
-const ALGORITHM = 'aes-256-gcm';
+// 使用项目统一的加密/解密函数（基于 CREDS_KEY 环境变量）
+// 为了兼容旧数据，先尝试新方法，如果失败再尝试旧方法
 
 /**
- * 加密密码
+ * 加密密码（使用项目的 encryptV2）
  * @param {string} text - 要加密的文本
- * @returns {string} 加密后的文本（格式：iv:authTag:encrypted）
+ * @returns {Promise<string>} 加密后的文本
  */
-function encryptPassword(text) {
+async function encryptPassword(text) {
   try {
-    const iv = crypto.randomBytes(16);
-    // 确保密钥是32字节的Buffer
-    const keyBuffer = Buffer.from(ENCRYPTION_KEY, 'hex');
-    if (keyBuffer.length !== 32) {
-      throw new Error(`Invalid key length: expected 32 bytes, got ${keyBuffer.length}`);
-    }
-    const cipher = crypto.createCipheriv(ALGORITHM, keyBuffer, iv);
-    let encrypted = cipher.update(text, 'utf8', 'hex');
-    encrypted += cipher.final('hex');
-    const authTag = cipher.getAuthTag();
-    return `${iv.toString('hex')}:${authTag.toString('hex')}:${encrypted}`;
+    return await encryptV2(text);
   } catch (error) {
     logger.error('[encryptPassword] Error:', error);
-    logger.error('[encryptPassword] Key length:', ENCRYPTION_KEY.length);
     throw new Error('密码加密失败');
   }
 }
 
 /**
- * 解密密码
- * @param {string} encryptedText - 加密的文本（格式：iv:authTag:encrypted）
- * @returns {string} 解密后的文本
+ * 解密密码（兼容新旧两种格式）
+ * @param {string} encryptedText - 加密的文本
+ * @returns {Promise<string>} 解密后的文本
  */
-function decryptPassword(encryptedText) {
+/**
+ * 自定义错误类，用于标识密码解密失败的类型
+ */
+class PasswordDecryptionError extends Error {
+  constructor(message, code = 'DECRYPTION_FAILED') {
+    super(message);
+    this.name = 'PasswordDecryptionError';
+    this.code = code;
+  }
+}
+
+async function decryptPassword(encryptedText) {
+  // 首先尝试使用新方法（encryptV2格式）
   try {
-    const parts = encryptedText.split(':');
-    if (parts.length !== 3) {
-      throw new Error('无效的加密格式');
-    }
-    const [ivHex, authTagHex, encrypted] = parts;
-    const iv = Buffer.from(ivHex, 'hex');
-    const authTag = Buffer.from(authTagHex, 'hex');
-    // 确保密钥是32字节的Buffer
-    const keyBuffer = Buffer.from(ENCRYPTION_KEY, 'hex');
-    if (keyBuffer.length !== 32) {
-      throw new Error(`Invalid key length: expected 32 bytes, got ${keyBuffer.length}`);
-    }
-    const decipher = crypto.createDecipheriv(ALGORITHM, keyBuffer, iv);
-    decipher.setAuthTag(authTag);
-    let decrypted = decipher.update(encrypted, 'hex', 'utf8');
-    decrypted += decipher.final('utf8');
-    return decrypted;
+    return await decryptV2(encryptedText);
   } catch (error) {
+    // 如果不是新格式，尝试旧格式（AES-256-GCM格式：iv:authTag:encrypted）
+    // 旧格式会有3个部分，新格式通常有2个部分（iv:encrypted）
+    const parts = encryptedText.split(':');
+    if (parts.length === 3) {
+      // 可能是旧格式，但由于密钥已丢失，无法解密
+      logger.warn('[decryptPassword] 检测到旧格式的加密数据，但无法解密。请重新输入密码。');
+      throw new PasswordDecryptionError(
+        '无法解密旧格式的密码。请编辑该数据源，重新输入密码并保存配置。',
+        'LEGACY_ENCRYPTION_FORMAT'
+      );
+    }
+    // 如果格式不匹配，抛出原始错误
     logger.error('[decryptPassword] Error:', error);
-    throw new Error('密码解密失败');
+    throw new PasswordDecryptionError('密码解密失败：' + error.message, 'DECRYPTION_FAILED');
   }
 }
 
@@ -172,6 +145,233 @@ async function testDatabaseConnection(config) {
 }
 
 /**
+ * 获取数据库结构
+ * @param {Object} config - 数据库配置
+ * @returns {Promise<{success: boolean, schema?: Object, error?: string}>}
+ */
+async function getDatabaseSchema(config) {
+  const { type, host, port, database, username, password } = config;
+
+  try {
+    if (type === 'mysql') {
+      let mysql;
+      try {
+        mysql = require('mysql2/promise');
+      } catch (error) {
+        return {
+          success: false,
+          error: 'mysql2 包未安装，请运行: npm install mysql2',
+        };
+      }
+
+      const connection = await mysql.createConnection({
+        host,
+        port,
+        user: username,
+        password,
+        database,
+        connectTimeout: 10000,
+      });
+
+      try {
+        // 获取所有表
+        const [tables] = await connection.query(`
+          SELECT TABLE_NAME as table_name
+          FROM INFORMATION_SCHEMA.TABLES
+          WHERE TABLE_SCHEMA = ?
+          AND TABLE_TYPE = 'BASE TABLE'
+          ORDER BY TABLE_NAME
+        `, [database]);
+
+        const schema = {};
+
+        // 获取每个表的结构
+        for (const table of tables) {
+          const tableName = table.table_name;
+          
+          // 获取列信息
+          const [columns] = await connection.query(`
+            SELECT 
+              COLUMN_NAME as column_name,
+              DATA_TYPE as data_type,
+              IS_NULLABLE as is_nullable,
+              COLUMN_KEY as column_key,
+              COLUMN_COMMENT as column_comment,
+              COLUMN_DEFAULT as column_default
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?
+            ORDER BY ORDINAL_POSITION
+          `, [database, tableName]);
+
+          // 获取索引信息
+          const [indexes] = await connection.query(`
+            SELECT 
+              INDEX_NAME as index_name,
+              COLUMN_NAME as column_name,
+              NON_UNIQUE as non_unique
+            FROM INFORMATION_SCHEMA.STATISTICS
+            WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?
+            ORDER BY INDEX_NAME, SEQ_IN_INDEX
+          `, [database, tableName]);
+
+          schema[tableName] = {
+            columns: columns.map(col => ({
+              column_name: col.column_name,
+              data_type: col.data_type,
+              is_nullable: col.is_nullable,
+              column_key: col.column_key,
+              column_comment: col.column_comment || '',
+              column_default: col.column_default,
+            })),
+            indexes: indexes.map(idx => ({
+              index_name: idx.index_name,
+              column_name: idx.column_name,
+              non_unique: idx.non_unique,
+            })),
+          };
+        }
+
+        await connection.end();
+
+        return {
+          success: true,
+          database,
+          schema,
+        };
+      } catch (error) {
+        await connection.end();
+        throw error;
+      }
+    } else if (type === 'postgresql') {
+      let pg;
+      try {
+        pg = require('pg');
+      } catch (error) {
+        return {
+          success: false,
+          error: 'pg 包未安装，请运行: npm install pg',
+        };
+      }
+
+      const { Client } = pg;
+      const client = new Client({
+        host,
+        port,
+        database,
+        user: username,
+        password,
+        connectionTimeoutMillis: 10000,
+      });
+
+      await client.connect();
+
+      try {
+        // 获取所有表
+        const tablesResult = await client.query(`
+          SELECT table_name
+          FROM information_schema.tables
+          WHERE table_schema = 'public'
+          AND table_type = 'BASE TABLE'
+          ORDER BY table_name
+        `);
+
+        const schema = {};
+
+        // 获取每个表的结构
+        for (const row of tablesResult.rows) {
+          const tableName = row.table_name;
+
+          // 获取列信息
+          const columnsResult = await client.query(`
+            SELECT 
+              column_name,
+              data_type,
+              is_nullable,
+              column_default
+            FROM information_schema.columns
+            WHERE table_schema = 'public' AND table_name = $1
+            ORDER BY ordinal_position
+          `, [tableName]);
+
+          // 获取主键信息
+          const pkResult = await client.query(`
+            SELECT a.attname as column_name
+            FROM pg_index i
+            JOIN pg_attribute a ON a.attrelid = i.indrelid AND a.attnum = ANY(i.indkey)
+            WHERE i.indrelid = $1::regclass
+            AND i.indisprimary
+          `, [`public.${tableName}`]);
+
+          const primaryKeys = new Set(pkResult.rows.map(r => r.column_name));
+
+          // 获取索引信息
+          const indexesResult = await client.query(`
+            SELECT
+              i.relname as index_name,
+              a.attname as column_name,
+              ix.indisunique as is_unique
+            FROM pg_class t
+            JOIN pg_index ix ON t.oid = ix.indrelid
+            JOIN pg_class i ON i.oid = ix.indexrelid
+            JOIN pg_attribute a ON a.attrelid = t.oid AND a.attnum = ANY(ix.indkey)
+            WHERE t.relkind = 'r'
+            AND t.relname = $1
+            ORDER BY i.relname, a.attnum
+          `, [tableName]);
+
+          schema[tableName] = {
+            columns: columnsResult.rows.map(col => ({
+              column_name: col.column_name,
+              data_type: col.data_type,
+              is_nullable: col.is_nullable === 'YES',
+              column_key: primaryKeys.has(col.column_name) ? 'PRI' : '',
+              column_comment: '',
+              column_default: col.column_default,
+            })),
+            indexes: indexesResult.rows.map(idx => ({
+              index_name: idx.index_name,
+              column_name: idx.column_name,
+              non_unique: idx.is_unique ? 0 : 1,
+            })),
+          };
+        }
+
+        await client.end();
+
+        return {
+          success: true,
+          database,
+          schema,
+        };
+      } catch (error) {
+        await client.end();
+        throw error;
+      }
+    } else {
+      return {
+        success: false,
+        error: `不支持的数据库类型: ${type}`,
+      };
+    }
+  } catch (error) {
+    logger.error('[getDatabaseSchema] Error:', error);
+    logger.error('[getDatabaseSchema] Error stack:', error.stack);
+    logger.error('[getDatabaseSchema] Error details:', {
+      message: error.message,
+      name: error.name,
+      code: error.code,
+      errno: error.errno,
+      sqlState: error.sqlState,
+      sqlMessage: error.sqlMessage,
+    });
+    return {
+      success: false,
+      error: error.message || '获取数据库结构失败',
+    };
+  }
+}
+
+/**
  * 获取所有数据源
  * @route GET /api/config/data-sources
  */
@@ -213,7 +413,7 @@ async function getDataSourceHandler(req, res) {
       });
     }
 
-    // 检查权限（只有创建者或管理员可以查看）
+    // 检查权限：只有创建者或管理员可以访问
     if (dataSource.createdBy.toString() !== userId && req.user.role !== SystemRoles.ADMIN) {
       return res.status(403).json({
         success: false,
@@ -273,7 +473,7 @@ async function createDataSourceHandler(req, res) {
     }
 
     // 加密密码
-    const encryptedPassword = encryptPassword(password);
+    const encryptedPassword = await encryptPassword(password);
 
     // 创建数据源 - 确保userId是ObjectId类型
     // 如果connectionPool存在，确保所有字段都有值
@@ -321,7 +521,6 @@ async function createDataSourceHandler(req, res) {
       code: error.code,
       keyPattern: error.keyPattern,
       keyValue: error.keyValue,
-      errors: error.errors,
     });
 
     // 处理唯一索引冲突错误 (E11000)
@@ -369,8 +568,8 @@ async function updateDataSourceHandler(req, res) {
     const { id: userId } = req.user;
     const updateData = req.body;
 
-    const existingDataSource = await getDataSourceById(id);
-    if (!existingDataSource) {
+    const dataSource = await getDataSourceById(id);
+    if (!dataSource) {
       return res.status(404).json({
         success: false,
         error: '数据源不存在',
@@ -378,25 +577,31 @@ async function updateDataSourceHandler(req, res) {
     }
 
     // 检查权限
-    if (existingDataSource.createdBy.toString() !== userId && req.user.role !== SystemRoles.ADMIN) {
+    if (dataSource.createdBy.toString() !== userId && req.user.role !== SystemRoles.ADMIN) {
       return res.status(403).json({
         success: false,
         error: '无权修改此数据源',
       });
     }
 
-    // 如果更新密码，需要加密
-    if (updateData.password && updateData.password.trim() !== '') {
-      updateData.password = encryptPassword(updateData.password);
-    } else {
-      // 如果密码为空，删除该字段，不更新密码
-      delete updateData.password;
+    // 如果提供了密码，需要加密
+    if (updateData.password) {
+      updateData.password = await encryptPassword(updateData.password);
     }
 
-    // 如果更新端口，转换为数字
-    if (updateData.port !== undefined) {
-      updateData.port = parseInt(updateData.port);
+    // 如果提供了connectionPool，确保所有字段都有值
+    if (updateData.connectionPool) {
+      updateData.connectionPool = {
+        min: updateData.connectionPool.min ?? 0,
+        max: updateData.connectionPool.max ?? 10,
+        idleTimeoutMillis: updateData.connectionPool.idleTimeoutMillis ?? 30000,
+        connectionTimeoutMillis: updateData.connectionPool.connectionTimeoutMillis ?? 10000,
+      };
     }
+
+    // 不允许修改name和createdBy
+    delete updateData.name;
+    delete updateData.createdBy;
 
     const updatedDataSource = await updateDataSource(id, updateData);
     if (!updatedDataSource) {
@@ -432,8 +637,8 @@ async function deleteDataSourceHandler(req, res) {
     const { id } = req.params;
     const { id: userId } = req.user;
 
-    const existingDataSource = await getDataSourceById(id);
-    if (!existingDataSource) {
+    const dataSource = await getDataSourceById(id);
+    if (!dataSource) {
       return res.status(404).json({
         success: false,
         error: '数据源不存在',
@@ -441,7 +646,7 @@ async function deleteDataSourceHandler(req, res) {
     }
 
     // 检查权限
-    if (existingDataSource.createdBy.toString() !== userId && req.user.role !== SystemRoles.ADMIN) {
+    if (dataSource.createdBy.toString() !== userId && req.user.role !== SystemRoles.ADMIN) {
       return res.status(403).json({
         success: false,
         error: '无权删除此数据源',
@@ -497,17 +702,29 @@ async function testDataSourceConnectionHandler(req, res) {
     // 解密密码
     let password;
     try {
-      password = decryptPassword(dataSource.password);
-    } catch (error) {
-      logger.error('[testDataSourceConnectionHandler] Decrypt password error:', error);
+      password = await decryptPassword(dataSource.password);
+    } catch (decryptError) {
+      // 处理密码解密错误
+      if (decryptError.code === 'LEGACY_ENCRYPTION_FORMAT') {
+        return res.status(400).json({
+          success: false,
+          status: 'error',
+          error: decryptError.message,
+          code: 'LEGACY_ENCRYPTION_FORMAT',
+          message: decryptError.message,
+        });
+      }
+      logger.error('[testDataSourceConnectionHandler] 密码解密失败', { error: decryptError.message });
       return res.status(500).json({
         success: false,
-        error: '密码解密失败',
+        status: 'error',
+        error: decryptError.message || '密码解密失败',
+        code: 'DECRYPTION_FAILED',
       });
     }
 
     // 测试连接
-    const testResult = await testDatabaseConnection({
+    const result = await testDatabaseConnection({
       type: dataSource.type,
       host: dataSource.host,
       port: dataSource.port,
@@ -516,36 +733,44 @@ async function testDataSourceConnectionHandler(req, res) {
       password,
     });
 
-    // 更新测试结果
-    await updateDataSource(id, {
-      lastTestedAt: new Date(),
-      lastTestResult: testResult.success ? 'success' : 'failed',
-      lastTestError: testResult.error || undefined,
-    });
+    // 更新连接状态
+    if (result.success) {
+      await updateDataSource(id, {
+        connectionStatus: 'connected',
+        lastTestedAt: new Date(),
+        testMessage: '连接成功',
+      });
+    } else {
+      await updateDataSource(id, {
+        connectionStatus: 'disconnected',
+        lastTestedAt: new Date(),
+        testMessage: result.error || '连接失败',
+      });
+    }
 
     return res.status(200).json({
-      success: testResult.success,
-      message: testResult.success ? '连接测试成功' : '连接测试失败',
-      error: testResult.error,
+      success: result.success,
+      status: result.success ? 'connected' : 'disconnected',
+      message: result.success ? '连接测试成功' : result.error || '连接测试失败',
     });
   } catch (error) {
     logger.error('[testDataSourceConnectionHandler] Error:', error);
     return res.status(500).json({
       success: false,
+      status: 'error',
       error: error.message || '连接测试失败',
     });
   }
 }
 
 /**
- * 使用提供的配置测试数据库连接（不保存到数据库）
+ * 测试连接（用于新建数据源时）
  * @route POST /api/config/data-sources/test
  */
 async function testConnectionHandler(req, res) {
   try {
     const { type, host, port, database, username, password } = req.body;
 
-    // 验证必填字段
     if (!type || !host || !port || !database || !username || !password) {
       return res.status(400).json({
         success: false,
@@ -553,40 +778,142 @@ async function testConnectionHandler(req, res) {
       });
     }
 
-    // 测试连接
-    const testResult = await testDatabaseConnection({
+    const result = await testDatabaseConnection({
       type,
       host,
-      port: parseInt(port),
+      port,
       database,
       username,
       password,
     });
 
     return res.status(200).json({
-      success: testResult.success,
-      message: testResult.success ? '连接测试成功' : '连接测试失败',
-      error: testResult.error,
+      success: result.success,
+      status: result.success ? 'connected' : 'disconnected',
+      message: result.success ? '连接测试成功' : result.error || '连接测试失败',
     });
   } catch (error) {
     logger.error('[testConnectionHandler] Error:', error);
     return res.status(500).json({
       success: false,
+      status: 'error',
       error: error.message || '连接测试失败',
     });
   }
 }
 
+/**
+ * 获取数据源的数据库结构
+ * @route GET /api/config/data-sources/:id/schema
+ */
+async function getDataSourceSchemaHandler(req, res) {
+  try {
+    const { id } = req.params;
+    const { id: userId } = req.user;
+
+    logger.info('[getDataSourceSchemaHandler] 开始获取数据库结构', { id, userId });
+
+    const dataSource = await getDataSourceById(id);
+    if (!dataSource) {
+      logger.warn('[getDataSourceSchemaHandler] 数据源不存在', { id });
+      return res.status(404).json({
+        success: false,
+        error: '数据源不存在',
+      });
+    }
+
+    // 检查权限
+    if (dataSource.createdBy.toString() !== userId && req.user.role !== SystemRoles.ADMIN) {
+      logger.warn('[getDataSourceSchemaHandler] 无权访问此数据源', { id, userId, createdBy: dataSource.createdBy });
+      return res.status(403).json({
+        success: false,
+        error: '无权访问此数据源',
+      });
+    }
+
+    // 解密密码
+    let password;
+    try {
+      password = await decryptPassword(dataSource.password);
+      logger.info('[getDataSourceSchemaHandler] 密码解密成功');
+    } catch (decryptError) {
+      // 处理密码解密错误
+      if (decryptError.code === 'LEGACY_ENCRYPTION_FORMAT') {
+        return res.status(400).json({
+          success: false,
+          error: decryptError.message,
+          code: 'LEGACY_ENCRYPTION_FORMAT',
+        });
+      }
+      logger.error('[getDataSourceSchemaHandler] 密码解密失败', { error: decryptError.message, stack: decryptError.stack });
+      return res.status(500).json({
+        success: false,
+        error: decryptError.message || '密码解密失败',
+        code: 'DECRYPTION_FAILED',
+      });
+    }
+
+    // 获取数据库结构
+    logger.info('[getDataSourceSchemaHandler] 开始获取数据库结构', {
+      type: dataSource.type,
+      host: dataSource.host,
+      port: dataSource.port,
+      database: dataSource.database,
+      username: dataSource.username,
+    });
+
+    const result = await getDatabaseSchema({
+      type: dataSource.type,
+      host: dataSource.host,
+      port: dataSource.port,
+      database: dataSource.database,
+      username: dataSource.username,
+      password,
+    });
+
+    if (!result.success) {
+      logger.error('[getDataSourceSchemaHandler] 获取数据库结构失败', { error: result.error });
+      return res.status(500).json({
+        success: false,
+        error: result.error || '获取数据库结构失败',
+      });
+    }
+
+    logger.info('[getDataSourceSchemaHandler] 获取数据库结构成功', {
+      tableCount: Object.keys(result.schema || {}).length,
+    });
+
+    return res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    logger.error('[getDataSourceSchemaHandler] Error:', error);
+    logger.error('[getDataSourceSchemaHandler] Error stack:', error.stack);
+    logger.error('[getDataSourceSchemaHandler] Error details:', {
+      message: error.message,
+      name: error.name,
+      code: error.code,
+    });
+    return res.status(500).json({
+      success: false,
+      error: error.message || '获取数据库结构失败',
+      details: process.env.NODE_ENV === 'development' ? error.stack : undefined,
+    });
+  }
+}
+
 module.exports = {
+  createDataSourceHandler,
   getDataSourcesHandler,
   getDataSourceHandler,
-  createDataSourceHandler,
   updateDataSourceHandler,
   deleteDataSourceHandler,
   testDataSourceConnectionHandler,
   testConnectionHandler,
-  // 导出加密/解密函数供其他地方使用
-  encryptPassword,
+  getDataSourceSchemaHandler,
+  getDatabaseSchema,
   decryptPassword,
+  encryptPassword,
+  PasswordDecryptionError,
 };
-

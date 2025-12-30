@@ -549,6 +549,52 @@ export const getDataSourceById = ({ id }: { id: string }): Promise<d.DataSourceR
   return request.get(endpoints.dataSources.get(id));
 };
 
+export const getDataSourceSchema = ({ id }: { id: string }): Promise<{
+  success: boolean;
+  data?: {
+    success: boolean;
+    database: string;
+    schema: Record<string, {
+      columns: Array<{
+        column_name: string;
+        data_type: string;
+        is_nullable: boolean | string;
+        column_key: string;
+        column_comment: string;
+        column_default: any;
+      }>;
+      indexes: Array<{
+        index_name: string;
+        column_name: string;
+        non_unique: number;
+      }>;
+    }>;
+  };
+  error?: string;
+}> => {
+  return request.get(endpoints.dataSources.getSchema(id));
+};
+
+export const generateSemanticModel = ({ 
+  id, 
+  userInput 
+}: { 
+  id: string; 
+  userInput?: Record<string, any> 
+}): Promise<{
+  success: boolean;
+  data?: {
+    yaml: string;
+    database: string;
+    tableCount: number;
+    generatedAt: string;
+  };
+  error?: string;
+  message?: string;
+}> => {
+  return request.post(endpoints.dataSources.generateSemanticModel(id), { userInput });
+};
+
 export const createDataSource = (data: d.DataSourceCreateParams): Promise<d.DataSourceResponse> => {
   return request.post(endpoints.dataSources.create(), data);
 };

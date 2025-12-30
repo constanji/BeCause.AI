@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Database, MessageSquare, BookOpen, FileText, Plus, Trash2, Eye, Upload, X, ChevronRight, ChevronDown, Folder, FolderOpen } from 'lucide-react';
+import * as yaml from 'js-yaml';
 import { Button, useToastContext } from '@because/client';
 import {
   useListKnowledgeQuery,
@@ -328,10 +329,14 @@ function AddKnowledgeModal({ type, onClose, onAdd, isLoading }: AddKnowledgeModa
   const { showToast } = useToastContext();
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [fileContent, setFileContent] = useState<string>('');
+  const [fileName, setFileName] = useState<string>('');
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
+
+    const fileLowerName = file.name.toLowerCase();
+    setFileName(fileLowerName);
 
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -340,15 +345,13 @@ function AddKnowledgeModal({ type, onClose, onAdd, isLoading }: AddKnowledgeModa
       
       // 尝试解析 JSON 或 YAML
       try {
-        if (file.name.endsWith('.json')) {
+        if (fileLowerName.endsWith('.json')) {
           const json = JSON.parse(content);
           setFormData(json);
-        } else if (file.name.endsWith('.yaml') || file.name.endsWith('.yml')) {
-          // 简单的 YAML 解析提示
-          showToast({
-            message: 'YAML 解析功能需要安装 yaml 库，当前仅支持 JSON 文件',
-            status: 'warning',
-          });
+        } else if (fileLowerName.endsWith('.yaml') || fileLowerName.endsWith('.yml')) {
+          // 支持 YAML 解析
+          const yamlData = yaml.load(content) as Record<string, any>;
+          setFormData(yamlData);
         }
       } catch (error) {
         showToast({
@@ -367,42 +370,46 @@ function AddKnowledgeModal({ type, onClose, onAdd, isLoading }: AddKnowledgeModa
       // 语义模型：从文件或表单获取数据
       if (fileContent) {
         try {
-          const semanticData = JSON.parse(fileContent);
-          // 检查是否为数据库级别的语义模型文件（包含 database 和 semantic_models 数组）
-          if (semanticData.database && semanticData.semantic_models && Array.isArray(semanticData.semantic_models)) {
+          // 支持 JSON 和 YAML 文件解析
+          let semanticData: Record<string, any>;
+          
+          if (fileName.endsWith('.yaml') || fileName.endsWith('.yml')) {
+            // YAML 解析，确保数据结构与 JSON 一致
+            semanticData = yaml.load(fileContent) as Record<string, any>;
+            
+            // 验证和规范化数据结构，确保与 JSON 格式一致
+            if (!semanticData || typeof semanticData !== 'object') {
+              throw new Error('YAML 文件格式错误：根元素必须是对象');
+            }
+            
+            // 确保 semantic_models 是数组（如果存在）
+            if (semanticData.semantic_models && !Array.isArray(semanticData.semantic_models)) {
+              throw new Error('YAML 文件格式错误：semantic_models 必须是数组');
+            }
+          } else {
+            semanticData = JSON.parse(fileContent);
+          }
+          
+          // 检查是否为数据库级别的语义模型文件
+          // 如果有 semantic_models 数组，无论是否有 database 字段，都应该创建父子结构
+          if (semanticData.semantic_models && Array.isArray(semanticData.semantic_models) && semanticData.semantic_models.length > 0) {
+            // 确定数据库名称：优先使用文件中的 database 字段，否则使用文件名（去除扩展名）
+            const databaseName = semanticData.database || fileName.replace(/\.(yaml|yml|json)$/i, '') || 'unknown_database';
+            
             // 数据库级别的批量导入：创建父级（数据库）和子级（表）
+            // 一份文件对应一个数据库（父级），里面的表作为子级
             onAdd({
               type: 'semantic_model',
               data: {
                 isDatabaseLevel: true,
-                databaseName: semanticData.database,
+                databaseName: databaseName,
                 semanticModels: semanticData.semantic_models,
-                databaseContent: JSON.stringify(semanticData), // 整个 JSON 作为数据库级别的内容
+                databaseContent: JSON.stringify(semanticData), // 整个文件内容作为数据库级别的内容
                 metadata: semanticData.metadata || {},
               },
             });
             showToast({
-              message: `成功添加数据库语义模型: ${semanticData.database} (包含 ${semanticData.semantic_models.length} 个表)`,
-              status: 'success',
-            });
-            onClose();
-            return;
-          } else if (semanticData.semantic_models && Array.isArray(semanticData.semantic_models)) {
-            // 兼容旧格式：只有 semantic_models 数组，没有 database 字段
-            // 批量添加多个语义模型（作为独立的表级别模型）
-            semanticData.semantic_models.forEach((model: any) => {
-              onAdd({
-                type: 'semantic_model',
-                data: {
-                  semanticModelId: model.name || model.model,
-                  databaseName: semanticData.database || '',
-                  tableName: model.name || model.model,
-                  content: JSON.stringify(model),
-                },
-              });
-            });
-            showToast({
-              message: `成功添加 ${semanticData.semantic_models.length} 个语义模型`,
+              message: `成功添加数据库语义模型: ${databaseName} (包含 ${semanticData.semantic_models.length} 个表)`,
               status: 'success',
             });
             onClose();
@@ -421,7 +428,7 @@ function AddKnowledgeModal({ type, onClose, onAdd, isLoading }: AddKnowledgeModa
           }
         } catch (error) {
           showToast({
-            message: 'JSON 解析失败，请检查文件格式',
+            message: '文件解析失败，请检查文件格式（支持 JSON 和 YAML）',
             status: 'error',
           });
           return;
