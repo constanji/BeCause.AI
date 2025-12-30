@@ -383,34 +383,42 @@ class KnowledgeBaseService {
    * @param {string} [params.entityId] - 实体ID
    * @returns {Promise<Object>} 创建的知识条目
    */
-  async addBusinessKnowledge({ userId, title, content, category, tags, entityId }) {
+  async addBusinessKnowledge({ userId, title, content, category, tags, entityId, fileId, filename }) {
     try {
-      // 生成向量嵌入（如果失败则允许没有 embedding）
+      // 如果有关联的文件，文件已经通过上传 API 向量化，不需要再次生成 embedding
+      // 否则，为文本内容生成向量嵌入
       let embedding = null;
-      try {
-        embedding = await this.embeddingService.embedText(content, userId);
-        logger.debug(`[KnowledgeBaseService] Generated embedding for business knowledge`);
-      } catch (embeddingError) {
-        logger.warn(`[KnowledgeBaseService] Failed to generate embedding for business knowledge, continuing without embedding:`, embeddingError.message);
+      if (!fileId && content) {
+        try {
+          embedding = await this.embeddingService.embedText(content, userId);
+          logger.debug(`[KnowledgeBaseService] Generated embedding for business knowledge`);
+        } catch (embeddingError) {
+          logger.warn(`[KnowledgeBaseService] Failed to generate embedding for business knowledge, continuing without embedding:`, embeddingError.message);
+        }
+      } else if (fileId) {
+        logger.debug(`[KnowledgeBaseService] Business knowledge linked to file ${fileId}, file already vectorized`);
       }
 
       const knowledgeEntry = new KnowledgeEntry({
         user: userId,
         type: KnowledgeType.BUSINESS_KNOWLEDGE,
         title,
-        content,
+        content: content || (fileId ? `文档: ${filename || '已上传文档'}` : ''),
         embedding,
         metadata: {
           category,
           tags: tags || [],
           entity_id: entityId,
+          file_id: fileId, // 关联的文件ID
+          filename: filename, // 文件名
         },
       });
 
       await knowledgeEntry.save();
 
       // 同时存储到向量数据库（如果启用且有 embedding）
-      if (this.useVectorDB && embedding) {
+      // 注意：如果有关联的文件，文件已经通过上传 API 向量化，不需要再次存储
+      if (this.useVectorDB && embedding && !fileId) {
         try {
           await this.vectorDBService.storeKnowledgeVector({
             knowledgeEntryId: knowledgeEntry._id.toString(),
@@ -422,6 +430,8 @@ class KnowledgeBaseService {
               category,
               tags: tags || [],
               entity_id: entityId,
+              file_id: fileId,
+              filename: filename,
             },
           });
         } catch (vectorError) {

@@ -520,13 +520,17 @@ const processAgentFileUpload = async ({ req, res, metadata }) => {
     throw new Error('Image uploads are not supported for file search tool resources');
   }
 
-  if (!messageAttachment && !agent_id) {
-    throw new Error('No agent ID provided for agent file upload');
+  // 允许通过 entity_id 上传文件（用于知识库管理），不需要 agent_id
+  if (!messageAttachment && !agent_id && !metadata.entity_id) {
+    throw new Error('No agent ID or entity ID provided for agent file upload');
   }
 
   const isImage = file.mimetype.startsWith('image');
   let fileInfoMetadata;
-  const entity_id = messageAttachment === true ? undefined : agent_id;
+  // 优先使用 metadata.entity_id（用于知识库管理），否则使用 agent_id
+  const entity_id = messageAttachment === true 
+    ? undefined 
+    : (metadata.entity_id || agent_id);
   const basePath = mime.getType(file.originalname)?.startsWith('image') ? 'images' : 'uploads';
   if (tool_resource === EToolResources.execute_code) {
     const isCodeEnabled = await checkCapability(req, AgentCapabilities.execute_code);

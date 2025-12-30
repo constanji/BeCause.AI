@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Database, MessageSquare, BookOpen, FileText, Plus, Trash2, Eye, Upload, X, ChevronRight, ChevronDown, Folder, FolderOpen, Server } from 'lucide-react';
 import * as yaml from 'js-yaml';
 import { Button, useToastContext } from '@because/client';
@@ -8,6 +8,8 @@ import {
   useDeleteKnowledgeMutation,
 } from '~/data-provider';
 import { useListDataSourcesQuery } from '~/data-provider/DataSources';
+import { useUploadFileMutation } from '~/data-provider/Files';
+import { EToolResources, EModelEndpoint } from '@because/data-provider';
 import type { DataSource } from '@because/data-provider';
 import { dataService } from '@because/data-provider';
 import { cn } from '~/utils';
@@ -115,23 +117,13 @@ export default function KnowledgeBaseManagement() {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4">
         <div>
           <h3 className="text-lg font-semibold text-text-primary">知识库管理</h3>
           <p className="mt-1 text-sm text-text-secondary">
             管理向量数据库中的语义模型、QA对、同义词和业务知识
           </p>
         </div>
-        <Button
-          type="button"
-          onClick={() => setShowAddModal(true)}
-          className="btn btn-primary relative flex items-center gap-2 rounded-lg px-3 py-2"
-          disabled={!selectedDataSourceId}
-          title={!selectedDataSourceId ? '请先选择数据源' : ''}
-        >
-          <Plus className="h-4 w-4" />
-          添加{activeTabConfig?.label}
-        </Button>
       </div>
 
       {/* 数据源选择器 */}
@@ -166,31 +158,38 @@ export default function KnowledgeBaseManagement() {
             </div>
           )}
         </div>
-        {!selectedDataSourceId && (
-          <p className="mt-2 text-xs text-text-tertiary">
-            请先选择数据源，然后管理该数据源绑定的知识库
-          </p>
-        )}
       </div>
 
-      {/* 标签页 */}
-      <div className="mb-4 flex gap-2 border-b border-border-light">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            type="button"
-            onClick={() => setActiveTab(tab.id)}
-            className={cn(
-              'flex items-center gap-2 border-b-2 px-4 py-2 text-sm font-medium transition-colors',
-              activeTab === tab.id
-                ? 'border-primary text-primary'
-                : 'border-transparent text-text-secondary hover:text-text-primary',
-            )}
-          >
-            {tab.icon}
-            {tab.label}
-          </button>
-        ))}
+      {/* 标签页和添加按钮 */}
+      <div className="mb-4 flex items-end justify-between border-b border-border-light pb-4">
+        <div className="flex gap-2">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => setActiveTab(tab.id)}
+              className={cn(
+                'flex items-center gap-2 border-b-2 px-4 py-2 text-sm font-medium transition-colors',
+                activeTab === tab.id
+                  ? 'border-primary text-primary'
+                  : 'border-transparent text-text-secondary hover:text-text-primary',
+              )}
+            >
+              {tab.icon}
+              {tab.label}
+            </button>
+          ))}
+        </div>
+        <Button
+          type="button"
+          onClick={() => setShowAddModal(true)}
+          className="btn btn-primary relative flex items-center gap-2 rounded-lg px-3 py-2"
+          disabled={!selectedDataSourceId}
+          title={!selectedDataSourceId ? '请先选择数据源' : ''}
+        >
+          <Plus className="h-4 w-4" />
+          添加{activeTabConfig?.label}
+        </Button>
       </div>
 
       {/* 内容区域 */}
@@ -258,6 +257,28 @@ function KnowledgeEntryCard({ entry, onView, onDelete }: KnowledgeEntryCardProps
   const hasChildren = entry.children && entry.children.length > 0;
   const isDatabaseLevel = entry.metadata?.is_database_level === true;
 
+  // 根据知识类型获取对应的图标
+  const getEntryIcon = () => {
+    if (isDatabaseLevel) {
+      return isExpanded ? (
+        <FolderOpen className="h-4 w-4 text-primary" />
+      ) : (
+        <Folder className="h-4 w-4 text-primary" />
+      );
+    }
+    
+    // 根据类型返回对应的图标
+    const tabConfig = tabs.find((tab) => tab.id === entry.type);
+    if (tabConfig) {
+      return React.cloneElement(tabConfig.icon as React.ReactElement, {
+        className: 'h-4 w-4 text-text-secondary',
+      });
+    }
+    
+    // 默认图标
+    return <Database className="h-4 w-4 text-text-secondary" />;
+  };
+
   return (
     <div className="rounded-lg border border-border-light bg-surface-secondary transition-colors hover:bg-surface-hover">
       <div className="p-4">
@@ -279,15 +300,7 @@ function KnowledgeEntryCard({ entry, onView, onDelete }: KnowledgeEntryCardProps
                   )}
                 </button>
               )}
-              {isDatabaseLevel ? (
-                isExpanded ? (
-                  <FolderOpen className="h-4 w-4 text-primary" />
-                ) : (
-                  <Folder className="h-4 w-4 text-primary" />
-                )
-              ) : (
-                <Database className="h-4 w-4 text-text-secondary" />
-              )}
+              {getEntryIcon()}
               <h4 className="font-medium text-text-primary">{entry.title}</h4>
               {hasChildren && entry.children && (
                 <span className="text-xs text-text-tertiary">
@@ -395,6 +408,26 @@ function AddKnowledgeModal({ type, dataSourceId, onClose, onAdd, isLoading }: Ad
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [fileContent, setFileContent] = useState<string>('');
   const [fileName, setFileName] = useState<string>('');
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [uploadedFileId, setUploadedFileId] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  // 文件上传 mutation（用于业务知识文档上传）
+  const uploadFileMutation = useUploadFileMutation({
+    onSuccess: (data) => {
+      setUploadedFileId(data.file_id);
+      showToast({
+        message: '文件上传成功，正在向量化处理...',
+        status: 'success',
+      });
+    },
+    onError: (error: any) => {
+      showToast({
+        message: `文件上传失败: ${error.message || '未知错误'}`,
+        status: 'error',
+      });
+    },
+  });
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -556,25 +589,45 @@ function AddKnowledgeModal({ type, dataSourceId, onClose, onAdd, isLoading }: Ad
         },
       });
     } else if (type === 'business_knowledge') {
-      if (!formData.title || !formData.content) {
-        showToast({
-          message: '请填写标题和内容',
-          status: 'error',
+      // 如果上传了文件，使用文件信息；否则需要手动输入内容
+      if (uploadedFileId) {
+        // 使用上传的文件作为业务知识
+        onAdd({
+          type: 'business_knowledge',
+          data: {
+            title: formData.title || uploadedFile?.name || '文档',
+            content: formData.content || `文档: ${uploadedFile?.name || '已上传文档'}`,
+            category: formData.category || '',
+            tags: Array.isArray(formData.tags)
+              ? formData.tags
+              : formData.tags?.split(',').map((s: string) => s.trim()) || [],
+            entityId: dataSourceId, // 关联数据源
+            fileId: uploadedFileId, // 关联上传的文件
+            filename: uploadedFile?.name || '',
+          },
         });
-        return;
+      } else {
+        // 手动输入模式
+        if (!formData.title || !formData.content) {
+          showToast({
+            message: '请填写标题和内容，或上传文档',
+            status: 'error',
+          });
+          return;
+        }
+        onAdd({
+          type: 'business_knowledge',
+          data: {
+            title: formData.title || '',
+            content: formData.content || '',
+            category: formData.category || '',
+            tags: Array.isArray(formData.tags)
+              ? formData.tags
+              : formData.tags?.split(',').map((s: string) => s.trim()) || [],
+            entityId: dataSourceId, // 关联数据源
+          },
+        });
       }
-      onAdd({
-        type: 'business_knowledge',
-        data: {
-          title: formData.title || '',
-          content: formData.content || '',
-          category: formData.category || '',
-          tags: Array.isArray(formData.tags)
-            ? formData.tags
-            : formData.tags?.split(',').map((s: string) => s.trim()) || [],
-          entityId: dataSourceId, // 关联数据源
-        },
-      });
     }
   };
 
@@ -729,26 +782,76 @@ function AddKnowledgeModal({ type, dataSourceId, onClose, onAdd, isLoading }: Ad
           {type === 'business_knowledge' && (
             <>
               <div>
+                <label className="block text-sm font-medium text-text-primary">
+                  上传文档（可选）
+                </label>
+                <div className="mt-1 flex items-center gap-2">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    className="hidden"
+                    accept=".pdf,.doc,.docx,.txt,.md"
+                    aria-label="上传文档"
+                    title="上传文档"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setUploadedFile(file);
+                        // 自动设置标题为文件名（如果标题为空）
+                        if (!formData.title) {
+                          setFormData({ ...formData, title: file.name.replace(/\.[^/.]+$/, '') });
+                        }
+                        // 上传文件并向量化
+                        const uploadFormData = new FormData();
+                        uploadFormData.append('file', file);
+                        uploadFormData.append('endpoint', EModelEndpoint.agents);
+                        uploadFormData.append('endpointType', EModelEndpoint.agents);
+                        uploadFormData.append('tool_resource', EToolResources.file_search);
+                        uploadFormData.append('entity_id', dataSourceId);
+                        uploadFileMutation.mutate(uploadFormData);
+                      }
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="flex items-center gap-2 rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary hover:bg-surface-hover"
+                  >
+                    <Upload className="h-4 w-4" />
+                    {uploadedFile ? uploadedFile.name : '选择文档'}
+                  </button>
+                  {uploadedFile && (
+                    <span className="text-xs text-text-secondary">
+                      {uploadFileMutation.isLoading ? '上传中...' : uploadedFileId ? '已上传' : ''}
+                    </span>
+                  )}
+                </div>
+                <p className="mt-1 text-xs text-text-tertiary">
+                  支持 PDF、Word、TXT、Markdown 等格式，文件将自动向量化
+                </p>
+              </div>
+              <div className="text-sm text-text-secondary">或手动输入：</div>
+              <div>
                 <label className="block text-sm font-medium text-text-primary">标题 *</label>
                 <input
                   type="text"
                   value={formData.title || ''}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   className="mt-1 block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
-                  required
+                  required={!uploadedFileId}
                   placeholder="输入标题"
                   aria-label="标题"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-text-primary">内容 *</label>
+                <label className="block text-sm font-medium text-text-primary">内容 {uploadedFileId ? '' : '*'}</label>
                 <textarea
                   value={formData.content || ''}
                   onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                   rows={6}
                   className="mt-1 block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
-                  required
-                  placeholder="输入内容"
+                  required={!uploadedFileId}
+                  placeholder={uploadedFileId ? '文档已上传，内容可选' : '输入内容'}
                   aria-label="内容"
                 />
               </div>
