@@ -1006,6 +1006,59 @@ function ViewKnowledgeModal({ entry, onClose }: ViewKnowledgeModalProps) {
             </div>
           </div>
 
+          {/* 语义模型说明（仅对数据库级别的语义模型显示） */}
+          {isSemanticModel && entry.metadata?.is_database_level && entry.metadata?.semantic_description && (
+            <div>
+              <label className="block text-sm font-medium text-text-primary mb-2">语义模型说明</label>
+              <div className="rounded-lg border border-border-light bg-surface-secondary px-4 py-3">
+                <div className="max-h-96 overflow-auto text-sm text-text-primary whitespace-pre-wrap leading-relaxed">
+                  <div className="text-text-primary">
+                    {entry.metadata.semantic_description.split('\n').map((line, index) => {
+                      // 检测 emoji 开头的行（表标题）
+                      if (/^[1-9]️⃣/.test(line.trim())) {
+                        return (
+                          <div key={index} className="font-semibold text-base mt-4 mb-2 text-text-primary">
+                            {line}
+                          </div>
+                        );
+                      }
+                      // 检测 "核心语义："、"可直接识别" 等标题
+                      if (line.trim().endsWith('：') || line.trim().endsWith(':')) {
+                        return (
+                          <div key={index} className="font-medium mt-3 mb-1 text-text-primary">
+                            {line}
+                          </div>
+                        );
+                      }
+                      // 检测列表项
+                      if (line.trim().startsWith('-')) {
+                        return (
+                          <div key={index} className="ml-4 text-text-secondary">
+                            {line}
+                          </div>
+                        );
+                      }
+                      // 检测分隔线
+                      if (line.trim() === '---') {
+                        return <hr key={index} className="my-4 border-border-light" />;
+                      }
+                      // 普通文本
+                      if (line.trim()) {
+                        return (
+                          <div key={index} className="mb-1 text-text-secondary">
+                            {line}
+                          </div>
+                        );
+                      }
+                      // 空行
+                      return <br key={index} />;
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div>
             {isSemanticModel ? (
               <>
