@@ -8,8 +8,6 @@ import MCPManagement from './MCPManagement';
 import EndpointsConfig from './EndpointsConfig';
 import UsersManagement from './UsersManagement';
 import FeaturesManagement from './FeaturesManagement';
-import MarketplaceContent from './MarketplaceContent';
-import AvailableToolsManagement from './AvailableToolsManagement';
 import KnowledgeBaseManagement from './KnowledgeBaseManagement';
 import DataSourceManagement from './DataSourceManagement';
 
@@ -75,19 +73,9 @@ export default function GlobalConfigContent({ startupConfig: propStartupConfig }
       description: '管理所有智能体，设置是否展示给用户',
     },
     {
-      id: 'marketplace',
-      label: '智能体市场',
-      description: '浏览和发现智能体',
-    },
-    {
       id: 'mcp',
       label: 'MCP管理',
       description: '查看和管理MCP服务器的连接状态',
-    },
-    {
-      id: 'availableTools',
-      label: '工具管理',
-      description: '查看当前端点下可用的所有工具',
     },
     {
       id: 'users',
@@ -100,14 +88,14 @@ export default function GlobalConfigContent({ startupConfig: propStartupConfig }
       description: '管理初始界面的欢迎语和模型',
     },
     {
-      id: 'knowledgeBase',
-      label: '知识库管理',
-      description: '管理向量数据库中的语义模型、QA对、同义词和业务知识',
-    },
-    {
       id: 'dataSources',
       label: '数据源管理',
       description: '管理数据库连接配置，支持 MySQL 和 PostgreSQL',
+    },
+    {
+      id: 'knowledgeBase',
+      label: '知识库管理',
+      description: '管理向量数据库中的语义模型、QA对、同义词和业务知识',
     },
   ];
 
@@ -148,19 +136,9 @@ export default function GlobalConfigContent({ startupConfig: propStartupConfig }
             <AgentsManagement />
           </div>
         )}
-        {activeTab === 'marketplace' && (
-          <div className="h-full overflow-hidden">
-            <MarketplaceContent />
-          </div>
-        )}
         {activeTab === 'mcp' && (
           <div className="h-full overflow-hidden px-4 py-4" key="mcp-management">
             <MCPManagement startupConfig={startupConfig} />
-          </div>
-        )}
-        {activeTab === 'availableTools' && (
-          <div className="h-full overflow-hidden px-4 py-4" key="available-tools-management">
-            <AvailableToolsManagement />
           </div>
         )}
         {activeTab === 'users' && (
@@ -173,14 +151,14 @@ export default function GlobalConfigContent({ startupConfig: propStartupConfig }
             <FeaturesManagement startupConfig={startupConfig} />
           </div>
         )}
-        {activeTab === 'knowledgeBase' && (
-          <div className="h-full overflow-hidden px-4 py-4">
-            <KnowledgeBaseManagement />
-          </div>
-        )}
         {activeTab === 'dataSources' && (
           <div className="h-full overflow-hidden px-4 py-4">
             <DataSourceManagement />
+          </div>
+        )}
+        {activeTab === 'knowledgeBase' && (
+          <div className="h-full overflow-hidden px-4 py-4">
+            <KnowledgeBaseManagement />
           </div>
         )}
       </div>
