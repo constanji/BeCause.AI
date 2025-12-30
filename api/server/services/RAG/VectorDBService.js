@@ -349,6 +349,29 @@ class VectorDBService {
   }
 
   /**
+   * 更新知识向量（实际上使用 storeKnowledgeVector，因为它已经支持 ON CONFLICT DO UPDATE）
+   * @param {Object} params
+   * @param {string} params.knowledgeEntryId - 知识条目ID
+   * @param {string} params.userId - 用户ID
+   * @param {string} params.type - 知识类型
+   * @param {string} params.content - 内容（JSON序列化）
+   * @param {number[]} params.embedding - 向量嵌入
+   * @param {Object} params.metadata - 元数据
+   * @returns {Promise<boolean>} 是否成功
+   */
+  async updateKnowledgeVector({ knowledgeEntryId, userId, type, content, embedding, metadata = {} }) {
+    // storeKnowledgeVector 已经支持 ON CONFLICT DO UPDATE，所以直接调用它
+    return await this.storeKnowledgeVector({
+      knowledgeEntryId,
+      userId,
+      type,
+      content,
+      embedding,
+      metadata,
+    });
+  }
+
+  /**
    * 从单个表中搜索相似向量
    * 按照 DAT 系统架构，每个类型在独立的表中搜索
    * @param {Object} params

@@ -556,6 +556,20 @@ export const useAddKnowledgeBatchMutation = (): UseMutationResult<
   });
 };
 
+export const useUpdateKnowledgeMutation = (): UseMutationResult<
+  dataService.UpdateKnowledgeResponse,
+  Error,
+  { id: string; payload: dataService.UpdateKnowledgeRequest }
+> => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, payload }) => dataService.updateKnowledge(id, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.knowledgeBase]);
+    },
+  });
+};
+
 export const useDeleteKnowledgeMutation = (): UseMutationResult<
   { success: boolean; message: string },
   Error,

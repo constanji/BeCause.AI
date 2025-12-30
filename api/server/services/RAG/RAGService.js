@@ -233,6 +233,45 @@ class RAGService {
   }
 
   /**
+   * 更新知识条目
+   * @param {Object} params
+   * @param {string} params.entryId - 知识条目ID
+   * @param {string} params.userId - 用户ID
+   * @param {string} params.type - 知识类型
+   * @param {Object} params.data - 更新数据
+   * @returns {Promise<Object>} 更新后的知识条目
+   */
+  async updateKnowledge({ entryId, userId, type, data }) {
+    try {
+      switch (type) {
+        case KnowledgeType.QA_PAIR:
+          return await this.knowledgeBaseService.updateQAPair({
+            entryId,
+            userId,
+            ...data,
+          });
+        case KnowledgeType.SYNONYM:
+          return await this.knowledgeBaseService.updateSynonym({
+            entryId,
+            userId,
+            ...data,
+          });
+        case KnowledgeType.BUSINESS_KNOWLEDGE:
+          return await this.knowledgeBaseService.updateBusinessKnowledge({
+            entryId,
+            userId,
+            ...data,
+          });
+        default:
+          throw new Error(`不支持更新类型: ${type}`);
+      }
+    } catch (error) {
+      logger.error('[RAGService] 更新知识失败:', error);
+      throw error;
+    }
+  }
+
+  /**
    * 删除知识条目
    * @param {Object} params
    * @param {string} params.entryId - 知识条目ID

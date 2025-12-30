@@ -1099,6 +1099,23 @@ export const addKnowledgeBatch = (payload: { entries: AddKnowledgeRequest[] }): 
   return request.post(endpoints.rag.knowledgeBatch(), payload);
 };
 
+export interface UpdateKnowledgeRequest {
+  type: 'qa_pair' | 'synonym' | 'business_knowledge';
+  data: Record<string, any>;
+}
+
+export interface UpdateKnowledgeResponse {
+  success: boolean;
+  data: KnowledgeEntry;
+}
+
+export const updateKnowledge = (
+  id: string,
+  payload: UpdateKnowledgeRequest,
+): Promise<UpdateKnowledgeResponse> => {
+  return request.put(endpoints.rag.knowledgeById(id), payload);
+};
+
 export const deleteKnowledge = (id: string): Promise<{ success: boolean; message: string }> => {
   return request.delete(endpoints.rag.knowledgeById(id));
 };

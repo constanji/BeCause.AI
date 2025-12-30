@@ -48,6 +48,32 @@ export const useAddKnowledgeMutation = (
   });
 };
 
+export const useUpdateKnowledgeMutation = (
+  options?: UseMutationOptions<
+    dataService.UpdateKnowledgeResponse,
+    Error,
+    { id: string; payload: dataService.UpdateKnowledgeRequest }
+  >,
+): UseMutationResult<
+  dataService.UpdateKnowledgeResponse,
+  Error,
+  { id: string; payload: dataService.UpdateKnowledgeRequest }
+> => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, payload }) => dataService.updateKnowledge(id, payload),
+    onMutate: (variables) => options?.onMutate?.(variables),
+    onError: (error, variables, context) => {
+      options?.onError?.(error, variables, context);
+    },
+    onSuccess: (data, variables, context) => {
+      queryClient.invalidateQueries([QueryKeys.knowledgeBase]);
+      options?.onSuccess?.(data, variables, context);
+    },
+    ...options,
+  });
+};
+
 export const useDeleteKnowledgeMutation = (
   options?: UseMutationOptions<{ success: boolean; message: string }, Error, string>,
 ): UseMutationResult<{ success: boolean; message: string }, Error, string> => {

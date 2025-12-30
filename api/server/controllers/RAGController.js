@@ -181,6 +181,64 @@ const getKnowledgeList = async (req, res) => {
 };
 
 /**
+ * 更新知识条目控制器
+ * PUT /api/rag/knowledge/:id
+ */
+const updateKnowledge = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { type, data } = req.body;
+    const userId = req.user.id;
+
+    if (!id) {
+      return res.status(400).json({
+        error: '知识条目ID不能为空',
+      });
+    }
+
+    if (!type || !Object.values(KnowledgeType).includes(type)) {
+      return res.status(400).json({
+        error: '无效的知识类型',
+        validTypes: Object.values(KnowledgeType),
+      });
+    }
+
+    if (!data) {
+      return res.status(400).json({
+        error: '更新数据不能为空',
+      });
+    }
+
+    // 只支持更新 QA对、同义词、业务知识
+    const allowedTypes = [KnowledgeType.QA_PAIR, KnowledgeType.SYNONYM, KnowledgeType.BUSINESS_KNOWLEDGE];
+    if (!allowedTypes.includes(type)) {
+      return res.status(400).json({
+        error: '不支持更新该类型的知识条目',
+        allowedTypes,
+      });
+    }
+
+    const result = await ragService.updateKnowledge({
+      entryId: id,
+      userId,
+      type,
+      data,
+    });
+
+    res.json({
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    logger.error('[RAGController] 更新知识失败:', error);
+    res.status(500).json({
+      error: '更新知识失败',
+      message: error.message,
+    });
+  }
+};
+
+/**
  * 删除知识条目控制器
  * DELETE /api/rag/knowledge/:id
  */
@@ -224,6 +282,7 @@ module.exports = {
   addKnowledge,
   addKnowledgeBatch,
   getKnowledgeList,
+  updateKnowledge,
   deleteKnowledge,
 };
 

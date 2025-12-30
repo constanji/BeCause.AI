@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Database, MessageSquare, BookOpen, FileText, Plus, Trash2, Eye, Upload, X, ChevronRight, ChevronDown, Folder, FolderOpen, Server } from 'lucide-react';
+import { Database, MessageSquare, BookOpen, FileText, Plus, Trash2, Eye, Upload, X, ChevronRight, ChevronDown, Folder, FolderOpen, Server, Pencil } from 'lucide-react';
 import * as yaml from 'js-yaml';
 import { Button, useToastContext } from '@because/client';
 import {
@@ -7,6 +7,7 @@ import {
   useAddKnowledgeMutation,
   useDeleteKnowledgeMutation,
 } from '~/data-provider';
+import { useUpdateKnowledgeMutation } from '~/data-provider/KnowledgeBase';
 import { useListDataSourcesQuery } from '~/data-provider/DataSources';
 import { useUploadFileMutation } from '~/data-provider/Files';
 import { EToolResources, EModelEndpoint } from '@because/data-provider';
@@ -53,6 +54,7 @@ export default function KnowledgeBaseManagement() {
   const { showToast } = useToastContext();
   const [activeTab, setActiveTab] = useState<KnowledgeType>('semantic_model');
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState<KnowledgeEntry | null>(null);
   const [showViewModal, setShowViewModal] = useState<KnowledgeEntry | null>(null);
   const [selectedDataSourceId, setSelectedDataSourceId] = useState<string | null>(null);
 
@@ -86,6 +88,23 @@ export default function KnowledgeBaseManagement() {
     onError: (error: Error) => {
       showToast({
         message: `添加失败: ${error.message}`,
+        status: 'error',
+      });
+    },
+  });
+
+  const updateMutation = useUpdateKnowledgeMutation({
+    onSuccess: () => {
+      showToast({
+        message: '更新成功',
+        status: 'success',
+      });
+      setShowEditModal(null);
+      refetch();
+    },
+    onError: (error: Error) => {
+      showToast({
+        message: `更新失败: ${error.message}`,
         status: 'error',
       });
     },
@@ -220,6 +239,7 @@ export default function KnowledgeBaseManagement() {
                 key={entry._id}
                 entry={entry}
                 onView={(entry) => setShowViewModal(entry)}
+                onEdit={(entry) => setShowEditModal(entry)}
                 onDelete={() => handleDelete(entry._id)}
               />
             ))}
@@ -238,6 +258,17 @@ export default function KnowledgeBaseManagement() {
         />
       )}
 
+      {/* 编辑模态框 */}
+      {showEditModal && selectedDataSourceId && (
+        <EditKnowledgeModal
+          entry={showEditModal}
+          dataSourceId={selectedDataSourceId}
+          onClose={() => setShowEditModal(null)}
+          onUpdate={(payload) => updateMutation.mutate({ id: showEditModal._id, payload })}
+          isLoading={updateMutation.isLoading}
+        />
+      )}
+
       {/* 查看模态框 */}
       {showViewModal && (
         <ViewKnowledgeModal entry={showViewModal} onClose={() => setShowViewModal(null)} />
@@ -249,10 +280,11 @@ export default function KnowledgeBaseManagement() {
 interface KnowledgeEntryCardProps {
   entry: KnowledgeEntry;
   onView: (entry: KnowledgeEntry) => void;
+  onEdit: (entry: KnowledgeEntry) => void;
   onDelete: () => void;
 }
 
-function KnowledgeEntryCard({ entry, onView, onDelete }: KnowledgeEntryCardProps) {
+function KnowledgeEntryCard({ entry, onView, onEdit, onDelete }: KnowledgeEntryCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const hasChildren = entry.children && entry.children.length > 0;
   const isDatabaseLevel = entry.metadata?.is_database_level === true;
@@ -342,6 +374,18 @@ function KnowledgeEntryCard({ entry, onView, onDelete }: KnowledgeEntryCardProps
             >
               <Eye className="h-4 w-4" />
             </button>
+            {/* 只对 QA对、同义词、业务知识显示编辑按钮 */}
+            {(entry.type === 'qa_pair' || entry.type === 'synonym' || entry.type === 'business_knowledge') && (
+              <button
+                type="button"
+                onClick={() => onEdit(entry)}
+                className="rounded p-2 text-text-secondary hover:bg-surface-hover hover:text-text-primary"
+                title="编辑"
+                aria-label="编辑"
+              >
+                <Pencil className="h-4 w-4" />
+              </button>
+            )}
             <button
               type="button"
               onClick={onDelete}
@@ -907,6 +951,10 @@ interface ViewKnowledgeModalProps {
 }
 
 function ViewKnowledgeModal({ entry, onClose }: ViewKnowledgeModalProps) {
+  const [isContentExpanded, setIsContentExpanded] = useState(false);
+  const [isMetadataExpanded, setIsMetadataExpanded] = useState(false);
+  const isSemanticModel = entry.type === 'semantic_model';
+
   const formatMetadata = (metadata: Record<string, any>): string => {
     try {
       return JSON.stringify(metadata, null, 2);
@@ -959,18 +1007,86 @@ function ViewKnowledgeModal({ entry, onClose }: ViewKnowledgeModalProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-text-primary mb-1">内容</label>
-            <div className="rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary font-mono whitespace-pre-wrap max-h-64 overflow-auto">
-              {entry.type === 'semantic_model' ? formatContent(entry.content) : entry.content}
-            </div>
+            {isSemanticModel ? (
+              <>
+                <button
+                  type="button"
+                  onClick={() => setIsContentExpanded(!isContentExpanded)}
+                  className="mb-2 flex w-full items-center justify-between rounded-lg border border-border-light bg-surface-secondary px-4 py-3 transition-colors hover:bg-surface-hover"
+                  aria-label={isContentExpanded ? '收起内容' : '展开内容'}
+                >
+                  <div className="flex items-center gap-2">
+                    {isContentExpanded ? (
+                      <ChevronDown className="h-4 w-4 text-text-secondary" />
+                    ) : (
+                      <ChevronRight className="h-4 w-4 text-text-secondary" />
+                    )}
+                    <span className="text-sm font-medium text-text-primary">内容</span>
+                  </div>
+                  <span className="text-xs text-text-tertiary">
+                    {isContentExpanded ? '点击收起' : '点击展开'}
+                  </span>
+                </button>
+                {isContentExpanded && (
+                  <div className="rounded-lg border border-border-light bg-surface-secondary px-4 py-3">
+                    <div className="max-h-96 overflow-auto text-sm text-text-primary font-mono whitespace-pre-wrap">
+                      {formatContent(entry.content)}
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <>
+                <label className="block text-sm font-medium text-text-primary mb-1">内容</label>
+                <div className="rounded-lg border border-border-light bg-surface-secondary px-4 py-3">
+                  <div className="max-h-64 overflow-auto text-sm text-text-primary font-mono whitespace-pre-wrap">
+                    {entry.content}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
 
           {entry.metadata && Object.keys(entry.metadata).length > 0 && (
             <div>
-              <label className="block text-sm font-medium text-text-primary mb-1">元数据</label>
-              <div className="rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary font-mono whitespace-pre-wrap max-h-64 overflow-auto">
-                {formatMetadata(entry.metadata)}
-              </div>
+              {isSemanticModel ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setIsMetadataExpanded(!isMetadataExpanded)}
+                    className="mb-2 flex w-full items-center justify-between rounded-lg border border-border-light bg-surface-secondary px-4 py-3 transition-colors hover:bg-surface-hover"
+                    aria-label={isMetadataExpanded ? '收起元数据' : '展开元数据'}
+                  >
+                    <div className="flex items-center gap-2">
+                      {isMetadataExpanded ? (
+                        <ChevronDown className="h-4 w-4 text-text-secondary" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4 text-text-secondary" />
+                      )}
+                      <span className="text-sm font-medium text-text-primary">元数据</span>
+                    </div>
+                    <span className="text-xs text-text-tertiary">
+                      {isMetadataExpanded ? '点击收起' : '点击展开'}
+                    </span>
+                  </button>
+                  {isMetadataExpanded && (
+                    <div className="rounded-lg border border-border-light bg-surface-secondary px-4 py-3">
+                      <div className="max-h-96 overflow-auto text-sm text-text-primary font-mono whitespace-pre-wrap">
+                        {formatMetadata(entry.metadata)}
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  <label className="block text-sm font-medium text-text-primary mb-1">元数据</label>
+                  <div className="rounded-lg border border-border-light bg-surface-secondary px-4 py-3">
+                    <div className="max-h-64 overflow-auto text-sm text-text-primary font-mono whitespace-pre-wrap">
+                      {formatMetadata(entry.metadata)}
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           )}
 
@@ -1002,6 +1118,256 @@ function ViewKnowledgeModal({ entry, onClose }: ViewKnowledgeModalProps) {
             </Button>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+interface EditKnowledgeModalProps {
+  entry: KnowledgeEntry;
+  dataSourceId: string;
+  onClose: () => void;
+  onUpdate: (payload: { type: 'qa_pair' | 'synonym' | 'business_knowledge'; data: Record<string, any> }) => void;
+  isLoading: boolean;
+}
+
+function EditKnowledgeModal({ entry, dataSourceId, onClose, onUpdate, isLoading }: EditKnowledgeModalProps) {
+  const { showToast } = useToastContext();
+  const [formData, setFormData] = useState<Record<string, any>>({});
+
+  // 初始化表单数据
+  React.useEffect(() => {
+    if (entry.type === 'qa_pair') {
+      setFormData({
+        question: entry.metadata?.question || '',
+        answer: entry.metadata?.answer || '',
+      });
+    } else if (entry.type === 'synonym') {
+      setFormData({
+        noun: entry.metadata?.noun || '',
+        synonyms: Array.isArray(entry.metadata?.synonyms)
+          ? entry.metadata.synonyms.join(', ')
+          : entry.metadata?.synonyms || '',
+      });
+    } else if (entry.type === 'business_knowledge') {
+      setFormData({
+        title: entry.title || '',
+        content: entry.content || '',
+        category: entry.metadata?.category || '',
+        tags: Array.isArray(entry.metadata?.tags)
+          ? entry.metadata.tags.join(', ')
+          : entry.metadata?.tags || '',
+      });
+    }
+  }, [entry]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (entry.type === 'qa_pair') {
+      if (!formData.question || !formData.answer) {
+        showToast({
+          message: '请填写问题和答案',
+          status: 'error',
+        });
+        return;
+      }
+      onUpdate({
+        type: 'qa_pair',
+        data: {
+          question: formData.question || '',
+          answer: formData.answer || '',
+        },
+      });
+    } else if (entry.type === 'synonym') {
+      if (!formData.noun || !formData.synonyms) {
+        showToast({
+          message: '请填写名词和同义词',
+          status: 'error',
+        });
+        return;
+      }
+      onUpdate({
+        type: 'synonym',
+        data: {
+          noun: formData.noun || '',
+          synonyms: Array.isArray(formData.synonyms)
+            ? formData.synonyms
+            : formData.synonyms?.split(',').map((s: string) => s.trim()) || [],
+        },
+      });
+    } else if (entry.type === 'business_knowledge') {
+      if (!formData.title || !formData.content) {
+        showToast({
+          message: '请填写标题和内容',
+          status: 'error',
+        });
+        return;
+      }
+      onUpdate({
+        type: 'business_knowledge',
+        data: {
+          title: formData.title || '',
+          content: formData.content || '',
+          category: formData.category || '',
+          tags: Array.isArray(formData.tags)
+            ? formData.tags
+            : formData.tags?.split(',').map((s: string) => s.trim()) || [],
+        },
+      });
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50" onClick={onClose}>
+      <div
+        className="w-full max-w-2xl rounded-lg bg-surface-primary p-6 shadow-lg"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-text-primary">
+            编辑{tabs.find((t) => t.id === entry.type)?.label}
+          </h3>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded p-1 text-text-secondary hover:bg-surface-hover hover:text-text-primary"
+            aria-label="关闭"
+            title="关闭"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {entry.type === 'qa_pair' && (
+            <>
+              <div>
+                <label className="block text-sm font-medium text-text-primary">问题 *</label>
+                <input
+                  type="text"
+                  value={formData.question || ''}
+                  onChange={(e) => setFormData({ ...formData, question: e.target.value })}
+                  className="mt-1 block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
+                  required
+                  placeholder="输入问题"
+                  aria-label="问题"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-text-primary">答案 *</label>
+                <textarea
+                  value={formData.answer || ''}
+                  onChange={(e) => setFormData({ ...formData, answer: e.target.value })}
+                  rows={4}
+                  className="mt-1 block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
+                  required
+                  placeholder="输入答案"
+                  aria-label="答案"
+                />
+              </div>
+            </>
+          )}
+
+          {entry.type === 'synonym' && (
+            <>
+              <div>
+                <label className="block text-sm font-medium text-text-primary">名词 *</label>
+                <input
+                  type="text"
+                  value={formData.noun || ''}
+                  onChange={(e) => setFormData({ ...formData, noun: e.target.value })}
+                  className="mt-1 block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
+                  required
+                  placeholder="输入名词"
+                  aria-label="名词"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-text-primary">同义词 *</label>
+                <input
+                  type="text"
+                  value={formData.synonyms || ''}
+                  onChange={(e) => setFormData({ ...formData, synonyms: e.target.value })}
+                  className="mt-1 block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
+                  placeholder="用逗号分隔，例如：订购, 下单, 购买"
+                  required
+                  aria-label="同义词"
+                />
+                <p className="mt-1 text-xs text-text-tertiary">多个同义词用逗号分隔</p>
+              </div>
+            </>
+          )}
+
+          {entry.type === 'business_knowledge' && (
+            <>
+              <div>
+                <label className="block text-sm font-medium text-text-primary">标题 *</label>
+                <input
+                  type="text"
+                  value={formData.title || ''}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  className="mt-1 block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
+                  required
+                  placeholder="输入标题"
+                  aria-label="标题"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-text-primary">内容 *</label>
+                <textarea
+                  value={formData.content || ''}
+                  onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                  rows={6}
+                  className="mt-1 block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
+                  required
+                  placeholder="输入内容"
+                  aria-label="内容"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-text-primary">分类</label>
+                <input
+                  type="text"
+                  value={formData.category || ''}
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                  className="mt-1 block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
+                  placeholder="输入分类"
+                  aria-label="分类"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-text-primary">标签</label>
+                <input
+                  type="text"
+                  value={formData.tags || ''}
+                  onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
+                  className="mt-1 block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
+                  placeholder="用逗号分隔，例如：重要, 常用, 基础"
+                  aria-label="标签"
+                />
+                <p className="mt-1 text-xs text-text-tertiary">多个标签用逗号分隔</p>
+              </div>
+            </>
+          )}
+
+          <div className="flex justify-end gap-2 pt-4">
+            <Button
+              type="button"
+              onClick={onClose}
+              className="btn btn-secondary rounded-lg px-4 py-2"
+            >
+              取消
+            </Button>
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="btn btn-primary rounded-lg px-4 py-2"
+            >
+              {isLoading ? '更新中...' : '更新'}
+            </Button>
+          </div>
+        </form>
       </div>
     </div>
   );

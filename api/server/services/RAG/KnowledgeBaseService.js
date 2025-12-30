@@ -449,6 +449,200 @@ class KnowledgeBaseService {
   }
 
   /**
+   * 更新QA对
+   * @param {Object} params
+   * @param {string} params.entryId - 知识条目ID
+   * @param {string} params.userId - 用户ID
+   * @param {string} params.question - 问题
+   * @param {string} params.answer - 答案
+   * @returns {Promise<Object>} 更新后的知识条目
+   */
+  async updateQAPair({ entryId, userId, question, answer }) {
+    try {
+      const entry = await KnowledgeEntry.findOne({ _id: entryId, user: userId });
+      if (!entry) {
+        throw new Error('知识条目不存在或无权修改');
+      }
+
+      const content = `问题: ${question}\n答案: ${answer}`;
+      const title = `QA: ${question.substring(0, 50)}${question.length > 50 ? '...' : ''}`;
+
+      // 重新生成向量嵌入
+      let embedding = null;
+      try {
+        embedding = await this.embeddingService.embedText(question, userId);
+      } catch (embeddingError) {
+        logger.warn(`[KnowledgeBaseService] Failed to regenerate embedding for QA pair, continuing without embedding:`, embeddingError.message);
+      }
+
+      entry.title = title;
+      entry.content = content;
+      entry.embedding = embedding;
+      entry.metadata = {
+        ...entry.metadata,
+        question,
+        answer,
+      };
+      entry.updatedAt = new Date();
+
+      await entry.save();
+
+      // 更新向量数据库
+      if (this.useVectorDB && embedding) {
+        try {
+          await this.vectorDBService.updateKnowledgeVector({
+            knowledgeEntryId: entry._id.toString(),
+            userId: userId.toString(),
+            type: KnowledgeType.QA_PAIR,
+            content,
+            embedding,
+            metadata: entry.metadata,
+          });
+        } catch (vectorError) {
+          logger.warn('[KnowledgeBaseService] Failed to update vector in VectorDB:', vectorError.message);
+        }
+      }
+
+      logger.info(`[KnowledgeBaseService] 更新QA对: ${entryId}`);
+      return entry.toObject();
+    } catch (error) {
+      logger.error('[KnowledgeBaseService] 更新QA对失败:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * 更新同义词
+   * @param {Object} params
+   * @param {string} params.entryId - 知识条目ID
+   * @param {string} params.userId - 用户ID
+   * @param {string} params.noun - 名词
+   * @param {string[]} params.synonyms - 同义词数组
+   * @returns {Promise<Object>} 更新后的知识条目
+   */
+  async updateSynonym({ entryId, userId, noun, synonyms }) {
+    try {
+      const entry = await KnowledgeEntry.findOne({ _id: entryId, user: userId });
+      if (!entry) {
+        throw new Error('知识条目不存在或无权修改');
+      }
+
+      const synonymsText = synonyms.join(', ');
+      const content = `名词: ${noun}\n同义词: ${synonymsText}`;
+      const title = `同义词: ${noun}`;
+
+      // 重新生成向量嵌入
+      let embedding = null;
+      try {
+        embedding = await this.embeddingService.embedText(content, userId);
+      } catch (embeddingError) {
+        logger.warn(`[KnowledgeBaseService] Failed to regenerate embedding for synonym, continuing without embedding:`, embeddingError.message);
+      }
+
+      entry.title = title;
+      entry.content = content;
+      entry.embedding = embedding;
+      entry.metadata = {
+        ...entry.metadata,
+        noun,
+        synonyms,
+      };
+      entry.updatedAt = new Date();
+
+      await entry.save();
+
+      // 更新向量数据库
+      if (this.useVectorDB && embedding) {
+        try {
+          await this.vectorDBService.updateKnowledgeVector({
+            knowledgeEntryId: entry._id.toString(),
+            userId: userId.toString(),
+            type: KnowledgeType.SYNONYM,
+            content,
+            embedding,
+            metadata: entry.metadata,
+          });
+        } catch (vectorError) {
+          logger.warn('[KnowledgeBaseService] Failed to update vector in VectorDB:', vectorError.message);
+        }
+      }
+
+      logger.info(`[KnowledgeBaseService] 更新同义词: ${entryId}`);
+      return entry.toObject();
+    } catch (error) {
+      logger.error('[KnowledgeBaseService] 更新同义词失败:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * 更新业务知识
+   * @param {Object} params
+   * @param {string} params.entryId - 知识条目ID
+   * @param {string} params.userId - 用户ID
+   * @param {string} params.title - 标题
+   * @param {string} params.content - 内容
+   * @param {string} [params.category] - 分类
+   * @param {string[]} [params.tags] - 标签
+   * @returns {Promise<Object>} 更新后的知识条目
+   */
+  async updateBusinessKnowledge({ entryId, userId, title, content, category, tags }) {
+    try {
+      const entry = await KnowledgeEntry.findOne({ _id: entryId, user: userId });
+      if (!entry) {
+        throw new Error('知识条目不存在或无权修改');
+      }
+
+      // 如果有关联的文件，不需要重新生成 embedding
+      const fileId = entry.metadata?.file_id;
+      let embedding = entry.embedding; // 保留原有 embedding
+
+      if (!fileId && content) {
+        // 重新生成向量嵌入
+        try {
+          embedding = await this.embeddingService.embedText(content, userId);
+        } catch (embeddingError) {
+          logger.warn(`[KnowledgeBaseService] Failed to regenerate embedding for business knowledge, continuing without embedding:`, embeddingError.message);
+        }
+      }
+
+      entry.title = title;
+      entry.content = content || entry.content;
+      entry.embedding = embedding;
+      entry.metadata = {
+        ...entry.metadata,
+        category,
+        tags: tags || [],
+      };
+      entry.updatedAt = new Date();
+
+      await entry.save();
+
+      // 更新向量数据库（如果有关联文件，文件已经向量化，不需要更新）
+      if (this.useVectorDB && embedding && !fileId) {
+        try {
+          await this.vectorDBService.updateKnowledgeVector({
+            knowledgeEntryId: entry._id.toString(),
+            userId: userId.toString(),
+            type: KnowledgeType.BUSINESS_KNOWLEDGE,
+            content: entry.content,
+            embedding,
+            metadata: entry.metadata,
+          });
+        } catch (vectorError) {
+          logger.warn('[KnowledgeBaseService] Failed to update vector in VectorDB:', vectorError.message);
+        }
+      }
+
+      logger.info(`[KnowledgeBaseService] 更新业务知识: ${entryId}`);
+      return entry.toObject();
+    } catch (error) {
+      logger.error('[KnowledgeBaseService] 更新业务知识失败:', error);
+      throw error;
+    }
+  }
+
+  /**
    * 批量添加知识条目
    * @param {Object} params
    * @param {string} params.userId - 用户ID

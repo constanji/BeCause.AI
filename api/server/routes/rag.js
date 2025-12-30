@@ -39,6 +39,12 @@ router.post('/knowledge/batch', ragController.addKnowledgeBatch);
 router.get('/knowledge', ragController.getKnowledgeList);
 
 /**
+ * PUT /api/rag/knowledge/:id
+ * 更新知识条目
+ */
+router.put('/knowledge/:id', ragController.updateKnowledge);
+
+/**
  * DELETE /api/rag/knowledge/:id
  * 删除知识条目
  */
