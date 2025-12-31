@@ -2,6 +2,532 @@ const { logger } = require('@because/data-schemas');
 const mongoose = require('mongoose');
 const { createModels } = require('@because/data-schemas');
 
+/**
+ * 语义角色定义
+ * 每个语义模型必须声明其语义角色，而不是通过表名猜测
+ */
+const SemanticRole = {
+  ENTITY: 'entity',      // 实体：人、物、概念（如客户、商品、医生）
+  FACT: 'fact',          // 事实表：交易、订单、支付（可聚合的业务事实）
+  SNAPSHOT: 'snapshot',  // 快照：库存、状态、余额（时间点的状态）
+  EVENT: 'event',        // 事件：行为、日志、变更（不可聚合的事件流）
+};
+
+/**
+ * 语义描述符基类
+ * 定义生成语义模型说明的接口
+ */
+class SemanticDescriptor {
+  /**
+   * 生成模型描述
+   * @param {Object} model - 语义模型对象
+   * @param {Object} context - 上下文信息（主键、维度、度量等）
+   * @returns {string} 生成的描述文本
+   */
+  generateDescription(model, context) {
+    throw new Error('generateDescription must be implemented by subclass');
+  }
+
+  /**
+   * 生成业务问题示例
+   * @param {Object} model - 语义模型对象
+   * @param {Object} context - 上下文信息
+   * @returns {Array<string>} 业务问题列表
+   */
+  generateBusinessQuestions(model, context) {
+    return [];
+  }
+
+  /**
+   * 生成关键点
+   * @param {Object} model - 语义模型对象
+   * @param {Object} context - 上下文信息
+   * @returns {Array<string>} 关键点列表
+   */
+  generateKeyPoints(model, context) {
+    return [];
+  }
+}
+
+/**
+ * 实体描述符
+ * 用于描述"人"、"物"、"概念"等实体
+ */
+class EntityDescriptor extends SemanticDescriptor {
+  generateDescription(model, context) {
+    const { primaryKey, dimensions, measures } = context;
+    const modelName = model.name || model.model || '实体';
+    
+    let desc = '这是一个"实体"的抽象\n\n';
+    
+    // 根据实体的维度推断实体类型
+    if (dimensions.some(d => d.includes('name') || d.includes('title'))) {
+      desc += '一个实体是谁？它有哪些基本属性？';
+    } else {
+      desc += `这是"${modelName}"实体，包含实体的基本信息和属性`;
+    }
+    
+    return desc;
+  }
+
+  generateBusinessQuestions(model, context) {
+    const { dimensions, measures } = context;
+    const questions = [];
+    
+    if (dimensions.length > 0) {
+      questions.push(`按${dimensions[0]}分析的数据分布如何？`);
+    }
+    if (measures.length > 0) {
+      questions.push(`实体的${measures[0]}统计情况如何？`);
+    }
+    
+    return questions;
+  }
+
+  generateKeyPoints(model, context) {
+    const { primaryKey } = context;
+    const points = [];
+    
+    if (primaryKey) {
+      points.push(`${primaryKey} 是唯一标识`);
+    }
+    
+    return points;
+  }
+}
+
+/**
+ * 事实表描述符
+ * 用于描述交易、订单等可聚合的业务事实
+ */
+class FactDescriptor extends SemanticDescriptor {
+  generateDescription(model, context) {
+    const { measures, dimensions } = context;
+    const modelName = model.name || model.model || '事实表';
+    
+    let desc = '这是一次"交易事件"或"业务事实"\n\n';
+    
+    if (measures.some(m => m.includes('amount') || m.includes('price'))) {
+      desc += '包含可汇总的金额、数量等度量值\n\n';
+      desc += '这是业务分析的核心事实表，可用于计算GMV、销量等关键指标';
+    } else {
+      desc += `这是"${modelName}"事实表，记录业务发生的事实`;
+    }
+    
+    return desc;
+  }
+
+  generateBusinessQuestions(model, context) {
+    const { measures, dimensions } = context;
+    const questions = [];
+    
+    if (measures.some(m => m.includes('amount') || m.includes('total'))) {
+      questions.push('总金额、总数量统计');
+    }
+    if (measures.some(m => m.includes('price') || m.includes('cost'))) {
+      questions.push('价格、成本分析');
+    }
+    if (dimensions.length > 0) {
+      questions.push(`按${dimensions[0]}维度的数据分布`);
+    }
+    
+    return questions;
+  }
+
+  generateKeyPoints(model, context) {
+    const { primaryKey, measures, dimensions } = context;
+    const points = [];
+    
+    if (primaryKey) {
+      points.push(`${primaryKey} 是唯一标识`);
+    }
+    
+    // 检查是否有既是维度又是度量的字段
+    const dualFields = dimensions.filter(d => measures.includes(d));
+    if (dualFields.length > 0) {
+      points.push(`${dualFields[0]} 既是属性（维度）又是可统计指标（measure）`);
+    }
+    
+    if (measures.some(m => m.includes('quantity') || m.includes('count'))) {
+      points.push('数量、金额等字段都是可汇总的数值');
+    }
+    
+    return points;
+  }
+}
+
+/**
+ * 快照描述符
+ * 用于描述库存、状态等时间点快照
+ */
+class SnapshotDescriptor extends SemanticDescriptor {
+  generateDescription(model, context) {
+    const { dimensions, measures } = context;
+    const modelName = model.name || model.model || '快照表';
+    
+    let desc = '这是"当前状态"的快照模型\n\n';
+    desc += '快照不是交易，而是某个时间点的状态记录\n\n';
+    
+    if (measures.some(m => m.includes('quantity') || m.includes('stock'))) {
+      desc += '可直接回答的问题：哪些商品库存不足？最近多久补过货？库存总量趋势如何？';
+    } else {
+      desc += `这是"${modelName}"状态快照，记录实体的当前状态`;
+    }
+    
+    return desc;
+  }
+
+  generateBusinessQuestions(model, context) {
+    const { measures, dimensions } = context;
+    const questions = [];
+    
+    if (measures.some(m => m.includes('quantity') || m.includes('stock'))) {
+      questions.push('哪些商品库存不足？');
+      questions.push('最近多久补过货？');
+      questions.push('库存总量趋势如何？');
+    } else {
+      questions.push('当前状态分布如何？');
+      questions.push('状态变化趋势如何？');
+    }
+    
+    return questions;
+  }
+
+  generateKeyPoints(model, context) {
+    const { primaryKey, measures, dimensions } = context;
+    const points = [];
+    
+    if (primaryKey) {
+      points.push(`${primaryKey} 是唯一标识`);
+    }
+    
+    // 快照表的特点：状态字段可能既是维度又是度量
+    const stateFields = measures.filter(m => 
+      m.includes('quantity') || m.includes('stock') || m.includes('balance')
+    );
+    if (stateFields.length > 0) {
+      points.push(`${stateFields[0]} 既是维度又是度量，这在 BI / LLM 场景是完全合理的（状态 & 汇总）`);
+    }
+    
+    return points;
+  }
+}
+
+/**
+ * 事件描述符
+ * 用于描述行为、日志等不可聚合的事件流
+ */
+class EventDescriptor extends SemanticDescriptor {
+  generateDescription(model, context) {
+    const { dimensions } = context;
+    const modelName = model.name || model.model || '事件表';
+    
+    let desc = '这是"事件"或"行为"的记录\n\n';
+    
+    if (dimensions.some(d => d.includes('type') || d.includes('action'))) {
+      desc += '记录了事件类型、发生时间、相关对象等信息\n\n';
+      desc += '这是分析转化、用户行为路径的关键数据源';
+    } else {
+      desc += `这是"${modelName}"事件表，记录业务事件的发生`;
+    }
+    
+    return desc;
+  }
+
+  generateBusinessQuestions(model, context) {
+    const { dimensions } = context;
+    const questions = [];
+    
+    questions.push('转化漏斗分析');
+    questions.push('用户行为路径');
+    
+    if (dimensions.some(d => d.includes('type'))) {
+      questions.push('事件类型分布');
+    }
+    
+    return questions;
+  }
+
+  generateKeyPoints(model, context) {
+    const { primaryKey, dimensions } = context;
+    const points = [];
+    
+    if (primaryKey) {
+      points.push(`${primaryKey} 是唯一标识`);
+    }
+    
+    points.push('行为类型、行为时间、行为对象（人 + 商品）');
+    points.push('这是漏斗 / 推荐 / 画像的输入层');
+    
+    return points;
+  }
+}
+
+/**
+ * 语义角色注册表
+ * 将语义角色映射到对应的描述符
+ */
+const SemanticRoleRegistry = {
+  [SemanticRole.ENTITY]: EntityDescriptor,
+  [SemanticRole.FACT]: FactDescriptor,
+  [SemanticRole.SNAPSHOT]: SnapshotDescriptor,
+  [SemanticRole.EVENT]: EventDescriptor,
+};
+
+/**
+ * 从语义模型结构中提取上下文信息
+ * @param {Object} model - 语义模型对象
+ * @returns {Object} 上下文信息
+ */
+function extractModelContext(model) {
+  const entities = model.entities || [];
+  const dimensions = model.dimensions || [];
+  const measures = model.measures || [];
+  const columns = model.columns || [];
+
+  // 提取主键
+  const primaryEntity = entities.find(e => e.type === 'primary');
+  const primaryKey = primaryEntity 
+    ? (primaryEntity.expr || primaryEntity.name)
+    : null;
+
+  // 提取外键
+  const foreignEntities = entities.filter(e => e.type === 'foreign');
+  const foreignKeys = foreignEntities.map(e => e.expr || e.name);
+
+  // 从语义模型结构提取维度
+  let allDimensions = dimensions.map(d => d.expr || d.name || d.alias).filter(Boolean);
+  
+  // 从语义模型结构提取度量
+  let allMeasures = measures.map(m => m.expr || m.name || m.alias).filter(Boolean);
+
+  // 如果没有语义模型结构，从 columns 分析
+  if (columns && columns.length > 0) {
+    if (allDimensions.length === 0) {
+      allDimensions = columns.filter(col => {
+        const type = (col.type || '').toLowerCase();
+        const name = (col.name || '').toLowerCase();
+        return type.includes('date') || type.includes('time') || type.includes('enum') || 
+               type.includes('varchar') || type.includes('char') || 
+               name.includes('type') || name.includes('status') || name.includes('category');
+      }).map(col => col.name);
+    }
+
+    if (allMeasures.length === 0) {
+      allMeasures = columns.filter(col => {
+        const type = (col.type || '').toLowerCase();
+        const name = (col.name || '').toLowerCase();
+        return type.includes('int') || type.includes('decimal') || type.includes('float') || 
+               type.includes('double') || type.includes('numeric') ||
+               name.includes('amount') || name.includes('price') || name.includes('quantity') || 
+               name.includes('count') || name.includes('total') || name.includes('sum');
+      }).map(col => col.name);
+    }
+
+    if (!primaryKey) {
+      const primaryKeys = columns.filter(col => {
+        const key = (col.key || '').toUpperCase();
+        return key === 'PRI' || key === 'PRIMARY' || key.includes('PRIMARY');
+      }).map(col => col.name);
+      if (primaryKeys.length > 0) {
+        primaryKey = primaryKeys[0];
+      }
+    }
+  }
+
+  // 提取可识别字段
+  const identifiableFields = columns ? columns.filter(col => {
+    const name = (col.name || '').toLowerCase();
+    return name.includes('name') || name.includes('title') || name.includes('phone') || 
+           name.includes('email') || name.includes('mobile') || name.includes('tel') ||
+           name.includes('code') || name.includes('no') || name.includes('number');
+  }).map(col => col.name) : [];
+
+  return {
+    primaryKey,
+    foreignKeys,
+    dimensions: allDimensions,
+    measures: allMeasures,
+    identifiableFields,
+  };
+}
+
+/**
+ * 推断语义角色（如果模型未显式声明）
+ * 这是兜底逻辑，优先使用模型声明的 semantic_role
+ * @param {Object} model - 语义模型对象
+ * @param {Object} context - 上下文信息
+ * @returns {string} 推断的语义角色
+ */
+function inferSemanticRole(model, context) {
+  // 优先使用模型显式声明的角色
+  if (model.semantic_role && SemanticRoleRegistry[model.semantic_role]) {
+    return model.semantic_role;
+  }
+
+  const { measures, dimensions } = context;
+  const modelName = (model.name || model.model || '').toLowerCase();
+
+  // 基于模型特征推断角色
+  // 如果有明确的度量字段，通常是事实表
+  if (measures.length > 0 && measures.some(m => 
+    m.includes('amount') || m.includes('price') || m.includes('quantity') || m.includes('total')
+  )) {
+    // 如果包含时间维度且度量是状态类，可能是快照
+    if (measures.some(m => m.includes('stock') || m.includes('balance') || m.includes('quantity')) &&
+        dimensions.some(d => d.includes('time') || d.includes('date'))) {
+      return SemanticRole.SNAPSHOT;
+    }
+    return SemanticRole.FACT;
+  }
+
+  // 如果有事件类型字段，通常是事件表
+  if (dimensions.some(d => d.includes('type') || d.includes('action') || d.includes('event')) ||
+      modelName.includes('behavior') || modelName.includes('log') || modelName.includes('event')) {
+    return SemanticRole.EVENT;
+  }
+
+  // 如果有状态字段且没有明显的度量，可能是快照
+  if (dimensions.some(d => d.includes('status') || d.includes('state')) ||
+      modelName.includes('inventory') || modelName.includes('stock') || modelName.includes('snapshot')) {
+    return SemanticRole.SNAPSHOT;
+  }
+
+  // 默认作为实体
+  return SemanticRole.ENTITY;
+}
+
+/**
+ * 生成语义模型说明文本
+ * 基于语义角色注册表 + 策略模式，而非 if-else 猜测
+ * @param {Object} params
+ * @param {string} params.databaseName - 数据库名称
+ * @param {Array} params.semanticModels - 语义模型数组
+ * @returns {string} 生成的说明文本
+ */
+function generateSemanticModelDescription({ databaseName, semanticModels }) {
+  if (!semanticModels || semanticModels.length === 0) {
+    return '';
+  }
+
+  let description = '';
+  const emojiMap = {
+    1: '1️⃣',
+    2: '2️⃣',
+    3: '3️⃣',
+    4: '4️⃣',
+    5: '5️⃣',
+    6: '6️⃣',
+    7: '7️⃣',
+    8: '8️⃣',
+    9: '9️⃣',
+  };
+
+  // 生成每个表的说明
+  semanticModels.forEach((model, index) => {
+    const emoji = emojiMap[index + 1] || `${index + 1}.`;
+    const modelName = model.name || model.model || '未知表';
+    
+    // 提取模型上下文
+    const context = extractModelContext(model);
+    
+    // 确定语义角色（优先使用声明，否则推断）
+    const semanticRole = inferSemanticRole(model, context);
+    
+    // 从注册表获取对应的描述符
+    const DescriptorClass = SemanticRoleRegistry[semanticRole];
+    if (!DescriptorClass) {
+      // 如果角色不存在，使用默认实体描述符
+      const descriptor = new EntityDescriptor();
+      const modelDesc = model.description || descriptor.generateDescription(model, context);
+      description += `${emoji} ${modelName}\n\n${modelDesc}\n\n---\n\n`;
+      return;
+    }
+    
+    // 实例化描述符并生成内容
+    const descriptor = new DescriptorClass();
+    
+    // 生成模型描述（如果模型已有描述且足够详细，则使用模型的描述）
+    let modelDesc = model.description;
+    if (!modelDesc || modelDesc.includes('数据库表:') || modelDesc.length < 20) {
+      modelDesc = descriptor.generateDescription(model, context);
+    }
+    
+    description += `${emoji} ${modelName}\n\n`;
+    description += `${modelDesc}\n\n`;
+
+    // 生成核心语义
+    if (context.primaryKey) {
+      description += `核心语义：\n`;
+      // 提取主键显示名称
+      let keyDisplayName = context.primaryKey;
+      if (context.primaryKey.endsWith('_id')) {
+        keyDisplayName = context.primaryKey.replace(/_id$/, '');
+      }
+      description += `${keyDisplayName}唯一标识：${context.primaryKey}\n\n`;
+    }
+
+    // 可识别属性
+    if (context.identifiableFields.length > 0) {
+      const entityType = modelDesc.includes('人') ? '人' : modelDesc.includes('商品') ? '商品' : '实体';
+      description += `可直接识别${entityType}的属性：\n`;
+      context.identifiableFields.slice(0, 5).forEach(field => {
+        description += `${field}\n`;
+      });
+    }
+
+    // 可分析属性
+    const analysisFields = [];
+    context.dimensions.slice(0, 3).forEach(field => {
+      analysisFields.push(`${field}（维度）`);
+    });
+    context.measures.slice(0, 3).forEach(field => {
+      analysisFields.push(`${field}（度量）`);
+    });
+    
+    if (analysisFields.length > 0) {
+      description += `\n可分析属性：\n`;
+      analysisFields.forEach(field => {
+        description += `${field}\n`;
+      });
+    }
+
+    // 业务问题示例
+    const businessQuestions = descriptor.generateBusinessQuestions(model, context);
+    if (businessQuestions.length > 0) {
+      description += `\n业务能问的问题：\n`;
+      businessQuestions.forEach(q => {
+        description += `${q}\n`;
+      });
+    }
+
+    // 关键点
+    const keyPoints = [];
+    
+    // 添加描述符生成的关键点
+    const descriptorKeyPoints = descriptor.generateKeyPoints(model, context);
+    keyPoints.push(...descriptorKeyPoints);
+    
+    // 添加外键关联信息
+    if (context.foreignKeys.length > 0) {
+      keyPoints.push(`${context.foreignKeys[0]} 是关联字段`);
+    }
+    
+    if (keyPoints.length > 0) {
+      description += `\n关键点（语义正确）：\n`;
+      keyPoints.forEach(point => {
+        description += `${point}\n`;
+      });
+    }
+
+    description += '\n---\n\n';
+  });
+
+  return description;
+}
+
+
+
 // 确保模型已创建（如果还没有）
 // 注意：模型需要在 MongoDB 连接后才能使用，但可以在连接前创建
 let KnowledgeEntry;
@@ -64,7 +590,7 @@ class KnowledgeBaseService {
    * @param {boolean} [params.isDatabaseLevel] - 是否为数据库级别的语义模型
    * @returns {Promise<Object>} 创建的知识条目
    */
-  async addSemanticModel({ userId, semanticModelId, databaseName, tableName, content, entityId, parentId, isDatabaseLevel = false }) {
+  async addSemanticModel({ userId, semanticModelId, databaseName, tableName, content, entityId, parentId, isDatabaseLevel = false, semanticDescription = null }) {
     try {
       const title = isDatabaseLevel 
         ? `数据库语义模型: ${databaseName}`
@@ -114,6 +640,8 @@ class KnowledgeBaseService {
           table_name: tableName,
           entity_id: entityId,
           is_database_level: isDatabaseLevel,
+          // 语义模型说明（仅用于展示，不参与向量检索）
+          semantic_description: semanticDescription || null,
         },
       });
 
@@ -128,6 +656,7 @@ class KnowledgeBaseService {
       }
       
       // 同时存储到向量数据库（如果启用且有 embedding）
+      // 注意：semantic_description 不参与向量检索，只存储在 MongoDB 中供展示使用
       if (this.useVectorDB && embedding) {
         try {
           await this.vectorDBService.storeKnowledgeVector({
@@ -143,6 +672,7 @@ class KnowledgeBaseService {
               entity_id: entityId,
               is_database_level: isDatabaseLevel,
               parent_id: parentId || null,
+              // 不包含 semantic_description，因为它不参与向量检索
             },
           });
         } catch (vectorError) {
@@ -179,6 +709,12 @@ class KnowledgeBaseService {
    */
   async addDatabaseSemanticModel({ userId, databaseName, semanticModels, databaseContent, metadata = {} }) {
     try {
+      // 生成语义模型说明（仅用于展示，不参与向量检索）
+      const semanticDescription = generateSemanticModelDescription({
+        databaseName,
+        semanticModels,
+      });
+
       // 1. 先创建数据库级别的父模型
       const parentEntry = await this.addSemanticModel({
         userId,
@@ -188,6 +724,7 @@ class KnowledgeBaseService {
         content: databaseContent,
         isDatabaseLevel: true,
         entityId: metadata.entity_id,
+        semanticDescription, // 传递说明文本
       });
 
       // 确保 parentId 是正确的 ObjectId 或字符串格式
