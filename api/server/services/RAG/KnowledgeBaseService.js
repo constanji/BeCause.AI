@@ -1290,9 +1290,10 @@ class KnowledgeBaseService {
   }
 
   /**
-   * 获取用户的知识条目列表
+   * 获取知识条目列表
+   * 
    * @param {Object} params
-   * @param {string} params.userId - 用户ID
+   * @param {string} [params.userId] - 用户ID（可选，用于过滤特定用户创建的知识）
    * @param {string} [params.type] - 知识类型过滤
    * @param {string} [params.entityId] - 实体ID过滤
    * @param {boolean} [params.includeChildren] - 是否包含子项（默认只返回父级）
@@ -1302,7 +1303,12 @@ class KnowledgeBaseService {
    */
   async getKnowledgeEntries({ userId, type, entityId, includeChildren = false, limit = 100, skip = 0 }) {
     try {
-      const query = { user: userId };
+      const query = {};
+
+      // userId改为可选，如果提供则过滤，否则查询所有
+      if (userId) {
+        query.user = userId;
+      }
 
       if (type) {
         query.type = type;
@@ -1338,7 +1344,11 @@ class KnowledgeBaseService {
         });
       } else if (entries.length === 0 && type === 'semantic_model') {
         // 如果查询结果为空，尝试查询所有条目看看是否有数据
-        const allEntries = await KnowledgeEntry.find({ user: userId, type: type }).limit(5).lean();
+        const allEntriesQuery = { type: type };
+        if (userId) {
+          allEntriesQuery.user = userId;
+        }
+        const allEntries = await KnowledgeEntry.find(allEntriesQuery).limit(5).lean();
         logger.warn(`[KnowledgeBaseService] 查询父级结果为空，但数据库中有 ${allEntries.length} 条语义模型条目（前5条）`);
         allEntries.forEach((entry, index) => {
           logger.warn(`[KnowledgeBaseService] 条目 ${index + 1}: _id=${entry._id}, parent_id=${entry.parent_id || 'null'}, title=${entry.title}`);
@@ -1360,9 +1370,13 @@ class KnowledgeBaseService {
         
         if (parentIds.length > 0) {
           const childrenQuery = {
-            user: userId,
             parent_id: { $in: parentIds },
           };
+          
+          // userId改为可选
+          if (userId) {
+            childrenQuery.user = userId;
+          }
           
           // 如果提供了 entityId，子项查询也需要过滤 entityId，确保数据源隔离
           if (entityId) {

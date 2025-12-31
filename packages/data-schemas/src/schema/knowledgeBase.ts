@@ -20,7 +20,7 @@ export type KnowledgeTypeValue = typeof KnowledgeType[keyof typeof KnowledgeType
  * 知识库条目接口
  */
 export interface IKnowledgeEntry extends Document {
-  user: mongoose.Types.ObjectId;
+  user?: mongoose.Types.ObjectId; // 改为可选，支持Agent共享知识库
   type: KnowledgeTypeValue;
   title: string;
   content: string;
@@ -66,7 +66,7 @@ const knowledgeEntrySchema: Schema<IKnowledgeEntry> = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       index: true,
-      required: true,
+      required: false, // 改为可选，支持Agent共享知识库
     },
     type: {
       type: String,

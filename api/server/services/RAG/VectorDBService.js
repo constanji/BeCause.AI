@@ -374,18 +374,29 @@ class VectorDBService {
   /**
    * 从单个表中搜索相似向量
    * 按照 DAT 系统架构，每个类型在独立的表中搜索
+ 
+   * 支持entityId数据源隔离
    * @param {Object} params
    * @param {string} params.tableName - 表名
    * @param {string} params.queryEmbedding - 查询向量
-   * @param {string} params.userId - 用户ID
    * @param {string} params.type - 知识类型
+   * @param {string} [params.entityId] - 实体ID（数据源隔离，可选）
    * @param {number} params.topK - 返回前K个结果
    * @param {number} params.minScore - 最小相似度分数
    * @returns {Promise<Array>} 搜索结果数组
    */
-  async searchInTable({ tableName, queryEmbedding, userId, type, topK, minScore }) {
+  async searchInTable({ tableName, queryEmbedding, type, entityId, topK, minScore }) {
     const embeddingStr = `[${queryEmbedding.join(',')}]`;
 
+    // 构建查询条件：支持entityId数据源隔离
+    let whereClause = 'WHERE embedding IS NOT NULL\n        AND 1 - (embedding <=> $1::vector) >= $2';
+    const queryParams = [embeddingStr, minScore];
+    
+    if (entityId) {
+      whereClause += '\n        AND metadata->>\'entity_id\' = $3';
+      queryParams.push(entityId);
+    }
+    
     const query = `
       SELECT 
         knowledge_entry_id,
@@ -394,19 +405,14 @@ class VectorDBService {
         metadata,
         1 - (embedding <=> $1::vector) as similarity
       FROM ${tableName}
-      WHERE user_id = $2
-        AND embedding IS NOT NULL
-        AND 1 - (embedding <=> $1::vector) >= $3
+      ${whereClause}
       ORDER BY embedding <=> $1::vector
-      LIMIT $4
+      LIMIT $${queryParams.length + 1}
     `;
 
-    const result = await this.pool.query(query, [
-      embeddingStr,
-      userId,
-      minScore,
-      topK,
-    ]);
+    queryParams.push(topK);
+
+    const result = await this.pool.query(query, queryParams);
 
     return result.rows.map(row => ({
       knowledgeEntryId: row.knowledge_entry_id,
@@ -420,18 +426,92 @@ class VectorDBService {
   }
 
   /**
+   * 从file_vectors表中检索文件chunk
+   * 支持两种模式：
+   * 1. 通过file_id过滤：只检索指定文件的chunk（用于业务知识上传文档）
+   * 2. 直接相似度搜索：在所有文件的chunk中搜索（用于混合检索）
+   * 
+   * @param {Object} params
+   * @param {number[]} params.queryEmbedding - 查询向量
+   * @param {string} [params.fileId] - 文件ID（可选，如果提供则只检索该文件的chunk）
+   * @param {string} [params.entityId] - 实体ID（数据源隔离，可选）
+   * @param {number} params.topK - 返回前K个结果
+   * @param {number} params.minScore - 最小相似度分数
+   * @returns {Promise<Array>} 搜索结果数组
+   */
+  async searchFileVectors({ queryEmbedding, fileId, entityId, topK = 10, minScore = 0.5 }) {
+    if (!this.initialized) {
+      await this.initialize();
+    }
+
+    try {
+      const embeddingStr = `[${queryEmbedding.join(',')}]`;
+      
+      // 构建查询条件
+      let whereClause = 'WHERE embedding IS NOT NULL\n        AND 1 - (embedding <=> $1::vector) >= $2';
+      const queryParams = [embeddingStr, minScore];
+      let paramIndex = 3;
+
+      // 如果指定了file_id，只检索该文件的chunk
+      if (fileId) {
+        whereClause += `\n        AND file_id = $${paramIndex}`;
+        queryParams.push(fileId);
+        paramIndex++;
+      }
+
+      // 如果指定了entity_id，进行数据源隔离
+      if (entityId) {
+        whereClause += `\n        AND metadata->>'entity_id' = $${paramIndex}`;
+        queryParams.push(entityId);
+        paramIndex++;
+      }
+
+      const query = `
+        SELECT 
+          file_id,
+          chunk_index,
+          content,
+          metadata,
+          1 - (embedding <=> $1::vector) as similarity
+        FROM file_vectors
+        ${whereClause}
+        ORDER BY embedding <=> $1::vector
+        LIMIT $${paramIndex}
+      `;
+
+      queryParams.push(topK);
+
+      const result = await this.pool.query(query, queryParams);
+
+      return result.rows.map(row => ({
+        fileId: row.file_id,
+        chunkIndex: row.chunk_index,
+        content: row.content,
+        metadata: row.metadata || {},
+        score: parseFloat(row.similarity),
+        similarity: parseFloat(row.similarity),
+      }));
+    } catch (error) {
+      logger.error('[VectorDBService] 文件向量检索失败:', error);
+      throw error;
+    }
+  }
+
+  /**
    * 相似度搜索
    * 按照 DAT 系统架构，从对应的独立表中搜索
    * 查找流程：问题向量化 → 在对应的独立表中搜索 → 返回结果
+ 
+   * 支持entityId数据源隔离
    * @param {Object} params
    * @param {number[]} params.queryEmbedding - 查询向量
-   * @param {string} params.userId - 用户ID
    * @param {string[]} params.types - 知识类型过滤（如果为空，搜索所有类型）
+   * @param {string} [params.entityId] - 实体ID（数据源隔离，可选）
    * @param {number} params.topK - 返回前K个结果（每个类型）
    * @param {number} params.minScore - 最小相似度分数
    * @returns {Promise<Array>} 搜索结果数组
    */
-  async searchSimilar({ queryEmbedding, userId, types, topK = 10, minScore = 0.5 }) {
+  async searchSimilar({ queryEmbedding, types, entityId, topK = 10, minScore = 0.5 }) {
     if (!this.initialized) {
       await this.initialize();
     }
@@ -439,7 +519,8 @@ class VectorDBService {
     try {
       const allTypes = ['semantic_model', 'qa_pair', 'synonym', 'business_knowledge'];
       const searchTypes = types && types.length > 0 ? types : allTypes;
-      logger.info(`[VectorDBService] 开始向量相似度搜索 (用户: ${userId}, 类型数: ${searchTypes.length}, topK: ${topK}, minScore: ${minScore})`);
+      const isolationInfo = entityId ? `, entityId: ${entityId} (数据源隔离)` : ' (无数据源隔离)';
+      logger.info(`[VectorDBService] 开始向量相似度搜索 (类型数: ${searchTypes.length}, topK: ${topK}, minScore: ${minScore})${isolationInfo} - 已移除user_id隔离，支持共享知识库`);
 
       // 按照 DAT 架构，从每个类型的独立表中搜索
       const searchPromises = searchTypes.map(async (type) => {
@@ -453,8 +534,8 @@ class VectorDBService {
           return await this.searchInTable({
             tableName,
             queryEmbedding,
-            userId,
             type,
+            entityId, // 传递entityId进行数据源隔离
             topK, // 每个类型返回 topK 个结果
             minScore,
           });
@@ -473,8 +554,8 @@ class VectorDBService {
         .sort((a, b) => b.score - a.score)
         .slice(0, topK);
 
-      logger.info(`[VectorDBService] 从 ${searchTypes.length} 个独立表中完成向量相似度搜索，返回 ${sortedResults.length} 个结果 (搜索类型: ${searchTypes.join(', ')})`);
-      logger.debug(`[VectorDBService] Found ${sortedResults.length} similar vectors from ${searchTypes.length} independent tables (DAT architecture)`);
+      logger.info(`[VectorDBService] 从 ${searchTypes.length} 个独立表中完成向量相似度搜索，返回 ${sortedResults.length} 个结果 (搜索类型: ${searchTypes.join(', ')})${isolationInfo}`);
+      logger.debug(`[VectorDBService] Found ${sortedResults.length} similar vectors from ${searchTypes.length} independent tables (DAT architecture, no user isolation${entityId ? ', entity isolation enabled' : ''})`);
       return sortedResults;
     } catch (error) {
       logger.error('[VectorDBService] Failed to search similar vectors:', error);

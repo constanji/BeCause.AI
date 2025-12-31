@@ -106,34 +106,36 @@ class RetrievalService {
       if (this.useVectorDB) {
         try {
           const searchTypes = types && types.length > 0 ? types.join(', ') : '全部类型';
-          logger.info(`[RetrievalService] 开始在向量数据库中搜索相似向量 (类型: ${searchTypes}, topK: ${topK * 2}, minScore: ${minScore})`);
+          const isolationInfo = entityId ? `, entityId: ${entityId} (数据源隔离)` : ' (无数据源隔离)';
+          logger.info(`[RetrievalService] 开始在向量数据库中搜索相似向量 (类型: ${searchTypes}, topK: ${topK * 2}, minScore: ${minScore})${isolationInfo} - 已移除user_id隔离`);
           const vectorResults = await this.vectorDBService.searchSimilar({
             queryEmbedding,
-            userId: userId.toString(),
             types,
+            entityId, // 在向量数据库层面进行数据源隔离，提高效率
             topK: topK * 2, // 检索更多结果以便后续过滤
             minScore,
           });
 
-          // 从 MongoDB 获取完整信息
+          // 从 MongoDB 获取完整信息（已移除user过滤，支持共享知识库）
           if (vectorResults.length > 0) {
             const knowledgeEntryIds = vectorResults.map(r => r.knowledgeEntryId);
             const knowledgeEntries = await KnowledgeEntry.find({
               _id: { $in: knowledgeEntryIds },
-              user: userId,
             })
-              .select('type title content embedding metadata')
+              .select('type title content embedding metadata user')
               .lean();
 
             // 合并向量数据库的相似度分数和 MongoDB 的完整信息
+            // 注意：entityId过滤已在向量数据库层面完成，这里不需要再次过滤
             const resultsMap = new Map(knowledgeEntries.map(e => [e._id.toString(), e]));
             const scoredResults = vectorResults
               .map(vectorResult => {
                 const entry = resultsMap.get(vectorResult.knowledgeEntryId);
                 if (!entry) return null;
 
-                // 应用实体ID过滤
+                // 双重检查：确保entityId匹配（防御性编程）
                 if (entityId && entry.metadata?.entity_id !== entityId) {
+                  logger.warn(`[RetrievalService] 发现entityId不匹配的条目: ${vectorResult.knowledgeEntryId}, 期望: ${entityId}, 实际: ${entry.metadata?.entity_id}`);
                   return null;
                 }
 
@@ -146,7 +148,7 @@ class RetrievalService {
               .filter(result => result !== null)
               .slice(0, topK);
 
-            logger.info(`[RetrievalService] 从向量数据库检索到 ${scoredResults.length} 个相关结果`);
+            logger.info(`[RetrievalService] 从向量数据库检索到 ${scoredResults.length} 个相关结果${isolationInfo}`);
             return scoredResults;
           }
         } catch (vectorError) {
@@ -154,9 +156,9 @@ class RetrievalService {
         }
       }
 
-      // 3. 回退到 MongoDB 中的向量相似度计算
+      // 3. 回退到 MongoDB 中的向量相似度计算（已移除user过滤，支持共享知识库）
       logger.info('[RetrievalService] 使用MongoDB进行向量相似度计算（向量数据库不可用或回退）');
-      const queryConditions = { user: userId };
+      const queryConditions = {};
 
       if (types && types.length > 0) {
         queryConditions.type = { $in: types };
@@ -167,7 +169,7 @@ class RetrievalService {
       }
 
       const knowledgeEntries = await KnowledgeEntry.find(queryConditions)
-        .select('type title content embedding metadata')
+        .select('type title content embedding metadata user')
         .lean();
 
       if (knowledgeEntries.length === 0) {
@@ -203,8 +205,74 @@ class RetrievalService {
   }
 
   /**
-   * 从文件向量库中检索（兼容现有文件检索）
-   * 注意：如果 RAG_API_URL 未配置，此功能将不可用
+   * 从文件向量库中检索
+   * 支持两种模式：
+   * 1. 本地模式（优先）：直接查询file_vectors表（如果USE_VECTOR_DB启用）
+   * 2. RAG API模式（回退）：通过RAG_API_URL调用外部服务
+   * 
+   * @param {Object} params
+   * @param {string} params.query - 查询文本
+   * @param {string} params.fileId - 文件ID
+   * @param {string} params.userId - 用户ID
+   * @param {string} [params.entityId] - 实体ID（数据源隔离，可选）
+   * @param {number} [params.k] - 返回前K个结果
+   * @returns {Promise<Array>} 检索结果数组
+   */
+  async retrieveFromFiles({ query, fileId, userId, entityId, k = 4 }) {
+    // 优先使用本地向量数据库
+    if (this.useVectorDB) {
+      try {
+        logger.info(`[RetrievalService] 使用本地向量数据库检索文件: fileId=${fileId}`);
+        
+        // 1. 将查询文本向量化
+        const queryEmbedding = await this.embeddingService.embedText(query, userId);
+        
+        if (!queryEmbedding) {
+          logger.warn('[RetrievalService] 查询文本向量化失败，无法进行文件检索');
+          // 回退到RAG API
+          return await this.retrieveFromFilesViaRAGAPI({ query, fileId, userId, k });
+        }
+
+        // 2. 从file_vectors表中检索
+        const vectorResults = await this.vectorDBService.searchFileVectors({
+          queryEmbedding,
+          fileId, // 指定file_id，只检索该文件的chunk
+          entityId, // 数据源隔离
+          topK: k,
+          minScore: 0.5,
+        });
+
+        // 3. 转换格式以统一返回
+        const results = vectorResults.map(result => ({
+          type: KnowledgeType.FILE,
+          title: result.metadata?.filename || result.metadata?.source?.split('/').pop() || '文件',
+          content: result.content,
+          score: result.score,
+          similarity: result.similarity,
+          metadata: {
+            file_id: result.fileId,
+            filename: result.metadata?.filename || result.metadata?.source?.split('/').pop(),
+            chunk_index: result.chunkIndex,
+            page: result.metadata?.page || null,
+            entity_id: result.metadata?.entity_id || entityId,
+          },
+        }));
+
+        logger.info(`[RetrievalService] 从本地向量数据库检索到 ${results.length} 个文件chunk`);
+        return results;
+      } catch (vectorError) {
+        logger.warn('[RetrievalService] 本地向量数据库检索失败，回退到RAG API:', vectorError.message);
+        // 回退到RAG API
+        return await this.retrieveFromFilesViaRAGAPI({ query, fileId, userId, k });
+      }
+    }
+
+    // 回退到RAG API
+    return await this.retrieveFromFilesViaRAGAPI({ query, fileId, userId, k });
+  }
+
+  /**
+   * 通过RAG API检索文件（回退方案）
    * @param {Object} params
    * @param {string} params.query - 查询文本
    * @param {string} params.fileId - 文件ID
@@ -212,7 +280,7 @@ class RetrievalService {
    * @param {number} [params.k] - 返回前K个结果
    * @returns {Promise<Array>} 检索结果数组
    */
-  async retrieveFromFiles({ query, fileId, userId, k = 4 }) {
+  async retrieveFromFilesViaRAGAPI({ query, fileId, userId, k = 4 }) {
     if (!this.ragApiUrl) {
       logger.warn('[RetrievalService] RAG_API_URL not configured, file retrieval disabled');
       return [];
@@ -254,7 +322,7 @@ class RetrievalService {
 
       return results;
     } catch (error) {
-      logger.error('[RetrievalService] 文件检索失败:', error);
+      logger.error('[RetrievalService] RAG API文件检索失败:', error);
       // 失败时返回空数组，不抛出错误
       return [];
     }
@@ -262,10 +330,14 @@ class RetrievalService {
 
   /**
    * 混合检索：从知识库和文件中检索
+   * 智能文件检索策略：
+   * 1. 如果指定了fileIds，先尝试用file_id检索（只检索指定文件的chunk）
+   * 2. 如果fileIds检索结果为空或没有fileIds，使用跨文件相似度检索（检索所有文件的chunk）
+   * 
    * @param {Object} params
    * @param {string} params.query - 查询文本
    * @param {string} params.userId - 用户ID
-   * @param {string[]} [params.fileIds] - 文件ID数组
+   * @param {string[]} [params.fileIds] - 文件ID数组（可选，如果提供则优先检索指定文件）
    * @param {string[]} [params.types] - 知识类型数组
    * @param {string} [params.entityId] - 实体ID
    * @param {number} [params.topK] - 总返回数量
@@ -286,29 +358,130 @@ class RetrievalService {
         })
       );
 
-      // 2. 从文件检索（如果有文件ID）
+      // 2. 智能文件检索策略
+      let fileResults = [];
+      const fileTopK = Math.ceil(topK * 0.3); // 30% 来自文件
+
       if (fileIds && fileIds.length > 0) {
+        // 策略1：如果指定了fileIds，先尝试用file_id检索（只检索指定文件的chunk）
+        logger.info(`[RetrievalService] 使用file_id检索模式，检索 ${fileIds.length} 个指定文件`);
+        
         const filePromises = fileIds.map(fileId =>
           this.retrieveFromFiles({
             query,
-            fileId,
+            fileId, // 指定file_id，只检索该文件的chunk
             userId,
-            k: Math.ceil(topK * 0.3 / fileIds.length), // 30% 来自文件
+            entityId,
+            k: Math.ceil(fileTopK / fileIds.length),
           })
         );
-        promises.push(...filePromises);
+        
+        const specifiedFileResults = await Promise.all(filePromises);
+        fileResults = specifiedFileResults.flat();
+
+        // 如果指定文件的检索结果为空或太少，回退到跨文件相似度检索
+        if (fileResults.length === 0 || fileResults.length < Math.ceil(fileTopK * 0.5)) {
+          logger.info(`[RetrievalService] 指定文件检索结果不足（${fileResults.length}个），回退到跨文件相似度检索`);
+          
+          // 策略2：跨文件相似度检索（不指定file_id，检索所有文件的chunk）
+          if (this.useVectorDB) {
+            try {
+              const queryEmbedding = await this.embeddingService.embedText(query, userId);
+              if (queryEmbedding) {
+                const crossFileResults = await this.vectorDBService.searchFileVectors({
+                  queryEmbedding,
+                  // 不指定fileId，检索所有文件
+                  fileId: null,
+                  entityId,
+                  topK: fileTopK,
+                  minScore: 0.5,
+                });
+
+                // 转换格式
+                const formattedCrossFileResults = crossFileResults.map(result => ({
+                  type: KnowledgeType.FILE,
+                  title: result.metadata?.filename || result.metadata?.source?.split('/').pop() || '文件',
+                  content: result.content,
+                  score: result.score,
+                  similarity: result.similarity,
+                  metadata: {
+                    file_id: result.fileId,
+                    filename: result.metadata?.filename || result.metadata?.source?.split('/').pop(),
+                    chunk_index: result.chunkIndex,
+                    page: result.metadata?.page || null,
+                    entity_id: result.metadata?.entity_id || entityId,
+                  },
+                }));
+
+                // 合并结果：优先使用指定文件的结果，补充跨文件检索的结果
+                const existingFileIds = new Set(fileResults.map(r => r.metadata?.file_id));
+                const additionalResults = formattedCrossFileResults.filter(
+                  r => !existingFileIds.has(r.metadata?.file_id)
+                );
+                
+                fileResults = [...fileResults, ...additionalResults]
+                  .sort((a, b) => b.score - a.score)
+                  .slice(0, fileTopK);
+
+                logger.info(`[RetrievalService] 跨文件检索补充了 ${additionalResults.length} 个结果，总计 ${fileResults.length} 个文件结果`);
+              }
+            } catch (crossFileError) {
+              logger.warn('[RetrievalService] 跨文件相似度检索失败，使用指定文件结果:', crossFileError.message);
+            }
+          }
+        } else {
+          logger.info(`[RetrievalService] 指定文件检索成功，返回 ${fileResults.length} 个结果`);
+        }
+      } else {
+        // 策略3：如果没有指定fileIds，直接使用跨文件相似度检索
+        logger.info('[RetrievalService] 未指定fileIds，使用跨文件相似度检索');
+        
+        if (this.useVectorDB) {
+          try {
+            const queryEmbedding = await this.embeddingService.embedText(query, userId);
+            if (queryEmbedding) {
+              const crossFileResults = await this.vectorDBService.searchFileVectors({
+                queryEmbedding,
+                fileId: null, // 不指定fileId，检索所有文件
+                entityId,
+                topK: fileTopK,
+                minScore: 0.5,
+              });
+
+              // 转换格式
+              fileResults = crossFileResults.map(result => ({
+                type: KnowledgeType.FILE,
+                title: result.metadata?.filename || result.metadata?.source?.split('/').pop() || '文件',
+                content: result.content,
+                score: result.score,
+                similarity: result.similarity,
+                metadata: {
+                  file_id: result.fileId,
+                  filename: result.metadata?.filename || result.metadata?.source?.split('/').pop(),
+                  chunk_index: result.chunkIndex,
+                  page: result.metadata?.page || null,
+                  entity_id: result.metadata?.entity_id || entityId,
+                },
+              }));
+
+              logger.info(`[RetrievalService] 跨文件检索返回 ${fileResults.length} 个结果`);
+            }
+          } catch (crossFileError) {
+            logger.warn('[RetrievalService] 跨文件相似度检索失败:', crossFileError.message);
+          }
+        }
       }
 
-      // 3. 等待所有检索完成
-      const results = await Promise.all(promises);
-      const flatResults = results.flat();
+      // 3. 等待知识库检索完成
+      const knowledgeResults = await Promise.all(promises);
+      const allResults = [...knowledgeResults.flat(), ...fileResults];
 
       // 4. 按相似度排序并返回前K个
-      const sortedResults = flatResults
+      const sortedResults = allResults
         .sort((a, b) => b.score - a.score)
         .slice(0, topK);
 
-      logger.info(`[RetrievalService] 混合检索返回 ${sortedResults.length} 个结果`);
+      logger.info(`[RetrievalService] 混合检索返回 ${sortedResults.length} 个结果（知识库: ${knowledgeResults.flat().length}，文件: ${fileResults.length}）`);
 
       return sortedResults;
     } catch (error) {
