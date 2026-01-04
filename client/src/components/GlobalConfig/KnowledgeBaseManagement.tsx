@@ -866,39 +866,82 @@ function AddKnowledgeModal({ type, dataSourceId, onClose, onAdd, isLoading }: Ad
                   </button>
                   {uploadedFile && (
                     <span className="text-xs text-text-secondary">
-                      {uploadFileMutation.isLoading ? '上传中...' : uploadedFileId ? '已上传' : ''}
+                      {uploadFileMutation.isLoading ? '上传中...' : uploadedFileId ? '✅ 已上传，可直接提交' : ''}
                     </span>
                   )}
                 </div>
                 <p className="mt-1 text-xs text-text-tertiary">
                   支持 PDF、Word、TXT、Markdown 等格式，文件将自动向量化
+                  {uploadedFileId && (
+                    <span className="block mt-1 text-green-600 dark:text-green-400">
+                      ✓ 文件已上传，可直接点击"添加"按钮提交
+                    </span>
+                  )}
                 </p>
               </div>
-              <div className="text-sm text-text-secondary">或手动输入：</div>
-              <div>
-                <label className="block text-sm font-medium text-text-primary">标题 *</label>
-                <input
-                  type="text"
-                  value={formData.title || ''}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="mt-1 block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
-                  required={!uploadedFileId}
-                  placeholder="输入标题"
-                  aria-label="标题"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-text-primary">内容 {uploadedFileId ? '' : '*'}</label>
-                <textarea
-                  value={formData.content || ''}
-                  onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  rows={6}
-                  className="mt-1 block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
-                  required={!uploadedFileId}
-                  placeholder={uploadedFileId ? '文档已上传，内容可选' : '输入内容'}
-                  aria-label="内容"
-                />
-              </div>
+              {!uploadedFileId && (
+                <div className="text-sm text-text-secondary">或手动输入：</div>
+              )}
+              {!uploadedFileId && (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-text-primary">标题 *</label>
+                    <input
+                      type="text"
+                      value={formData.title || ''}
+                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                      className="mt-1 block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
+                      required
+                      placeholder="输入标题"
+                      aria-label="标题"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-text-primary">内容 *</label>
+                    <textarea
+                      value={formData.content || ''}
+                      onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                      rows={6}
+                      className="mt-1 block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
+                      required
+                      placeholder="输入内容"
+                      aria-label="内容"
+                    />
+                  </div>
+                </>
+              )}
+              {uploadedFileId && (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-text-primary">标题（可选）</label>
+                    <input
+                      type="text"
+                      value={formData.title || ''}
+                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                      className="mt-1 block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
+                      placeholder={`默认: ${uploadedFile?.name || '文档'}`}
+                      aria-label="标题"
+                    />
+                    <p className="mt-1 text-xs text-text-tertiary">
+                      留空将使用文件名作为标题
+                    </p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-text-primary">内容（可选）</label>
+                    <textarea
+                      value={formData.content || ''}
+                      onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                      rows={6}
+                      className="mt-1 block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
+                      placeholder="文档已上传，内容可选填写"
+                      aria-label="内容"
+                    />
+                    <p className="mt-1 text-xs text-text-tertiary">
+                      文档内容已从上传的文件中提取，此处可填写补充说明
+                    </p>
+                  </div>
+                </>
+              )}
               <div>
                 <label className="block text-sm font-medium text-text-primary">分类</label>
                 <input

@@ -1,0 +1,66 @@
+{
+  "timestamp": "2026-01-04T02:09:07.300Z",
+  "summary": {
+    "total": 8,
+    "passed": 6,
+    "failed": 2
+  },
+  "results": [
+    {
+      "name": "基础查询测试",
+      "success": true,
+      "total": 4,
+      "duration": 107,
+      "avgScore": 1
+    },
+    {
+      "name": "QA对检索测试",
+      "success": true,
+      "total": 3,
+      "duration": 27,
+      "avgScore": 1
+    },
+    {
+      "name": "语义模型检索测试",
+      "success": false,
+      "total": 0,
+      "duration": 18,
+      "avgScore": 0
+    },
+    {
+      "name": "同义词检索测试",
+      "success": true,
+      "total": 1,
+      "duration": 16,
+      "avgScore": 1
+    },
+    {
+      "name": "业务知识检索测试",
+      "success": true,
+      "total": 2,
+      "duration": 20,
+      "avgScore": 1
+    },
+    {
+      "name": "混合检索测试",
+      "success": true,
+      "total": 4,
+      "duration": 27,
+      "avgScore": 1
+    },
+    {
+      "name": "增强重排测试",
+      "success": true,
+      "total": 5,
+      "duration": 29,
+      "avgScore": 0.9359999999999999
+    },
+    {
+      "name": "数据源隔离测试",
+      "success": false,
+      "total": 0,
+      "duration": 14,
+      "avgScore": 0
+    }
+  ]
+}

@@ -652,39 +652,70 @@ const processAgentFileUpload = async ({ req, res, metadata }) => {
 
   if (tool_resource === EToolResources.file_search) {
     // FIRST: Upload to Storage for permanent backup (S3/local/etc.)
-    const { handleFileUpload } = getStrategyFunctions(source);
-    const sanitizedUploadFn = createSanitizedUploadWrapper(handleFileUpload);
-    storageResult = await sanitizedUploadFn({
-      req,
-      file,
-      file_id,
-      basePath,
-      entity_id,
-    });
+    try {
+      logger.info(`[processAgentFileUpload] 开始存储文件: ${file.originalname}, file_id=${file_id}`);
+      const { handleFileUpload } = getStrategyFunctions(source);
+      const sanitizedUploadFn = createSanitizedUploadWrapper(handleFileUpload);
+      storageResult = await sanitizedUploadFn({
+        req,
+        file,
+        file_id,
+        basePath,
+        entity_id,
+      });
+      logger.info(`[processAgentFileUpload] 文件存储成功: ${file.originalname}`);
+    } catch (storageError) {
+      logger.error(`[processAgentFileUpload] 文件存储失败: ${file.originalname}`, storageError);
+      logger.error(`[processAgentFileUpload] 存储错误堆栈:`, storageError.stack);
+      throw new Error(`文件存储失败: ${storageError.message}`);
+    }
 
     // SECOND: Upload to Vector DB
     const { uploadVectors } = require('./VectorDB/crud');
 
-    embeddingResult = await uploadVectors({
-      req,
-      file,
-      file_id,
-      entity_id,
-    });
+    try {
+      logger.info(`[processAgentFileUpload] 开始向量化文件: ${file.originalname}, file_id=${file_id}, entity_id=${entity_id || '无'}`);
+      embeddingResult = await uploadVectors({
+        req,
+        file,
+        file_id,
+        entity_id,
+        storageMetadata: storageResult ? {
+          filepath: storageResult.filepath,
+          source: storageResult.source || source,
+        } : undefined,
+      });
+      logger.info(`[processAgentFileUpload] 向量化完成: ${file.originalname}`);
+    } catch (vectorError) {
+      logger.error(`[processAgentFileUpload] 向量化失败: ${file.originalname}`, vectorError);
+      logger.error(`[processAgentFileUpload] 向量化错误堆栈:`, vectorError.stack);
+      // 向量化失败应该抛出错误，但文件已经存储
+      throw new Error(`文件向量化失败: ${vectorError.message}`);
+    }
 
     // Vector status will be stored at root level, no need for metadata
     fileInfoMetadata = {};
   } else {
     // Standard single storage for non-RAG files
-    const { handleFileUpload } = getStrategyFunctions(source);
-    const sanitizedUploadFn = createSanitizedUploadWrapper(handleFileUpload);
-    storageResult = await sanitizedUploadFn({
-      req,
-      file,
-      file_id,
-      basePath,
-      entity_id,
-    });
+    try {
+      const { handleFileUpload } = getStrategyFunctions(source);
+      const sanitizedUploadFn = createSanitizedUploadWrapper(handleFileUpload);
+      storageResult = await sanitizedUploadFn({
+        req,
+        file,
+        file_id,
+        basePath,
+        entity_id,
+      });
+    } catch (storageError) {
+      logger.error(`[processAgentFileUpload] 文件存储失败: ${file.originalname}`, storageError);
+      throw new Error(`文件存储失败: ${storageError.message}`);
+    }
+  }
+
+  // 验证 storageResult
+  if (!storageResult) {
+    throw new Error('文件存储结果为空');
   }
 
   let { bytes, filename, filepath: _filepath, height, width } = storageResult;
@@ -697,7 +728,9 @@ const processAgentFileUpload = async ({ req, res, metadata }) => {
 
   let filepath = _filepath;
 
-  if (!messageAttachment && tool_resource) {
+  // 只有当有 agent_id 时才添加到 agent 资源中
+  // 业务知识上传时只有 entity_id，没有 agent_id，所以跳过这一步
+  if (!messageAttachment && tool_resource && agent_id) {
     await addAgentResourceFile({
       req,
       file_id,

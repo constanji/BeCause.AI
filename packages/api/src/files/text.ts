@@ -100,13 +100,25 @@ export async function parseTextNative(file: Express.Multer.File): Promise<{
   bytes: number;
   source: string;
 }> {
-  const { content: text, bytes } = await readFileAsString(file.path, {
-    fileSize: file.size,
-  });
+  if (!file || !file.path) {
+    throw new Error('文件对象无效：缺少文件路径');
+  }
 
-  return {
-    text,
-    bytes,
-    source: FileSources.text,
-  };
+  try {
+    const { content: text, bytes } = await readFileAsString(file.path, {
+      fileSize: file.size,
+    });
+
+    return {
+      text,
+      bytes,
+      source: FileSources.text,
+    };
+  } catch (error) {
+    logger.error('[parseTextNative] 文件读取失败:', error);
+    if (error.message?.includes('ENOENT') || error.message?.includes('not found')) {
+      throw new Error(`文件不存在或已被删除: ${file.path}`);
+    }
+    throw error;
+  }
 }

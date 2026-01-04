@@ -384,6 +384,14 @@ router.post('/', async (req, res) => {
   } catch (error) {
     let message = 'Error processing file';
     logger.error('[/files] Error processing file:', error);
+    logger.error('[/files] Error stack:', error.stack);
+    logger.error('[/files] Error details:', {
+      message: error.message,
+      name: error.name,
+      code: error.code,
+      file: req.file?.originalname,
+      file_id: req.file_id,
+    });
 
     if (error.message?.includes('file_ids')) {
       message += ': ' + error.message;
@@ -394,6 +402,23 @@ router.post('/', async (req, res) => {
       error.message?.includes('No OCR result') ||
       error.message?.includes('exceeds token limit')
     ) {
+      message = error.message;
+    }
+
+    // 传递更详细的错误信息（特别是向量化相关的错误）
+    if (
+      error.message?.includes('向量化') || 
+      error.message?.includes('embedding') || 
+      error.message?.includes('ONNX') ||
+      error.message?.includes('本地文件向量化失败') ||
+      error.message?.includes('文件存储失败') ||
+      error.message?.includes('文件向量化失败')
+    ) {
+      message = error.message;
+    }
+    
+    // 如果是未知错误，至少传递错误消息
+    if (message === 'Error processing file' && error.message) {
       message = error.message;
     }
 
