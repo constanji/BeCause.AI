@@ -82,9 +82,7 @@ async function saveMessage(req, params, metadata) {
 
     const savedMessage = message.toObject();
 
-    // 注意：旧的 AutoKnowledgeExtractor 已删除，QA对提取现在由 QA提取智能体（qaExtractor.ts）处理
-    // QA提取智能体在 AgentClient.chatCompletion 中自动运行，无需在此处调用
-
+ 
     return savedMessage;
   } catch (err) {
     logger.error('Error saving message:', err);
