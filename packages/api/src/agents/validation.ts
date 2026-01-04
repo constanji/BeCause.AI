@@ -70,6 +70,7 @@ export const agentBaseSchema = z.object({
   tool_resources: agentToolResourcesSchema,
   support_contact: agentSupportContactSchema,
   category: z.string().optional(),
+  data_source_id: z.string().nullable().optional(),
 });
 
 /** Create schema extends base with required fields for creation */

@@ -240,6 +240,7 @@ export type Agent = {
   version?: number;
   category?: string;
   support_contact?: SupportContact;
+  data_source_id?: string | null;
 };
 
 export type TAgentsMap = Record<string, Agent | undefined>;
@@ -264,6 +265,7 @@ export type AgentCreateParams = {
   | 'recursion_limit'
   | 'category'
   | 'support_contact'
+  | 'data_source_id'
 >;
 
 export type AgentUpdateParams = {
@@ -290,6 +292,7 @@ export type AgentUpdateParams = {
   | 'recursion_limit'
   | 'category'
   | 'support_contact'
+  | 'data_source_id'
 >;
 
 export type AgentListParams = {

@@ -112,6 +112,10 @@ const agentSchema = new Schema<IAgent>(
       default: false,
       index: true,
     },
+    data_source_id: {
+      type: String,
+      default: undefined,
+    },
   },
   {
     timestamps: true,
