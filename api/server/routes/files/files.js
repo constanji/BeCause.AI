@@ -421,6 +421,11 @@ router.post('/', async (req, res) => {
     if (message === 'Error processing file' && error.message) {
       message = error.message;
     }
+    
+    // 特别处理 file_id 相关的错误
+    if (error.message?.includes('No file_id provided') || error.message?.includes('file_id')) {
+      message = error.message;
+    }
 
     try {
       await fs.unlink(req.file.path);

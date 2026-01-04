@@ -60,7 +60,7 @@ const deleteVectors = async (req, file) => {
 
   // 使用本地向量数据库删除
   try {
-    const VectorDBService = require('../../services/RAG/VectorDBService');
+    const VectorDBService = require('../../RAG/VectorDBService');
     const vectorDBService = new VectorDBService();
     await vectorDBService.initialize();
     const pool = vectorDBService.getPool();
@@ -303,8 +303,8 @@ async function processChunksInBatches({
  * @returns {Promise<{ filepath: string, bytes: number, embedded: boolean }>}
  */
 async function uploadVectorsLocal({ req, file, file_id, entity_id, storageMetadata }) {
-  const VectorDBService = require('../../services/RAG/VectorDBService');
-  const ONNXEmbeddingService = require('../../services/RAG/ONNXEmbeddingService');
+  const VectorDBService = require('../../RAG/VectorDBService');
+  const ONNXEmbeddingService = require('../../RAG/ONNXEmbeddingService');
   
   let vectorDBService = null;
   let pool = null;

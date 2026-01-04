@@ -1032,7 +1032,11 @@ async function saveBase64Image(
  */
 function filterFile({ req, image, isAvatar }) {
   const { file } = req;
-  const { endpoint, endpointType, file_id, width, height } = req.body;
+  const { endpoint, endpointType, width, height } = req.body;
+  
+  // 优先使用 multer 中间件生成的 req.file_id，如果没有则使用 req.body.file_id
+  // multer 中间件会在 filename 回调中设置 req.file_id = crypto.randomUUID()
+  const file_id = req.file_id || req.body.file_id;
 
   if (!file_id && !isAvatar) {
     throw new Error('No file_id provided');
