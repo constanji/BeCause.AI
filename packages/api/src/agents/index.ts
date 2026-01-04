@@ -1,5 +1,6 @@
 export * from './chain';
 export * from './memory';
+export * from './qaExtractor';
 export * from './migration';
 export * from './legacy';
 export * from './resources';

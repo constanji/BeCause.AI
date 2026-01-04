@@ -14,6 +14,7 @@ const {
   memoryInstructions,
   getTransactionsConfig,
   createMemoryProcessor,
+  createQAExtractorProcessor,
   filterMalformedContentParts,
 } = require('@because/api');
 const {
@@ -198,6 +199,8 @@ class AgentClient extends BaseClient {
     this.indexTokenCountMap = {};
     /** @type {(messages: BaseMessage[]) => Promise<void>} */
     this.processMemory;
+    /** @type {(messages: BaseMessage[]) => Promise<(TAttachment | null)[] | undefined>} */
+    this.processQAExtractor;
     /** @type {Record<number, string> | null} */
     this.agentIdMap = null;
   }
@@ -454,6 +457,9 @@ class AgentClient extends BaseClient {
       systemContent += `${memoryInstructions}\n\n# Existing memory about the user:\n${withoutKeys}`;
     }
 
+    // 初始化QA提取器（并行运行，不阻塞主流程）
+    await this.useQAExtractor();
+
     if (systemContent) {
       this.options.agent.instructions = systemContent;
     }
@@ -665,6 +671,158 @@ class AgentClient extends BaseClient {
       return memoryResult;
     } catch (error) {
       logger.error('Memory Agent failed to process memory', error);
+    }
+  }
+
+  /**
+   * 初始化QA提取器
+   * @returns {Promise<void>}
+   */
+  async useQAExtractor() {
+    const appConfig = this.options.req.config;
+    const qaExtractorConfig = appConfig.qaExtractor;
+    
+    // 检查是否启用QA提取器
+    if (!qaExtractorConfig || qaExtractorConfig.disabled === true) {
+      return;
+    }
+
+    /** @type {Agent} */
+    let prelimAgent;
+    const allowedProviders = new Set(
+      appConfig?.endpoints?.[EModelEndpoint.agents]?.allowedProviders,
+    );
+    
+    try {
+      // 检查是否配置了独立的QA提取智能体
+      if (qaExtractorConfig.agent?.id != null && qaExtractorConfig.agent.id !== this.options.agent.id) {
+        prelimAgent = await loadAgent({
+          req: this.options.req,
+          agent_id: qaExtractorConfig.agent.id,
+          endpoint: EModelEndpoint.agents,
+        });
+      } else if (
+        qaExtractorConfig.agent?.id == null &&
+        qaExtractorConfig.agent?.model != null &&
+        qaExtractorConfig.agent?.provider != null
+      ) {
+        prelimAgent = { id: Constants.EPHEMERAL_AGENT_ID, ...qaExtractorConfig.agent };
+      }
+    } catch (error) {
+      logger.error(
+        '[api/server/controllers/agents/client.js #useQAExtractor] Error loading agent for QA extraction',
+        error,
+      );
+    }
+
+    const agent = await initializeAgent({
+      req: this.options.req,
+      res: this.options.res,
+      agent: prelimAgent,
+      allowedProviders,
+      endpointOption: {
+        endpoint:
+          prelimAgent?.id !== Constants.EPHEMERAL_AGENT_ID
+            ? EModelEndpoint.agents
+            : qaExtractorConfig.agent?.provider,
+      },
+    });
+
+    if (!agent) {
+      logger.warn(
+        '[api/server/controllers/agents/client.js #useQAExtractor] No agent found for QA extraction',
+        qaExtractorConfig,
+      );
+      return;
+    }
+
+    const llmConfig = Object.assign(
+      {
+        provider: agent.provider,
+        model: agent.model,
+      },
+      agent.model_parameters,
+    );
+
+    // 获取当前Agent的数据源ID（entityId）
+    const entityId = this.options.agent.data_source_id || qaExtractorConfig.entityId;
+
+    // 导入RAGService
+    const { RAGService } = require('~/server/services/RAG');
+    const ragService = new RAGService();
+
+    const userId = this.options.req.user.id + '';
+    const messageId = this.responseMessageId + '';
+    const conversationId = this.conversationId + '';
+    
+    const processQAExtractor = await createQAExtractorProcessor({
+      userId,
+      config: {
+        instructions: agent.instructions,
+        llmConfig,
+        entityId,
+        minQuestionLength: qaExtractorConfig.minQuestionLength,
+        minAnswerLength: qaExtractorConfig.minAnswerLength,
+      },
+      messageId,
+      conversationId,
+      qaExtractorMethods: {
+        addQAPair: async ({ userId, question, answer, entityId }) => {
+          const result = await ragService.addKnowledge({
+            userId,
+            type: 'qa_pair',
+            data: {
+              question,
+              answer,
+              entityId,
+            },
+          });
+          return { _id: result._id.toString() };
+        },
+      },
+      res: this.options.res,
+    });
+
+    this.processQAExtractor = processQAExtractor;
+  }
+
+  /**
+   * 运行QA提取器
+   * @param {BaseMessage[]} messages
+   * @returns {Promise<void | (TAttachment | null)[]>}
+   */
+  async runQAExtractor(messages) {
+    try {
+      if (this.processQAExtractor == null) {
+        return;
+      }
+      const appConfig = this.options.req.config;
+      const qaExtractorConfig = appConfig.qaExtractor;
+      const messageWindowSize = qaExtractorConfig?.messageWindowSize ?? 5;
+
+      let messagesToProcess = [...messages];
+      if (messages.length > messageWindowSize) {
+        for (let i = messages.length - messageWindowSize; i >= 0; i--) {
+          const potentialWindow = messages.slice(i, i + messageWindowSize);
+          if (potentialWindow[0]?.role === 'user') {
+            messagesToProcess = [...potentialWindow];
+            break;
+          }
+        }
+
+        if (messagesToProcess.length === messages.length) {
+          messagesToProcess = [...messages.slice(-messageWindowSize)];
+        }
+      }
+
+      const filteredMessages = messagesToProcess.map((msg) => this.filterImageUrls(msg));
+      const bufferString = getBufferString(filteredMessages);
+      const bufferMessage = new HumanMessage(`# Current Chat:\n\n${bufferString}`);
+      const qaResult = await this.processQAExtractor([bufferMessage]);
+      
+      return qaResult;
+    } catch (error) {
+      logger.error('QA Extractor Agent failed to process QA extraction', error);
     }
   }
 
@@ -925,6 +1083,9 @@ class AgentClient extends BaseClient {
         // }
 
         memoryPromise = this.runMemory(messages);
+        
+        // 并行运行QA提取器
+        const qaExtractorPromise = this.runQAExtractor(messages);
 
         run = await createRun({
           agents,

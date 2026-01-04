@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { Database, MessageSquare, BookOpen, FileText, Plus, Trash2, Eye, Upload, X, ChevronRight, ChevronDown, Folder, FolderOpen, Server, Pencil } from 'lucide-react';
+import { Database, MessageSquare, BookOpen, FileText, Plus, Trash2, Eye, Upload, X, ChevronRight, ChevronDown, Folder, FolderOpen, Server, Pencil, Sparkles, Bot } from 'lucide-react';
 import * as yaml from 'js-yaml';
-import { Button, useToastContext } from '@because/client';
+import { Button, useToastContext, Spinner } from '@because/client';
 import {
   useListKnowledgeQuery,
   useAddKnowledgeMutation,
@@ -10,10 +10,16 @@ import {
 import { useUpdateKnowledgeMutation } from '~/data-provider/KnowledgeBase';
 import { useListDataSourcesQuery } from '~/data-provider/DataSources';
 import { useUploadFileMutation } from '~/data-provider/Files';
-import { EToolResources, EModelEndpoint } from '@because/data-provider';
-import type { DataSource } from '@because/data-provider';
+import { useListAgentsQuery } from '~/data-provider';
+import { EToolResources, EModelEndpoint, Constants, QueryKeys } from '@because/data-provider';
+import type { DataSource, Agent } from '@because/data-provider';
 import { dataService } from '@because/data-provider';
 import { cn } from '~/utils';
+import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
+import { useNewConvo } from '~/hooks';
+import { clearMessagesCache } from '~/utils';
+import store from '~/store';
 
 // 类型定义
 type KnowledgeEntry = {
@@ -449,12 +455,92 @@ interface AddKnowledgeModalProps {
 
 function AddKnowledgeModal({ type, dataSourceId, onClose, onAdd, isLoading }: AddKnowledgeModalProps) {
   const { showToast } = useToastContext();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { newConversation } = useNewConvo();
+  const { conversation } = store.useCreateConversationAtom(0);
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [fileContent, setFileContent] = useState<string>('');
   const [fileName, setFileName] = useState<string>('');
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [uploadedFileId, setUploadedFileId] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  // 语义模型导入方式选择状态
+  const [semanticModelImportMode, setSemanticModelImportMode] = useState<'file' | 'database' | 'agent' | null>(
+    type === 'semantic_model' ? null : null
+  );
+  const [generating, setGenerating] = useState(false);
+  const [generatedSemanticModel, setGeneratedSemanticModel] = useState<any>(null);
+  
+  // 获取数据源列表（用于数据库生成方式）
+  const { data: dataSourcesResponse } = useListDataSourcesQuery();
+  const dataSources = dataSourcesResponse?.data || [];
+  
+  // 获取Agent列表（用于Agent生成方式）
+  const { data: agentsResponse } = useListAgentsQuery({ requiredPermission: 0 });
+  const agents = agentsResponse?.data || [];
+  const [selectedAgentId, setSelectedAgentId] = useState<string>('');
+  const [agentRequirement, setAgentRequirement] = useState<string>('');
+  
+  // 处理Agent调用生成语义模型
+  const handleStartAgentGeneration = () => {
+    if (!selectedAgentId) {
+      showToast({
+        message: '请选择Agent',
+        status: 'error',
+      });
+      return;
+    }
+
+    const selectedAgent = agents.find((agent: Agent) => agent.id === selectedAgentId);
+    if (!selectedAgent) {
+      showToast({
+        message: '选择的Agent不存在',
+        status: 'error',
+      });
+      return;
+    }
+
+    // 清除当前对话的消息缓存
+    clearMessagesCache(queryClient, conversation?.conversationId);
+    queryClient.invalidateQueries([QueryKeys.messages]);
+
+    // 创建新对话并设置智能体
+    newConversation({
+      preset: {
+        endpoint: EModelEndpoint.agents,
+        agent_id: selectedAgentId,
+        model: selectedAgent.model || '',
+        conversationId: Constants.NEW_CONVO as string,
+      },
+      keepLatestMessage: false,
+    });
+
+    // 构建初始消息
+    const requirementText = agentRequirement.trim()
+      ? `\n\n需求描述：\n${agentRequirement}`
+      : '';
+    const initialMessage = `请使用 semantic_model_generator 工具生成语义模型。${requirementText}`;
+
+    // 导航到新对话，并在URL中传递初始消息
+    navigate(`/c/new?agent_id=${selectedAgentId}&message=${encodeURIComponent(initialMessage)}`, {
+      replace: false,
+      state: {
+        agentId: selectedAgentId,
+        agentName: selectedAgent.name,
+        initialMessage: initialMessage,
+      },
+    });
+
+    showToast({
+      message: '正在打开新对话，您可以在对话中使用Agent生成语义模型',
+      status: 'success',
+    });
+
+    // 关闭当前模态框
+    onClose();
+  };
   
   // 文件上传 mutation（用于业务知识文档上传）
   const uploadFileMutation = useUploadFileMutation({
@@ -505,6 +591,72 @@ function AddKnowledgeModal({ type, dataSourceId, onClose, onAdd, isLoading }: Ad
     reader.readAsText(file);
   };
 
+  // 处理数据库生成语义模型
+  const handleGenerateFromDatabase = async (selectedDataSourceIdForGen: string) => {
+    try {
+      setGenerating(true);
+      const response = await dataService.generateSemanticModel({
+        id: selectedDataSourceIdForGen,
+        userInput: {},
+      });
+
+      if (response.success && response.data) {
+        // 解析YAML内容
+        const yamlData = yaml.load(response.data.yaml) as any;
+        setGeneratedSemanticModel({
+          yaml: response.data.yaml,
+          database: response.data.database,
+          tableCount: response.data.tableCount,
+          semanticModels: yamlData.semantic_models || [],
+        });
+        showToast({
+          message: `语义模型生成成功，共包含 ${response.data.tableCount} 张表`,
+          status: 'success',
+        });
+      } else {
+        showToast({
+          message: response.error || '生成语义模型失败',
+          status: 'error',
+        });
+      }
+    } catch (error) {
+      showToast({
+        message: `生成语义模型失败: ${error instanceof Error ? error.message : '未知错误'}`,
+        status: 'error',
+      });
+    } finally {
+      setGenerating(false);
+    }
+  };
+
+  // 处理从数据库生成的语义模型添加到知识库
+  const handleAddGeneratedSemanticModel = (title?: string, modelType?: string) => {
+    if (!generatedSemanticModel) return;
+
+    const databaseName = generatedSemanticModel.database || dataSourceId;
+    const yamlData = yaml.load(generatedSemanticModel.yaml) as any;
+
+    onAdd({
+      type: 'semantic_model',
+      data: {
+        isDatabaseLevel: true,
+        databaseName: databaseName,
+        semanticModels: yamlData.semantic_models || [],
+        databaseContent: JSON.stringify(yamlData),
+        metadata: {
+          entity_id: dataSourceId,
+          title: title,
+          model_type: modelType,
+        },
+      },
+    });
+    showToast({
+      message: `成功添加数据库语义模型: ${databaseName} (包含 ${generatedSemanticModel.tableCount} 个表)`,
+      status: 'success',
+    });
+    onClose();
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -550,6 +702,8 @@ function AddKnowledgeModal({ type, dataSourceId, onClose, onAdd, isLoading }: Ad
                 metadata: {
                   ...semanticData.metadata,
                   entity_id: dataSourceId, // 关联数据源
+                  title: formData.title,
+                  model_type: formData.model_type,
                 },
               },
             });
@@ -697,73 +851,337 @@ function AddKnowledgeModal({ type, dataSourceId, onClose, onAdd, isLoading }: Ad
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {type === 'semantic_model' && (
-            <>
-              <div>
-                <label className="block text-sm font-medium text-text-primary">
-                  上传文件 (JSON/YAML)
-                </label>
-                <input
-                  type="file"
-                  accept=".json,.yaml,.yml"
-                  onChange={handleFileUpload}
-                  className="mt-1 block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
-                  aria-label="上传语义模型文件"
-                />
-                <p className="mt-1 text-xs text-text-tertiary">
-                  支持 JSON 或 YAML 格式的语义模型文件
-                </p>
-              </div>
-              <div className="text-sm text-text-secondary">或手动输入：</div>
-              <div>
-                <label className="block text-sm font-medium text-text-primary">语义模型ID *</label>
-                <input
-                  type="text"
-                  value={formData.semanticModelId || ''}
-                  onChange={(e) => setFormData({ ...formData, semanticModelId: e.target.value })}
-                  className="mt-1 block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
-                  required={!fileContent}
-                  placeholder="输入语义模型ID"
-                  aria-label="语义模型ID"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-text-primary">数据库名 *</label>
-                <input
-                  type="text"
-                  value={formData.databaseName || ''}
-                  onChange={(e) => setFormData({ ...formData, databaseName: e.target.value })}
-                  className="mt-1 block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
-                  required={!fileContent}
-                  placeholder="输入数据库名"
-                  aria-label="数据库名"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-text-primary">表名 *</label>
-                <input
-                  type="text"
-                  value={formData.tableName || ''}
-                  onChange={(e) => setFormData({ ...formData, tableName: e.target.value })}
-                  className="mt-1 block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
-                  required={!fileContent}
-                  placeholder="输入表名"
-                  aria-label="表名"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-text-primary">内容 (JSON)</label>
-                <textarea
-                  value={formData.content || ''}
-                  onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  rows={6}
-                  className="mt-1 block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary font-mono"
-                  placeholder='{"name": "table_name", "columns": [...]}'
-                />
-              </div>
-            </>
-          )}
+        {type === 'semantic_model' && semanticModelImportMode === null ? (
+          // 选择导入方式
+          <div className="space-y-4">
+            <div className="text-sm text-text-secondary mb-4">
+              请选择添加语义模型的方式：
+            </div>
+            <div className="grid grid-cols-1 gap-4">
+              <button
+                type="button"
+                onClick={() => setSemanticModelImportMode('file')}
+                className="flex items-start gap-4 rounded-lg border-2 border-border-light bg-surface-secondary p-4 hover:border-primary hover:bg-surface-hover transition-colors text-left"
+              >
+                <FileText className="h-6 w-6 text-primary mt-0.5 flex-shrink-0" />
+                <div className="flex-1">
+                  <div className="font-medium text-text-primary mb-1">从文件导入</div>
+                  <div className="text-sm text-text-secondary">
+                    上传 JSON/YAML 格式的语义模型文件，可以修改标题和语义模型类型
+                  </div>
+                </div>
+              </button>
+              <button
+                type="button"
+                onClick={() => setSemanticModelImportMode('database')}
+                className="flex items-start gap-4 rounded-lg border-2 border-border-light bg-surface-secondary p-4 hover:border-primary hover:bg-surface-hover transition-colors text-left"
+              >
+                <Database className="h-6 w-6 text-primary mt-0.5 flex-shrink-0" />
+                <div className="flex-1">
+                  <div className="font-medium text-text-primary mb-1">连接数据库一键生成</div>
+                  <div className="text-sm text-text-secondary">
+                    自动连接数据库并生成语义模型，支持 MySQL 和 PostgreSQL
+                  </div>
+                </div>
+              </button>
+              <button
+                type="button"
+                onClick={() => setSemanticModelImportMode('agent')}
+                className="flex items-start gap-4 rounded-lg border-2 border-border-light bg-surface-secondary p-4 hover:border-primary hover:bg-surface-hover transition-colors text-left"
+              >
+                <Bot className="h-6 w-6 text-primary mt-0.5 flex-shrink-0" />
+                <div className="flex-1">
+                  <div className="font-medium text-text-primary mb-1">Agent调用生成语义模型</div>
+                  <div className="text-sm text-text-secondary">
+                    使用AI Agent基于模板系统生成高质量的语义模型，支持自定义需求描述
+                  </div>
+                </div>
+              </button>
+            </div>
+            <div className="flex justify-end gap-2 pt-4">
+              <Button
+                type="button"
+                onClick={onClose}
+                className="btn btn-secondary rounded-lg px-4 py-2"
+              >
+                取消
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {type === 'semantic_model' && semanticModelImportMode === 'file' && (
+              <>
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="text-base font-medium text-text-primary">从文件导入</h4>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSemanticModelImportMode(null);
+                      setFileContent('');
+                      setFileName('');
+                      setFormData({});
+                    }}
+                    className="text-sm text-text-secondary hover:text-text-primary"
+                  >
+                    返回
+                  </button>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-text-primary mb-2">
+                    上传文件 (JSON/YAML) *
+                  </label>
+                  <input
+                    type="file"
+                    accept=".json,.yaml,.yml"
+                    onChange={handleFileUpload}
+                    className="block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
+                    aria-label="上传语义模型文件"
+                  />
+                  <p className="mt-1 text-xs text-text-tertiary">
+                    支持 JSON 或 YAML 格式的语义模型文件
+                  </p>
+                </div>
+                {fileContent && (
+                  <>
+                    <div>
+                      <label className="block text-sm font-medium text-text-primary mb-2">
+                        标题
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.title || ''}
+                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                        className="block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
+                        placeholder="输入标题（可选）"
+                        aria-label="标题"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-text-primary mb-2">
+                        语义模型类型
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.model_type || ''}
+                        onChange={(e) => setFormData({ ...formData, model_type: e.target.value })}
+                        className="block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
+                        placeholder="例如：分析语义模型、业务语义模型等（可选）"
+                        aria-label="语义模型类型"
+                      />
+                    </div>
+                  </>
+                )}
+              </>
+            )}
+
+            {type === 'semantic_model' && semanticModelImportMode === 'database' && (
+              <>
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="text-base font-medium text-text-primary">连接数据库一键生成</h4>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSemanticModelImportMode(null);
+                      setGeneratedSemanticModel(null);
+                    }}
+                    className="text-sm text-text-secondary hover:text-text-primary"
+                  >
+                    返回
+                  </button>
+                </div>
+                {!generatedSemanticModel ? (
+                  <>
+                    <div>
+                      <label className="block text-sm font-medium text-text-primary mb-2">
+                        选择数据源 *
+                      </label>
+                      <select
+                        value={dataSourceId}
+                        className="block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
+                        disabled
+                        title="数据源选择"
+                        aria-label="数据源选择"
+                      >
+                        {dataSources.map((ds: DataSource) => (
+                          <option key={ds._id} value={ds._id}>
+                            {ds.name} ({ds.type.toUpperCase()} - {ds.database})
+                          </option>
+                        ))}
+                      </select>
+                      <p className="mt-1 text-xs text-text-tertiary">
+                        将使用当前选中的数据源生成语义模型
+                      </p>
+                    </div>
+                    <Button
+                      type="button"
+                      onClick={() => handleGenerateFromDatabase(dataSourceId)}
+                      disabled={generating || !dataSourceId}
+                      className="btn btn-primary w-full"
+                    >
+                      {generating ? (
+                        <>
+                          <Spinner className="h-4 w-4 mr-2" />
+                          生成中...
+                        </>
+                      ) : (
+                        <>
+                          <Database className="h-4 w-4 mr-2" />
+                          生成语义模型
+                        </>
+                      )}
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <div className="rounded-lg border border-border-light bg-surface-secondary p-4 mb-4">
+                      <div className="text-sm text-text-primary mb-2">
+                        <strong>生成成功！</strong> 数据库：{generatedSemanticModel.database}，包含 {generatedSemanticModel.tableCount} 张表
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-text-primary mb-2">
+                        标题
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.title || generatedSemanticModel.database || ''}
+                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                        className="block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
+                        placeholder="输入标题（可选）"
+                        aria-label="标题"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-text-primary mb-2">
+                        语义模型类型
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.model_type || ''}
+                        onChange={(e) => setFormData({ ...formData, model_type: e.target.value })}
+                        className="block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
+                        placeholder="例如：分析语义模型、业务语义模型等（可选）"
+                        aria-label="语义模型类型"
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        type="button"
+                        onClick={() => handleAddGeneratedSemanticModel(formData.title, formData.model_type)}
+                        disabled={isLoading}
+                        className="btn btn-primary flex-1"
+                      >
+                        {isLoading ? (
+                          <>
+                            <Spinner className="h-4 w-4 mr-2" />
+                            添加中...
+                          </>
+                        ) : (
+                          <>
+                            <Plus className="h-4 w-4 mr-2" />
+                            添加到知识库
+                          </>
+                        )}
+                      </Button>
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          setGeneratedSemanticModel(null);
+                          setFormData({});
+                        }}
+                        className="btn btn-secondary"
+                      >
+                        重新生成
+                      </Button>
+                    </div>
+                  </>
+                )}
+              </>
+            )}
+
+            {type === 'semantic_model' && semanticModelImportMode === 'agent' && (
+              <>
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="text-base font-medium text-text-primary">Agent调用生成语义模型</h4>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSemanticModelImportMode(null);
+                      setSelectedAgentId('');
+                      setAgentRequirement('');
+                    }}
+                    className="text-sm text-text-secondary hover:text-text-primary"
+                  >
+                    返回
+                  </button>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-text-primary mb-2">
+                      选择Agent *
+                    </label>
+                    <select
+                      value={selectedAgentId}
+                      onChange={(e) => setSelectedAgentId(e.target.value)}
+                      className="block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
+                      title="选择Agent"
+                      aria-label="选择Agent"
+                    >
+                      <option value="">请选择Agent</option>
+                      {agents
+                        .filter((agent: Agent) => agent.tools?.includes('semantic_model_generator'))
+                        .map((agent: Agent) => (
+                          <option key={agent.id} value={agent.id}>
+                            {agent.name || agent.id}
+                          </option>
+                        ))}
+                    </select>
+                    <p className="mt-1 text-xs text-text-tertiary">
+                      只有配置了 semantic_model_generator 工具的Agent才会显示
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-text-primary mb-2">
+                      需求描述（可选）
+                    </label>
+                    <textarea
+                      value={agentRequirement}
+                      onChange={(e) => setAgentRequirement(e.target.value)}
+                      className="block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
+                      rows={4}
+                      placeholder="描述你的语义模型需求，例如：&#10;- 领域：电商&#10;- 主要实体：用户、订单、商品&#10;- 分析需求：用户行为分析、销售统计等"
+                      aria-label="需求描述"
+                    />
+                    <p className="mt-1 text-xs text-text-tertiary">
+                      描述语义模型的领域、实体和分析需求，Agent将基于模板系统生成高质量的语义模型
+                    </p>
+                  </div>
+
+                  <div className="rounded-lg border border-border-light bg-surface-secondary p-4 mb-4">
+                    <div className="text-sm text-text-primary mb-2">
+                      <strong>使用说明：</strong>
+                    </div>
+                    <ul className="text-xs text-text-secondary space-y-1 list-disc list-inside">
+                      <li>Agent调用生成语义模型需要在对话环境中进行</li>
+                      <li>点击"开始生成"将打开新对话，Agent将使用语义模型模板系统生成规范的语义模型文档</li>
+                      <li>生成完成后，可以将结果复制并手动添加到知识库</li>
+                    </ul>
+                  </div>
+
+                  <Button
+                    type="button"
+                    onClick={handleStartAgentGeneration}
+                    disabled={!selectedAgentId}
+                    className="btn btn-primary w-full"
+                  >
+                    <Bot className="h-4 w-4 mr-2" />
+                    开始生成
+                  </Button>
+                </div>
+              </>
+            )}
 
           {type === 'qa_pair' && (
             <>
@@ -966,23 +1384,28 @@ function AddKnowledgeModal({ type, dataSourceId, onClose, onAdd, isLoading }: Ad
             </>
           )}
 
-          <div className="flex justify-end gap-2 pt-4">
-            <Button
-              type="button"
-              onClick={onClose}
-              className="btn btn-secondary rounded-lg px-4 py-2"
-            >
-              取消
-            </Button>
-            <Button
-              type="submit"
-              disabled={isLoading}
-              className="btn btn-primary rounded-lg px-4 py-2"
-            >
-              {isLoading ? '添加中...' : '添加'}
-            </Button>
-          </div>
-        </form>
+          {type !== 'semantic_model' || (semanticModelImportMode === 'file' && fileContent) || (semanticModelImportMode !== 'database' && semanticModelImportMode !== null) ? (
+            <div className="flex justify-end gap-2 pt-4">
+              <Button
+                type="button"
+                onClick={onClose}
+                className="btn btn-secondary rounded-lg px-4 py-2"
+              >
+                取消
+              </Button>
+              {(type !== 'semantic_model' || semanticModelImportMode === 'file') && (
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="btn btn-primary rounded-lg px-4 py-2"
+                >
+                  {isLoading ? '添加中...' : '添加'}
+                </Button>
+              )}
+            </div>
+          ) : null}
+          </form>
+        )}
       </div>
     </div>
   );
@@ -996,11 +1419,17 @@ interface ViewKnowledgeModalProps {
 function ViewKnowledgeModal({ entry, onClose }: ViewKnowledgeModalProps) {
   const [isContentExpanded, setIsContentExpanded] = useState(false);
   const [isMetadataExpanded, setIsMetadataExpanded] = useState(false);
+  const [isSemanticDescriptionExpanded, setIsSemanticDescriptionExpanded] = useState(false);
   const isSemanticModel = entry.type === 'semantic_model';
 
   const formatMetadata = (metadata: Record<string, any>): string => {
     try {
-      return JSON.stringify(metadata, null, 2);
+      // 对于语义模型，排除 semantic_description（因为它有独立的展示区域）
+      const metadataToDisplay = { ...metadata };
+      if (isSemanticModel && metadataToDisplay.semantic_description) {
+        delete metadataToDisplay.semantic_description;
+      }
+      return JSON.stringify(metadataToDisplay, null, 2);
     } catch {
       return String(metadata);
     }
@@ -1052,53 +1481,72 @@ function ViewKnowledgeModal({ entry, onClose }: ViewKnowledgeModalProps) {
           {/* 语义模型说明（仅对数据库级别的语义模型显示） */}
           {isSemanticModel && entry.metadata?.is_database_level && entry.metadata?.semantic_description && (
             <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">语义模型说明</label>
-              <div className="rounded-lg border border-border-light bg-surface-secondary px-4 py-3">
-                <div className="max-h-96 overflow-auto text-sm text-text-primary whitespace-pre-wrap leading-relaxed">
-                  <div className="text-text-primary">
-                    {entry.metadata.semantic_description.split('\n').map((line, index) => {
-                      // 检测 emoji 开头的行（表标题）
-                      if (/^[1-9]️⃣/.test(line.trim())) {
-                        return (
-                          <div key={index} className="font-semibold text-base mt-4 mb-2 text-text-primary">
-                            {line}
-                          </div>
-                        );
-                      }
-                      // 检测 "核心语义："、"可直接识别" 等标题
-                      if (line.trim().endsWith('：') || line.trim().endsWith(':')) {
-                        return (
-                          <div key={index} className="font-medium mt-3 mb-1 text-text-primary">
-                            {line}
-                          </div>
-                        );
-                      }
-                      // 检测列表项
-                      if (line.trim().startsWith('-')) {
-                        return (
-                          <div key={index} className="ml-4 text-text-secondary">
-                            {line}
-                          </div>
-                        );
-                      }
-                      // 检测分隔线
-                      if (line.trim() === '---') {
-                        return <hr key={index} className="my-4 border-border-light" />;
-                      }
-                      // 普通文本
-                      if (line.trim()) {
-                        return (
-                          <div key={index} className="mb-1 text-text-secondary">
-                            {line}
-                          </div>
-                        );
-                      }
-                      // 空行
-                      return <br key={index} />;
-                    })}
+              <button
+                type="button"
+                onClick={() => setIsSemanticDescriptionExpanded(!isSemanticDescriptionExpanded)}
+                className="mb-2 flex w-full items-center justify-between rounded-lg border border-border-light bg-surface-secondary px-4 py-3 transition-colors hover:bg-surface-hover"
+                aria-label={isSemanticDescriptionExpanded ? '收起语义模型说明' : '展开语义模型说明'}
+              >
+                <div className="flex items-center gap-2">
+                  {isSemanticDescriptionExpanded ? (
+                    <ChevronDown className="h-4 w-4 text-text-secondary" />
+                  ) : (
+                    <ChevronRight className="h-4 w-4 text-text-secondary" />
+                  )}
+                  <span className="text-sm font-medium text-text-primary">语义模型说明</span>
+                </div>
+                <span className="text-xs text-text-tertiary">
+                  {isSemanticDescriptionExpanded ? '点击收起' : '点击展开'}
+                </span>
+              </button>
+              {isSemanticDescriptionExpanded && (
+                <div className="rounded-lg border border-border-light bg-surface-secondary px-4 py-3">
+                  <div className="max-h-96 overflow-auto text-sm text-text-primary whitespace-pre-wrap leading-relaxed">
+                    <div className="text-text-primary">
+                      {entry.metadata.semantic_description.split('\n').map((line, index) => {
+                        // 检测 emoji 开头的行（表标题）
+                        if (/^[1-9]️⃣/.test(line.trim())) {
+                          return (
+                            <div key={index} className="font-semibold text-base mt-4 mb-2 text-text-primary">
+                              {line}
+                            </div>
+                          );
+                        }
+                        // 检测 "核心语义："、"可直接识别" 等标题
+                        if (line.trim().endsWith('：') || line.trim().endsWith(':')) {
+                          return (
+                            <div key={index} className="font-medium mt-3 mb-1 text-text-primary">
+                              {line}
+                            </div>
+                          );
+                        }
+                        // 检测列表项
+                        if (line.trim().startsWith('-')) {
+                          return (
+                            <div key={index} className="ml-4 text-text-secondary">
+                              {line}
+                            </div>
+                          );
+                        }
+                        // 检测分隔线
+                        if (line.trim() === '---') {
+                          return <hr key={index} className="my-4 border-border-light" />;
+                        }
+                        // 普通文本
+                        if (line.trim()) {
+                          return (
+                            <div key={index} className="mb-1 text-text-secondary">
+                              {line}
+                            </div>
+                          );
+                        }
+                        // 空行
+                        return <br key={index} />;
+                      })}
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           )}
 

@@ -774,16 +774,90 @@ class KnowledgeBaseService {
   }
 
   /**
+   * 检查是否存在重复的QA对
+   * @param {string} question - 问题文本
+   * @param {string} userId - 用户ID
+   * @param {string} [entityId] - 实体ID（数据源ID）
+   * @param {number} [minScore=0.85] - 最小相似度阈值
+   * @returns {Promise<Object|null>} 如果存在重复则返回已存在的QA对，否则返回null
+   */
+  async checkDuplicateQA({ question, userId, entityId, minScore = 0.85 }) {
+    try {
+      // 先尝试在MongoDB中直接查找相同的问题（精确匹配）
+      const query = {
+        type: KnowledgeType.QA_PAIR,
+        'metadata.question': question.trim(),
+      };
+      
+      // 如果指定了entityId，在同一数据源内检查；否则检查所有数据源
+      if (entityId) {
+        query['metadata.entity_id'] = entityId;
+      }
+
+      const existingQA = await KnowledgeEntry.findOne(query);
+      if (existingQA) {
+        logger.debug(`[KnowledgeBaseService] 发现完全相同的QA对（精确匹配）`);
+        return existingQA.toObject();
+      }
+
+      // 如果没有精确匹配，使用向量相似度搜索（如果启用了向量数据库）
+      if (this.useVectorDB) {
+        try {
+          const questionEmbedding = await this.embeddingService.embedText(question, userId);
+          if (questionEmbedding) {
+            const similarResults = await this.vectorDBService.searchSimilar({
+              queryEmbedding: questionEmbedding,
+              type: KnowledgeType.QA_PAIR,
+              topK: 1,
+              minScore,
+              entityId, // 在同一数据源内搜索
+            });
+
+            if (similarResults && similarResults.length > 0) {
+              const topResult = similarResults[0];
+              if (topResult.score >= minScore) {
+                logger.debug(`[KnowledgeBaseService] 发现相似的QA对（相似度: ${topResult.score.toFixed(3)}）`);
+                // 从MongoDB获取完整信息
+                const existingEntry = await KnowledgeEntry.findById(topResult.knowledgeEntryId);
+                if (existingEntry) {
+                  return existingEntry.toObject();
+                }
+              }
+            }
+          }
+        } catch (vectorError) {
+          logger.warn('[KnowledgeBaseService] 向量相似度检查失败，继续执行:', vectorError.message);
+        }
+      }
+
+      return null;
+    } catch (error) {
+      logger.warn('[KnowledgeBaseService] 检查重复QA失败:', error);
+      return null; // 出错时不阻止添加
+    }
+  }
+
+  /**
    * 添加QA对到知识库
    * @param {Object} params
    * @param {string} params.userId - 用户ID
    * @param {string} params.question - 问题
    * @param {string} params.answer - 答案
-   * @param {string} [params.entityId] - 实体ID
-   * @returns {Promise<Object>} 创建的知识条目
+   * @param {string} [params.entityId] - 实体ID（数据源ID）
+   * @param {boolean} [params.skipDuplicateCheck=false] - 是否跳过去重检查
+   * @returns {Promise<Object>} 创建的知识条目（如果已存在则返回已存在的条目）
    */
-  async addQAPair({ userId, question, answer, entityId }) {
+  async addQAPair({ userId, question, answer, entityId, skipDuplicateCheck = false }) {
     try {
+      // 去重检查（除非明确跳过）
+      if (!skipDuplicateCheck) {
+        const duplicate = await this.checkDuplicateQA({ question, userId, entityId });
+        if (duplicate) {
+          logger.info(`[KnowledgeBaseService] QA对已存在，跳过添加: ${question.substring(0, 30)}...`);
+          return duplicate;
+        }
+      }
+
       // 将问题和答案组合作为内容
       const content = `问题: ${question}\n答案: ${answer}`;
       const title = `QA: ${question.substring(0, 50)}${question.length > 50 ? '...' : ''}`;
