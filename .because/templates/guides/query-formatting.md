@@ -112,5 +112,5 @@ SELECT country, SUM(cases) AS total_cases FROM covid_data WHERE date >= '2024-01
 
 ---
 
-**最后更新**：2025-01-27  
+**最后更新**：2025-12-17  
 **版本**：1.0.0

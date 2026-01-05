@@ -819,6 +819,29 @@ export const memorySchema = z.object({
 
 export type TMemoryConfig = DeepPartial<z.infer<typeof memorySchema>>;
 
+export const qaExtractorSchema = z.object({
+  disabled: z.boolean().optional(),
+  messageWindowSize: z.number().optional().default(5),
+  minQuestionLength: z.number().optional().default(5),
+  minAnswerLength: z.number().optional().default(10),
+  entityId: z.string().optional(),
+  agent: z
+    .union([
+      z.object({
+        id: z.string(),
+      }),
+      z.object({
+        provider: z.string(),
+        model: z.string(),
+        instructions: z.string().optional(),
+        model_parameters: z.record(z.any()).optional(),
+      }),
+    ])
+    .optional(),
+});
+
+export type TQAExtractorConfig = DeepPartial<z.infer<typeof qaExtractorSchema>>;
+
 const customEndpointsSchema = z.array(endpointSchema.partial()).optional();
 
 export const configSchema = z.object({
@@ -827,6 +850,7 @@ export const configSchema = z.object({
   ocr: ocrSchema.optional(),
   webSearch: webSearchSchema.optional(),
   memory: memorySchema.optional(),
+  qaExtractor: qaExtractorSchema.optional(),
   secureImageLinks: z.boolean().optional(),
   imageOutputType: z.nativeEnum(EImageOutputType).default(EImageOutputType.PNG),
   includedTools: z.array(z.string()).optional(),

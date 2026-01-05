@@ -124,5 +124,5 @@ with open('templates/prompt-templates/default/text_to_sql_rules.txt') as f:
 
 ---
 
-**最后更新**：2025-01-27  
+**最后更新**：2025-12-17  
 **版本**：1.0.0

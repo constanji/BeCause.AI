@@ -126,7 +126,7 @@ class BeCause extends Tool {
   }
 
   /**
-   * 处理 intent-classification 命令
+   * 处理 intent-classification（意图分类）命令
    */
   async handleIntentClassification(args) {
     const { arguments: userQuery } = args;
@@ -192,7 +192,7 @@ class BeCause extends Tool {
   }
 
   /**
-   * 处理 data-assistance 命令
+   * 处理 data-assistance（数据辅助）命令
    */
   async handleDataAssistance(args) {
     const { arguments: userQuery, mode } = args;
@@ -428,12 +428,43 @@ class BeCause extends Tool {
       }
 
       const duration = Date.now() - startTime;
-      const resultPreview =
-        typeof result === 'string'
-          ? result.length > 1000
-            ? result.substring(0, 1000) + '...'
-            : result
-          : JSON.stringify(result).substring(0, 1000);
+      
+      // 格式化 resultPreview：如果是 JSON 字符串，先解析再格式化；否则直接截取
+      let resultPreview;
+      const MAX_PREVIEW_LENGTH = 2000;
+      
+      if (typeof result === 'string') {
+        try {
+          // 尝试解析为 JSON
+          const parsed = JSON.parse(result);
+          const formatted = JSON.stringify(parsed, null, 2);
+          // 如果格式化后超过限制，智能截取
+          if (formatted.length > MAX_PREVIEW_LENGTH) {
+            // 找到最后一个完整的 JSON 键值对结束位置
+            let truncated = formatted.substring(0, MAX_PREVIEW_LENGTH);
+            // 尝试在最后一个换行符处截断，保持缩进结构
+            const lastNewline = truncated.lastIndexOf('\n');
+            if (lastNewline > MAX_PREVIEW_LENGTH * 0.8) {
+              truncated = truncated.substring(0, lastNewline);
+            }
+            // 添加省略提示
+            resultPreview = truncated + '\n  ... (内容已截断，完整内容长度: ' + formatted.length + ' 字符)';
+          } else {
+            resultPreview = formatted;
+          }
+        } catch (e) {
+          // 不是有效的 JSON，直接截取字符串
+          resultPreview = result.length > MAX_PREVIEW_LENGTH 
+            ? result.substring(0, MAX_PREVIEW_LENGTH) + '... (内容已截断)' 
+            : result;
+        }
+      } else {
+        const formatted = JSON.stringify(result, null, 2);
+        resultPreview = formatted.length > MAX_PREVIEW_LENGTH 
+          ? formatted.substring(0, MAX_PREVIEW_LENGTH) + '... (内容已截断)' 
+          : formatted;
+      }
+      
       const resultInfo = {
         command,
         resultPreview,
