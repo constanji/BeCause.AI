@@ -472,13 +472,15 @@ function AddKnowledgeModal({ type, dataSourceId, onClose, onAdd, isLoading }: Ad
   );
   const [generating, setGenerating] = useState(false);
   const [generatedSemanticModel, setGeneratedSemanticModel] = useState<any>(null);
+  // Schema类型选择：'light' | 'meta'
+  const [schemaType, setSchemaType] = useState<'light' | 'meta'>('meta');
   
   // 获取数据源列表（用于数据库生成方式）
   const { data: dataSourcesResponse } = useListDataSourcesQuery();
   const dataSources = dataSourcesResponse?.data || [];
   
   // 获取Agent列表（用于Agent生成方式）
-  const { data: agentsResponse } = useListAgentsQuery({ requiredPermission: 0 });
+  const { data: agentsResponse } = useListAgentsQuery();
   const agents = agentsResponse?.data || [];
   const [selectedAgentId, setSelectedAgentId] = useState<string>('');
   const [agentRequirement, setAgentRequirement] = useState<string>('');
@@ -595,10 +597,29 @@ function AddKnowledgeModal({ type, dataSourceId, onClose, onAdd, isLoading }: Ad
   const handleGenerateFromDatabase = async (selectedDataSourceIdForGen: string) => {
     try {
       setGenerating(true);
+      
+      // 确保 schemaType 有值
+      const effectiveSchemaType = schemaType || 'meta';
+      console.log('[前端] 准备发送请求');
+      console.log('[前端] selectedDataSourceIdForGen:', selectedDataSourceIdForGen);
+      console.log('[前端] schemaType状态值:', schemaType);
+      console.log('[前端] effectiveSchemaType:', effectiveSchemaType);
+      console.log('[前端] schemaType类型:', typeof schemaType);
+      
+      const requestPayload = {
+        id: selectedDataSourceIdForGen,
+        userInput: {},
+        schemaType: effectiveSchemaType, // 明确传递Schema类型
+      };
+      console.log('[前端] 完整payload:', JSON.stringify(requestPayload, null, 2));
+      
       const response = await dataService.generateSemanticModel({
         id: selectedDataSourceIdForGen,
         userInput: {},
-      });
+        schemaType: effectiveSchemaType, // 明确传递
+      } as any); // 临时类型断言，等待TypeScript重新编译
+      
+      console.log('[前端] 请求发送完成，响应:', response);
 
       if (response.success && response.data) {
         // 解析YAML内容
@@ -608,9 +629,17 @@ function AddKnowledgeModal({ type, dataSourceId, onClose, onAdd, isLoading }: Ad
           database: response.data.database,
           tableCount: response.data.tableCount,
           semanticModels: yamlData.semantic_models || [],
+          schemaType, // 保存Schema类型
         });
+        // 初始化formData，设置默认标题（如果还没有设置）
+        if (!formData.title) {
+          setFormData({
+            ...formData,
+            title: response.data.database || '',
+          });
+        }
         showToast({
-          message: `语义模型生成成功，共包含 ${response.data.tableCount} 张表`,
+          message: `语义模型生成成功（${schemaType === 'light' ? 'Light Schema' : 'MSchema'}），共包含 ${response.data.tableCount} 张表`,
           status: 'success',
         });
       } else {
@@ -635,6 +664,10 @@ function AddKnowledgeModal({ type, dataSourceId, onClose, onAdd, isLoading }: Ad
 
     const databaseName = generatedSemanticModel.database || dataSourceId;
     const yamlData = yaml.load(generatedSemanticModel.yaml) as any;
+    
+    // 使用传入的title和modelType，如果为空则使用默认值
+    const finalTitle = (title && title.trim()) || generatedSemanticModel.database || '语义模型';
+    const finalModelType = (modelType && modelType.trim()) || undefined;
 
     onAdd({
       type: 'semantic_model',
@@ -645,8 +678,8 @@ function AddKnowledgeModal({ type, dataSourceId, onClose, onAdd, isLoading }: Ad
         databaseContent: JSON.stringify(yamlData),
         metadata: {
           entity_id: dataSourceId,
-          title: title,
-          model_type: modelType,
+          title: finalTitle,
+          model_type: finalModelType,
         },
       },
     });
@@ -1013,6 +1046,45 @@ function AddKnowledgeModal({ type, dataSourceId, onClose, onAdd, isLoading }: Ad
                         将使用当前选中的数据源生成语义模型
                       </p>
                     </div>
+                    <div>
+                      <label className="block text-sm font-medium text-text-primary mb-2">
+                        Schema类型 *
+                      </label>
+                      <div className="space-y-2">
+                        <label className="flex items-start gap-3 rounded-lg border border-border-light bg-surface-secondary p-3 cursor-pointer hover:bg-surface-hover transition-colors">
+                          <input
+                            type="radio"
+                            name="schemaType"
+                            value="light"
+                            checked={schemaType === 'light'}
+                            onChange={(e) => setSchemaType(e.target.value as 'light' | 'meta')}
+                            className="mt-0.5"
+                          />
+                          <div className="flex-1">
+                            <div className="font-medium text-text-primary mb-1">Light Schema（推荐用于Agent/LLM）</div>
+                            <div className="text-xs text-text-secondary">
+                              轻量、稳定、抗幻觉。只包含name、role、description和aggregation枚举，不包含SQL表达式和数据类型细节。适合给LLM/Agent理解使用。
+                            </div>
+                          </div>
+                        </label>
+                        <label className="flex items-start gap-3 rounded-lg border border-border-light bg-surface-secondary p-3 cursor-pointer hover:bg-surface-hover transition-colors">
+                          <input
+                            type="radio"
+                            name="schemaType"
+                            value="meta"
+                            checked={schemaType === 'meta'}
+                            onChange={(e) => setSchemaType(e.target.value as 'light' | 'meta')}
+                            className="mt-0.5"
+                          />
+                          <div className="flex-1">
+                            <div className="font-medium text-text-primary mb-1">MSchema（完整可执行）</div>
+                            <div className="text-xs text-text-secondary">
+                              完整、可执行、包含SQL表达式、数据类型和join关系。适合系统/执行引擎使用，可直接生成SQL。
+                            </div>
+                          </div>
+                        </label>
+                      </div>
+                    </div>
                     <Button
                       type="button"
                       onClick={() => handleGenerateFromDatabase(dataSourceId)}
@@ -1041,16 +1113,21 @@ function AddKnowledgeModal({ type, dataSourceId, onClose, onAdd, isLoading }: Ad
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-text-primary mb-2">
-                        标题
+                        标题 *
                       </label>
                       <input
                         type="text"
-                        value={formData.title || generatedSemanticModel.database || ''}
-                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                        value={formData.title !== undefined ? formData.title : (generatedSemanticModel.database || '')}
+                        onChange={(e) => {
+                          setFormData({ ...formData, title: e.target.value });
+                        }}
                         className="block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
-                        placeholder="输入标题（可选）"
+                        placeholder="输入标题"
                         aria-label="标题"
                       />
+                      <p className="mt-1 text-xs text-text-tertiary">
+                        当前Schema类型：{generatedSemanticModel.schemaType === 'light' ? 'Light Schema（轻量，适合LLM/Agent）' : 'MSchema（完整可执行，适合系统引擎）'}
+                      </p>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-text-primary mb-2">
@@ -1058,7 +1135,7 @@ function AddKnowledgeModal({ type, dataSourceId, onClose, onAdd, isLoading }: Ad
                       </label>
                       <input
                         type="text"
-                        value={formData.model_type || ''}
+                        value={formData.model_type !== undefined ? formData.model_type : ''}
                         onChange={(e) => setFormData({ ...formData, model_type: e.target.value })}
                         className="block w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
                         placeholder="例如：分析语义模型、业务语义模型等（可选）"

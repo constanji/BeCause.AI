@@ -14,7 +14,9 @@ async function _getResponse<T>(url: string, options?: AxiosRequestConfig): Promi
 }
 
 async function _post(url: string, data?: any) {
-  const response = await axios.post(url, JSON.stringify(data), {
+  // axios.post 会自动序列化对象为 JSON，不需要手动 JSON.stringify
+  // 只有当 data 是字符串时才需要特殊处理
+  const response = await axios.post(url, data, {
     headers: { 'Content-Type': 'application/json' },
   });
   return response.data;
@@ -38,7 +40,8 @@ async function _postTTS(url: string, formData: FormData, options?: AxiosRequestC
 }
 
 async function _put(url: string, data?: any) {
-  const response = await axios.put(url, JSON.stringify(data), {
+  // axios.put 会自动序列化对象为 JSON，不需要手动 JSON.stringify
+  const response = await axios.put(url, data, {
     headers: { 'Content-Type': 'application/json' },
   });
   return response.data;
@@ -55,7 +58,8 @@ async function _deleteWithOptions<T>(url: string, options?: AxiosRequestConfig):
 }
 
 async function _patch(url: string, data?: any) {
-  const response = await axios.patch(url, JSON.stringify(data), {
+  // axios.patch 会自动序列化对象为 JSON，不需要手动 JSON.stringify
+  const response = await axios.patch(url, data, {
     headers: { 'Content-Type': 'application/json' },
   });
   return response.data;

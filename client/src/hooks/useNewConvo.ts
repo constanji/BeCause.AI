@@ -246,11 +246,17 @@ const useNewConvo = (index = 0) => {
           ? { endpoint: _template.endpoint }
           : _template;
 
+      // 从localStorage获取项目ID和数据源ID（如果template中没有）
+      const projectId = template.project_id || localStorage.getItem(LocalStorageKeys.LAST_PROJECT_ID) || undefined;
+      const dataSourceId = localStorage.getItem(LocalStorageKeys.LAST_DATA_SOURCE_ID) || undefined;
+      
       const conversation = {
         conversationId: Constants.NEW_CONVO as string,
         title: 'New Chat',
         endpoint: null,
         ...template,
+        project_id: projectId, // 包含项目ID
+        data_source_id: dataSourceId, // 包含数据源ID（用于直接传递）
         createdAt: '',
         updatedAt: '',
       };

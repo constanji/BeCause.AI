@@ -43,6 +43,11 @@ const {
 const {
   saveModelSpecsConfig,
 } = require('~/server/controllers/ModelSpecsController');
+const {
+  listProjectsHandler,
+  getProjectHandler,
+  updateProjectDataSourceHandler,
+} = require('~/server/controllers/ProjectController');
 const emailLoginEnabled =
   process.env.ALLOW_EMAIL_LOGIN === undefined || isEnabled(process.env.ALLOW_EMAIL_LOGIN);
 const passwordResetEnabled = isEnabled(process.env.ALLOW_PASSWORD_RESET);
@@ -252,5 +257,10 @@ router.post('/data-sources/:id/test', requireJwtAuth, checkAdmin, testDataSource
 router.post('/data-sources/test', requireJwtAuth, checkAdmin, testConnectionHandler);
 router.get('/data-sources/:id/schema', requireJwtAuth, checkAdmin, getDataSourceSchemaHandler);
 router.post('/data-sources/:id/generate-semantic-model', requireJwtAuth, checkAdmin, generateSemanticModelHandler);
+
+// 项目查询路由（需要认证，但不需要管理员权限）
+router.get('/projects', requireJwtAuth, listProjectsHandler);
+router.get('/projects/:id', requireJwtAuth, getProjectHandler);
+router.put('/projects/:id/data-source', requireJwtAuth, updateProjectDataSourceHandler);
 
 module.exports = router;

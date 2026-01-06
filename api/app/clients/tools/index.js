@@ -18,6 +18,7 @@ const BaziAstrology = require('./structured/BaziAstrology');
 const DatabaseSchema = require('./structured/DatabaseSchema');
 const SqlExecutor = require('./structured/SqlExecutor');
 const BeCause = require('./structured/BeCause');
+const BeCauseSkills = require('./structured/BeCauseSkills');
 const SemanticModelGenerator = require('./structured/SemanticModelGenerator');
 
 module.exports = {
@@ -40,5 +41,6 @@ module.exports = {
   DatabaseSchema,
   SqlExecutor,
   BeCause,
+  BeCauseSkills,
   SemanticModelGenerator,
 };

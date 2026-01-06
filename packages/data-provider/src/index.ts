@@ -28,6 +28,7 @@ export * from './types/runs';
 export * from './types/web';
 export * from './types/graph';
 export * from './types/dataSource';
+export * from './types/project';
 /* access permissions */
 export * from './accessPermissions';
 /* query/mutation keys */

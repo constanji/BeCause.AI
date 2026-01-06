@@ -41,6 +41,7 @@ const {
   DatabaseSchema,
   SqlExecutor,
   BeCause,
+  BeCauseSkills,
   SemanticModelGenerator,
 } = require('../');
 const { primeFiles: primeCodeFiles } = require('~/server/services/Files/Code/process');
@@ -189,6 +190,7 @@ const loadTools = async ({
     tavily_search_results_json: TavilySearchResults,
     speckit: Speckit,
     because: BeCause,
+    because_skills: BeCauseSkills, // BeCause问数工具 - 统一的智能问数能力集
     database_schema: DatabaseSchema,
     social: SocialMedia,
     bazi_astrology: BaziAstrology,
@@ -267,6 +269,12 @@ const loadTools = async ({
     },
     because: {
       projectRoot: paths.root,
+    },
+    because_skills: {
+      userId: user,
+      req: options.req,
+      projectRoot: paths.root,
+      conversation: options.conversation, // 传递conversation信息，用于获取project_id
     },
     database_schema: {
       apiUrl: process.env.SQL_API_URL || 'http://localhost:3001',

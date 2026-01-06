@@ -249,6 +249,12 @@ export const rag = {
   knowledgeById: (id: string) => `${BASE_URL}/api/rag/knowledge/${id}`,
 };
 
+export const projects = {
+  list: () => `${BASE_URL}/api/config/projects`,
+  get: (id: string) => `${BASE_URL}/api/config/projects/${id}`,
+  updateDataSource: (id: string) => `${BASE_URL}/api/config/projects/${id}/data-source`,
+};
+
 export const revertAgentVersion = (agent_id: string) => `${agents({ path: `${agent_id}/revert` })}`;
 
 export const files = () => `${BASE_URL}/api/files`;

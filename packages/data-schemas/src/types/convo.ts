@@ -53,6 +53,8 @@ export interface IConversation extends Document {
   fileTokenLimit?: number;
   // Additional fields
   files?: string[];
+  project_id?: string; // 关联的业务/项目ID
+  data_source_id?: string; // 关联的数据源ID（直接选择数据源时使用）
   expiredAt?: Date;
   createdAt?: Date;
   updatedAt?: Date;

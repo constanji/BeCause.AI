@@ -590,11 +590,12 @@ class KnowledgeBaseService {
    * @param {boolean} [params.isDatabaseLevel] - 是否为数据库级别的语义模型
    * @returns {Promise<Object>} 创建的知识条目
    */
-  async addSemanticModel({ userId, semanticModelId, databaseName, tableName, content, entityId, parentId, isDatabaseLevel = false, semanticDescription = null }) {
+  async addSemanticModel({ userId, semanticModelId, databaseName, tableName, content, entityId, parentId, isDatabaseLevel = false, semanticDescription = null, title: customTitle = null, modelType = null }) {
     try {
-      const title = isDatabaseLevel 
+      // 如果提供了自定义标题，使用自定义标题；否则使用默认标题
+      const title = customTitle || (isDatabaseLevel 
         ? `数据库语义模型: ${databaseName}`
-        : `语义模型: ${databaseName}.${tableName}`;
+        : `语义模型: ${databaseName}.${tableName}`);
       
       // 生成向量嵌入（如果失败，允许没有 embedding）
       let embedding = null;
@@ -642,6 +643,8 @@ class KnowledgeBaseService {
           is_database_level: isDatabaseLevel,
           // 语义模型说明（仅用于展示，不参与向量检索）
           semantic_description: semanticDescription || null,
+          // 模型类型（如果提供）
+          model_type: modelType || null,
         },
       });
 
@@ -716,6 +719,8 @@ class KnowledgeBaseService {
       });
 
       // 1. 先创建数据库级别的父模型
+      // 使用metadata中的title，如果没有则使用databaseName
+      const parentTitle = metadata.title || databaseName;
       const parentEntry = await this.addSemanticModel({
         userId,
         semanticModelId: databaseName,
@@ -725,6 +730,8 @@ class KnowledgeBaseService {
         isDatabaseLevel: true,
         entityId: metadata.entity_id,
         semanticDescription, // 传递说明文本
+        title: parentTitle, // 使用metadata中的title
+        modelType: metadata.model_type, // 使用metadata中的model_type
       });
 
       // 确保 parentId 是正确的 ObjectId 或字符串格式

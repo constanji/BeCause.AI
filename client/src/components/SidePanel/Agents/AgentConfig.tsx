@@ -19,7 +19,6 @@ import Action from '~/components/SidePanel/Builder/Action';
 import { useLocalize, useVisibleTools } from '~/hooks';
 import { Panel, isEphemeralAgent } from '~/common';
 import { useGetAgentFiles } from '~/data-provider';
-import { useListDataSourcesQuery } from '~/data-provider/DataSources';
 import { icons } from '~/hooks/Endpoint/Icons';
 import Instructions from './Instructions';
 import AgentAvatar from './AgentAvatar';
@@ -30,7 +29,6 @@ import Artifacts from './Artifacts';
 import AgentTool from './AgentTool';
 import CodeForm from './Code/Form';
 import MCPTools from './MCPTools';
-import type { DataSource } from '@because/data-provider';
 
 const labelClass = 'mb-2 text-token-text-primary dark:text-text-primary block font-medium';
 const inputClass = cn(
@@ -38,34 +36,6 @@ const inputClass = cn(
   'flex w-full px-3 py-2 border-border-light bg-surface-secondary text-text-primary dark:text-text-primary focus-visible:ring-2 focus-visible:ring-ring-primary',
   removeFocusOutlines,
 );
-
-function DataSourceSelector() {
-  const { control } = useFormContext<AgentForm>();
-  const { data: dataSourcesResponse } = useListDataSourcesQuery();
-  const dataSources = dataSourcesResponse?.data || [];
-
-  return (
-    <Controller
-      name="data_source_id"
-      control={control}
-      render={({ field }) => (
-        <select
-          {...field}
-          value={field.value ?? ''}
-          className={inputClass}
-          id="data_source_id"
-        >
-          <option value="">不配置数据源</option>
-          {dataSources.map((ds: DataSource) => (
-            <option key={ds._id} value={ds._id}>
-              {ds.name} ({ds.type})
-            </option>
-          ))}
-        </select>
-      )}
-    />
-  );
-}
 
 export default function AgentConfig() {
   const localize = useLocalize();
@@ -312,13 +282,6 @@ export default function AgentConfig() {
               <span>{model != null && model ? model : localize('com_ui_select_model')}</span>
             </div>
           </button>
-        </div>
-        {/* Data Source Configuration */}
-        <div className="mb-4">
-          <label className={labelClass} htmlFor="data_source_id">
-            数据源配置
-          </label>
-          <DataSourceSelector />
         </div>
         {(codeEnabled ||
           fileSearchEnabled ||

@@ -61,6 +61,8 @@ export enum QueryKeys {
   knowledgeEntry = 'knowledgeEntry',
   dataSources = 'dataSources',
   dataSource = 'dataSource',
+  projects = 'projects',
+  project = 'project',
 }
 
 // Dynamic query keys that require parameters

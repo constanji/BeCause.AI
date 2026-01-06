@@ -196,6 +196,13 @@
     "authConfig": []
   },
   {
+    "name": "BeCause问数",
+    "pluginKey": "because_skills",
+    "description": "BeCause问数工具 - 智能问数（自然语言转SQL）的完整能力集。Commands: intent-classification (意图分类), rag-retrieval (RAG知识检索), reranker (结果重排序), sql-validation (SQL校验), result-analysis (结果分析), sql-executor (SQL执行). 此工具集成了RAG服务、知识库检索、SQL生成与执行等完整问数流程。",
+    "icon": "📊",
+    "authConfig": []
+  },
+  {
     "name": "SQL Executor",
     "pluginKey": "sql_executor",
     "description": "执行只读的 SQL SELECT 查询并返回结果和归因分析。调用内部 hsp-sql-api 服务的 /sql_query 接口执行查询，返回数据行、行数统计以及结构化的归因说明，帮助智能体在回答时清晰说明结论来自哪张表、哪些字段、哪些过滤条件。",

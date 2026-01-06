@@ -1554,6 +1554,10 @@ export enum Constants {
 }
 
 export enum LocalStorageKeys {
+  /** Key for the last selected project ID */
+  LAST_PROJECT_ID = 'last_project_id',
+  /** Key for the last selected data source ID */
+  LAST_DATA_SOURCE_ID = 'last_data_source_id',
   /** Key for the admin defined App Title */
   APP_TITLE = 'appTitle',
   /** Key for the last conversation setup. */

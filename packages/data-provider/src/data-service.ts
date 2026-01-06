@@ -7,6 +7,7 @@ import * as m from './types/mutations';
 import * as q from './types/queries';
 import * as f from './types/files';
 import * as d from './types/dataSource';
+import * as p from './types/project';
 import * as config from './config';
 import request from './request';
 import * as s from './schemas';
@@ -577,10 +578,12 @@ export const getDataSourceSchema = ({ id }: { id: string }): Promise<{
 
 export const generateSemanticModel = ({ 
   id, 
-  userInput 
+  userInput,
+  schemaType = 'meta'
 }: { 
   id: string; 
-  userInput?: Record<string, any> 
+  userInput?: Record<string, any>;
+  schemaType?: 'light' | 'meta';
 }): Promise<{
   success: boolean;
   data?: {
@@ -592,7 +595,13 @@ export const generateSemanticModel = ({
   error?: string;
   message?: string;
 }> => {
-  return request.post(endpoints.dataSources.generateSemanticModel(id), { userInput });
+  // 确保 schemaType 总是被包含在请求体中（即使它是 undefined，也使用默认值）
+  const effectiveSchemaType = schemaType || 'meta';
+  console.log('[data-service] generateSemanticModel 调用，schemaType:', schemaType, 'effectiveSchemaType:', effectiveSchemaType);
+  return request.post(endpoints.dataSources.generateSemanticModel(id), { 
+    userInput: userInput || {}, 
+    schemaType: effectiveSchemaType // 明确传递，确保总是有值
+  });
 };
 
 export const createDataSource = (data: d.DataSourceCreateParams): Promise<d.DataSourceResponse> => {
@@ -615,6 +624,26 @@ export const deleteDataSource = ({ id }: { id: string }): Promise<{ success: boo
 
 export const testDataSourceConnection = ({ id }: { id: string }): Promise<d.DataSourceTestResponse> => {
   return request.post(endpoints.dataSources.test(id));
+};
+
+/* Projects */
+
+export const listProjects = (): Promise<p.ProjectListResponse> => {
+  return request.get(endpoints.projects.list());
+};
+
+export const getProjectById = ({ id }: { id: string }): Promise<p.ProjectResponse> => {
+  return request.get(endpoints.projects.get(id));
+};
+
+export const updateProjectDataSource = ({
+  id,
+  data_source_id,
+}: {
+  id: string;
+  data_source_id: string | null;
+}): Promise<p.ProjectResponse> => {
+  return request.put(endpoints.projects.updateDataSource(id), { data_source_id });
 };
 
 export const testConnection = (data: d.DataSourceCreateParams): Promise<d.DataSourceTestResponse> => {

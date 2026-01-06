@@ -11,6 +11,7 @@ import {
   parseCompactConvo,
   replaceSpecialVars,
   isAssistantsEndpoint,
+  LocalStorageKeys,
 } from '@because/data-provider';
 import { useSetRecoilState, useResetRecoilState, useRecoilValue } from 'recoil';
 import type {
@@ -170,10 +171,21 @@ export default function useChatFunctions({
     const endpointType = getEndpointField(endpointsConfig, endpoint, 'type');
 
     /** This becomes part of the `endpointOption` */
+    // 从localStorage获取最新的data_source_id和project_id，确保用户选择的数据源立即生效
+    const latestDataSourceId = localStorage.getItem(LocalStorageKeys.LAST_DATA_SOURCE_ID);
+    const latestProjectId = localStorage.getItem(LocalStorageKeys.LAST_PROJECT_ID);
+    
+    // 合并conversation和localStorage中的数据源ID
+    const conversationWithDataSource = {
+      ...(conversation ?? {}),
+      ...(latestDataSourceId ? { data_source_id: latestDataSourceId } : {}),
+      ...(latestProjectId ? { project_id: latestProjectId } : {}),
+    };
+    
     const convo = parseCompactConvo({
       endpoint: endpoint as EndpointSchemaKey,
       endpointType: endpointType as EndpointSchemaKey,
-      conversation: conversation ?? {},
+      conversation: conversationWithDataSource,
     });
 
     const { modelDisplayLabel } = endpointsConfig?.[endpoint ?? ''] ?? {};
@@ -183,6 +195,9 @@ export default function useChatFunctions({
         endpointType,
         overrideConvoId,
         overrideUserMessageId,
+        // 确保data_source_id和project_id包含在endpointOption中
+        ...(latestDataSourceId ? { data_source_id: latestDataSourceId } : {}),
+        ...(latestProjectId ? { project_id: latestProjectId } : {}),
       },
       convo,
     ) as TEndpointOption;

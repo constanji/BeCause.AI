@@ -4,6 +4,7 @@ export interface IMongoProject extends Document {
   name: string;
   promptGroupIds: Types.ObjectId[];
   agentIds: string[];
+  data_source_id?: Types.ObjectId; // 关联的数据源ID
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -24,6 +25,11 @@ const projectSchema = new Schema<IMongoProject>(
       type: [String],
       ref: 'Agent',
       default: [],
+    },
+    data_source_id: {
+      type: Schema.Types.ObjectId,
+      ref: 'DataSource',
+      index: true,
     },
   },
   {

@@ -500,6 +500,41 @@ async function loadAgentTools({ req, res, agent, signal, tool_resources, openAIA
     });
   }
 
+  // 获取conversation信息（如果conversationId存在）
+  let conversation = null;
+  if (req.body?.conversationId) {
+    try {
+      const { getConvo } = require('~/models/Conversation');
+      conversation = await getConvo(req.user.id, req.body.conversationId);
+      
+      // 如果请求体中包含data_source_id（来自localStorage），优先使用请求体中的值
+      // 这样可以确保用户选择数据源后立即生效，即使conversation尚未保存到数据库
+      if (req.body?.data_source_id) {
+        conversation.data_source_id = req.body.data_source_id;
+      } else if (req.body?.endpointOption?.data_source_id) {
+        conversation.data_source_id = req.body.endpointOption.data_source_id;
+      }
+      
+      // 同样处理project_id
+      if (req.body?.project_id) {
+        conversation.project_id = req.body.project_id;
+      } else if (req.body?.endpointOption?.project_id) {
+        conversation.project_id = req.body.endpointOption.project_id;
+      }
+    } catch (error) {
+      logger.warn('[loadAgentTools] 获取conversation失败:', error.message);
+    }
+  }
+  
+  // 如果conversation不存在，但请求体中有data_source_id，创建一个临时conversation对象
+  if (!conversation && (req.body?.data_source_id || req.body?.endpointOption?.data_source_id)) {
+    conversation = {
+      conversationId: req.body?.conversationId || null,
+      data_source_id: req.body?.data_source_id || req.body?.endpointOption?.data_source_id || null,
+      project_id: req.body?.project_id || req.body?.endpointOption?.project_id || null,
+    };
+  }
+
   const { loadedTools, toolContextMap } = await loadTools({
     agent,
     signal,
@@ -516,6 +551,7 @@ async function loadAgentTools({ req, res, agent, signal, tool_resources, openAIA
       uploadImageBuffer,
       returnMetadata: true,
       [Tools.web_search]: webSearchCallbacks,
+      conversation, // 传递conversation信息
     },
     webSearch: appConfig.webSearch,
     fileStrategy: appConfig.fileStrategy,

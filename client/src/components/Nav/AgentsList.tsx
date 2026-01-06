@@ -1,16 +1,20 @@
 import React, { useMemo, useEffect, useState, useCallback } from 'react';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
-import { Bot, GripVertical } from 'lucide-react';
+import { Bot, GripVertical, Database, CheckCircle2 } from 'lucide-react';
 import { useDrag, useDrop } from 'react-dnd';
-import { EModelEndpoint, Constants, SystemRoles, QueryKeys } from '@because/data-provider';
+import { EModelEndpoint, Constants, SystemRoles, QueryKeys, LocalStorageKeys } from '@because/data-provider';
 import { useListAgentsQuery } from '~/data-provider';
+import { useListDataSourcesQuery } from '~/data-provider/DataSources';
 import { useLocalize, useAgentDefaultPermissionLevel, useNewConvo, useAuthContext } from '~/hooks';
+import { useToastContext } from '@because/client';
 import { clearMessagesCache } from '~/utils';
 import { cn } from '~/utils';
 import { getAgentAvatarUrl } from '~/utils/agents';
 import type { Agent } from '@because/data-provider';
+import type { DataSource } from '@because/data-provider';
 import store from '~/store';
+import useLocalStorage from '~/hooks/useLocalStorage';
 
 interface AgentsListProps {
   toggleNav?: () => void;
@@ -51,6 +55,23 @@ export default function AgentsList({ toggleNav }: AgentsListProps) {
   const { conversation } = store.useCreateConversationAtom(0);
   const isAdmin = user?.role === SystemRoles.ADMIN;
   const [agentOrder, setAgentOrder] = useState<string[]>(getAgentOrder());
+  
+  // 数据源列表 - 只显示已启用的数据源
+  const { data: dataSourcesResponse } = useListDataSourcesQuery();
+  const allDataSources = dataSourcesResponse?.data || [];
+  const enabledDataSources = useMemo(
+    () => allDataSources.filter((ds: DataSource) => ds.status === 'active'),
+    [allDataSources],
+  );
+  
+  // 选中的数据源ID（保存到localStorage）
+  const [selectedDataSourceId, setSelectedDataSourceId] = useLocalStorage<string | null>(
+    LocalStorageKeys.LAST_DATA_SOURCE_ID,
+    null,
+  );
+  
+  // 当前选中的数据源
+  const currentDataSourceId = selectedDataSourceId;
   
   // 只获取公开的智能体（管理员选择展示的）
   const { data: agentsResponse } = useListAgentsQuery(
@@ -159,41 +180,92 @@ export default function AgentsList({ toggleNav }: AgentsListProps) {
   }, []);
 
   return (
-    <div className="mb-4 border-t border-border-light pt-4">
-      <div className="mb-2 px-2">
-        <h2 className="text-sm font-semibold text-text-primary">智能体</h2>
-      </div>
-      <div className="rounded-lg border border-border-light bg-surface-secondary p-2">
-        {agents.length === 0 ? (
-          <div className="py-2 text-center text-xs text-text-tertiary">
-            暂无可用智能体
-          </div>
-        ) : (
-          <div className="space-y-1">
-            {agents.map((agent, index) => {
-              // 检查当前 URL 参数或 state 中的 agent_id
-              const urlParams = new URLSearchParams(location.search);
-              const urlAgentId = urlParams.get('agent_id');
-              const isActive =
-                urlAgentId === agent.id ||
-                (location.pathname.includes(`/c/`) && location.state?.agentId === agent.id);
+    <>
+      <div className="mb-4 border-t border-border-light pt-4">
+        <div className="mb-2 px-2">
+          <h2 className="text-sm font-semibold text-text-primary">智能体</h2>
+        </div>
+        <div className="rounded-lg border border-border-light bg-surface-secondary p-2">
+          {agents.length === 0 ? (
+            <div className="py-2 text-center text-xs text-text-tertiary">
+              暂无可用智能体
+            </div>
+          ) : (
+            <div className="space-y-1">
+              {agents.map((agent, index) => {
+                // 检查当前 URL 参数或 state 中的 agent_id
+                const urlParams = new URLSearchParams(location.search);
+                const urlAgentId = urlParams.get('agent_id');
+                const isActive =
+                  urlAgentId === agent.id ||
+                  (location.pathname.includes(`/c/`) && location.state?.agentId === agent.id);
 
-              return (
-                <AgentListItem
-                  key={agent.id}
-                  agent={agent}
-                  index={index}
-                  isActive={isActive}
-                  onClick={() => handleAgentClick(agent)}
-                  moveAgent={moveAgent}
-                  canDrag={isAdmin}
-                />
-              );
-            })}
-          </div>
-        )}
+                return (
+                  <AgentListItem
+                    key={agent.id}
+                    agent={agent}
+                    index={index}
+                    isActive={isActive}
+                    onClick={() => handleAgentClick(agent)}
+                    moveAgent={moveAgent}
+                    canDrag={isAdmin}
+                  />
+                );
+              })}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+      
+      {/* 数据源选择器 - 直接展示已启用的数据源 */}
+      <div className="mb-4 border-t border-border-light pt-4">
+        <div className="mb-2 px-2">
+          <h2 className="text-sm font-semibold text-text-primary">业务列表</h2>
+        </div>
+        <div className="rounded-lg border border-border-light bg-surface-secondary p-2">
+          {enabledDataSources.length === 0 ? (
+            <div className="py-2 text-center text-xs text-text-tertiary">
+              暂无已启用的数据源
+            </div>
+          ) : (
+            <div className="space-y-1">
+              {enabledDataSources.map((dataSource: DataSource) => {
+                const isSelected = currentDataSourceId === dataSource._id;
+                return (
+                  <button
+                    key={dataSource._id}
+                    onClick={() => {
+                      // 直接选择数据源（保存到localStorage）
+                      setSelectedDataSourceId(dataSource._id);
+                    }}
+                    className={cn(
+                      'flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left transition-colors',
+                      isSelected
+                        ? 'bg-surface-active text-text-primary'
+                        : 'text-text-secondary hover:bg-surface-hover',
+                    )}
+                    aria-label={dataSource.name ? `选择数据源: ${dataSource.name}` : '选择数据源'}
+                  >
+                    <Database className="h-4 w-4 flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="truncate text-sm font-medium">{dataSource.name}</span>
+                        {isSelected && (
+                          <CheckCircle2 className="h-3 w-3 flex-shrink-0 text-green-600" />
+                        )}
+                      </div>
+                      <div className="text-xs text-text-tertiary">
+                        {dataSource.type === 'mysql' ? 'MySQL' : 'PostgreSQL'} · {dataSource.database}
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+    </>
   );
 }
 

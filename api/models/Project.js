@@ -1,3 +1,4 @@
+const { logger } = require('@because/data-schemas');
 const { GLOBAL_PROJECT_NAME } = require('@because/data-provider').Constants;
 const { Project } = require('~/db/models');
 
@@ -119,9 +120,47 @@ const removeAgentFromAllProjects = async (agentId) => {
   await Project.updateMany({}, { $pull: { agentIds: agentId } });
 };
 
+/**
+ * Get all projects for a user
+ * @param {string} userId - User ID
+ * @returns {Promise<IMongoProject[]>} Array of projects
+ */
+const getProjects = async function (userId) {
+  try {
+    // 目前项目没有用户关联，返回所有项目
+    // 后续可以根据需要添加用户关联
+    return await Project.find({}).sort({ createdAt: -1 }).lean();
+  } catch (error) {
+    logger.error('[getProjects] Error:', error);
+    throw error;
+  }
+};
+
+/**
+ * Update project data source
+ * @param {string} projectId - Project ID
+ * @param {string|null} dataSourceId - Data source ID (null to remove)
+ * @returns {Promise<IMongoProject>} Updated project
+ */
+const updateProjectDataSource = async function (projectId, dataSourceId) {
+  try {
+    const updateData = dataSourceId ? { data_source_id: dataSourceId } : { $unset: { data_source_id: 1 } };
+    return await Project.findByIdAndUpdate(
+      projectId,
+      updateData,
+      { new: true },
+    ).lean();
+  } catch (error) {
+    logger.error('[updateProjectDataSource] Error:', error);
+    throw error;
+  }
+};
+
 module.exports = {
   getProjectById,
   getProjectByName,
+  getProjects,
+  updateProjectDataSource,
   /* prompts */
   addGroupIdsToProject,
   removeGroupIdsFromProject,
