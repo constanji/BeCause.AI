@@ -78,14 +78,26 @@ class SqlExecutorTool extends Tool {
    * 获取数据源连接池
    */
   async getConnectionPool(dataSourceId) {
+    // 清理数据源ID，确保格式正确
+    const cleanedId = this.cleanDataSourceId(dataSourceId);
+    
+    if (!cleanedId) {
+      throw new Error(`无效的数据源ID: ${dataSourceId}`);
+    }
+
+    logger.info('[SqlExecutorTool] 获取连接池，数据源ID:', { 
+      original: dataSourceId, 
+      cleaned: cleanedId 
+    });
+
     // 如果已有连接池，直接返回
-    if (connectionPools.has(dataSourceId)) {
-      return connectionPools.get(dataSourceId);
+    if (connectionPools.has(cleanedId)) {
+      return connectionPools.get(cleanedId);
     }
 
     // 获取数据源信息
     const getDataSourceByIdFn = loadDataSourceModel();
-    const dataSource = await getDataSourceByIdFn(dataSourceId);
+    const dataSource = await getDataSourceByIdFn(cleanedId);
     if (!dataSource) {
       throw new Error(`数据源不存在: ${dataSourceId}`);
     }
@@ -141,14 +153,14 @@ class SqlExecutorTool extends Tool {
       throw new Error(`不支持的数据库类型: ${dataSource.type}`);
     }
 
-    // 缓存连接池
-    connectionPools.set(dataSourceId, {
+    // 缓存连接池（使用清理后的ID）
+    connectionPools.set(cleanedId, {
       pool,
       dataSource,
     });
 
     logger.info('[SqlExecutorTool] 创建连接池成功:', {
-      dataSourceId,
+      dataSourceId: cleanedId,
       type: dataSource.type,
       database: dataSource.database,
     });
@@ -262,19 +274,47 @@ class SqlExecutorTool extends Tool {
   }
 
   /**
+   * 清理数据源ID字符串，移除多余的引号和空白字符
+   */
+  cleanDataSourceId(id) {
+    if (!id) {
+      return null;
+    }
+    
+    // 如果是对象，尝试提取_id或id字段
+    if (typeof id === 'object') {
+      id = id._id || id.id || id.toString();
+    }
+    
+    // 转换为字符串
+    const str = String(id).trim();
+    
+    // 移除字符串两端的引号（单引号和双引号，可能有多层）
+    let cleaned = str.replace(/^["']+|["']+$/g, '');
+    
+    // 如果还有引号，继续清理（处理双重引号的情况）
+    while (cleaned !== cleaned.replace(/^["']+|["']+$/g, '')) {
+      cleaned = cleaned.replace(/^["']+|["']+$/g, '');
+    }
+    
+    return cleaned || null;
+  }
+
+  /**
    * 获取数据源ID（从输入参数、conversation.project_id或req.body）
    */
   async getDataSourceId(input) {
     // 1. 优先使用输入参数中的data_source_id
     if (input.data_source_id) {
-      return input.data_source_id;
+      return this.cleanDataSourceId(input.data_source_id);
     }
 
     // 2. 从conversation.project_id获取项目，然后从项目获取data_source_id
     if (this.conversation && this.conversation.project_id) {
       try {
         const getProjectByIdFn = loadProjectModel();
-        const project = await getProjectByIdFn(this.conversation.project_id);
+        const projectId = this.cleanDataSourceId(this.conversation.project_id);
+        const project = await getProjectByIdFn(projectId);
         if (project && project.data_source_id) {
           return project.data_source_id.toString();
         }
@@ -285,19 +325,20 @@ class SqlExecutorTool extends Tool {
 
     // 3. 从conversation.data_source_id获取（如果前端直接传递了数据源ID）
     if (this.conversation && this.conversation.data_source_id) {
-      return this.conversation.data_source_id;
+      return this.cleanDataSourceId(this.conversation.data_source_id);
     }
 
     // 4. 从req.body中获取（如果前端通过请求传递）
     if (this.req && this.req.body) {
       if (this.req.body.data_source_id) {
-        return this.req.body.data_source_id;
+        return this.cleanDataSourceId(this.req.body.data_source_id);
       }
       // 如果req.body中有project_id，也尝试获取
       if (this.req.body.project_id) {
         try {
           const getProjectByIdFn = loadProjectModel();
-          const project = await getProjectByIdFn(this.req.body.project_id);
+          const projectId = this.cleanDataSourceId(this.req.body.project_id);
+          const project = await getProjectByIdFn(projectId);
           if (project && project.data_source_id) {
             return project.data_source_id.toString();
           }
@@ -307,7 +348,7 @@ class SqlExecutorTool extends Tool {
       }
     }
 
-    // 4. 如果都没有，返回null
+    // 5. 如果都没有，返回null
     return null;
   }
 

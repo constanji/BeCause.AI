@@ -17,6 +17,7 @@ const BeCauseSkills = require(path.join(projectRoot, 'BeCauseSkills'));
  * 这是一个统一的工具入口，内部集成了 BeCauseSkills 中的所有工具能力：
  * - 意图分类 (intent-classification)
  * - RAG知识检索 (rag-retrieval)
+ * - 数据库Schema获取 (database-schema)
  * - 结果重排序 (reranker)
  * - SQL校验 (sql-validation)
  * - 结果分析 (result-analysis)
@@ -30,14 +31,15 @@ class BeCauseSkillsTool extends Tool {
   description =
     'BeCause问数工具 - 智能问数（自然语言转SQL）的完整能力集。' +
     'Commands: intent-classification (意图分类), rag-retrieval (RAG知识检索), ' +
-    'reranker (结果重排序), sql-validation (SQL校验), result-analysis (结果分析), ' +
-    'sql-executor (SQL执行)。' +
+    'database-schema (数据库Schema获取), reranker (结果重排序), sql-validation (SQL校验), ' +
+    'result-analysis (结果分析), sql-executor (SQL执行)。' +
     '此工具集成了RAG服务、知识库检索、SQL生成与执行等完整问数流程。';
 
   schema = z.object({
     command: z.enum([
       'intent-classification',
       'rag-retrieval',
+      'database-schema',
       'reranker',
       'sql-validation',
       'result-analysis',
@@ -67,6 +69,11 @@ class BeCauseSkillsTool extends Tool {
         userId: this.userId,
         req: this.req,
         conversation: this.conversation, // 传递conversation给RAGRetrievalTool
+      }),
+      'database-schema': new BeCauseSkills.DatabaseSchemaTool({
+        userId: this.userId,
+        req: this.req,
+        conversation: this.conversation, // 传递conversation给DatabaseSchemaTool
       }),
       'reranker': new BeCauseSkills.RerankerTool({
         userId: this.userId,

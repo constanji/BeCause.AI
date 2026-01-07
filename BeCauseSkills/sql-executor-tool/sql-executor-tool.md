@@ -85,18 +85,17 @@ SQL执行工具，直接连接数据库执行SQL查询，支持动态数据源�
 
 ## 数据源配置
 
-数据源信息存储在MongoDB中，Agent配置中包含 `data_source_id` 字段：
+数据源信息存储在MongoDB中，从前端业务列表选择的数据源获取：
 
-```json
-{
-  "agent": {
-    "id": "agent-123",
-    "name": "智能问数Agent",
-    "data_source_id": "datasource-456",
-    "tools": ["sql_executor"]
-  }
-}
-```
+1. **前端选择数据源**：用户在左侧业务列表中选择数据源
+2. **数据源传递**：通过conversation.project_id或conversation.data_source_id传递
+3. **自动连接**：工具自动从MongoDB获取数据源信息并连接数据库
+
+数据源获取优先级：
+1. 输入参数中的`data_source_id`
+2. conversation.project_id → 项目 → 项目的data_source_id
+3. conversation.data_source_id（前端直接传递）
+4. req.body.data_source_id（请求体传递）
 
 ## 使用场景
 
@@ -121,12 +120,13 @@ SQL执行工具，直接连接数据库执行SQL查询，支持动态数据源�
 - 无法动态切换数据源
 
 **新版本**（v2.0）：
-- 从Agent配置中获取数据源信息
+- 从前端业务列表选择的数据源获取数据源信息
 - 直接连接数据库执行SQL
 - 支持动态切换数据源
+- 不再依赖sql-api服务
 
 ### 兼容性
 
-- 如果Agent未配置 `data_source_id`，工具会尝试使用环境变量（向后兼容）
-- 如果环境变量也未配置，工具会返回错误
+- 如果未提供数据源ID，工具会返回错误提示用户选择数据源
+- 工具会自动从conversation或req.body中获取数据源信息
 

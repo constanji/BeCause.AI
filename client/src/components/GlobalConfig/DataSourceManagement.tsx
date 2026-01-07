@@ -245,10 +245,10 @@ export default function DataSourceManagement() {
                     <Button
                       onClick={() => setSemanticModelDataSourceId(dataSource._id)}
                       className="btn btn-neutral border-token-border-light relative flex items-center gap-2 rounded-lg px-3 py-2"
-                      title="语义模型配置"
+                      title="数据库结构配置"
                     >
                       <Database className="h-4 w-4" />
-                      语义模型
+                      数据库结构
                     </Button>
                     <Button
                       onClick={() => handleTestConnection(dataSource._id)}

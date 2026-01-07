@@ -51,6 +51,11 @@ class IntentClassificationTool extends Tool {
       .string()
       .optional()
       .describe('实体ID过滤（数据源ID）'),
+    use_schema_fallback: z
+      .boolean()
+      .optional()
+      .default(true)
+      .describe('当RAG检索不到语义模型时，是否使用database_schema作为后备方案，默认启用'),
   });
 
   constructor(fields = {}) {
@@ -98,13 +103,119 @@ class IntentClassificationTool extends Tool {
   }
 
   /**
+   * 获取数据库Schema（作为RAG检索的后备方案）
+   * 直接连接数据库获取Schema，不依赖sql-api服务
+   */
+  async getDatabaseSchema(dataSourceId = null) {
+    try {
+      // 如果没有提供dataSourceId，尝试获取
+      if (!dataSourceId) {
+        dataSourceId = await this.getEntityId({});
+      }
+
+      if (!dataSourceId) {
+        logger.warn('[IntentClassificationTool] 未提供数据源ID，无法获取Schema');
+        return null;
+      }
+
+      // 延迟加载DatabaseSchemaTool，避免循环依赖
+      let DatabaseSchemaTool = null;
+      try {
+        DatabaseSchemaTool = require('../../database-schema-tool/scripts/DatabaseSchemaTool');
+      } catch (e) {
+        DatabaseSchemaTool = require(path.resolve(__dirname, '../../database-schema-tool/scripts/DatabaseSchemaTool'));
+      }
+
+      // 创建DatabaseSchemaTool实例并调用
+      const schemaTool = new DatabaseSchemaTool({
+        userId: this.userId,
+        req: this.req,
+        conversation: this.conversation,
+      });
+
+      const result = await schemaTool._call({
+        format: 'semantic',
+        data_source_id: dataSourceId,
+      });
+
+      const parsedResult = JSON.parse(result);
+      if (parsedResult.success && parsedResult.semantic_models) {
+        // 转换为checkQueryRelevance需要的格式
+        return {
+          database: parsedResult.database,
+          schema: parsedResult.semantic_models.reduce((acc, model) => {
+            acc[model.name] = {
+              columns: model.columns.map(col => ({
+                column_name: col.name,
+                data_type: col.type,
+                is_nullable: col.nullable ? 'YES' : 'NO',
+                column_key: col.key,
+                column_comment: col.comment,
+                column_default: col.default,
+              })),
+              indexes: model.indexes || [],
+            };
+            return acc;
+          }, {}),
+        };
+      }
+
+      return null;
+    } catch (error) {
+      logger.warn('[IntentClassificationTool] 获取数据库Schema失败:', error.message);
+      return null;
+    }
+  }
+
+  /**
+   * 检查查询是否与数据库表/列相关
+   */
+  checkQueryRelevance(query, schemaData) {
+    if (!schemaData) return { relevant: false };
+
+    const queryLower = query.toLowerCase();
+    const tableNames = [];
+    const columnNames = [];
+
+    // 提取所有表名和列名
+    if (schemaData.schema) {
+      for (const [tableName, tableInfo] of Object.entries(schemaData.schema)) {
+        tableNames.push(tableName.toLowerCase());
+        if (tableInfo.columns) {
+          columnNames.push(...tableInfo.columns.map(col => col.column_name.toLowerCase()));
+        }
+      }
+    } else if (schemaData.table) {
+      tableNames.push(schemaData.table.toLowerCase());
+      if (schemaData.columns) {
+        columnNames.push(...schemaData.columns.map(col => col.column_name.toLowerCase()));
+      }
+    }
+
+    // 检查查询中是否包含表名或列名
+    const matchedTables = tableNames.filter(tableName => 
+      queryLower.includes(tableName)
+    );
+    const matchedColumns = columnNames.filter(columnName => 
+      queryLower.includes(columnName)
+    );
+
+    return {
+      relevant: matchedTables.length > 0 || matchedColumns.length > 0,
+      matched_tables: matchedTables,
+      matched_columns: matchedColumns.slice(0, 5), // 只返回前5个匹配的列
+    };
+  }
+
+  /**
    * 基于RAG结果和查询文本分析意图
    */
-  analyzeIntent(query, ragResults) {
+  analyzeIntent(query, ragResults, schemaRelevance = null) {
     const ragContext = {
       semantic_models_found: false,
       qa_pairs_found: false,
       business_knowledge_found: false,
+      schema_relevance: schemaRelevance,
     };
 
     if (ragResults && ragResults.results) {
@@ -124,14 +235,21 @@ class IntentClassificationTool extends Tool {
       intent = 'TEXT_TO_SQL';
       confidence = 0.8;
       reasoning = '检索到相关数据库语义模型';
-    } else if (ragContext.qa_pairs_found || ragContext.business_knowledge_found) {
-      // 如果找到QA对或业务知识，可能是GENERAL
+    } 
+    // 如果RAG检索失败但通过database_schema发现查询与数据库相关
+    else if (schemaRelevance && schemaRelevance.relevant) {
+      intent = 'TEXT_TO_SQL';
+      confidence = 0.7;
+      reasoning = `查询与数据库表/列相关（${schemaRelevance.matched_tables.length}个表，${schemaRelevance.matched_columns.length}个列）`;
+    }
+    // 如果找到QA对或业务知识，可能是GENERAL
+    else if (ragContext.qa_pairs_found || ragContext.business_knowledge_found) {
       intent = 'GENERAL';
       confidence = 0.6;
       reasoning = '检索到相关问答或业务知识';
     } else {
       // 检查查询文本中的关键词
-      const sqlKeywords = ['查询', '统计', '显示', '列出', '计算', 'select', 'count', 'sum'];
+      const sqlKeywords = ['查询', '统计', '显示', '列出', '计算', 'select', 'count', 'sum', 'avg', 'max', 'min'];
       const hasSqlKeywords = sqlKeywords.some(keyword => 
         query.toLowerCase().includes(keyword.toLowerCase())
       );
@@ -156,19 +274,30 @@ class IntentClassificationTool extends Tool {
   }
 
   /**
+   * 清理数据源ID字符串，移除多余的引号和空白字符
+   */
+  cleanDataSourceId(id) {
+    if (!id || typeof id !== 'string') {
+      return id;
+    }
+    // 移除字符串两端的引号和空白字符
+    return id.trim().replace(/^["']+|["']+$/g, '');
+  }
+
+  /**
    * 获取entityId（从conversation或input）
    */
   async getEntityId(input) {
     // 优先使用input中的entity_id
     if (input.entity_id) {
-      return input.entity_id;
+      return this.cleanDataSourceId(input.entity_id);
     }
 
     // 从conversation中获取数据源ID
     if (this.conversation) {
       // 优先使用conversation.data_source_id
       if (this.conversation.data_source_id) {
-        return this.conversation.data_source_id;
+        return this.cleanDataSourceId(this.conversation.data_source_id);
       }
       
       // 如果conversation有project_id，从项目获取data_source_id
@@ -180,7 +309,8 @@ class IntentClassificationTool extends Tool {
           } catch (e) {
             getProjectById = require(path.resolve(__dirname, '../../../api/models/Project')).getProjectById;
           }
-          const project = await getProjectById(this.conversation.project_id);
+          const projectId = this.cleanDataSourceId(this.conversation.project_id);
+          const project = await getProjectById(projectId);
           if (project && project.data_source_id) {
             return project.data_source_id.toString();
           }
@@ -197,7 +327,7 @@ class IntentClassificationTool extends Tool {
    * @override
    */
   async _call(input) {
-    const { query, use_rag = true, top_k = 5 } = input;
+    const { query, use_rag = true, top_k = 5, use_schema_fallback = true } = input;
 
     try {
       logger.info('[IntentClassificationTool] 开始意图分类:', { query: query.substring(0, 50) });
@@ -209,7 +339,30 @@ class IntentClassificationTool extends Tool {
         ragResults = await this.retrieveRAGKnowledge(query, userId, top_k, entityId);
       }
 
-      const analysis = this.analyzeIntent(query, ragResults);
+      // 如果RAG检索不到语义模型，且启用了schema后备方案，尝试获取数据库schema
+      let schemaRelevance = null;
+      const ragContext = ragResults && ragResults.results 
+        ? { semantic_models_found: ragResults.results.some(r => r.type === 'semantic_model') }
+        : { semantic_models_found: false };
+
+      if (use_schema_fallback && !ragContext.semantic_models_found) {
+        try {
+          const entityId = await this.getEntityId(input);
+          const schemaData = await this.getDatabaseSchema(entityId);
+          if (schemaData) {
+            schemaRelevance = this.checkQueryRelevance(query, schemaData);
+            logger.info('[IntentClassificationTool] 使用database_schema后备方案:', {
+              relevant: schemaRelevance.relevant,
+              matched_tables: schemaRelevance.matched_tables.length,
+              matched_columns: schemaRelevance.matched_columns.length,
+            });
+          }
+        } catch (error) {
+          logger.warn('[IntentClassificationTool] Schema后备方案失败:', error.message);
+        }
+      }
+
+      const analysis = this.analyzeIntent(query, ragResults, schemaRelevance);
 
       const result = {
         intent: analysis.intent,

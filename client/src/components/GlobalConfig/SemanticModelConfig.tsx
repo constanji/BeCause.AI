@@ -4,7 +4,7 @@ import { useLocalize, useAuthContext } from '~/hooks';
 import { ArrowLeft, Database, RefreshCw, Download, FileText } from 'lucide-react';
 import { cn } from '~/utils';
 import { dataService } from '@because/data-provider';
-import type { IDataSource } from '@because/data-provider';
+import type { DataSource } from '@because/data-provider';
 
 interface SemanticModelConfigProps {
   dataSourceId: string;
@@ -34,7 +34,7 @@ interface DatabaseSchema {
 export default function SemanticModelConfig({ dataSourceId, onBack }: SemanticModelConfigProps) {
   const localize = useLocalize();
   const { showToast } = useToastContext();
-  const [dataSource, setDataSource] = useState<IDataSource | null>(null);
+  const [dataSource, setDataSource] = useState<DataSource | null>(null);
   const [schema, setSchema] = useState<DatabaseSchema | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadingSchema, setLoadingSchema] = useState(false);
@@ -51,6 +51,10 @@ export default function SemanticModelConfig({ dataSourceId, onBack }: SemanticMo
       setLoading(true);
       const response = await dataService.getDataSourceById({ id: dataSourceId });
       setDataSource(response.data);
+      // 数据源加载成功后，自动加载数据库结构
+      if (response.data) {
+        loadSchema();
+      }
     } catch (error) {
       showToast({
         message: `加载数据源失败: ${error instanceof Error ? error.message : '未知错误'}`,
@@ -174,7 +178,7 @@ export default function SemanticModelConfig({ dataSourceId, onBack }: SemanticMo
             返回
           </Button>
           <div>
-            <h2 className="text-xl font-semibold text-text-primary">语义模型配置</h2>
+            <h2 className="text-xl font-semibold text-text-primary">数据源结构</h2>
             <p className="mt-1 text-sm text-text-secondary">
               {dataSource.name} ({dataSource.type.toUpperCase()})
             </p>
@@ -221,19 +225,25 @@ export default function SemanticModelConfig({ dataSourceId, onBack }: SemanticMo
         {!schema ? (
           <div className="flex h-full items-center justify-center">
             <div className="text-center">
-              <p className="text-text-secondary mb-4">尚未加载数据库结构</p>
-              <Button
-                onClick={loadSchema}
-                disabled={loadingSchema}
-                className="btn btn-primary relative flex items-center gap-2 rounded-lg px-3 py-2"
-              >
-                {loadingSchema ? (
-                  <Spinner className="h-4 w-4" />
-                ) : (
+              <p className="text-text-secondary mb-4">
+                {loadingSchema ? '正在加载数据库结构...' : '尚未加载数据库结构'}
+              </p>
+              {!loadingSchema && (
+                <Button
+                  onClick={loadSchema}
+                  disabled={loadingSchema}
+                  className="btn btn-primary relative flex items-center gap-2 rounded-lg px-3 py-2"
+                >
                   <Database className="h-4 w-4" />
-                )}
-                {loadingSchema ? '加载中...' : '加载数据库结构'}
-              </Button>
+                  加载数据库结构
+                </Button>
+              )}
+              {loadingSchema && (
+                <div className="flex items-center justify-center gap-2">
+                  <Spinner className="h-4 w-4" />
+                  <span className="text-text-secondary">加载中...</span>
+                </div>
+              )}
             </div>
           </div>
         ) : (
