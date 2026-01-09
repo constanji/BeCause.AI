@@ -33,7 +33,7 @@ class Speckit extends Tool {
     'analyze (consistency analysis), checklist (generate checklist), constitution (manage project principles), ' +
     'write_file (write content to a file in specs directory), ' +
     'read_file (read content from a file in specs or memory directory), ' +
-    'generate_templates (generate a complete template system in .specoutput directory). ' +
+    'generate_templates (generate a complete template system in specs directory). ' +
     'Use command name and provide arguments as needed.';
 
   schema = z.object({
@@ -518,9 +518,9 @@ class Speckit extends Tool {
       const documentTemplateTemplateTemplate = await this.loadTemplate('document-template-template.md', true).catch(() => null);
 
       const repoRoot = await this.findRepoRoot();
-      const specOutputDir = path.join(repoRoot, '.specoutput');
+      const specOutputDir = path.join(repoRoot, 'specs');
 
-      // Ensure .specoutput directory exists
+      // Ensure specs directory exists
       try {
         await fs.mkdir(specOutputDir, { recursive: true });
       } catch (err) {
@@ -533,7 +533,7 @@ class Speckit extends Tool {
         user_requirements: userRequirements,
         output_directory: specOutputDir,
         note: 'This command requires LLM-based execution following the meta-template-generator command template. ' +
-              'The LLM should read the command template and generate a complete template system in .specoutput directory.',
+              'The LLM should read the command template and generate a complete template system in specs directory.',
         command_template: commandTemplate, // Full template for LLM context
         reference_templates: {
           document_template_preview: documentTemplateTemplate ? documentTemplateTemplate.substring(0, 500) + '...' : null,
@@ -544,7 +544,7 @@ class Speckit extends Tool {
         instructions: [
           '1. Read and understand the meta-template-generator command template',
           '2. Analyze the user requirements: "' + userRequirements + '"',
-          '3. Create a task folder in .specoutput directory',
+          '3. Create a task folder in specs directory',
           '4. Generate all necessary template files based on the requirements',
           '5. Follow the structure and patterns defined in the command template',
           '6. Use /speckit.write_file to create all generated template files',

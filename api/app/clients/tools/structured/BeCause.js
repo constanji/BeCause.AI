@@ -52,7 +52,7 @@ class BeCause extends Tool {
 
   constructor(fields = {}) {
     super();
-    // 和 LBchat 中保持一致：projectRoot 用于在服务里查找 BeCauseNode 目录
+    // 和 LBchat 中保持一致：projectRoot 用于在服务里查找 .because 目录
     this.projectRoot = fields.projectRoot || process.cwd();
     this.service = new BeCauseService(this.projectRoot);
   }
@@ -103,7 +103,7 @@ class BeCause extends Tool {
             '1. 阅读命令模板，理解执行步骤和变量说明（注意：命令模板包含RAG检索步骤）',
             '2. 执行RAG知识检索：调用 POST /api/rag/query 检索相关语义模型、QA对、同义词、业务知识',
             '3. 从检索结果提取 rag_semantic_models, rag_qa_pairs, rag_synonyms, rag_business_knowledge',
-            `4. 从 BeCauseNode/templates/prompt-templates/${templateMode}/ 加载对应的 system/user Prompt 模板`,
+            `4. 从 .because/templates/prompt-templates/${templateMode}/ 加载对应的 system/user Prompt 模板`,
             '5. 准备变量（优先使用RAG变量：rag_semantic_models等，传统变量仅作为回退）',
             '6. 使用 Jinja2 或等价模板能力替换变量，构造最终的 Prompt',
             '7. 调用 LLM 生成 ANSI SQL',
@@ -375,14 +375,14 @@ class BeCause extends Tool {
       };
       logger.info(`[BeCause工具调用] 输入参数: ${JSON.stringify(inputParams, null, 2)}`);
 
-      // 检查 BeCauseNode 目录是否存在
+      // 检查 .because 目录是否存在
       const isAvailable = await this.service.isAvailable();
       if (!isAvailable) {
         return JSON.stringify(
           {
             success: false,
             error:
-              'BeCauseNode 目录未找到。请确保在项目根目录或上级目录中存在 BeCauseNode，并且其中包含 commands 与 templates/prompt-templates。',
+              '.because 目录未找到。请确保在项目根目录或上级目录中存在 .because，并且其中包含 commands 与 templates/prompt-templates。',
           },
           null,
           2,

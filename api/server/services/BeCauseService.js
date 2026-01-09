@@ -5,7 +5,7 @@ const { logger } = require('@because/data-schemas');
 /**
  * BeCause Service - Handles BeCause command templates and prompt templates
  *
- * 从 LBchat / BeCause 项目迁移而来，用于在 Node.js 后端中访问 BeCauseNode 目录下的
+ * 从 LBchat / BeCause 项目迁移而来，用于在 Node.js 后端中访问 .because 目录下的
  * command 模板和 prompt 模板，配合 BeCause 工具实现 Text-to-SQL 提示词系统。
  *
  * 重要更新（v2.0.0）：
@@ -18,20 +18,20 @@ const { logger } = require('@because/data-schemas');
 class BeCauseService {
   constructor(projectRoot = process.cwd()) {
     this.projectRoot = projectRoot;
-    this.becauseNodeDir = path.join(projectRoot, 'BeCauseNode');
+    this.becauseNodeDir = path.join(projectRoot, '.because');
     this.commandsDir = path.join(this.becauseNodeDir, 'commands');
     this.templatesDir = path.join(this.becauseNodeDir, 'templates', 'prompt-templates');
   }
 
   /**
-   * 向上查找 BeCauseNode 目录
+   * 向上查找 .because 目录
    */
   async findBeCauseNodeDir(startPath = this.projectRoot) {
     let currentPath = path.resolve(startPath);
     const root = path.parse(currentPath).root;
 
     while (currentPath !== root) {
-      const becauseNodePath = path.join(currentPath, 'BeCauseNode');
+      const becauseNodePath = path.join(currentPath, '.because');
 
       try {
         await fs.access(becauseNodePath);
@@ -48,7 +48,7 @@ class BeCauseService {
   }
 
   /**
-   * 检查 BeCauseNode 是否可用
+   * 检查 .because 目录是否可用
    */
   async isAvailable() {
     try {
@@ -213,7 +213,7 @@ class BeCauseService {
   }
 
   /**
-   * 读取 BeCauseNode 自带的 README
+   * 读取 .because 目录自带的 README
    */
   async readREADME() {
     const becauseNodeDir = await this.findBeCauseNodeDir();
