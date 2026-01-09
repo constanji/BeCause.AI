@@ -288,13 +288,13 @@ class RAGService {
   /**
    * 获取知识条目列表
    * @param {Object} params
-   * @param {string} params.userId - 用户ID
+   * @param {string} [params.userId] - 用户ID（可选，不传递则查询所有用户的知识，支持共享知识库）
    * @param {Object} [params.filters] - 过滤条件
    * @returns {Promise<Array>} 知识条目数组
    */
   async getKnowledgeList({ userId, filters = {} }) {
     return await this.knowledgeBaseService.getKnowledgeEntries({
-      userId,
+      userId: userId || undefined, // 如果userId为undefined，则不进行用户过滤，支持共享知识库
       ...filters,
     });
   }

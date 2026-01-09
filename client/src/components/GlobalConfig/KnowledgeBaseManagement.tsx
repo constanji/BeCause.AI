@@ -2962,12 +2962,32 @@ function RAGTestModal({ dataSourceId, onClose }: RAGTestModalProps) {
       }
 
       const data = await response.json();
-      setResults(data.results || []);
+      const allResults = data.results || [];
+      
+      // 调试：打印相似度分布
+      if (allResults.length > 0) {
+        const scores = allResults.map(r => r.score || r.similarity || 0);
+        const minScore = Math.min(...scores);
+        const maxScore = Math.max(...scores);
+        const avgScore = scores.reduce((a, b) => a + b, 0) / scores.length;
+        console.log('[RAG测试] 相似度分布:', {
+          总数: allResults.length,
+          最低: (minScore * 100).toFixed(1) + '%',
+          最高: (maxScore * 100).toFixed(1) + '%',
+          平均: (avgScore * 100).toFixed(1) + '%',
+          分布: scores.map(s => (s * 100).toFixed(1) + '%').join(', '),
+        });
+      }
+      
+      setResults(allResults);
       setMetadata(data.metadata || null);
 
-      if (data.results && data.results.length > 0) {
+      if (allResults.length > 0) {
+        const scoreRange = allResults.length > 1 
+          ? `相似度范围: ${(Math.min(...allResults.map(r => r.score || r.similarity || 0)) * 100).toFixed(1)}% - ${(Math.max(...allResults.map(r => r.score || r.similarity || 0)) * 100).toFixed(1)}%`
+          : '';
         showToast({
-          message: `成功检索到 ${data.results.length} 条结果`,
+          message: `成功检索到 ${allResults.length} 条结果${scoreRange ? `，${scoreRange}` : ''}`,
           status: 'success',
         });
       } else {
@@ -3087,9 +3107,9 @@ function RAGTestModal({ dataSourceId, onClose }: RAGTestModalProps) {
                         <span className="text-xs font-medium px-2 py-1 rounded bg-primary/20 text-primary">
                           {getTypeLabel(result.type)}
                         </span>
-                        {result.score !== undefined && (
+                        {(result.score !== undefined || result.similarity !== undefined) && (
                           <span className="text-xs text-text-tertiary">
-                            相似度: {(result.score * 100).toFixed(1)}%
+                            相似度: {((result.score || result.similarity || 0) * 100).toFixed(1)}%
                           </span>
                         )}
                       </div>

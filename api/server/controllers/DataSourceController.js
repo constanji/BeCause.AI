@@ -374,11 +374,11 @@ async function getDatabaseSchema(config) {
 /**
  * 获取所有数据源
  * @route GET /api/config/data-sources
+ * 返回所有数据源
  */
 async function getDataSourcesHandler(req, res) {
   try {
-    const { id: userId } = req.user;
-    const dataSources = await getDataSources({ createdBy: userId });
+    const dataSources = await getDataSources({});
 
     // 移除密码字段
     const sanitizedDataSources = dataSources.map(({ password, ...rest }) => rest);

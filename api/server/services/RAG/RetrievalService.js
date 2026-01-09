@@ -107,7 +107,7 @@ class RetrievalService {
         try {
           const searchTypes = types && types.length > 0 ? types.join(', ') : '全部类型';
           const isolationInfo = entityId ? `, entityId: ${entityId} (数据源隔离)` : ' (无数据源隔离)';
-          logger.info(`[RetrievalService] 开始在向量数据库中搜索相似向量 (类型: ${searchTypes}, topK: ${topK * 2}, minScore: ${minScore})${isolationInfo} - 已移除user_id隔离`);
+          logger.info(`[RetrievalService] 开始在向量数据库中搜索相似向量 (类型: ${searchTypes}, topK: ${topK * 2}, minScore: ${minScore})${isolationInfo}`);
           const vectorResults = await this.vectorDBService.searchSimilar({
             queryEmbedding,
             types,
@@ -116,7 +116,7 @@ class RetrievalService {
             minScore,
           });
 
-          // 从 MongoDB 获取完整信息（已移除user过滤，支持共享知识库）
+          // 从 MongoDB 获取完整信息
           if (vectorResults.length > 0) {
             const knowledgeEntryIds = vectorResults.map(r => r.knowledgeEntryId);
             const knowledgeEntries = await KnowledgeEntry.find({
@@ -156,7 +156,7 @@ class RetrievalService {
         }
       }
 
-      // 3. 回退到 MongoDB 中的向量相似度计算（已移除user过滤，支持共享知识库）
+      // 3. 回退到 MongoDB 中的向量相似度计算
       logger.info('[RetrievalService] 使用MongoDB进行向量相似度计算（向量数据库不可用或回退）');
       const queryConditions = {};
 

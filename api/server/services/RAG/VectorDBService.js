@@ -520,7 +520,7 @@ class VectorDBService {
       const allTypes = ['semantic_model', 'qa_pair', 'synonym', 'business_knowledge'];
       const searchTypes = types && types.length > 0 ? types : allTypes;
       const isolationInfo = entityId ? `, entityId: ${entityId} (数据源隔离)` : ' (无数据源隔离)';
-      logger.info(`[VectorDBService] 开始向量相似度搜索 (类型数: ${searchTypes.length}, topK: ${topK}, minScore: ${minScore})${isolationInfo} - 已移除user_id隔离，支持共享知识库`);
+      logger.info(`[VectorDBService] 开始向量相似度搜索 (类型数: ${searchTypes.length}, topK: ${topK}, minScore: ${minScore})${isolationInfo}`);
 
       // 按照 DAT 架构，从每个类型的独立表中搜索
       const searchPromises = searchTypes.map(async (type) => {

@@ -136,10 +136,12 @@ const addKnowledgeBatch = async (req, res) => {
 /**
  * 获取知识条目列表控制器
  * GET /api/rag/knowledge
+ * 支持共享知识库：不传递userId，允许所有用户查看所有知识条目（按entityId过滤）
  */
 const getKnowledgeList = async (req, res) => {
   try {
-    const userId = req.user.id;
+    // 不传递userId，支持共享知识库
+    // 如果需要用户隔离，可以通过entityId进行数据源级别的隔离
     const {
       type,
       entityId,
@@ -157,7 +159,7 @@ const getKnowledgeList = async (req, res) => {
     }
 
     const results = await ragService.getKnowledgeList({
-      userId,
+      userId: undefined, // 不传递userId，支持共享知识库
       filters: {
         ...filters,
         includeChildren: includeChildren === 'true',
