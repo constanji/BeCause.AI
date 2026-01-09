@@ -8,8 +8,7 @@ import MCPManagement from './MCPManagement';
 import EndpointsConfig from './EndpointsConfig';
 import UsersManagement from './UsersManagement';
 import FeaturesManagement from './FeaturesManagement';
-import KnowledgeBaseManagement from './KnowledgeBaseManagement';
-import DataSourceManagement from './DataSourceManagement';
+import AvailableToolsManagement from './AvailableToolsManagement';
 
 interface GlobalConfigContentProps {
   startupConfig?: TStartupConfig;
@@ -22,9 +21,7 @@ type TabType =
   | 'mcp'
   | 'availableTools'
   | 'users'
-  | 'features'
-  | 'knowledgeBase'
-  | 'dataSources';
+  | 'features';
 
 const isValidTab = (tab: string | null): tab is TabType => {
   return (
@@ -34,9 +31,7 @@ const isValidTab = (tab: string | null): tab is TabType => {
     tab === 'mcp' ||
     tab === 'availableTools' ||
     tab === 'users' ||
-    tab === 'features' ||
-    tab === 'knowledgeBase' ||
-    tab === 'dataSources'
+    tab === 'features'
   );
 };
 
@@ -73,6 +68,11 @@ export default function GlobalConfigContent({ startupConfig: propStartupConfig }
       description: '管理所有智能体，设置是否展示给用户',
     },
     {
+      id: 'availableTools',
+      label: '可用工具',
+      description: '查看当前已注册的工具列表',
+    },
+    {
       id: 'mcp',
       label: 'MCP管理',
       description: '查看和管理MCP服务器的连接状态',
@@ -86,16 +86,6 @@ export default function GlobalConfigContent({ startupConfig: propStartupConfig }
       id: 'features',
       label: '初始界面配置',
       description: '管理初始界面的欢迎语和模型',
-    },
-    {
-      id: 'dataSources',
-      label: '数据源管理',
-      description: '管理数据库连接配置，支持 MySQL 和 PostgreSQL',
-    },
-    {
-      id: 'knowledgeBase',
-      label: '知识库管理',
-      description: '管理向量数据库中的语义模型、QA对、同义词和业务知识',
     },
   ];
 
@@ -136,6 +126,11 @@ export default function GlobalConfigContent({ startupConfig: propStartupConfig }
             <AgentsManagement />
           </div>
         )}
+        {activeTab === 'availableTools' && (
+          <div className="h-full overflow-hidden px-4 py-4">
+            <AvailableToolsManagement />
+          </div>
+        )}
         {activeTab === 'mcp' && (
           <div className="h-full overflow-hidden px-4 py-4" key="mcp-management">
             <MCPManagement startupConfig={startupConfig} />
@@ -149,16 +144,6 @@ export default function GlobalConfigContent({ startupConfig: propStartupConfig }
         {activeTab === 'features' && (
           <div className="h-full overflow-hidden px-4 py-4">
             <FeaturesManagement startupConfig={startupConfig} />
-          </div>
-        )}
-        {activeTab === 'dataSources' && (
-          <div className="h-full overflow-hidden px-4 py-4">
-            <DataSourceManagement />
-          </div>
-        )}
-        {activeTab === 'knowledgeBase' && (
-          <div className="h-full overflow-hidden px-4 py-4">
-            <KnowledgeBaseManagement />
           </div>
         )}
       </div>

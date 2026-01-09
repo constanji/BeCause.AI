@@ -2,7 +2,7 @@ import { useState, memo } from 'react';
 import { useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import * as Select from '@ariakit/react/select';
-import { FileText, LogOut, Settings as SettingsIcon } from 'lucide-react';
+import { FileText, LogOut, Settings as SettingsIcon, Database } from 'lucide-react';
 import { LinkIcon, GearIcon, DropdownMenuSeparator, Avatar } from '@because/client';
 import { SystemRoles } from '@because/data-provider';
 import { useGetStartupConfig, useGetUserBalance } from '~/data-provider';
@@ -92,14 +92,24 @@ function AccountSettings() {
           {localize('com_nav_settings')}
         </Select.SelectItem>
         {isAdmin && (
-          <Select.SelectItem
-            value=""
-            onClick={() => navigate('/global-config')}
-            className="select-item text-sm"
-          >
-            <SettingsIcon className="icon-md" aria-hidden="true" />
-            Agent平台
-          </Select.SelectItem>
+          <>
+            <Select.SelectItem
+              value=""
+              onClick={() => navigate('/global-config')}
+              className="select-item text-sm"
+            >
+              <SettingsIcon className="icon-md" aria-hidden="true" />
+              Agent平台
+            </Select.SelectItem>
+            <Select.SelectItem
+              value=""
+              onClick={() => navigate('/asset-center')}
+              className="select-item text-sm"
+            >
+              <Database className="icon-md" aria-hidden="true" />
+              资产中心
+            </Select.SelectItem>
+          </>
         )}
         <DropdownMenuSeparator />
         <Select.SelectItem

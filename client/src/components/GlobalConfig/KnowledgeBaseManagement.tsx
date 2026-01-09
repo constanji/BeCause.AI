@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Database, MessageSquare, BookOpen, FileText, Plus, Trash2, Eye, Upload, X, ChevronRight, ChevronDown, Folder, FolderOpen, Server, Pencil, Sparkles, Bot } from 'lucide-react';
+import { Database, MessageSquare, BookOpen, FileText, Plus, Trash2, Eye, Upload, X, ChevronRight, ChevronDown, Folder, FolderOpen, Server, Pencil, Sparkles, Bot, FileUp, TestTube } from 'lucide-react';
 import * as yaml from 'js-yaml';
 import { Button, useToastContext, Spinner } from '@because/client';
 import {
@@ -9,8 +9,9 @@ import {
 } from '~/data-provider';
 import { useUpdateKnowledgeMutation } from '~/data-provider/KnowledgeBase';
 import { useListDataSourcesQuery } from '~/data-provider/DataSources';
-import { useUploadFileMutation } from '~/data-provider/Files';
+import { useUploadFileMutation, useFileDownload } from '~/data-provider/Files';
 import { useListAgentsQuery } from '~/data-provider';
+import { useAuthContext } from '~/hooks/AuthContext';
 import { EToolResources, EModelEndpoint, Constants, QueryKeys } from '@because/data-provider';
 import type { DataSource, Agent } from '@because/data-provider';
 import { dataService } from '@because/data-provider';
@@ -62,6 +63,7 @@ export default function KnowledgeBaseManagement() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState<KnowledgeEntry | null>(null);
   const [showViewModal, setShowViewModal] = useState<KnowledgeEntry | null>(null);
+  const [showRAGTestModal, setShowRAGTestModal] = useState(false);
   const [selectedDataSourceId, setSelectedDataSourceId] = useState<string | null>(null);
 
   // 获取数据源列表
@@ -205,16 +207,28 @@ export default function KnowledgeBaseManagement() {
             </button>
           ))}
         </div>
-        <Button
-          type="button"
-          onClick={() => setShowAddModal(true)}
-          className="btn btn-primary relative flex items-center gap-2 rounded-lg px-3 py-2"
-          disabled={!selectedDataSourceId}
-          title={!selectedDataSourceId ? '请先选择数据源' : ''}
-        >
-          <Plus className="h-4 w-4" />
-          添加{activeTabConfig?.label}
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            type="button"
+            onClick={() => setShowRAGTestModal(true)}
+            className="btn btn-secondary relative flex items-center gap-2 rounded-lg px-3 py-2"
+            disabled={!selectedDataSourceId}
+            title={!selectedDataSourceId ? '请先选择数据源' : ''}
+          >
+            <TestTube className="h-4 w-4" />
+            RAG测试
+          </Button>
+          <Button
+            type="button"
+            onClick={() => setShowAddModal(true)}
+            className="btn btn-primary relative flex items-center gap-2 rounded-lg px-3 py-2"
+            disabled={!selectedDataSourceId}
+            title={!selectedDataSourceId ? '请先选择数据源' : ''}
+          >
+            <Plus className="h-4 w-4" />
+            添加{activeTabConfig?.label}
+          </Button>
+        </div>
       </div>
 
       {/* 内容区域 */}
@@ -239,11 +253,16 @@ export default function KnowledgeBaseManagement() {
             </div>
           </div>
         ) : (
-          <div className="space-y-2">
+          <div className={cn(
+            activeTab === 'qa_pair' || activeTab === 'synonym'
+              ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'
+              : 'space-y-2'
+          )}>
             {knowledgeEntries.map((entry) => (
               <KnowledgeEntryCard
                 key={entry._id}
                 entry={entry}
+                activeTab={activeTab}
                 onView={(entry) => setShowViewModal(entry)}
                 onEdit={(entry) => setShowEditModal(entry)}
                 onDelete={() => handleDelete(entry._id)}
@@ -255,13 +274,25 @@ export default function KnowledgeBaseManagement() {
 
       {/* 添加模态框 */}
       {showAddModal && selectedDataSourceId && (
-        <AddKnowledgeModal
-          type={activeTab}
-          dataSourceId={selectedDataSourceId}
-          onClose={() => setShowAddModal(false)}
-          onAdd={(payload) => addMutation.mutate(payload)}
-          isLoading={addMutation.isLoading}
-        />
+        <>
+          {(activeTab === 'qa_pair' || activeTab === 'synonym') ? (
+            <BatchAddKnowledgeModal
+              type={activeTab as 'qa_pair' | 'synonym'}
+              dataSourceId={selectedDataSourceId}
+              onClose={() => setShowAddModal(false)}
+              onAdd={(payload) => addMutation.mutate(payload)}
+              isLoading={addMutation.isLoading}
+            />
+          ) : (
+            <AddKnowledgeModal
+              type={activeTab}
+              dataSourceId={selectedDataSourceId}
+              onClose={() => setShowAddModal(false)}
+              onAdd={(payload) => addMutation.mutate(payload)}
+              isLoading={addMutation.isLoading}
+            />
+          )}
+        </>
       )}
 
       {/* 编辑模态框 */}
@@ -279,21 +310,31 @@ export default function KnowledgeBaseManagement() {
       {showViewModal && (
         <ViewKnowledgeModal entry={showViewModal} onClose={() => setShowViewModal(null)} />
       )}
+
+      {/* RAG测试模态框 */}
+      {showRAGTestModal && selectedDataSourceId && (
+        <RAGTestModal
+          dataSourceId={selectedDataSourceId}
+          onClose={() => setShowRAGTestModal(false)}
+        />
+      )}
     </div>
   );
 }
 
 interface KnowledgeEntryCardProps {
   entry: KnowledgeEntry;
+  activeTab: KnowledgeType;
   onView: (entry: KnowledgeEntry) => void;
   onEdit: (entry: KnowledgeEntry) => void;
   onDelete: () => void;
 }
 
-function KnowledgeEntryCard({ entry, onView, onEdit, onDelete }: KnowledgeEntryCardProps) {
+function KnowledgeEntryCard({ entry, activeTab, onView, onEdit, onDelete }: KnowledgeEntryCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const hasChildren = entry.children && entry.children.length > 0;
   const isDatabaseLevel = entry.metadata?.is_database_level === true;
+  const isCompactView = activeTab === 'qa_pair' || activeTab === 'synonym';
 
   // 根据知识类型获取对应的图标
   const getEntryIcon = () => {
@@ -316,6 +357,83 @@ function KnowledgeEntryCard({ entry, onView, onEdit, onDelete }: KnowledgeEntryC
     // 默认图标
     return <Database className="h-4 w-4 text-text-secondary" />;
   };
+
+  // QA对和同义词的紧凑显示
+  if (isCompactView) {
+    const question = entry.metadata?.question || '';
+    const answer = entry.metadata?.answer || '';
+    const noun = entry.metadata?.noun || '';
+    const synonyms = Array.isArray(entry.metadata?.synonyms) 
+      ? entry.metadata.synonyms.join(', ')
+      : entry.metadata?.synonyms || '';
+
+    return (
+      <div className="rounded-lg border border-border-light bg-surface-secondary p-3 transition-colors hover:bg-surface-hover">
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex-1 min-w-0">
+            {activeTab === 'qa_pair' ? (
+              <>
+                <div className="flex items-start gap-2 mb-1">
+                  <MessageSquare className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-text-primary line-clamp-2">
+                      <span className="text-text-tertiary">Q:</span> {question || entry.title.replace('QA: ', '')}
+                    </p>
+                    <p className="text-xs text-text-secondary mt-1 line-clamp-2">
+                      <span className="text-text-tertiary">A:</span> {answer || entry.content.replace(/^问题:.*?\n答案: /, '')}
+                    </p>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex items-start gap-2">
+                  <BookOpen className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-text-primary">
+                      {noun || entry.title}
+                    </p>
+                    <p className="text-xs text-text-secondary mt-0.5 line-clamp-1">
+                      {synonyms || entry.content}
+                    </p>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+          <div className="flex gap-1 flex-shrink-0">
+            <button
+              type="button"
+              onClick={() => onView(entry)}
+              className="rounded p-1.5 text-text-secondary hover:bg-surface-hover hover:text-text-primary"
+              title="查看详情"
+              aria-label="查看详情"
+            >
+              <Eye className="h-3.5 w-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={() => onEdit(entry)}
+              className="rounded p-1.5 text-text-secondary hover:bg-surface-hover hover:text-text-primary"
+              title="编辑"
+              aria-label="编辑"
+            >
+              <Pencil className="h-3.5 w-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={onDelete}
+              className="rounded p-1.5 text-text-secondary hover:bg-surface-hover hover:text-red-500"
+              title="删除"
+              aria-label="删除"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-lg border border-border-light bg-surface-secondary transition-colors hover:bg-surface-hover">
@@ -1494,10 +1612,76 @@ interface ViewKnowledgeModalProps {
 }
 
 function ViewKnowledgeModal({ entry, onClose }: ViewKnowledgeModalProps) {
+  const { user } = useAuthContext();
   const [isContentExpanded, setIsContentExpanded] = useState(false);
   const [isMetadataExpanded, setIsMetadataExpanded] = useState(false);
   const [isSemanticDescriptionExpanded, setIsSemanticDescriptionExpanded] = useState(false);
+  const [fileContent, setFileContent] = useState<string | null>(null);
+  const [isLoadingFile, setIsLoadingFile] = useState(false);
   const isSemanticModel = entry.type === 'semantic_model';
+  // 支持 fileId 和 file_id 两种格式
+  const fileId = entry.metadata?.fileId || entry.metadata?.file_id;
+  const isBusinessKnowledgeWithFile = entry.type === 'business_knowledge' && fileId;
+  
+  // 获取文件内容
+  const { refetch: downloadFile } = useFileDownload(user?.id, fileId);
+  
+  // 当 entry 变化时重置文件内容
+  React.useEffect(() => {
+    setFileContent(null);
+    setIsLoadingFile(false);
+  }, [entry._id]);
+
+  React.useEffect(() => {
+    if (isBusinessKnowledgeWithFile && fileId && !fileContent && !isLoadingFile) {
+      setIsLoadingFile(true);
+      downloadFile().then((result) => {
+        if (result.data) {
+          // 读取blob内容
+          fetch(result.data)
+            .then(res => res.blob())
+            .then(blob => {
+              // 尝试读取文本内容，支持更多文件类型
+              const reader = new FileReader();
+              reader.onload = (e) => {
+                const text = e.target?.result as string;
+                setFileContent(text);
+                setIsLoadingFile(false);
+              };
+              reader.onerror = () => {
+                // 如果读取失败，检查文件类型
+                if (blob.type.startsWith('text/') || blob.type === 'application/json' || blob.type === '') {
+                  // 对于空类型或文本类型，尝试直接读取
+                  blob.text().then(text => {
+                    setFileContent(text);
+                    setIsLoadingFile(false);
+                  }).catch(() => {
+                    setFileContent(`[文件类型: ${blob.type || '未知'}] 文件大小: ${(blob.size / 1024).toFixed(2)} KB\n\n无法读取文件内容，请下载后查看。`);
+                    setIsLoadingFile(false);
+                  });
+                } else {
+                  setFileContent(`[文件类型: ${blob.type || '未知'}] 文件大小: ${(blob.size / 1024).toFixed(2)} KB\n\n此文件类型不支持预览，请下载后查看。`);
+                  setIsLoadingFile(false);
+                }
+              };
+              // 尝试读取为文本
+              reader.readAsText(blob);
+            })
+            .catch((error) => {
+              console.error('读取文件blob失败:', error);
+              setFileContent('无法加载文件内容');
+              setIsLoadingFile(false);
+            });
+        } else {
+          setIsLoadingFile(false);
+        }
+      }).catch((error) => {
+        console.error('文件下载失败:', error);
+        setFileContent('无法加载文件内容，请检查文件是否存在');
+        setIsLoadingFile(false);
+      });
+    }
+  }, [isBusinessKnowledgeWithFile, fileId, fileContent, isLoadingFile, downloadFile]);
 
   const formatMetadata = (metadata: Record<string, any>): string => {
     try {
@@ -1658,11 +1842,40 @@ function ViewKnowledgeModal({ entry, onClose }: ViewKnowledgeModalProps) {
               </>
             ) : (
               <>
-                <label className="block text-sm font-medium text-text-primary mb-1">内容</label>
+                <label className="block text-sm font-medium text-text-primary mb-1">
+                  内容
+                  {isBusinessKnowledgeWithFile && (entry.metadata?.filename || entry.metadata?.file_id) && (
+                    <span className="ml-2 text-xs text-text-tertiary">
+                      (文件: {entry.metadata?.filename || '已上传文件'})
+                    </span>
+                  )}
+                </label>
                 <div className="rounded-lg border border-border-light bg-surface-secondary px-4 py-3">
-                  <div className="max-h-64 overflow-auto text-sm text-text-primary font-mono whitespace-pre-wrap">
-                    {entry.content}
-                  </div>
+                  {isBusinessKnowledgeWithFile ? (
+                    <>
+                      {isLoadingFile ? (
+                        <div className="flex items-center justify-center py-8">
+                          <Spinner className="h-5 w-5 text-text-secondary" />
+                          <span className="ml-2 text-sm text-text-secondary">加载文件内容中...</span>
+                        </div>
+                      ) : fileContent ? (
+                        <div className="max-h-96 overflow-auto text-sm text-text-primary font-mono whitespace-pre-wrap break-words">
+                          {fileContent}
+                        </div>
+                      ) : (
+                        <div className="text-sm text-text-secondary">
+                          <p>正在加载文件内容...</p>
+                          <p className="mt-2 text-xs text-text-tertiary">
+                            文件ID: {fileId}
+                          </p>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div className="max-h-64 overflow-auto text-sm text-text-primary font-mono whitespace-pre-wrap break-words">
+                      {entry.content}
+                    </div>
+                  )}
                 </div>
               </>
             )}
@@ -1989,6 +2202,933 @@ function EditKnowledgeModal({ entry, dataSourceId, onClose, onUpdate, isLoading 
             </Button>
           </div>
         </form>
+      </div>
+    </div>
+  );
+}
+
+interface BatchAddKnowledgeModalProps {
+  type: 'qa_pair' | 'synonym';
+  dataSourceId: string;
+  onClose: () => void;
+  onAdd: (payload: AddKnowledgeRequest) => void;
+  isLoading: boolean;
+}
+
+function BatchAddKnowledgeModal({ type, dataSourceId, onClose, onAdd, isLoading }: BatchAddKnowledgeModalProps) {
+  const { showToast } = useToastContext();
+  const [addMode, setAddMode] = useState<'manual' | 'text' | 'file'>('text');
+  const [items, setItems] = useState<Array<Record<string, string>>>([]);
+  const [textInput, setTextInput] = useState<string>('');
+  const [fileContent, setFileContent] = useState<string>('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // 解析文本格式的QA对
+  const parseQATextInput = (text: string): Array<Record<string, string>> => {
+    const parsed: Array<Record<string, string>> = [];
+    // 按空行或连续换行分割成多个QA对
+    const qaBlocks = text.split(/\n\s*\n/).filter(block => block.trim());
+    
+    // 如果没有空行分隔，尝试按Q：或Q:来分割
+    const hasQMarkers = /[Qq][：:]/.test(text);
+    if (qaBlocks.length === 1 && hasQMarkers) {
+      // 按Q：或Q:分割
+      const qaMatches = text.split(/(?=[Qq][：:])/);
+      qaMatches.forEach((block) => {
+        const trimmed = block.trim();
+        if (!trimmed) return;
+        
+        // 检查是否以Q:或Q：开头
+        const qMatch = trimmed.match(/^[Qq][：:]\s*(.+?)(?=\n[Aa][：:]|\n\s*$)/s);
+        if (qMatch) {
+          const question = qMatch[1].trim();
+          // 查找对应的A：或A:
+          const aMatch = trimmed.match(/[Aa][：:]\s*(.+)$/s);
+          if (aMatch) {
+            const answer = aMatch[1].trim();
+            if (question && answer) {
+              parsed.push({ question, answer });
+            }
+          }
+        }
+      });
+    } else {
+      // 有空行分隔的情况
+      qaBlocks.forEach((block) => {
+        const lines = block.split('\n').map(line => line.trim()).filter(line => line);
+        let question = '';
+        let answer = '';
+        let answerLines: string[] = [];
+        let foundQ = false;
+        let foundA = false;
+        
+        lines.forEach((line) => {
+          // 检查是否以Q:或Q：开头
+          const qMatch = line.match(/^[Qq][：:]\s*(.+)$/);
+          if (qMatch) {
+            question = qMatch[1].trim();
+            foundQ = true;
+            foundA = false; // 重置A标记
+            answerLines = [];
+            return;
+          }
+          
+          // 检查是否以A:或A：开头
+          const aMatch = line.match(/^[Aa][：:]\s*(.+)$/);
+          if (aMatch) {
+            answerLines = [aMatch[1].trim()];
+            foundA = true;
+            return;
+          }
+          
+          // 如果已经找到A标记，后续行都是答案的一部分
+          if (foundA && line) {
+            answerLines.push(line);
+          } else if (foundQ && !foundA && line) {
+            // 如果找到了Q但还没找到A，这行可能是答案的开始
+            answerLines.push(line);
+            foundA = true;
+          } else if (!foundQ && line) {
+            // 如果还没找到Q，这行可能是问题
+            question = line;
+            foundQ = true;
+          }
+        });
+        
+        answer = answerLines.join('\n').trim();
+        
+        if (question && answer) {
+          parsed.push({ question, answer });
+        }
+      });
+    }
+    
+    return parsed;
+  };
+
+  // 解析文本格式的同义词
+  const parseTextInput = (text: string): Array<Record<string, string>> => {
+    const lines = text.split('\n').filter(line => line.trim());
+    const parsed: Array<Record<string, string>> = [];
+
+    lines.forEach((line, index) => {
+      const trimmed = line.trim();
+      if (!trimmed) return;
+
+      // 支持格式1: 主词：同义词1 同义词2 同义词3（冒号+空格）
+      // 支持格式2: 主词：同义词1,同义词2,同义词3（冒号+逗号）
+      // 支持格式3: 主词,同义词1,同义词2,同义词3（纯逗号）
+      // 支持格式4: 主词 同义词1 同义词2 同义词3（纯空格）
+      let noun = '';
+      let synonyms = '';
+
+      // 检查是否包含冒号（中英文）
+      if (trimmed.includes('：') || trimmed.includes(':')) {
+        const colonIndex = trimmed.indexOf('：') !== -1 ? trimmed.indexOf('：') : trimmed.indexOf(':');
+        noun = trimmed.substring(0, colonIndex).trim();
+        const synonymsPart = trimmed.substring(colonIndex + 1).trim();
+        
+        // 如果包含逗号，按逗号分割；否则按空格分割
+        if (synonymsPart.includes(',') || synonymsPart.includes('，')) {
+          synonyms = synonymsPart.replace(/[，,]/g, ',').split(',').map(s => s.trim()).filter(s => s).join(', ');
+        } else {
+          synonyms = synonymsPart.split(/\s+/).filter(s => s).join(', ');
+        }
+      } else {
+        // 没有冒号，检查是否包含逗号
+        if (trimmed.includes(',') || trimmed.includes('，')) {
+          // 按逗号分割（第一个是主词，后面是同义词）
+          const parts = trimmed.split(/[,，]/).map(s => s.trim()).filter(s => s);
+          if (parts.length >= 2) {
+            noun = parts[0];
+            synonyms = parts.slice(1).join(', ');
+          } else {
+            // 如果只有一个部分，可能是格式错误
+            return;
+          }
+        } else {
+          // 纯空格分割（第一个是主词，后面是同义词）
+          const parts = trimmed.split(/\s+/).filter(s => s);
+          if (parts.length >= 2) {
+            noun = parts[0];
+            synonyms = parts.slice(1).join(', ');
+          } else {
+            // 如果只有一个部分，可能是格式错误
+            return;
+          }
+        }
+      }
+
+      if (noun && synonyms) {
+        parsed.push({ noun, synonyms });
+      }
+    });
+
+    return parsed;
+  };
+
+  const handleTextInputChange = (text: string) => {
+    setTextInput(text);
+    if (text.trim()) {
+      if (type === 'synonym') {
+        const parsed = parseTextInput(text);
+        setItems(parsed);
+      } else if (type === 'qa_pair') {
+        const parsed = parseQATextInput(text);
+        setItems(parsed);
+      }
+    } else {
+      setItems([]);
+    }
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const content = e.target?.result as string;
+      setFileContent(content);
+      
+      if (type === 'synonym') {
+        // 解析文件内容
+        const parsed = parseTextInput(content);
+        if (parsed.length > 0) {
+          setItems(parsed);
+          setTextInput(content);
+          showToast({
+            message: `成功解析 ${parsed.length} 条同义词`,
+            status: 'success',
+          });
+        } else {
+          showToast({
+            message: '文件格式不正确，请检查格式',
+            status: 'error',
+          });
+        }
+      } else if (type === 'qa_pair') {
+        // 解析QA对文件内容
+        const parsed = parseQATextInput(content);
+        if (parsed.length > 0) {
+          setItems(parsed);
+          setTextInput(content);
+          showToast({
+            message: `成功解析 ${parsed.length} 条QA对`,
+            status: 'success',
+          });
+        } else {
+          showToast({
+            message: '文件格式不正确，请检查格式',
+            status: 'error',
+          });
+        }
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  const handleAddItem = () => {
+    if (type === 'qa_pair') {
+      setItems([...items, { question: '', answer: '' }]);
+    } else {
+      setItems([...items, { noun: '', synonyms: '' }]);
+    }
+  };
+
+  const handleRemoveItem = (index: number) => {
+    setItems(items.filter((_, i) => i !== index));
+  };
+
+  const handleItemChange = (index: number, field: string, value: string) => {
+    const newItems = [...items];
+    newItems[index] = { ...newItems[index], [field]: value };
+    setItems(newItems);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (addMode === 'text') {
+      // 文本输入模式，重新解析
+      if (!textInput.trim()) {
+        showToast({
+          message: `请输入${type === 'qa_pair' ? 'QA对' : '同义词'}内容`,
+          status: 'error',
+        });
+        return;
+      }
+      let parsed: Array<Record<string, string>> = [];
+      if (type === 'synonym') {
+        parsed = parseTextInput(textInput);
+      } else if (type === 'qa_pair') {
+        parsed = parseQATextInput(textInput);
+      }
+      if (parsed.length === 0) {
+        showToast({
+          message: '格式不正确，请检查输入格式',
+          status: 'error',
+        });
+        return;
+      }
+      setItems(parsed);
+    }
+
+    if (addMode === 'file' && type !== 'synonym') {
+      showToast({
+        message: '文件解析功能开发中，请使用手动输入模式',
+        status: 'info',
+      });
+      return;
+    }
+
+    if (items.length === 0) {
+      showToast({
+        message: '请至少添加一条记录',
+        status: 'error',
+      });
+      return;
+    }
+
+    // 验证并提交（逐个添加）
+    let successCount = 0;
+    items.forEach((item, index) => {
+      if (type === 'qa_pair') {
+        if (item.question && item.answer) {
+          onAdd({
+            type: 'qa_pair',
+            data: {
+              question: item.question,
+              answer: item.answer,
+              entityId: dataSourceId,
+            },
+          });
+          successCount++;
+        }
+      } else {
+        if (item.noun && item.synonyms) {
+          // 解析同义词，支持逗号和空格分隔
+          const synonymsArray = item.synonyms
+            .split(/[,，\s]+/)
+            .map((s: string) => s.trim())
+            .filter((s: string) => s);
+          
+          if (synonymsArray.length > 0) {
+            onAdd({
+              type: 'synonym',
+              data: {
+                noun: item.noun,
+                synonyms: synonymsArray,
+                entityId: dataSourceId,
+              },
+            });
+            successCount++;
+          }
+        }
+      }
+    });
+
+    if (successCount > 0) {
+      showToast({
+        message: `成功提交 ${successCount} 条${type === 'qa_pair' ? 'QA对' : '同义词'}，正在添加...`,
+        status: 'success',
+      });
+      onClose();
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50" onClick={onClose}>
+      <div
+        className="w-full max-w-4xl max-h-[90vh] rounded-lg bg-surface-primary p-6 shadow-lg overflow-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-text-primary">
+            批量添加{type === 'qa_pair' ? 'QA对' : '同义词'}
+          </h3>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded p-1 text-text-secondary hover:bg-surface-hover hover:text-text-primary"
+            aria-label="关闭"
+            title="关闭"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* 添加方式选择 */}
+          <div className="flex gap-4 border-b border-border-light pb-4">
+            <button
+              type="button"
+              onClick={() => {
+                setAddMode('text');
+                setTextInput('');
+                setItems([]);
+              }}
+              className={cn(
+                'px-4 py-2 text-sm font-medium rounded-lg transition-colors border-2',
+                addMode === 'text'
+                  ? 'border-primary text-text-primary bg-surface-primary'
+                  : 'border-transparent text-text-secondary hover:text-text-primary hover:bg-surface-hover bg-surface-secondary'
+              )}
+            >
+              文本输入
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setAddMode('manual');
+                setItems([]);
+                setTextInput('');
+              }}
+              className={cn(
+                'px-4 py-2 text-sm font-medium rounded-lg transition-colors border-2',
+                addMode === 'manual'
+                  ? 'border-primary text-text-primary bg-surface-primary'
+                  : 'border-transparent text-text-secondary hover:text-text-primary hover:bg-surface-hover bg-surface-secondary'
+              )}
+            >
+              逐条添加
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setAddMode('file');
+                setItems([]);
+                setTextInput('');
+                fileInputRef.current?.click();
+              }}
+              className={cn(
+                'px-4 py-2 text-sm font-medium rounded-lg transition-colors border-2',
+                addMode === 'file'
+                  ? 'border-primary text-text-primary bg-surface-primary'
+                  : 'border-transparent text-text-secondary hover:text-text-primary hover:bg-surface-hover bg-surface-secondary'
+              )}
+            >
+              文件解析
+            </button>
+          </div>
+
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".txt,.csv,.json"
+            onChange={handleFileUpload}
+            className="hidden"
+            aria-label="上传文件"
+            title="上传文件"
+          />
+
+          {addMode === 'text' ? (
+            <>
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-sm font-medium text-text-primary mb-2">
+                    批量输入{type === 'qa_pair' ? 'QA对' : '同义词'}
+                  </label>
+                  {type === 'qa_pair' ? (
+                    <>
+                      <p className="mb-3 text-xs text-text-tertiary">
+                        使用 Q：和 A：分割问题和答案，每对QA之间用空行分隔
+                      </p>
+                      <textarea
+                        value={textInput}
+                        onChange={(e) => handleTextInputChange(e.target.value)}
+                        rows={12}
+                        className="w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary font-mono"
+                        placeholder="例如：&#10;Q：什么是RAG？&#10;A：RAG是检索增强生成技术&#10;&#10;Q：如何使用语义模型？&#10;A：语义模型可以帮助理解数据库结构"
+                        aria-label="批量输入QA对"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <p className="mb-3 text-xs text-text-tertiary">
+                        用逗号或者空格分割同义词，每行一条
+                      </p>
+                      <textarea
+                        value={textInput}
+                        onChange={(e) => handleTextInputChange(e.target.value)}
+                        rows={12}
+                        className="w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary font-mono"
+                        placeholder="例如：&#10;订购：下单 购买 采购&#10;销售：售卖 出售 卖出&#10;客户，用户，消费者&#10;产品 商品"
+                        aria-label="批量输入同义词"
+                      />
+                    </>
+                  )}
+                </div>
+                {items.length > 0 && (
+                  <div className="rounded-lg border border-border-light bg-surface-secondary p-3">
+                    <p className="text-sm font-medium text-text-primary mb-2">
+                      预览（共 {items.length} 条）：
+                    </p>
+                    <div className="max-h-48 overflow-auto space-y-2">
+                      {items.map((item, index) => (
+                        <div key={index} className="text-xs text-text-secondary bg-surface-primary p-2 rounded">
+                          {type === 'qa_pair' ? (
+                            <>
+                              <div className="mb-1">
+                                <span className="font-medium text-text-primary">Q：</span>
+                                {item.question}
+                              </div>
+                              <div>
+                                <span className="font-medium text-text-primary">A：</span>
+                                {item.answer}
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              <span className="font-medium text-text-primary">{item.noun}</span>
+                              {'：'}
+                              {item.synonyms}
+                            </>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </>
+          ) : addMode === 'manual' ? (
+            <>
+              <div className="flex justify-between items-center">
+                <p className="text-sm text-text-secondary">
+                  已添加 {items.length} 条记录
+                </p>
+                <Button
+                  type="button"
+                  onClick={handleAddItem}
+                  className="btn btn-secondary flex items-center gap-2"
+                >
+                  <Plus className="h-4 w-4" />
+                  添加一条
+                </Button>
+              </div>
+
+              <div className="space-y-3 max-h-96 overflow-auto">
+                {items.map((item, index) => (
+                  <div key={index} className="border border-border-light rounded-lg p-4 bg-surface-secondary">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-sm font-medium text-text-primary">
+                        第 {index + 1} 条
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveItem(index)}
+                        className="text-text-secondary hover:text-red-500"
+                        title="删除"
+                        aria-label="删除"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                    {type === 'qa_pair' ? (
+                      <>
+                        <div className="mb-2">
+                          <label className="block text-xs font-medium text-text-primary mb-1">
+                            问题 *
+                          </label>
+                          <input
+                            type="text"
+                            value={item.question || ''}
+                            onChange={(e) => handleItemChange(index, 'question', e.target.value)}
+                            className="w-full rounded border border-border-light bg-surface-primary px-3 py-2 text-sm text-text-primary"
+                            placeholder="输入问题"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-text-primary mb-1">
+                            答案 *
+                          </label>
+                          <textarea
+                            value={item.answer || ''}
+                            onChange={(e) => handleItemChange(index, 'answer', e.target.value)}
+                            rows={2}
+                            className="w-full rounded border border-border-light bg-surface-primary px-3 py-2 text-sm text-text-primary"
+                            placeholder="输入答案"
+                            required
+                          />
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="mb-2">
+                          <label className="block text-xs font-medium text-text-primary mb-1">
+                            名词 *
+                          </label>
+                          <input
+                            type="text"
+                            value={item.noun || ''}
+                            onChange={(e) => handleItemChange(index, 'noun', e.target.value)}
+                            className="w-full rounded border border-border-light bg-surface-primary px-3 py-2 text-sm text-text-primary"
+                            placeholder="输入名词"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-text-primary mb-1">
+                            同义词 *（用逗号分隔）
+                          </label>
+                          <input
+                            type="text"
+                            value={item.synonyms || ''}
+                            onChange={(e) => handleItemChange(index, 'synonyms', e.target.value)}
+                            className="w-full rounded border border-border-light bg-surface-primary px-3 py-2 text-sm text-text-primary"
+                            placeholder="例如：订购, 下单, 购买"
+                            required
+                          />
+                        </div>
+                      </>
+                    )}
+                  </div>
+                ))}
+                {items.length === 0 && (
+                  <div className="text-center py-8 text-text-secondary">
+                    <p className="text-sm">点击"添加一条"按钮开始添加</p>
+                  </div>
+                )}
+              </div>
+            </>
+          ) : addMode === 'file' ? (
+            <div className="space-y-3">
+              <div>
+                <label className="block text-sm font-medium text-text-primary mb-2">
+                  上传文件（.txt格式）
+                </label>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="flex items-center gap-2 rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary hover:bg-surface-hover"
+                  >
+                    <FileUp className="h-4 w-4" />
+                    {fileContent ? '重新选择文件' : '选择文件'}
+                  </button>
+                  {fileContent && (
+                    <span className="text-xs text-text-secondary">
+                      已选择文件，共解析 {items.length} 条
+                    </span>
+                  )}
+                </div>
+                <p className="mt-2 text-xs text-text-tertiary">
+                  {type === 'qa_pair' 
+                    ? '文件格式：使用 Q：和 A：分割问题和答案，每对QA之间用空行分隔'
+                    : '文件格式：每行一条，需要逗号或者空格分割同义词'}
+                </p>
+              </div>
+              {items.length > 0 && (
+                <div className="rounded-lg border border-border-light bg-surface-secondary p-3">
+                  <p className="text-sm font-medium text-text-primary mb-2">
+                    预览（共 {items.length} 条）：
+                  </p>
+                  <div className="max-h-48 overflow-auto space-y-2">
+                    {items.map((item, index) => (
+                      <div key={index} className="text-xs text-text-secondary bg-surface-primary p-2 rounded">
+                        {type === 'qa_pair' ? (
+                          <>
+                            <div className="mb-1">
+                              <span className="font-medium text-text-primary">Q：</span>
+                              {item.question}
+                            </div>
+                            <div>
+                              <span className="font-medium text-text-primary">A：</span>
+                              {item.answer}
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <span className="font-medium text-text-primary">{item.noun}</span>
+                            {'：'}
+                            {item.synonyms}
+                          </>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : null}
+
+          <div className="flex justify-end gap-2 pt-4 border-t border-border-light">
+            <Button
+              type="button"
+              onClick={onClose}
+              className="btn btn-secondary rounded-lg px-4 py-2"
+            >
+              取消
+            </Button>
+            {((addMode === 'manual' && items.length > 0) || (addMode === 'text' && items.length > 0) || (addMode === 'file' && items.length > 0)) && (
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="btn btn-primary rounded-lg px-4 py-2"
+              >
+                {isLoading ? '添加中...' : `添加 ${items.length} 条`}
+              </Button>
+            )}
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+interface RAGTestModalProps {
+  dataSourceId: string;
+  onClose: () => void;
+}
+
+function RAGTestModal({ dataSourceId, onClose }: RAGTestModalProps) {
+  const { showToast } = useToastContext();
+  const { token } = useAuthContext();
+  const [query, setQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [results, setResults] = useState<any[]>([]);
+  const [metadata, setMetadata] = useState<any>(null);
+
+  const handleTest = async () => {
+    if (!query.trim()) {
+      showToast({
+        message: '请输入查询内容',
+        status: 'error',
+      });
+      return;
+    }
+
+    if (!token) {
+      showToast({
+        message: '未登录，请先登录',
+        status: 'error',
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    setResults([]);
+    setMetadata(null);
+
+    try {
+      const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      };
+
+      const response = await fetch('/api/rag/query', {
+        method: 'POST',
+        headers,
+        credentials: 'include',
+        body: JSON.stringify({
+          query: query.trim(),
+          options: {
+            entityId: dataSourceId,
+            topK: 10,
+            useReranking: true,
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        // 检查响应内容类型
+        const contentType = response.headers.get('content-type');
+        const isJson = contentType && contentType.includes('application/json');
+        
+        let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+        
+        if (isJson) {
+          try {
+            const errorData = await response.json();
+            errorMessage = errorData.error || errorData.message || errorMessage;
+          } catch (e) {
+            // JSON 解析失败
+          }
+        } else {
+          // 如果不是 JSON，读取文本内容
+          const text = await response.text().catch(() => '');
+          errorMessage = text || errorMessage;
+        }
+        
+        throw new Error(errorMessage);
+      }
+
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await response.text();
+        throw new Error(`服务器返回了非 JSON 响应: ${text.substring(0, 100)}`);
+      }
+
+      const data = await response.json();
+      setResults(data.results || []);
+      setMetadata(data.metadata || null);
+
+      if (data.results && data.results.length > 0) {
+        showToast({
+          message: `成功检索到 ${data.results.length} 条结果`,
+          status: 'success',
+        });
+      } else {
+        showToast({
+          message: '未检索到相关结果',
+          status: 'info',
+        });
+      }
+    } catch (error: any) {
+      console.error('RAG查询失败:', error);
+      showToast({
+        message: `RAG查询失败: ${error.message || '未知错误'}`,
+        status: 'error',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getTypeLabel = (type: string) => {
+    const typeMap: Record<string, string> = {
+      semantic_model: '语义模型',
+      qa_pair: 'QA对',
+      synonym: '同义词',
+      business_knowledge: '业务知识',
+      file: '文件',
+    };
+    return typeMap[type] || type;
+  };
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50" onClick={onClose}>
+      <div
+        className="w-full max-w-4xl max-h-[90vh] rounded-lg bg-surface-primary p-6 shadow-lg overflow-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-text-primary">RAG测试</h3>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded p-1 text-text-secondary hover:bg-surface-hover hover:text-text-primary"
+            aria-label="关闭"
+            title="关闭"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-text-primary mb-2">
+              查询内容
+            </label>
+            <textarea
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              rows={3}
+              className="w-full rounded border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary"
+              placeholder="输入要查询的问题或关键词..."
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+                  handleTest();
+                }
+              }}
+            />
+          </div>
+
+          <div className="flex justify-end gap-2">
+            <Button
+              type="button"
+              onClick={onClose}
+              className="btn btn-secondary rounded-lg px-4 py-2"
+            >
+              关闭
+            </Button>
+            <Button
+              type="button"
+              onClick={handleTest}
+              disabled={isLoading || !query.trim()}
+              className="btn btn-primary rounded-lg px-4 py-2"
+            >
+              {isLoading ? (
+                <>
+                  <Spinner className="h-4 w-4 mr-2" />
+                  查询中...
+                </>
+              ) : (
+                '测试查询'
+              )}
+            </Button>
+          </div>
+
+          {metadata && (
+            <div className="rounded-lg border border-border-light bg-surface-secondary p-3">
+              <p className="text-xs text-text-secondary">
+                检索数量: {metadata.retrievalCount || 0} | 
+                重排: {metadata.reranked ? '是' : '否'} | 
+                增强重排: {metadata.enhancedReranking ? '是' : '否'}
+              </p>
+            </div>
+          )}
+
+          {results.length > 0 && (
+            <div className="space-y-3">
+              <h4 className="text-sm font-medium text-text-primary">
+                检索结果 ({results.length} 条)
+              </h4>
+              <div className="space-y-2 max-h-96 overflow-auto">
+                {results.map((result, index) => (
+                  <div
+                    key={index}
+                    className="rounded-lg border border-border-light bg-surface-secondary p-4"
+                  >
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-medium px-2 py-1 rounded bg-primary/20 text-primary">
+                          {getTypeLabel(result.type)}
+                        </span>
+                        {result.score !== undefined && (
+                          <span className="text-xs text-text-tertiary">
+                            相似度: {(result.score * 100).toFixed(1)}%
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    {result.title && (
+                      <h5 className="text-sm font-medium text-text-primary mb-1">
+                        {result.title}
+                      </h5>
+                    )}
+                    <p className="text-sm text-text-secondary whitespace-pre-wrap">
+                      {result.content}
+                    </p>
+                    {result.metadata && Object.keys(result.metadata).length > 0 && (
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        {Object.entries(result.metadata)
+                          .filter(([key]) => key !== 'file_id' && key !== 'filename')
+                          .slice(0, 3)
+                          .map(([key, value]) => (
+                            <span
+                              key={key}
+                              className="rounded bg-surface-primary px-2 py-1 text-xs text-text-secondary"
+                            >
+                              {key}: {String(value)}
+                            </span>
+                          ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {!isLoading && results.length === 0 && query && (
+            <div className="text-center py-8 text-text-secondary">
+              <p className="text-sm">暂无检索结果</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

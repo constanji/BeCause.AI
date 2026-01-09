@@ -181,7 +181,7 @@ function Speech() {
             style={{ userSelect: 'none' }}
           >
             <Cog />
-            {localize('com_ui_advanced')}
+            {localize('com_ui_speech_advanced')}
           </Tabs.Trigger>
         </Tabs.List>
       </div>

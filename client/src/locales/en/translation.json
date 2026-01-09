@@ -646,6 +646,8 @@
   "com_ui_admin_settings": "Admin Settings",
   "com_ui_advanced": "Advanced",
   "com_ui_advanced_settings": "Advanced Settings",
+  "com_ui_advanced_mode": "Advanced",
+  "com_ui_speech_advanced": "Advanced",
   "com_ui_agent": "Agent",
   "com_ui_agent_category_aftersales": "After Sales",
   "com_ui_agent_category_finance": "Finance",

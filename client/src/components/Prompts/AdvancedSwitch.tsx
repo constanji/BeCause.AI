@@ -49,7 +49,7 @@ const AdvancedSwitch = () => {
               : 'text-text-secondary hover:text-text-primary'
           }`}
         >
-          <span className="relative">{localize('com_ui_advanced')}</span>
+          <span className="relative">{localize('com_ui_advanced_mode')}</span>
         </button>
       </div>
     </div>

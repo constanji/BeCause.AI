@@ -22,6 +22,7 @@ import Search from './Search';
 import Root from './Root';
 import AgentBuilder from './AgentBuilder';
 import GlobalConfigManager from './GlobalConfigManager';
+import AssetCenterManager from './AssetCenterManager';
 
 const AuthLayout = () => (
   <AuthContextProvider>
@@ -136,6 +137,10 @@ export const router = createBrowserRouter(
             {
               path: 'global-config',
               element: <GlobalConfigManager />,
+            },
+            {
+              path: 'asset-center',
+              element: <AssetCenterManager />,
             },
           ],
         },
