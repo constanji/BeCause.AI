@@ -8,7 +8,7 @@ const projectRoot = path.resolve(__dirname, '../../../../..');
 const BeCauseSkills2 = require(path.join(projectRoot, 'Because-2.0'));
 
 /**
- * BeCause问数工具 2.0 - 统一的智能问数工具入口（增强版）
+ * BeCause问数工具 2.0 - 统一的智能问数工具入口
  * 
  * 相比 1.0 版本新增：
  * - fluctuation-attribution: 波动归因（Adtributor算法，维度归因+指标归因+时间对比+下钻）

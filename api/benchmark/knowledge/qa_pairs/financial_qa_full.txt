@@ -14,9 +14,9 @@ Q:列出最年长且平均薪资最低的女性客户的账户号，并计算该
 A:Female 表示 gender = 'F'；A11 表示平均薪资；差值 = 最高平均薪资 - 最低平均薪资；若 A 的出生日期 > B 的出生日期，则 B 比 A 年长。
 SELECT T1.account_id , ( SELECT MAX(A11) - MIN(A11) FROM district ) FROM account AS T1 INNER JOIN district AS T2 ON T1.district_id = T2.district_id INNER JOIN disp AS T3 ON T1.account_id = T3.account_id INNER JOIN client AS T4 ON T3.client_id = T4.client_id WHERE T2.district_id = ( SELECT district_id FROM client WHERE gender = 'F' ORDER BY birth_date ASC LIMIT 1 ) ORDER BY T2.A11 DESC LIMIT 1
 
-Q:列出最年轻且拥有最高平均薪资的客户的账户号。
+Q:列出最年轻的客户的账户号。
 A:若 A 的出生日期 < B 的出生日期，则 B 更年轻；A11 为平均薪资。
-SELECT T1.account_id  FROM account AS T1 INNER JOIN disp AS T2 ON T1.account_id = T2.account_id INNER JOIN client AS T3 ON T2.client_id = T3.client_id INNER JOIN district AS T4 on T4.district_id = T1.district_id WHERE T2.client_id = ( SELECT client_id FROM client ORDER BY birth_date DESC LIMIT 1) GROUP BY T4.A11, T1.account_id
+SELECT T2.account_id FROM disp AS T2 WHERE T2.client_id = (SELECT client_id FROM client ORDER BY birth_date DESC LIMIT 1);
 
 Q:在贷款批准日期为 1997 的账户中，列出批准金额最低且选择周度对账的账户。
 A:“POPLATEK TYDNE” 表示周度对账。

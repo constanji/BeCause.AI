@@ -128,7 +128,7 @@ async function saveCustomEndpointsConfig(req, res) {
 
     await fs.writeFile(configPath, updatedYaml, 'utf8');
 
-    // Clear caches so endpoint list and models list refresh (fix: 编辑智能体选择提供商后不显示可用模型)
+    // Clear caches so endpoint list and models list refresh
     const cache = getLogStores(CacheKeys.CONFIG_STORE);
     await cache.delete(CacheKeys.STARTUP_CONFIG);
     await cache.delete(CacheKeys.ENDPOINT_CONFIG);

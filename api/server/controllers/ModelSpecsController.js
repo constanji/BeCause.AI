@@ -104,7 +104,7 @@ async function saveModelSpecsConfig(req, res) {
       return res.status(500).json({ error: errorMessage });
     }
 
-    // 清除缓存，强制重新加载配置（含端点与模型列表，避免编辑智能体时选择提供商后不显示可用模型）
+    // 清除缓存，强制重新加载配置
     const { getLogStores } = require('~/cache');
     const { CacheKeys } = require('@because/data-provider');
     const cache = getLogStores(CacheKeys.CONFIG_STORE);
