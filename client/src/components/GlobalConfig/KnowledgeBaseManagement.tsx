@@ -1,7 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { Database, MessageSquare, BookOpen, FileText, Plus, Trash2, Eye, Upload, X, ChevronRight, ChevronDown, Folder, FolderOpen, Server, Pencil, Sparkles, Bot, FileUp, TestTube } from 'lucide-react';
 import * as yaml from 'js-yaml';
-import { Button, useToastContext, Spinner } from '@because/client';
+import { Button, useToastContext, Spinner, Dropdown } from '@because/client';
 import {
   useListKnowledgeQuery,
   useAddKnowledgeMutation,
@@ -72,6 +72,17 @@ export default function KnowledgeBaseManagement() {
   const selectedDataSource = selectedDataSourceId 
     ? dataSources.find((ds: DataSource) => ds._id === selectedDataSourceId)
     : null;
+
+  const dataSourceOptions = useMemo(
+    () => [
+      { value: '', label: '请选择数据源' },
+      ...dataSources.map((ds: DataSource) => ({
+        value: ds._id,
+        label: `${ds.name} · ${ds.type} · ${ds.database}`,
+      })),
+    ],
+    [dataSources],
+  );
 
   // 语义模型需要包含子项以支持层级展示，但默认只显示父级
   // 根据选中的数据源过滤知识库（使用 entityId）
@@ -154,32 +165,28 @@ export default function KnowledgeBaseManagement() {
       </div>
 
       {/* 数据源选择器 */}
-      <div className="mb-4 rounded-lg border border-border-light bg-surface-secondary p-4">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <Server className="h-4 w-4 text-text-secondary" />
-            <label className="text-sm font-medium text-text-primary">选择数据源：</label>
+      <div className="mb-4 rounded-xl border border-border-light bg-surface-primary">
+        <div className="flex flex-wrap items-center gap-3 px-4 py-3.5">
+          <div className="flex flex-shrink-0 items-center gap-2">
+            <Server className="h-4 w-4 text-green-400" />
+            <span className="text-sm font-medium text-text-primary">选择数据源</span>
           </div>
-          <select
-            value={selectedDataSourceId || ''}
-            onChange={(e) => setSelectedDataSourceId(e.target.value || null)}
-            className="flex-1 rounded border border-border-light bg-surface-primary px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
-            aria-label="选择数据源"
-            title="选择数据源"
-          >
-            <option value="">-- 请选择数据源 --</option>
-            {dataSources.map((ds: DataSource) => (
-              <option key={ds._id} value={ds._id}>
-                {ds.name} ({ds.type} - {ds.database})
-              </option>
-            ))}
-          </select>
+          <div className="min-w-0 flex-1">
+            <Dropdown
+              value={selectedDataSourceId || ''}
+              onChange={(value) => setSelectedDataSourceId(value || null)}
+              options={dataSourceOptions}
+              className="w-full rounded-lg border-border-light bg-surface-secondary hover:border-green-500/40 focus:ring-green-500/30"
+              sizeClasses="w-[var(--popover-anchor-width,100%)] min-w-[240px]"
+              ariaLabel="选择数据源"
+            />
+          </div>
           {selectedDataSource && (
-            <div className="flex items-center gap-2 text-xs text-text-secondary">
-              <span className="rounded bg-surface-primary px-2 py-1">
+            <div className="flex flex-shrink-0 flex-wrap items-center gap-2">
+              <span className="rounded-md border border-green-500/20 bg-green-500/10 px-2 py-0.5 text-xs font-medium uppercase text-green-400">
                 {selectedDataSource.type}
               </span>
-              <span className="rounded bg-surface-primary px-2 py-1">
+              <span className="rounded-md bg-surface-secondary px-2 py-0.5 font-mono text-xs text-text-secondary">
                 {selectedDataSource.host}:{selectedDataSource.port}
               </span>
             </div>
@@ -236,7 +243,7 @@ export default function KnowledgeBaseManagement() {
         {!selectedDataSourceId ? (
           <div className="flex h-64 items-center justify-center text-text-secondary">
             <div className="text-center">
-              <Server className="mx-auto h-12 w-12 text-text-tertiary mb-4" />
+              <Server className="mx-auto mb-4 h-12 w-12 text-green-400/60" />
               <p className="text-sm">请先选择数据源</p>
               <p className="mt-2 text-xs text-text-tertiary">
                 在上方选择数据源后，可以管理该数据源绑定的知识库
