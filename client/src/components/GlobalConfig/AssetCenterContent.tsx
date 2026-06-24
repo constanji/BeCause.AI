@@ -5,20 +5,19 @@ import { useGetStartupConfig } from '~/data-provider';
 import { cn } from '~/utils';
 import KnowledgeBaseManagement from './KnowledgeBaseManagement';
 import DataSourceManagement from './DataSourceManagement';
-import ProjectConfig from './ProjectConfig';
 import PromptsManagement from './PromptsManagement';
 
-type TabType = 'dataSources' | 'knowledgeBase' | 'projectConfig' | 'prompts';
+type TabType = 'dataSources' | 'knowledgeBase' | 'prompts';
 
 const isValidTab = (tab: string | null): tab is TabType => {
-  return tab === 'dataSources' || tab === 'knowledgeBase' || tab === 'projectConfig' || tab === 'prompts';
+  return tab === 'dataSources' || tab === 'knowledgeBase' || tab === 'prompts';
 };
 
 export default function AssetCenterContent() {
   const { data: startupConfig } = useGetStartupConfig();
   const [searchParams, setSearchParams] = useSearchParams();
   const tabParam = searchParams.get('tab');
-  const initialTab: TabType = isValidTab(tabParam) ? tabParam : 'projectConfig';
+  const initialTab: TabType = isValidTab(tabParam) ? tabParam : 'dataSources';
   const [activeTab, setActiveTab] = useState<TabType>(initialTab);
 
   // 当 URL 参数变化时，更新活动标签页
@@ -35,11 +34,6 @@ export default function AssetCenterContent() {
   };
 
   const tabs: { id: TabType; label: string; description: string }[] = [
-    {
-      id: 'projectConfig',
-      label: '项目配置',
-      description: '配置项目相关设置，包括数据源选择等',
-    },
     {
       id: 'dataSources',
       label: '数据源管理',
@@ -84,11 +78,6 @@ export default function AssetCenterContent() {
 
       {/* 标签页内容 */}
       <div className="flex-1 overflow-hidden">
-        {activeTab === 'projectConfig' && (
-          <div className="h-full overflow-hidden px-4 py-4">
-            <ProjectConfig />
-          </div>
-        )}
         {activeTab === 'dataSources' && (
           <div className="h-full overflow-hidden px-4 py-4">
             <DataSourceManagement />
