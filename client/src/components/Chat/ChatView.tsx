@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useForm } from 'react-hook-form';
 import { Spinner } from '@because/client';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -74,6 +74,17 @@ function ChatView({ index = 0 }: { index?: number }) {
 
   useSSE(rootSubmission, chatHelpers, false);
   useSSE(addedSubmission, addedChatHelpers, true);
+
+  // 卸载时清空 submission atom，防止导航离开后再回来时 useSSE 重新触发
+  // 遗留的非空 submission 会让 ChatView 重新挂载时误发起一次重复请求（导致新建对话或产生 2/2 分支）
+  const setRootSubmission = useSetRecoilState(store.submissionByIndex(index));
+  const setAddedSubmission = useSetRecoilState(store.submissionByIndex(index + 1));
+  useEffect(() => {
+    return () => {
+      setRootSubmission(null);
+      setAddedSubmission(null);
+    };
+  }, [setRootSubmission, setAddedSubmission]);
 
   const methods = useForm<ChatFormValues>({
     defaultValues: { text: '' },
