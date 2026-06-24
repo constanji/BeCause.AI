@@ -7,7 +7,6 @@ import AgentsManagement from './AgentsManagement';
 import MCPManagement from './MCPManagement';
 import EndpointsConfig from './EndpointsConfig';
 import UsersManagement from './UsersManagement';
-import FeaturesManagement from './FeaturesManagement';
 import MarketplaceContent from './MarketplaceContent';
 import AvailableToolsManagement from './AvailableToolsManagement';
 
@@ -21,8 +20,7 @@ type TabType =
   | 'marketplace'
   | 'mcp'
   | 'availableTools'
-  | 'users'
-  | 'features';
+  | 'users';
 
 const isValidTab = (tab: string | null): tab is TabType => {
   return (
@@ -31,8 +29,7 @@ const isValidTab = (tab: string | null): tab is TabType => {
     tab === 'marketplace' ||
     tab === 'mcp' ||
     tab === 'availableTools' ||
-    tab === 'users' ||
-    tab === 'features'
+    tab === 'users'
   );
 };
 
@@ -44,12 +41,15 @@ export default function GlobalConfigContent({ startupConfig: propStartupConfig }
   const initialTab: TabType = isValidTab(tabParam) ? tabParam : 'modelSpecs';
   const [activeTab, setActiveTab] = useState<TabType>(initialTab);
 
-  // 当 URL 参数变化时，更新活动标签页
+  // 当 URL 参数变化时，更新活动标签页（已移除的 tab 回退到默认页）
   useEffect(() => {
     if (isValidTab(tabParam)) {
       setActiveTab(tabParam);
+    } else if (tabParam === 'features') {
+      setActiveTab('modelSpecs');
+      setSearchParams({ tab: 'modelSpecs' }, { replace: true });
     }
-  }, [tabParam]);
+  }, [tabParam, setSearchParams]);
 
   // 处理标签页切换，同时更新 URL 参数
   const handleTabChange = (tab: TabType) => {
@@ -87,11 +87,6 @@ export default function GlobalConfigContent({ startupConfig: propStartupConfig }
       id: 'users',
       label: '用户管理',
       description: '查看和管理所有注册用户',
-    },
-    {
-      id: 'features',
-      label: '初始界面配置',
-      description: '管理初始界面的欢迎语和模型',
     },
   ];
 
@@ -150,11 +145,6 @@ export default function GlobalConfigContent({ startupConfig: propStartupConfig }
         {activeTab === 'users' && (
           <div className="h-full overflow-hidden px-4 py-4">
             <UsersManagement />
-          </div>
-        )}
-        {activeTab === 'features' && (
-          <div className="h-full overflow-hidden px-4 py-4">
-            <FeaturesManagement startupConfig={startupConfig} />
           </div>
         )}
       </div>
