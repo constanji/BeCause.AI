@@ -5,7 +5,7 @@ import { QueryKeys } from '@because/data-provider';
 import { useGetStartupConfig } from '~/data-provider';
 import { useLocalize, useAuthContext } from '~/hooks';
 import { cn } from '~/utils';
-import { Plus, Settings, ChevronDown, X, Plug, Trash2 } from 'lucide-react';
+import { Plus, Settings, ChevronDown, X, Trash2 } from 'lucide-react';
 import EndpointConfigEditor from './EndpointConfigEditor';
 
 interface EndpointConfig {
@@ -195,7 +195,7 @@ export default function EndpointsConfig({ startupConfig: propStartupConfig }: En
       // 清除缓存并刷新配置（含端点与模型列表，避免编辑智能体时选择提供商后不显示可用模型）
       queryClient.invalidateQueries([QueryKeys.startupConfig]);
       queryClient.invalidateQueries([QueryKeys.endpoints]);
-      queryClient.invalidateQueries([QueryKeys.models]);
+      await queryClient.refetchQueries({ queryKey: [QueryKeys.models] });
       await Promise.all([refetch(), refreshEndpoints()]);
       setShowEditor(false);
       setEditingEndpoint(undefined);
@@ -241,7 +241,7 @@ export default function EndpointsConfig({ startupConfig: propStartupConfig }: En
       // 清除缓存并刷新配置（含端点与模型列表）
       queryClient.invalidateQueries([QueryKeys.startupConfig]);
       queryClient.invalidateQueries([QueryKeys.endpoints]);
-      queryClient.invalidateQueries([QueryKeys.models]);
+      await queryClient.refetchQueries({ queryKey: [QueryKeys.models] });
       await refetch();
       await refreshEndpoints();
     } catch (error) {
@@ -309,7 +309,7 @@ export default function EndpointsConfig({ startupConfig: propStartupConfig }: En
       // 清除缓存并刷新配置（含模型列表）
       queryClient.invalidateQueries([QueryKeys.startupConfig]);
       queryClient.invalidateQueries([QueryKeys.endpoints]);
-      queryClient.invalidateQueries([QueryKeys.models]);
+      await queryClient.refetchQueries({ queryKey: [QueryKeys.models] });
       await Promise.all([refetch(), refreshEndpoints()]);
       
       setNewModelName('');
@@ -370,7 +370,7 @@ export default function EndpointsConfig({ startupConfig: propStartupConfig }: En
       // 清除缓存并刷新配置（含模型列表）
       queryClient.invalidateQueries([QueryKeys.startupConfig]);
       queryClient.invalidateQueries([QueryKeys.endpoints]);
-      queryClient.invalidateQueries([QueryKeys.models]);
+      await queryClient.refetchQueries({ queryKey: [QueryKeys.models] });
       await Promise.all([refetch(), refreshEndpoints()]);
       
       showToast({
@@ -540,9 +540,6 @@ export default function EndpointsConfig({ startupConfig: propStartupConfig }: En
                           isExpanded ? 'rotate-180 text-green-400' : 'text-text-secondary',
                         )}
                       />
-                      <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-green-500/10">
-                        <Plug className="h-4 w-4 text-green-400" />
-                      </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-center gap-2">
                           <span className="truncate font-semibold text-text-primary">{endpoint.name}</span>

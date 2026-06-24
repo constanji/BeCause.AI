@@ -204,7 +204,7 @@ export const isAvatarUploadOnlyDirty = (
 
 export default function AgentPanel() {
   const localize = useLocalize();
-  const { user } = useAuthContext();
+  const { user, isAuthenticated } = useAuthContext();
   const { showToast } = useToastContext();
   const {
     activePanel,
@@ -217,7 +217,10 @@ export default function AgentPanel() {
 
   const { onSelect: onSelectAgent } = useSelectAgent();
 
-  const modelsQuery = useGetModelsQuery();
+  const modelsQuery = useGetModelsQuery({
+    enabled: isAuthenticated,
+    refetchOnMount: 'always',
+  });
   const basicAgentQuery = useGetAgentByIdQuery(current_agent_id);
 
   const { hasPermission, isLoading: permissionsLoading } = useResourcePermissions(

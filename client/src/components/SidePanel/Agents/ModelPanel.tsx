@@ -202,6 +202,11 @@ export default function ModelPanel({
                     isCollapsed={false}
                     showCarat={true}
                   />
+                  {provider && models.length === 0 && (
+                    <p className="mt-1.5 text-xs text-text-secondary">
+                      该提供商暂无可用模型，请先在「端点配置」中添加模型或开启自动获取
+                    </p>
+                  )}
                   {provider && error && (
                     <span className="text-sm text-red-500 transition duration-300 ease-in-out">
                       {localize('com_ui_field_required')}
