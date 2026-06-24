@@ -2742,12 +2742,18 @@ html {
 }
 
 .select-item[data-active-item] {
+  background-color: var(--surface-hover);
+  color: var(--text-primary);
+}
+
+/* 仅用于配置页 Dropdown，不影响左下角账户菜单等 select-item */
+.dropdown-select-item[data-active-item] {
   background-color: rgb(16 185 129 / 0.12);
   color: var(--text-primary);
 }
 
-.select-item[data-active-item] svg,
-.select-item[aria-selected='true'] svg {
+.dropdown-select-item[data-active-item] svg,
+.dropdown-select-item[aria-selected='true'] svg {
   color: var(--green-400);
 }
 

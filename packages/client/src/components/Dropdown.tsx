@@ -123,7 +123,7 @@ const Dropdown: React.FC<DropdownProps> = ({
             <Select.SelectItem
               key={`option-${index}`}
               value={String(option.value)}
-              className="select-item"
+              className="select-item dropdown-select-item"
               data-theme={option.value}
             >
               <div className="flex w-full items-center gap-2">
