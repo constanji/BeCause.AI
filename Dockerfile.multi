@@ -130,6 +130,10 @@ ENV CI=true
 # npm ci 不支持 --legacy-peer-deps，必须使用 npm install
 # 安装所有工作区的依赖（包括 client 的所有依赖）
 RUN npm install --legacy-peer-deps
+# Workaround for npm optionalDependencies bug in Docker/buildx:
+# ensure Rollup's Linux binary is present for linux/amd64 builds.
+RUN ROLLUP_VERSION="$(node -p "require('./node_modules/rollup/package.json').version")" && \
+    npm install --no-save "@rollup/rollup-linux-x64-gnu@${ROLLUP_VERSION}" --legacy-peer-deps
 
 # Base stage with dependencies installed
 FROM base-deps AS base
