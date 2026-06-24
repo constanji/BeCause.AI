@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Button, useToastContext } from '@because/client';
+import { Button, useToastContext, Dropdown } from '@because/client';
 import { useQueryClient } from '@tanstack/react-query';
 import { QueryKeys } from '@because/data-provider';
 import { useGetStartupConfig } from '~/data-provider';
 import { useListDataSourcesQuery } from '~/data-provider/DataSources';
 import { useLocalize, useAuthContext } from '~/hooks';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, Server, Globe } from 'lucide-react';
 import {
   BulbOutlined,
   InfoCircleOutlined,
@@ -15,7 +15,7 @@ import {
 } from '@ant-design/icons';
 import type { TStartupConfig } from '@because/data-provider';
 import type { DataSource } from '@because/data-provider';
-import { cn } from '~/utils';
+import { cn, defaultTextProps } from '~/utils';
 
 interface PromptsManagementProps {
   startupConfig?: TStartupConfig;
@@ -48,9 +48,9 @@ const iconOptions = [
 ];
 
 // 预览组件：显示提示项的实际效果
-function PromptItemPreview({ item }: { item: PromptItem }) {
+function PromptItemPreview({ item, compact = false }: { item: PromptItem; compact?: boolean }) {
   const getIconComponent = useCallback((iconType: string) => {
-    const iconProps = { className: 'text-base' };
+    const iconProps = { className: compact ? 'text-sm' : 'text-base' };
     switch (iconType) {
       case 'bulb':
         return <BulbOutlined {...iconProps} style={{ color: '#FFD700' }} />;
@@ -65,34 +65,150 @@ function PromptItemPreview({ item }: { item: PromptItem }) {
       default:
         return <BulbOutlined {...iconProps} style={{ color: '#FFD700' }} />;
     }
-  }, []);
+  }, [compact]);
 
   return (
     <div
       className={cn(
-        'group relative flex w-52 cursor-default flex-col gap-2 rounded-xl',
-        'border border-border-light bg-surface-tertiary px-3 pb-4 pt-3',
-        'text-start align-top text-[15px]',
-        'shadow-sm transition-all duration-300 ease-in-out',
-        'hover:border-border-medium hover:bg-surface-hover hover:shadow-lg'
+        'group relative flex cursor-default flex-col gap-2 rounded-xl',
+        'border border-border-light bg-surface-tertiary text-start align-top',
+        'shadow-sm transition-all duration-200',
+        'hover:border-green-500/30 hover:bg-surface-hover hover:shadow-md',
+        compact ? 'w-full px-3 pb-3 pt-2.5 text-sm' : 'w-52 px-3 pb-4 pt-3 text-[15px]',
       )}
     >
-      {/* 图标和标签 */}
       <div className="flex items-center gap-2">
-        <span className="flex-shrink-0">
-          {getIconComponent(item.icon)}
-        </span>
-        <span className="break-word line-clamp-2 overflow-hidden text-balance text-sm font-semibold text-text-primary">
+        <span className="flex-shrink-0">{getIconComponent(item.icon)}</span>
+        <span className="line-clamp-2 overflow-hidden text-balance break-words text-sm font-semibold text-text-primary">
           {item.label || '未设置标签'}
         </span>
       </div>
-      
-      {/* 描述 */}
       {item.description && (
-        <p className="break-word line-clamp-2 overflow-hidden text-balance break-all text-xs text-text-secondary">
+        <p className="line-clamp-2 overflow-hidden text-balance break-all text-xs text-text-secondary">
           {item.description}
         </p>
       )}
+    </div>
+  );
+}
+
+function PromptItemCard({
+  item,
+  index,
+  onUpdate,
+  onDelete,
+}: {
+  item: PromptItem;
+  index: number;
+  onUpdate: (field: keyof PromptItem, value: string) => void;
+  onDelete: () => void;
+}) {
+  return (
+    <div className="overflow-hidden rounded-xl border border-border-light bg-surface-primary">
+      {/* 卡片头 */}
+      <div className="flex items-center justify-between border-b border-border-light px-4 py-3">
+        <div className="flex items-center gap-2.5">
+          <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md bg-green-500/15 text-xs font-semibold text-green-400">
+            {index + 1}
+          </span>
+          <span className="text-sm font-semibold text-text-primary">
+            {item.label || `提示项 ${index + 1}`}
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={onDelete}
+          className="flex items-center gap-1 rounded-md px-2 py-1 text-xs text-text-secondary transition-colors hover:bg-red-500/10 hover:text-red-400"
+          aria-label={`删除提示项 ${index + 1}`}
+        >
+          <Trash2 className="h-3.5 w-3.5" />
+          删除
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 gap-0 lg:grid-cols-5">
+        {/* 左侧：配置表单 */}
+        <div className="space-y-4 border-border-light p-4 lg:col-span-3 lg:border-r">
+          {/* 图标类型 */}
+          <div>
+            <label className="mb-2 block text-sm font-medium text-text-primary">图标类型</label>
+            <div className="flex flex-wrap gap-2">
+              {iconOptions.map((option) => {
+                const active = item.icon === option.value;
+                return (
+                  <button
+                    key={option.value}
+                    type="button"
+                    onClick={() => onUpdate('icon', option.value)}
+                    className={cn(
+                      'flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm transition-all',
+                      active
+                        ? 'border-green-500 bg-green-500/10 text-text-primary'
+                        : 'border-border-light bg-surface-secondary text-text-secondary hover:border-green-500/30 hover:bg-surface-hover',
+                    )}
+                    aria-pressed={active}
+                  >
+                    <span className={cn(active && 'text-green-400')}>{option.icon}</span>
+                    <span>{option.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* 标签 */}
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-text-primary">标签</label>
+            <input
+              type="text"
+              value={item.label}
+              onChange={(e) => onUpdate('label', e.target.value)}
+              placeholder="输入提示项标签"
+              className={cn(defaultTextProps, 'w-full px-3 py-2 focus:ring-green-500/30')}
+            />
+          </div>
+
+          {/* 描述 */}
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-text-primary">描述</label>
+            <textarea
+              value={item.description}
+              onChange={(e) => onUpdate('description', e.target.value)}
+              placeholder="输入提示项描述，显示在卡片下方"
+              rows={2}
+              className={cn(defaultTextProps, 'w-full resize-none px-3 py-2 focus:ring-green-500/30')}
+            />
+          </div>
+
+          {/* 提示内容 */}
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-text-primary">提示内容</label>
+            <p className="mb-1.5 text-xs text-text-secondary">
+              点击后发送的提示内容（留空则使用标签）
+            </p>
+            <textarea
+              value={item.prompt}
+              onChange={(e) => onUpdate('prompt', e.target.value)}
+              placeholder="输入点击后发送的完整提示内容"
+              rows={3}
+              className={cn(defaultTextProps, 'w-full resize-none px-3 py-2 focus:ring-green-500/30')}
+            />
+          </div>
+        </div>
+
+        {/* 右侧：实时预览 */}
+        <div className="flex flex-col bg-surface-secondary/50 p-4 lg:col-span-2">
+          <div className="mb-3">
+            <p className="text-sm font-medium text-text-primary">预览效果</p>
+            <p className="mt-0.5 text-xs text-text-secondary">
+              实时预览在聊天界面中的显示效果
+            </p>
+          </div>
+          <div className="flex flex-1 items-start justify-center rounded-lg border border-dashed border-green-500/20 bg-surface-tertiary/50 p-4">
+            <PromptItemPreview item={item} compact />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -127,8 +243,26 @@ export default function PromptsManagement({ startupConfig: propStartupConfig }: 
       .map((ds: DataSource) => ({
         id: ds._id,
         name: ds.name || '未命名数据源',
+        type: ds.type,
+        database: ds.database,
       }));
   }, [dataSourcesResponse]);
+
+  const dataSourceOptions = useMemo(
+    () => [
+      { value: 'global', label: '全局提示集' },
+      ...dataSourcesList.map((ds) => ({
+        value: ds.id,
+        label: ds.name,
+      })),
+    ],
+    [dataSourcesList],
+  );
+
+  const selectedDataSourceInfo =
+    dataSource === 'global'
+      ? null
+      : dataSourcesList.find((ds) => ds.id === dataSource) ?? null;
 
   // 从 startupConfig 加载配置
   useEffect(() => {
@@ -293,196 +427,108 @@ export default function PromptsManagement({ startupConfig: propStartupConfig }: 
       <div className="flex-1 overflow-auto">
         <div className="space-y-6">
           {/* 数据源选择 */}
-          <div className="rounded-lg border border-border-light bg-surface-secondary p-4">
-            <label className="mb-2 block text-sm font-medium text-text-primary">
-              数据源
-            </label>
-            <p className="mb-3 text-xs text-text-secondary">
-              选择要配置的提示集数据源，全局提示集将应用于所有智能体
-            </p>
-            <select
-              value={dataSource}
-              onChange={(e) => setDataSource(e.target.value)}
-              className="w-full max-w-xs rounded-md border border-border-light bg-surface-primary px-3 py-2 text-sm text-text-primary focus:border-primary focus:outline-none"
-            >
-              <option value="global">全局提示集</option>
-              {dataSourcesList.map((ds) => (
-                <option key={ds.id} value={ds.id}>
-                  {ds.name}
-                </option>
-              ))}
-            </select>
+          <div className="rounded-xl border border-border-light bg-surface-primary">
+            <div className="border-b border-border-light px-4 py-3.5">
+              <div className="flex items-center gap-2">
+                {dataSource === 'global' ? (
+                  <Globe className="h-4 w-4 text-green-400" />
+                ) : (
+                  <Server className="h-4 w-4 text-green-400" />
+                )}
+                <span className="text-sm font-semibold text-text-primary">数据源</span>
+              </div>
+              <p className="mt-1 text-xs text-text-secondary">
+                选择要配置的提示集数据源，全局提示集将应用于所有智能体
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-3 px-4 py-3.5">
+              <div className="min-w-0 flex-1 max-w-md">
+                <Dropdown
+                  value={dataSource}
+                  onChange={setDataSource}
+                  options={dataSourceOptions}
+                  className="w-full rounded-lg border-border-light bg-surface-secondary hover:border-green-500/40 focus:ring-green-500/30"
+                  sizeClasses="w-[var(--popover-anchor-width,100%)] min-w-[240px]"
+                  ariaLabel="选择提示集数据源"
+                />
+              </div>
+              {dataSource === 'global' ? (
+                <span className="rounded-md border border-green-500/20 bg-green-500/10 px-2 py-0.5 text-xs font-medium text-green-400">
+                  全局
+                </span>
+              ) : selectedDataSourceInfo ? (
+                <div className="flex flex-shrink-0 flex-wrap items-center gap-2">
+                  <span className="rounded-md border border-green-500/20 bg-green-500/10 px-2 py-0.5 text-xs font-medium uppercase text-green-400">
+                    {selectedDataSourceInfo.type}
+                  </span>
+                  <span className="rounded-md bg-surface-secondary px-2 py-0.5 text-xs text-text-secondary">
+                    {selectedDataSourceInfo.database}
+                  </span>
+                </div>
+              ) : null}
+            </div>
           </div>
 
           {/* 整体预览 */}
           {currentConfig.items.length > 0 && (
-            <div className="rounded-lg border border-border-light bg-surface-secondary p-4">
-              <div className="mb-3">
+            <div className="rounded-xl border border-border-light bg-surface-primary">
+              <div className="border-b border-border-light px-4 py-3.5">
                 <h3 className="text-sm font-semibold text-text-primary">整体预览</h3>
-                <p className="mt-1 text-xs text-text-secondary">
+                <p className="mt-0.5 text-xs text-text-secondary">
                   预览所有提示项在聊天界面中的显示效果
                 </p>
               </div>
-              <div className="flex min-h-[150px] flex-wrap items-start justify-center gap-3 rounded-md border border-border-light bg-surface-tertiary p-4">
-                {currentConfig.items.length === 0 ? (
-                  <p className="py-8 text-sm text-text-secondary">暂无提示项</p>
-                ) : (
-                  currentConfig.items.map((item) => (
-                    <PromptItemPreview key={item.key} item={item} />
-                  ))
-                )}
+              <div className="flex min-h-[150px] flex-wrap items-start justify-center gap-3 p-4">
+                {currentConfig.items.map((item) => (
+                  <PromptItemPreview key={item.key} item={item} />
+                ))}
               </div>
             </div>
           )}
 
           {/* 提示项列表 */}
-          <div className="rounded-lg border border-border-light bg-surface-secondary p-4">
-            <div className="mb-4 flex items-center justify-between">
+          <div className="rounded-xl border border-border-light bg-surface-primary">
+            <div className="flex items-center justify-between border-b border-border-light px-4 py-3.5">
               <div>
                 <h3 className="text-sm font-semibold text-text-primary">提示项</h3>
-                <p className="mt-1 text-xs text-text-secondary">
+                <p className="mt-0.5 text-xs text-text-secondary">
                   配置提示集的各个提示项，用户点击后将自动发送对应的提示内容
                 </p>
               </div>
               <button
                 type="button"
                 onClick={handleAddItem}
-                className="btn btn-neutral flex items-center gap-2 rounded-lg px-3 py-2 text-sm"
+                className="flex flex-shrink-0 items-center gap-1.5 rounded-lg bg-green-500 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-green-600"
               >
                 <Plus className="h-4 w-4" />
                 添加提示项
               </button>
             </div>
 
-            {currentConfig.items.length === 0 ? (
-              <div className="rounded-md border border-border-light bg-surface-primary p-6 text-center">
-                <p className="text-sm text-text-secondary">
-                  暂无提示项，点击"添加提示项"开始配置
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                {currentConfig.items.map((item, index) => (
-                  <div
-                    key={item.key}
-                    className="rounded-md border border-border-light bg-surface-primary p-4"
-                  >
-                    <div className="mb-4 flex items-center justify-between">
-                      <h4 className="text-sm font-medium text-text-primary">
-                        提示项 {index + 1}
-                      </h4>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (
-                            window.confirm('确定要删除这个提示项吗？')
-                          ) {
-                            handleDeleteItem(item.key);
-                          }
-                        }}
-                        className="flex items-center gap-1 rounded px-2 py-1 text-sm text-red-500 hover:bg-surface-tertiary"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                        删除
-                      </button>
-                    </div>
-
-                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                      {/* 左侧：配置表单 */}
-                      <div className="space-y-3">
-                        {/* 图标类型 */}
-                        <div>
-                          <label className="mb-1 block text-xs font-medium text-text-primary">
-                            图标类型
-                          </label>
-                          <select
-                            value={item.icon}
-                            onChange={(e) =>
-                              handleUpdateItem(item.key, 'icon', e.target.value)
-                            }
-                            className="w-full rounded-md border border-border-light bg-surface-primary px-3 py-2 text-sm text-text-primary focus:border-primary focus:outline-none"
-                          >
-                            {iconOptions.map((option) => (
-                              <option key={option.value} value={option.value}>
-                                {option.label}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-
-                        {/* 标签 */}
-                        <div>
-                          <label className="mb-1 block text-xs font-medium text-text-primary">
-                            标签
-                          </label>
-                          <input
-                            type="text"
-                            value={item.label}
-                            onChange={(e) =>
-                              handleUpdateItem(item.key, 'label', e.target.value)
-                            }
-                            placeholder="输入提示项标签"
-                            className="w-full rounded-md border border-border-light bg-surface-primary px-3 py-2 text-sm text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none"
-                          />
-                        </div>
-
-                        {/* 描述 */}
-                        <div>
-                          <label className="mb-1 block text-xs font-medium text-text-primary">
-                            描述
-                          </label>
-                          <textarea
-                            value={item.description}
-                            onChange={(e) =>
-                              handleUpdateItem(
-                                item.key,
-                                'description',
-                                e.target.value,
-                              )
-                            }
-                            placeholder="输入提示项描述"
-                            rows={2}
-                            className="w-full rounded-md border border-border-light bg-surface-primary px-3 py-2 text-sm text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none"
-                          />
-                        </div>
-
-                        {/* 提示内容 */}
-                        <div>
-                          <label className="mb-1 block text-xs font-medium text-text-primary">
-                            提示内容
-                          </label>
-                          <p className="mb-1 text-xs text-text-secondary">
-                            点击后发送的提示内容（留空则使用标签）
-                          </p>
-                          <textarea
-                            value={item.prompt}
-                            onChange={(e) =>
-                              handleUpdateItem(item.key, 'prompt', e.target.value)
-                            }
-                            placeholder="输入点击后发送的提示内容（留空则使用标签）"
-                            rows={3}
-                            className="w-full rounded-md border border-border-light bg-surface-primary px-3 py-2 text-sm text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none"
-                          />
-                        </div>
-                      </div>
-
-                      {/* 右侧：实时预览 */}
-                      <div className="flex flex-col">
-                        <label className="mb-2 block text-xs font-medium text-text-primary">
-                          预览效果
-                        </label>
-                        <p className="mb-3 text-xs text-text-secondary">
-                          实时预览提示项在聊天界面中的显示效果
-                        </p>
-                        <div className="flex min-h-[120px] items-start justify-center rounded-md border border-border-light bg-surface-tertiary p-4">
-                          <PromptItemPreview item={item} />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+            <div className="p-4">
+              {currentConfig.items.length === 0 ? (
+                <div className="rounded-lg border border-dashed border-border-light bg-surface-secondary py-10 text-center">
+                  <p className="text-sm text-text-secondary">暂无提示项</p>
+                  <p className="mt-1 text-xs text-text-tertiary">点击右上角「添加提示项」开始配置</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {currentConfig.items.map((item, index) => (
+                    <PromptItemCard
+                      key={item.key}
+                      item={item}
+                      index={index}
+                      onUpdate={(field, value) => handleUpdateItem(item.key, field, value)}
+                      onDelete={() => {
+                        if (window.confirm('确定要删除这个提示项吗？')) {
+                          handleDeleteItem(item.key);
+                        }
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
