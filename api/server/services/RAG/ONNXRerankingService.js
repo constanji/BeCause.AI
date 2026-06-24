@@ -16,6 +16,7 @@ class ONNXRerankingService {
     this.pipeline = null;
     this.pipelineType = null; // 'feature-extraction' 或 'text-classification'
     this.initialized = false;
+    this.hasLoggedFlatScoreWarning = false;
   }
 
   /**
@@ -306,7 +307,13 @@ class ONNXRerankingService {
       const allSame = scores.length > 0 && scores.every(s => Math.abs(s - scores[0]) < 0.0001);
       
       if (allSame && results.length > 1) {
-        logger.warn(`[ONNXRerankingService] 警告：所有重排分数都相同 (${scores[0].toFixed(4)})，可能是模型输出问题`);
+        const msg = `[ONNXRerankingService] 所有重排分数都相同 (${scores[0].toFixed(4)})，将回退到检索分数`;
+        if (!this.hasLoggedFlatScoreWarning) {
+          logger.warn(msg);
+          this.hasLoggedFlatScoreWarning = true;
+        } else {
+          logger.debug(msg);
+        }
         logger.debug(`[ONNXRerankingService] 原始分数样本: ${results.slice(0, 3).map(r => `raw=${r.rawScore.toFixed(4)}, score=${r.score.toFixed(4)}`).join(', ')}`);
         
         // 如果所有分数都相同，尝试使用原始分数进行归一化
@@ -328,11 +335,9 @@ class ONNXRerankingService {
           // 重新排序
           results.sort((a, b) => b.score - a.score);
         } else {
-          // 如果原始分数也相同，使用基于索引的分数
-          logger.info(`[ONNXRerankingService] 原始分数也相同，使用基于索引的分数`);
-          results.forEach((result, idx) => {
-            result.score = 1.0 - (idx / results.length) * 0.3; // 0.7 到 1.0 之间
-          });
+          // 如果原始分数也相同，不再强行改成索引分数。
+          // 让上层 RerankingService 检测 allSame 后回退到检索原始分数，避免出现 100%/0% 的误导分数。
+          logger.info(`[ONNXRerankingService] 原始分数也相同，保持原始重排分数，交由上层回退到检索分数`);
         }
       }
 
@@ -349,6 +354,7 @@ class ONNXRerankingService {
       const topResults = results.slice(0, topK).map(item => ({
         text: item.text,
         score: item.score,
+        index: item.index,
       }));
 
       logger.debug(`[ONNXRerankingService] Reranked ${documents.length} documents, returning top ${topResults.length}`);

@@ -74,6 +74,17 @@ class RerankingService {
       return [];
     }
 
+    // 结果过少时重排收益很低且容易引入噪音，直接使用检索分数排序
+    if (results.length <= 2) {
+      return results
+        .map(result => ({
+          ...result,
+          reranked: false,
+        }))
+        .sort((a, b) => (b.score || b.similarity || 0) - (a.score || a.similarity || 0))
+        .slice(0, topK);
+    }
+
     try {
       // 如果使用 ONNX 重排器
       if (this.reranker && this.reranker.type === 'onnx' && this.reranker.service) {
@@ -92,25 +103,40 @@ class RerankingService {
           logger.warn(`[RerankingService] 警告：重排器返回的所有分数都相同 (${rerankScores[0].toFixed(4)})，使用原始检索分数`);
         }
 
-        // 将重排结果映射回原始结果
+        const usedIndices = new Set();
+
+        // 将重排结果映射回原始结果（优先按 index 映射，避免同文本重复映射）
         const rerankedResults = rerankedHighlights.map(highlight => {
-          // 找到对应的原始结果
-          const originalResult = results.find(
-            r => (r.content || r.text || '') === highlight.text
-          );
+          let originalResult = null;
+
+          if (Number.isInteger(highlight.index) && highlight.index >= 0 && highlight.index < results.length) {
+            originalResult = results[highlight.index];
+            usedIndices.add(highlight.index);
+          } else {
+            const matchedIndex = results.findIndex((r, idx) => {
+              if (usedIndices.has(idx)) return false;
+              return (r.content || r.text || '') === highlight.text;
+            });
+            if (matchedIndex !== -1) {
+              originalResult = results[matchedIndex];
+              usedIndices.add(matchedIndex);
+            }
+          }
 
           if (originalResult) {
-            // 如果重排分数都相同，使用原始分数；否则使用重排分数
-            const finalScore = allSameScore 
-              ? (originalResult.score || originalResult.similarity || 0)
-              : (highlight.score !== undefined && highlight.score !== null ? highlight.score : (originalResult.score || originalResult.similarity || 0));
+            // 排序使用重排结果顺序；对外展示的相似度统一使用原始检索分数，避免出现 100%/0% 这类误导显示
+            const retrievalScore = originalResult.score || originalResult.similarity || 0;
+            const rerankScore = highlight.score !== undefined && highlight.score !== null
+              ? highlight.score
+              : retrievalScore;
             
             return {
               ...originalResult,
-              score: finalScore,
-              similarity: finalScore,
+              score: retrievalScore,
+              similarity: retrievalScore,
+              rerankScore,
               reranked: !allSameScore, // 如果分数都相同，标记为未重排
-              originalScore: originalResult.score || originalResult.similarity || 0, // 保留原始分数用于调试
+              originalScore: retrievalScore, // 保留原始分数用于调试
             };
           }
 
@@ -119,6 +145,7 @@ class RerankingService {
             content: highlight.text,
             score: highlight.score || 0,
             similarity: highlight.score || 0,
+            rerankScore: highlight.score || 0,
             reranked: !allSameScore,
           };
         });
@@ -133,7 +160,13 @@ class RerankingService {
         } else {
           logger.info(`[RerankingService] 使用 ONNX 重排了 ${rerankedResults.length} 个结果`);
         }
-        return rerankedResults;
+        return rerankedResults
+          .sort((a, b) => {
+            const scoreDiff = (b.score || b.similarity || 0) - (a.score || a.similarity || 0);
+            if (Math.abs(scoreDiff) > 1e-9) return scoreDiff;
+            return (b.rerankScore || 0) - (a.rerankScore || 0);
+          })
+          .slice(0, topK);
       }
 
       // 如果使用外部重排器（Jina、Cohere 等）
@@ -153,24 +186,40 @@ class RerankingService {
           logger.warn(`[RerankingService] 警告：重排器返回的所有分数都相同 (${rerankScores[0].toFixed(4)})，使用原始检索分数`);
         }
 
-        // 将重排结果映射回原始结果
+        const usedIndices = new Set();
+
+        // 将重排结果映射回原始结果（优先按 index 映射，避免同文本重复映射）
         const rerankedResults = rerankedHighlights.map(highlight => {
-          const originalResult = results.find(
-            r => (r.content || r.text || '') === highlight.text
-          );
+          let originalResult = null;
+
+          if (Number.isInteger(highlight.index) && highlight.index >= 0 && highlight.index < results.length) {
+            originalResult = results[highlight.index];
+            usedIndices.add(highlight.index);
+          } else {
+            const matchedIndex = results.findIndex((r, idx) => {
+              if (usedIndices.has(idx)) return false;
+              return (r.content || r.text || '') === highlight.text;
+            });
+            if (matchedIndex !== -1) {
+              originalResult = results[matchedIndex];
+              usedIndices.add(matchedIndex);
+            }
+          }
 
           if (originalResult) {
-            // 如果重排分数都相同，使用原始分数；否则使用重排分数
-            const finalScore = allSameScore 
-              ? (originalResult.score || originalResult.similarity || 0)
-              : (highlight.score !== undefined && highlight.score !== null ? highlight.score : (originalResult.score || originalResult.similarity || 0));
+            // 排序使用重排结果顺序；对外展示的相似度统一使用原始检索分数，避免出现 100%/0% 这类误导显示
+            const retrievalScore = originalResult.score || originalResult.similarity || 0;
+            const rerankScore = highlight.score !== undefined && highlight.score !== null
+              ? highlight.score
+              : retrievalScore;
             
             return {
               ...originalResult,
-              score: finalScore,
-              similarity: finalScore,
+              score: retrievalScore,
+              similarity: retrievalScore,
+              rerankScore,
               reranked: !allSameScore,
-              originalScore: originalResult.score || originalResult.similarity || 0,
+              originalScore: retrievalScore,
             };
           }
 
@@ -178,6 +227,7 @@ class RerankingService {
             content: highlight.text,
             score: highlight.score || 0,
             similarity: highlight.score || 0,
+            rerankScore: highlight.score || 0,
             reranked: !allSameScore,
           };
         });
@@ -192,7 +242,13 @@ class RerankingService {
         } else {
           logger.info(`[RerankingService] 使用 ${this.reranker.type} 重排了 ${rerankedResults.length} 个结果`);
         }
-        return rerankedResults;
+        return rerankedResults
+          .sort((a, b) => {
+            const scoreDiff = (b.score || b.similarity || 0) - (a.score || a.similarity || 0);
+            if (Math.abs(scoreDiff) > 1e-9) return scoreDiff;
+            return (b.rerankScore || 0) - (a.rerankScore || 0);
+          })
+          .slice(0, topK);
       }
 
       // 默认重排：按分数排序

@@ -79,6 +79,127 @@ class RetrievalService {
   }
 
   /**
+   * 归一化文本：小写、去空白、去常见中英文标点
+   * @param {string} text
+   * @returns {string}
+   */
+  normalizeText(text) {
+    if (!text || typeof text !== 'string') return '';
+    return text
+      .toLowerCase()
+      .replace(/[\s`~!@#$%^&*()_\-+=\[\]{}\\|;:'",.<>/?，。！？、；：‘’“”（）【】《》]/g, '');
+  }
+
+  /**
+   * 基于词面命中对向量分数做轻量加权，提升“明显文本命中”的可解释性
+   * @param {Object} params
+   * @param {string} params.query
+   * @param {Object} params.entry
+   * @param {number} params.baseScore
+   * @returns {number}
+   */
+  applyLexicalBoost({ query, entry, baseScore }) {
+    const queryNormalized = this.normalizeText(query);
+    if (!queryNormalized) return baseScore;
+
+    const metadata = entry?.metadata || {};
+    const candidates = [
+      entry?.title,
+      entry?.content,
+      metadata?.question,
+      metadata?.answer,
+      metadata?.noun,
+      Array.isArray(metadata?.synonyms) ? metadata.synonyms.join(' ') : '',
+    ]
+      .filter(Boolean)
+      .map(t => this.normalizeText(String(t)));
+
+    if (candidates.length === 0) return baseScore;
+
+    let boost = 0;
+    const hasExactContain = candidates.some(text => text.includes(queryNormalized));
+    if (hasExactContain) {
+      boost = Math.max(boost, 0.2);
+    }
+
+    const queryTokens = query
+      .toLowerCase()
+      .split(/[\s,，。！？、；:：]+/)
+      .map(t => this.normalizeText(t))
+      .filter(Boolean);
+    if (queryTokens.length >= 2) {
+      const hasAllTokens = candidates.some(text => queryTokens.every(token => text.includes(token)));
+      if (hasAllTokens) {
+        boost = Math.max(boost, 0.12);
+      }
+    }
+
+    return Math.min(1, baseScore + boost);
+  }
+
+  /**
+   * 使用 MongoDB 余弦计算补召回（用于向量库阈值过高导致的漏召回）
+   * @param {Object} params
+   * @param {number[]} params.queryEmbedding
+   * @param {string[]} [params.types]
+   * @param {string} [params.entityId]
+   * @param {number} [params.topK]
+   * @param {number} [params.minScore]
+   * @param {string} params.query
+   * @returns {Promise<Array>}
+   */
+  async retrieveFromMongoForSupplement({
+    queryEmbedding,
+    types,
+    entityId,
+    topK = 10,
+    minScore = 0.35,
+    query,
+  }) {
+    const queryConditions = {};
+
+    if (types && types.length > 0) {
+      queryConditions.type = { $in: types };
+    }
+
+    if (entityId) {
+      queryConditions['metadata.entity_id'] = entityId;
+    }
+
+    const knowledgeEntries = await KnowledgeEntry.find(queryConditions)
+      .select('type title content embedding metadata user')
+      .lean();
+
+    if (knowledgeEntries.length === 0) {
+      return [];
+    }
+
+    return knowledgeEntries
+      .map(entry => {
+        if (!entry.embedding || entry.embedding.length === 0) {
+          return null;
+        }
+
+        const baseScore = this.cosineSimilarity(queryEmbedding, entry.embedding);
+        const finalScore = this.applyLexicalBoost({
+          query,
+          entry,
+          baseScore,
+        });
+
+        return {
+          ...entry,
+          score: finalScore,
+          similarity: finalScore,
+          retrievalScoreRaw: baseScore,
+        };
+      })
+      .filter(result => result !== null && result.score >= minScore)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, topK);
+  }
+
+  /**
    * 从知识库中检索相关内容
    * @param {Object} params
    * @param {string} params.query - 查询文本
@@ -144,14 +265,55 @@ class RetrievalService {
                   }
                 }
 
+                const baseScore = vectorResult.score;
+                const finalScore = this.applyLexicalBoost({
+                  query,
+                  entry,
+                  baseScore,
+                });
+
                 return {
                   ...entry,
-                  score: vectorResult.score,
-                  similarity: vectorResult.score,
+                  score: finalScore,
+                  similarity: finalScore,
+                  retrievalScoreRaw: baseScore,
                 };
               })
               .filter(result => result !== null)
+              .sort((a, b) => b.score - a.score)
               .slice(0, topK);
+
+            // 如果向量库结果过少，补一轮较低阈值的 Mongo 召回，避免 0.5 阈值导致漏召回
+            if (scoredResults.length < topK) {
+              const supplementTopK = topK - scoredResults.length;
+              const supplementMinScore = Math.min(minScore, 0.35);
+              const supplementResults = await this.retrieveFromMongoForSupplement({
+                queryEmbedding,
+                types,
+                entityId,
+                topK: Math.max(supplementTopK * 2, supplementTopK),
+                minScore: supplementMinScore,
+                query,
+              });
+
+              const existingIds = new Set(scoredResults.map(r => r._id?.toString?.() || String(r._id)));
+              const merged = [...scoredResults];
+              for (const item of supplementResults) {
+                const key = item._id?.toString?.() || String(item._id);
+                if (!existingIds.has(key)) {
+                  merged.push(item);
+                  existingIds.add(key);
+                }
+                if (merged.length >= topK) {
+                  break;
+                }
+              }
+
+              logger.info(
+                `[RetrievalService] 从向量数据库检索到 ${scoredResults.length} 个结果，并补召回 ${Math.max(0, merged.length - scoredResults.length)} 个结果${isolationInfo}`
+              );
+              return merged.sort((a, b) => (b.score || 0) - (a.score || 0)).slice(0, topK);
+            }
 
             logger.info(`[RetrievalService] 从向量数据库检索到 ${scoredResults.length} 个相关结果${isolationInfo}`);
             return scoredResults;
@@ -163,42 +325,14 @@ class RetrievalService {
 
       // 3. 回退到 MongoDB 中的向量相似度计算
       logger.info('[RetrievalService] 使用MongoDB进行向量相似度计算（向量数据库不可用或回退）');
-      const queryConditions = {};
-
-      if (types && types.length > 0) {
-        queryConditions.type = { $in: types };
-      }
-
-      if (entityId) {
-        queryConditions['metadata.entity_id'] = entityId;
-      }
-
-      const knowledgeEntries = await KnowledgeEntry.find(queryConditions)
-        .select('type title content embedding metadata user')
-        .lean();
-
-      if (knowledgeEntries.length === 0) {
-        logger.info('[RetrievalService] 未找到相关知识条目');
-        return [];
-      }
-
-      // 4. 计算相似度并排序
-      const scoredResults = knowledgeEntries
-        .map(entry => {
-          if (!entry.embedding || entry.embedding.length === 0) {
-            return null;
-          }
-
-          const score = this.cosineSimilarity(queryEmbedding, entry.embedding);
-          return {
-            ...entry,
-            score,
-            similarity: score,
-          };
-        })
-        .filter(result => result !== null && result.score >= minScore)
-        .sort((a, b) => b.score - a.score)
-        .slice(0, topK);
+      const scoredResults = await this.retrieveFromMongoForSupplement({
+        queryEmbedding,
+        types,
+        entityId,
+        topK,
+        minScore,
+        query,
+      });
 
       logger.info(`[RetrievalService] 从MongoDB检索到 ${scoredResults.length} 个相关结果`);
 
@@ -242,6 +376,7 @@ class RetrievalService {
         const vectorResults = await this.vectorDBService.searchFileVectors({
           queryEmbedding,
           fileId, // 指定file_id，只检索该文件的chunk
+          userId, // 用户隔离
           entityId, // 数据源隔离
           topK: k,
           minScore: 0.5,
@@ -351,6 +486,8 @@ class RetrievalService {
   async hybridRetrieve({ query, userId, fileIds, types, entityId, topK = 10 }) {
     try {
       const promises = [];
+      const hasSpecificFiles = Array.isArray(fileIds) && fileIds.length > 0;
+      const shouldSearchFiles = hasSpecificFiles || !Array.isArray(types) || types.includes(KnowledgeType.FILE);
 
       // 1. 从知识库检索
       promises.push(
@@ -367,7 +504,7 @@ class RetrievalService {
       let fileResults = [];
       const fileTopK = Math.ceil(topK * 0.3); // 30% 来自文件
 
-      if (fileIds && fileIds.length > 0) {
+      if (hasSpecificFiles) {
         // 策略1：如果指定了fileIds，先尝试用file_id检索（只检索指定文件的chunk）
         logger.info(`[RetrievalService] 使用file_id检索模式，检索 ${fileIds.length} 个指定文件`);
         
@@ -397,6 +534,7 @@ class RetrievalService {
                   queryEmbedding,
                   // 不指定fileId，检索所有文件
                   fileId: null,
+                  userId,
                   entityId,
                   topK: fileTopK,
                   minScore: 0.5,
@@ -437,7 +575,7 @@ class RetrievalService {
         } else {
           logger.info(`[RetrievalService] 指定文件检索成功，返回 ${fileResults.length} 个结果`);
         }
-      } else {
+      } else if (shouldSearchFiles) {
         // 策略3：如果没有指定fileIds，直接使用跨文件相似度检索
         logger.info('[RetrievalService] 未指定fileIds，使用跨文件相似度检索');
         
@@ -448,6 +586,7 @@ class RetrievalService {
               const crossFileResults = await this.vectorDBService.searchFileVectors({
                 queryEmbedding,
                 fileId: null, // 不指定fileId，检索所有文件
+                userId,
                 entityId,
                 topK: fileTopK,
                 minScore: 0.5,
@@ -475,6 +614,8 @@ class RetrievalService {
             logger.warn('[RetrievalService] 跨文件相似度检索失败:', crossFileError.message);
           }
         }
+      } else {
+        logger.info('[RetrievalService] 当前检索类型不包含 file，跳过文件向量检索');
       }
 
       // 3. 等待知识库检索完成

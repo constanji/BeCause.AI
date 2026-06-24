@@ -138,6 +138,14 @@ class RAGService {
         metadata: result.metadata || {},
       };
 
+      // 调试信息：保留重排分数，前端可按需展示；默认 score 仍表示检索相似度
+      if (result.rerankScore !== undefined && result.rerankScore !== null) {
+        formatted.rerankScore = result.rerankScore;
+      }
+      if (result.originalScore !== undefined && result.originalScore !== null) {
+        formatted.originalScore = result.originalScore;
+      }
+
       // 根据类型添加特定信息
       switch (result.type) {
         case KnowledgeType.SEMANTIC_MODEL:

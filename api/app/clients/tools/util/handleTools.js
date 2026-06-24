@@ -287,14 +287,14 @@ const loadTools = async ({
       conversation: options.conversation,
     },
     database_schema: {
-      apiUrl: process.env.SQL_API_URL || 'http://localhost:3001',
+      apiUrl: process.env.SQL_API_URL || 'http://33.114.3.59:13002',
     },
     sql_executor: {
-      apiUrl: process.env.SQL_API_URL || 'http://localhost:3001',
+      apiUrl: process.env.SQL_API_URL || 'http://33.114.3.59:13002',
     },
     semantic_model_generator: {
       projectRoot: paths.root,
-      sqlApiUrl: process.env.SQL_API_URL || 'http://localhost:3001',
+      sqlApiUrl: process.env.SQL_API_URL || 'http://33.114.3.59:13002',
     },
     generate_excel: {
       req: options.req,

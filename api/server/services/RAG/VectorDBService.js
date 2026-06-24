@@ -504,12 +504,13 @@ class VectorDBService {
    * @param {Object} params
    * @param {number[]} params.queryEmbedding - 查询向量
    * @param {string} [params.fileId] - 文件ID（可选，如果提供则只检索该文件的chunk）
+   * @param {string} [params.userId] - 用户ID（用户隔离，可选）
    * @param {string} [params.entityId] - 实体ID（数据源隔离，可选）
    * @param {number} params.topK - 返回前K个结果
    * @param {number} params.minScore - 最小相似度分数
    * @returns {Promise<Array>} 搜索结果数组
    */
-  async searchFileVectors({ queryEmbedding, fileId, entityId, topK = 10, minScore = 0.5 }) {
+  async searchFileVectors({ queryEmbedding, fileId, userId, entityId, topK = 10, minScore = 0.5 }) {
     if (!this.initialized) {
       await this.initialize();
     }
@@ -526,6 +527,13 @@ class VectorDBService {
       if (fileId) {
         whereClause += `\n        AND file_id = $${paramIndex}`;
         queryParams.push(fileId);
+        paramIndex++;
+      }
+
+      // 用户隔离：避免跨用户命中其他人的文件向量
+      if (userId) {
+        whereClause += `\n        AND user_id = $${paramIndex}`;
+        queryParams.push(userId.toString());
         paramIndex++;
       }
 
